@@ -4,7 +4,6 @@ use HasinHayder\TyroDashboard\Http\Controllers\DashboardController;
 use HasinHayder\TyroDashboard\Http\Controllers\PrivilegeController;
 use HasinHayder\TyroDashboard\Http\Controllers\ProfileController;
 use HasinHayder\TyroDashboard\Http\Controllers\RoleController;
-use HasinHayder\TyroDashboard\Http\Controllers\SettingsController;
 use HasinHayder\TyroDashboard\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -61,13 +60,5 @@ Route::middleware('tyro-dashboard.admin')->group(function () {
         Route::get('/{id}/edit', [PrivilegeController::class, 'edit'])->name('edit');
         Route::put('/{id}', [PrivilegeController::class, 'update'])->name('update');
         Route::delete('/{id}', [PrivilegeController::class, 'destroy'])->name('destroy');
-    });
-
-    // Settings
-    Route::prefix('settings')->name('settings.')->group(function () {
-        Route::get('/tyro', [SettingsController::class, 'tyroSettings'])->name('tyro');
-        Route::put('/tyro', [SettingsController::class, 'updateTyroSettings'])->name('tyro.update');
-        Route::get('/tyro-login', [SettingsController::class, 'tyroLoginSettings'])->name('tyro-login');
-        Route::put('/tyro-login', [SettingsController::class, 'updateTyroLoginSettings'])->name('tyro-login.update');
     });
 });
