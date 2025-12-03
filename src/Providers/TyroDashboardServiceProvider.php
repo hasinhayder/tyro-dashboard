@@ -88,6 +88,7 @@ class TyroDashboardServiceProvider extends ServiceProvider
             $viewsPath . '/partials/sidebar.blade.php' => resource_path('views/vendor/tyro-dashboard/partials/sidebar.blade.php'),
             $viewsPath . '/partials/topbar.blade.php' => resource_path('views/vendor/tyro-dashboard/partials/topbar.blade.php'),
             $viewsPath . '/partials/flash-messages.blade.php' => resource_path('views/vendor/tyro-dashboard/partials/flash-messages.blade.php'),
+            $viewsPath . '/partials/shadcn-theme.blade.php' => resource_path('views/vendor/tyro-dashboard/partials/shadcn-theme.blade.php'),
             $viewsPath . '/partials/styles.blade.php' => resource_path('views/vendor/tyro-dashboard/partials/styles.blade.php'),
             $viewsPath . '/partials/scripts.blade.php' => resource_path('views/vendor/tyro-dashboard/partials/scripts.blade.php'),
             $viewsPath . '/dashboard/admin.blade.php' => resource_path('views/vendor/tyro-dashboard/dashboard/admin.blade.php'),
@@ -104,6 +105,7 @@ class TyroDashboardServiceProvider extends ServiceProvider
             $viewsPath . '/partials/user-sidebar.blade.php' => resource_path('views/vendor/tyro-dashboard/partials/user-sidebar.blade.php'),
             $viewsPath . '/partials/topbar.blade.php' => resource_path('views/vendor/tyro-dashboard/partials/topbar.blade.php'),
             $viewsPath . '/partials/flash-messages.blade.php' => resource_path('views/vendor/tyro-dashboard/partials/flash-messages.blade.php'),
+            $viewsPath . '/partials/shadcn-theme.blade.php' => resource_path('views/vendor/tyro-dashboard/partials/shadcn-theme.blade.php'),
             $viewsPath . '/partials/styles.blade.php' => resource_path('views/vendor/tyro-dashboard/partials/styles.blade.php'),
             $viewsPath . '/partials/scripts.blade.php' => resource_path('views/vendor/tyro-dashboard/partials/scripts.blade.php'),
             $viewsPath . '/dashboard/user.blade.php' => resource_path('views/vendor/tyro-dashboard/dashboard/user.blade.php'),
@@ -112,8 +114,14 @@ class TyroDashboardServiceProvider extends ServiceProvider
 
         // Publish styles
         $this->publishes([
+            $viewsPath . '/partials/shadcn-theme.blade.php' => resource_path('views/vendor/tyro-dashboard/partials/shadcn-theme.blade.php'),
             $viewsPath . '/partials/styles.blade.php' => resource_path('views/vendor/tyro-dashboard/partials/styles.blade.php'),
         ], 'tyro-dashboard-styles');
+
+        // Publish theme only (for quick theme customization)
+        $this->publishes([
+            $viewsPath . '/partials/shadcn-theme.blade.php' => resource_path('views/vendor/tyro-dashboard/partials/shadcn-theme.blade.php'),
+        ], 'tyro-dashboard-theme');
 
         // Publish all
         $this->publishes([

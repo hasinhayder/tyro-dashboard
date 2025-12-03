@@ -10,7 +10,8 @@ class PublishStyleCommand extends Command
      * The name and signature of the console command.
      */
     protected $signature = 'tyro-dashboard:publish-style 
-                            {--force : Overwrite existing files}';
+                            {--force : Overwrite existing files}
+                            {--theme-only : Publish only the shadcn theme file}';
 
     /**
      * The console command description.
@@ -25,15 +26,29 @@ class PublishStyleCommand extends Command
         $this->info('');
         $this->info('Publishing Tyro Dashboard styles...');
         
-        $this->callSilently('vendor:publish', [
-            '--tag' => 'tyro-dashboard-styles',
-            '--force' => $this->option('force'),
-        ]);
+        if ($this->option('theme-only')) {
+            $this->callSilently('vendor:publish', [
+                '--tag' => 'tyro-dashboard-theme',
+                '--force' => $this->option('force'),
+            ]);
+            
+            $this->info('   ✓ Theme published to resources/views/vendor/tyro-dashboard/partials/shadcn-theme.blade.php');
+        } else {
+            $this->callSilently('vendor:publish', [
+                '--tag' => 'tyro-dashboard-styles',
+                '--force' => $this->option('force'),
+            ]);
+            
+            $this->info('   ✓ Styles published to resources/views/vendor/tyro-dashboard/partials/');
+            $this->info('     - shadcn-theme.blade.php (theme variables)');
+            $this->info('     - styles.blade.php (component styles)');
+        }
         
-        $this->info('   ✓ Styles published to resources/views/vendor/tyro-dashboard/partials/styles.blade.php');
         $this->info('');
-        $this->info('You can now customize the shadcn variables in the styles file:');
-        $this->info('   resources/views/vendor/tyro-dashboard/partials/styles.blade.php');
+        $this->info('You can now customize the shadcn theme variables in:');
+        $this->info('   resources/views/vendor/tyro-dashboard/partials/shadcn-theme.blade.php');
+        $this->info('');
+        $this->info('Tip: Use --theme-only to publish just the theme file for quick customization.');
         $this->info('');
 
         return self::SUCCESS;
