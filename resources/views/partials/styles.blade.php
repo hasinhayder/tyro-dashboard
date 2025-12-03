@@ -351,6 +351,7 @@
     .page-content {
         padding: 2rem;
         flex: 1;
+        background-color: var(--background);
         /* max-width: 1200px; */
     }
 
