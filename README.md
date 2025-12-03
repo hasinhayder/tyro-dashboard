@@ -230,6 +230,61 @@ php artisan vendor:publish --tag=tyro-dashboard-views
 
 Views will be published to `resources/views/vendor/tyro-dashboard/`.
 
+### Theme Customization (shadcn Variables)
+
+Tyro Dashboard uses [shadcn/ui](https://ui.shadcn.com) CSS variables for theming, making it easy to customize colors and integrate with shadcn-based projects.
+
+#### Publishing Theme Files
+
+Publish the theme variables to customize the look and feel:
+
+```bash
+# Publish only theme variables (recommended for color customization)
+php artisan tyro-dashboard:publish-style --theme-only
+
+# Or publish complete styles (theme + component styles)
+php artisan tyro-dashboard:publish-style
+```
+
+Theme files will be published to `resources/views/vendor/tyro-dashboard/partials/`.
+
+#### Visual Theme Editing with tweakcn (free)
+
+The easiest way to customize your theme is using [tweakcn.com](https://tweakcn.com):
+
+1. Visit [tweakcn.com](https://tweakcn.com)
+2. Use the visual editor to create your perfect color palette
+3. Copy the generated CSS variables
+4. Publish your theme: `php artisan tyro-dashboard:publish-style --theme-only`
+5. Paste the variables into `resources/views/vendor/tyro-dashboard/partials/shadcn-theme.blade.php`
+
+#### Theme File Structure
+
+After publishing, your theme structure will be:
+
+```
+resources/views/vendor/tyro-dashboard/partials/
+├── shadcn-theme.blade.php  # Theme variables (edit this!)
+└── styles.blade.php        # Component styles (includes theme)
+```
+
+The `shadcn-theme.blade.php` file contains only CSS variables, making it safe to edit without breaking component styles.
+
+#### Available CSS Variables
+
+Tyro Dashboard uses standard shadcn CSS variables in oklch color format for both light and dark modes:
+
+- `--background` - Page background
+- `--foreground` - Default text color
+- `--primary` - Primary buttons and links
+- `--secondary` - Secondary elements
+- `--destructive` - Error/danger states
+- `--border` - Border colors
+- `--input` - Input field borders
+- `--ring` - Focus ring colors
+- `--card` - Card backgrounds
+- `--muted` - Muted backgrounds
+
 ### Branding Configuration
 
 Set your branding in `.env`:
@@ -246,6 +301,8 @@ TYRO_DASHBOARD_PREFIX="admin"
 |---------|-------------|
 | `php artisan tyro-dashboard:install` | Interactive installation wizard |
 | `php artisan tyro-dashboard:version` | Display version information |
+| `php artisan tyro-dashboard:publish-style` | Publish styles and theme files |
+| `php artisan tyro-dashboard:publish-style --theme-only` | Publish only theme variables (recommended) |
 
 ## 🤝 Part of the Tyro Ecosystem
 
