@@ -43,6 +43,7 @@ class DashboardController extends BaseController
                     $roles = $roleModel::withCount('users')->get();
                     $stats['role_distribution'] = $roles->map(function ($role) {
                         return [
+                            'id' => $role->id,
                             'name' => $role->name,
                             'count' => $role->users_count,
                         ];
@@ -71,9 +72,15 @@ class DashboardController extends BaseController
                     'role_distribution' => new Collection(),
                 ];
             }
+
+            // Return admin dashboard view
+            return view('tyro-dashboard::dashboard.admin', $this->getViewData([
+                'stats' => $stats,
+            ]));
         }
 
-        return view('tyro-dashboard::dashboard.index', $this->getViewData([
+        // Return user dashboard view for non-admin users
+        return view('tyro-dashboard::dashboard.user', $this->getViewData([
             'stats' => $stats,
         ]));
     }

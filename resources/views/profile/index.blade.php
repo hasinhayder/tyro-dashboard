@@ -1,4 +1,4 @@
-@extends('tyro-dashboard::layouts.app')
+@extends($isAdmin ? 'tyro-dashboard::layouts.admin' : 'tyro-dashboard::layouts.user')
 
 @section('title', 'My Profile')
 

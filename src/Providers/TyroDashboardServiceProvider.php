@@ -66,20 +66,52 @@ class TyroDashboardServiceProvider extends ServiceProvider
             return;
         }
 
+        $viewsPath = __DIR__ . '/../../resources/views';
+
         // Publish config
         $this->publishes([
             __DIR__ . '/../../config/tyro-dashboard.php' => config_path('tyro-dashboard.php'),
         ], 'tyro-dashboard-config');
 
-        // Publish views
+        // Publish all views
         $this->publishes([
-            __DIR__ . '/../../resources/views' => resource_path('views/vendor/tyro-dashboard'),
+            $viewsPath => resource_path('views/vendor/tyro-dashboard'),
         ], 'tyro-dashboard-views');
+
+        // Publish admin views only (layouts, partials, dashboard, users, roles, privileges)
+        $this->publishes([
+            $viewsPath . '/layouts/admin.blade.php' => resource_path('views/vendor/tyro-dashboard/layouts/admin.blade.php'),
+            $viewsPath . '/layouts/app.blade.php' => resource_path('views/vendor/tyro-dashboard/layouts/app.blade.php'),
+            $viewsPath . '/partials/admin-sidebar.blade.php' => resource_path('views/vendor/tyro-dashboard/partials/admin-sidebar.blade.php'),
+            $viewsPath . '/partials/sidebar.blade.php' => resource_path('views/vendor/tyro-dashboard/partials/sidebar.blade.php'),
+            $viewsPath . '/partials/topbar.blade.php' => resource_path('views/vendor/tyro-dashboard/partials/topbar.blade.php'),
+            $viewsPath . '/partials/flash-messages.blade.php' => resource_path('views/vendor/tyro-dashboard/partials/flash-messages.blade.php'),
+            $viewsPath . '/partials/styles.blade.php' => resource_path('views/vendor/tyro-dashboard/partials/styles.blade.php'),
+            $viewsPath . '/partials/scripts.blade.php' => resource_path('views/vendor/tyro-dashboard/partials/scripts.blade.php'),
+            $viewsPath . '/dashboard/admin.blade.php' => resource_path('views/vendor/tyro-dashboard/dashboard/admin.blade.php'),
+            $viewsPath . '/dashboard/index.blade.php' => resource_path('views/vendor/tyro-dashboard/dashboard/index.blade.php'),
+            $viewsPath . '/users' => resource_path('views/vendor/tyro-dashboard/users'),
+            $viewsPath . '/roles' => resource_path('views/vendor/tyro-dashboard/roles'),
+            $viewsPath . '/privileges' => resource_path('views/vendor/tyro-dashboard/privileges'),
+        ], 'tyro-dashboard-views-admin');
+
+        // Publish user views only (user layout, user sidebar, user dashboard, profile)
+        $this->publishes([
+            $viewsPath . '/layouts/user.blade.php' => resource_path('views/vendor/tyro-dashboard/layouts/user.blade.php'),
+            $viewsPath . '/layouts/app.blade.php' => resource_path('views/vendor/tyro-dashboard/layouts/app.blade.php'),
+            $viewsPath . '/partials/user-sidebar.blade.php' => resource_path('views/vendor/tyro-dashboard/partials/user-sidebar.blade.php'),
+            $viewsPath . '/partials/topbar.blade.php' => resource_path('views/vendor/tyro-dashboard/partials/topbar.blade.php'),
+            $viewsPath . '/partials/flash-messages.blade.php' => resource_path('views/vendor/tyro-dashboard/partials/flash-messages.blade.php'),
+            $viewsPath . '/partials/styles.blade.php' => resource_path('views/vendor/tyro-dashboard/partials/styles.blade.php'),
+            $viewsPath . '/partials/scripts.blade.php' => resource_path('views/vendor/tyro-dashboard/partials/scripts.blade.php'),
+            $viewsPath . '/dashboard/user.blade.php' => resource_path('views/vendor/tyro-dashboard/dashboard/user.blade.php'),
+            $viewsPath . '/profile' => resource_path('views/vendor/tyro-dashboard/profile'),
+        ], 'tyro-dashboard-views-user');
 
         // Publish all
         $this->publishes([
             __DIR__ . '/../../config/tyro-dashboard.php' => config_path('tyro-dashboard.php'),
-            __DIR__ . '/../../resources/views' => resource_path('views/vendor/tyro-dashboard'),
+            $viewsPath => resource_path('views/vendor/tyro-dashboard'),
         ], 'tyro-dashboard');
     }
 }

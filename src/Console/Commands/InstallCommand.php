@@ -3,7 +3,6 @@
 namespace HasinHayder\TyroDashboard\Console\Commands;
 
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\File;
 
 class InstallCommand extends Command
 {
@@ -58,37 +57,37 @@ class InstallCommand extends Command
         ]);
         $this->info('   ✓ Configuration published to config/tyro-dashboard.php');
 
-        // Ask about views
-        if ($this->confirm('Would you like to publish the views for customization?', false)) {
-            $this->info('Publishing views...');
+        // Ask about views publishing
+        $this->info('');
+        $this->info('View Publishing Options:');
+        
+        if ($this->confirm('Would you like to publish all dashboard views?', false)) {
+            $this->info('Publishing all views...');
             $this->callSilently('vendor:publish', [
                 '--tag' => 'tyro-dashboard-views',
                 '--force' => $this->option('force'),
             ]);
-            $this->info('   ✓ Views published to resources/views/vendor/tyro-dashboard/');
-        }
-
-        // Ask about admin role configuration
-        $this->info('');
-        $this->info('Configuring admin access...');
-        
-        $defaultAdminRoles = config('tyro-dashboard.admin_roles', ['admin', 'super-admin']);
-        $this->info('   Current admin roles: ' . implode(', ', $defaultAdminRoles));
-        
-        if ($this->confirm('Would you like to customize the admin role slugs?', false)) {
-            $roles = $this->ask('Enter admin role slugs (comma-separated)', implode(',', $defaultAdminRoles));
-            $this->updateAdminRoles(array_map('trim', explode(',', $roles)));
-        }
-
-        // Ask about route prefix
-        if ($this->confirm('Would you like to customize the route prefix? (default: dashboard)', false)) {
-            $prefix = $this->ask('Enter route prefix', 'dashboard');
-            $this->updateRoutePrefix($prefix);
-        }
-
-        // Ask about branding
-        if ($this->confirm('Would you like to customize branding settings?', false)) {
-            $this->customizeBranding();
+            $this->info('   ✓ All views published to resources/views/vendor/tyro-dashboard/');
+        } else {
+            // Ask about admin views only
+            if ($this->confirm('Would you like to publish admin views only?', false)) {
+                $this->info('Publishing admin views...');
+                $this->callSilently('vendor:publish', [
+                    '--tag' => 'tyro-dashboard-views-admin',
+                    '--force' => $this->option('force'),
+                ]);
+                $this->info('   ✓ Admin views published to resources/views/vendor/tyro-dashboard/');
+            }
+            
+            // Ask about user views only
+            if ($this->confirm('Would you like to publish user views only?', false)) {
+                $this->info('Publishing user views...');
+                $this->callSilently('vendor:publish', [
+                    '--tag' => 'tyro-dashboard-views-user',
+                    '--force' => $this->option('force'),
+                ]);
+                $this->info('   ✓ User views published to resources/views/vendor/tyro-dashboard/');
+            }
         }
 
         // Check if user model has required trait
@@ -159,72 +158,4 @@ class InstallCommand extends Command
         return method_exists($userModel, 'tyroRoleSlugs');
     }
 
-    /**
-     * Update admin roles in config.
-     */
-    protected function updateAdminRoles(array $roles): void
-    {
-        $configPath = config_path('tyro-dashboard.php');
-        
-        if (!File::exists($configPath)) {
-            $this->warn('   Config file not found, skipping...');
-            return;
-        }
-
-        $content = File::get($configPath);
-        
-        // Convert roles array to PHP array string
-        $rolesString = "['" . implode("', '", $roles) . "']";
-        
-        // Replace the admin_roles line
-        $content = preg_replace(
-            "/'admin_roles'\s*=>\s*\[.*?\]/s",
-            "'admin_roles' => " . $rolesString,
-            $content
-        );
-        
-        File::put($configPath, $content);
-        $this->info('   ✓ Admin roles updated');
-    }
-
-    /**
-     * Update route prefix in config.
-     */
-    protected function updateRoutePrefix(string $prefix): void
-    {
-        $configPath = config_path('tyro-dashboard.php');
-        
-        if (!File::exists($configPath)) {
-            return;
-        }
-
-        $content = File::get($configPath);
-        
-        $content = preg_replace(
-            "/'prefix'\s*=>\s*env\([^)]+\)/",
-            "'prefix' => env('TYRO_DASHBOARD_PREFIX', '{$prefix}')",
-            $content
-        );
-        
-        File::put($configPath, $content);
-        $this->info('   ✓ Route prefix updated to: /' . $prefix);
-    }
-
-    /**
-     * Customize branding settings.
-     */
-    protected function customizeBranding(): void
-    {
-        $appName = $this->ask('Application name', config('app.name'));
-        
-        $envPath = base_path('.env');
-        if (File::exists($envPath)) {
-            $envContent = File::get($envPath);
-            
-            if (!str_contains($envContent, 'TYRO_DASHBOARD_APP_NAME')) {
-                File::append($envPath, "\n# Tyro Dashboard Branding\nTYRO_DASHBOARD_APP_NAME=\"{$appName}\"\n");
-                $this->info('   ✓ Branding settings added to .env');
-            }
-        }
-    }
 }

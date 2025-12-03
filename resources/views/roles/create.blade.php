@@ -1,4 +1,4 @@
-@extends('tyro-dashboard::layouts.app')
+@extends('tyro-dashboard::layouts.admin')
 
 @section('title', 'Create Role')
 
