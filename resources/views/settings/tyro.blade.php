@@ -17,6 +17,9 @@
             <h1 class="page-title">Tyro Settings</h1>
             <p class="page-description">Configure the core Tyro RBAC package settings.</p>
         </div>
+        <div>
+            <span class="badge badge-primary">v{{ config('tyro.version', '1.0.0') }}</span>
+        </div>
     </div>
 </div>
 
@@ -47,7 +50,7 @@
         <div class="card-body">
             <div class="form-group">
                 <label for="user_model" class="form-label">User Model Class</label>
-                <input type="text" id="user_model" name="user_model" class="form-input @error('user_model') is-invalid @enderror" value="{{ old('user_model', $config['user_model'] ?? 'App\\Models\\User') }}">
+                <input type="text" id="user_model" name="user_model" class="form-input @error('user_model') is-invalid @enderror" value="{{ old('user_model', $config['models']['user'] ?? 'App\\Models\\User') }}">
                 <span class="form-hint">The fully qualified class name of your User model.</span>
                 @error('user_model')
                     <span class="form-error">{{ $message }}</span>
@@ -56,18 +59,18 @@
 
             <div class="form-row">
                 <div class="form-group">
-                    <label for="user_primary_key" class="form-label">Primary Key</label>
+                    <label for="user_primary_key" class="form-label">User Primary Key</label>
                     <input type="text" id="user_primary_key" name="user_primary_key" class="form-input @error('user_primary_key') is-invalid @enderror" value="{{ old('user_primary_key', $config['user_primary_key'] ?? 'id') }}">
-                    <span class="form-hint">The primary key column of the users table.</span>
+                    <span class="form-hint">Primary key column name on users table.</span>
                     @error('user_primary_key')
                         <span class="form-error">{{ $message }}</span>
                     @enderror
                 </div>
 
                 <div class="form-group">
-                    <label for="user_foreign_key" class="form-label">Foreign Key</label>
+                    <label for="user_foreign_key" class="form-label">User Foreign Key</label>
                     <input type="text" id="user_foreign_key" name="user_foreign_key" class="form-input @error('user_foreign_key') is-invalid @enderror" value="{{ old('user_foreign_key', $config['user_foreign_key'] ?? 'user_id') }}">
-                    <span class="form-hint">The foreign key used in pivot tables.</span>
+                    <span class="form-hint">Foreign key column name referencing users.</span>
                     @error('user_foreign_key')
                         <span class="form-error">{{ $message }}</span>
                     @enderror
@@ -76,7 +79,7 @@
         </div>
     </div>
 
-    <!-- Tables Configuration -->
+    <!-- Database Tables Configuration -->
     <div class="card" style="margin-bottom: 1.5rem;">
         <div class="card-header">
             <h3 class="card-title">Database Tables</h3>
@@ -135,18 +138,20 @@
                 <span class="form-hint" style="margin-top: 0.5rem;">Cache roles and privileges for better performance.</span>
             </div>
 
-            <div class="form-row">
+            <div class="form-row" style="margin-top: 1rem;">
                 <div class="form-group">
-                    <label for="cache_duration" class="form-label">Cache Duration (minutes)</label>
-                    <input type="number" id="cache_duration" name="cache_duration" class="form-input @error('cache_duration') is-invalid @enderror" value="{{ old('cache_duration', $config['cache']['duration'] ?? 60) }}" min="0">
+                    <label for="cache_duration" class="form-label">Cache Duration (seconds)</label>
+                    <input type="number" id="cache_duration" name="cache_duration" class="form-input @error('cache_duration') is-invalid @enderror" value="{{ old('cache_duration', $config['cache']['ttl'] ?? 3600) }}" min="0">
+                    <span class="form-hint">Time-to-live for cached data.</span>
                     @error('cache_duration')
                         <span class="form-error">{{ $message }}</span>
                     @enderror
                 </div>
 
                 <div class="form-group">
-                    <label for="cache_prefix" class="form-label">Cache Key Prefix</label>
+                    <label for="cache_prefix" class="form-label">Cache Prefix</label>
                     <input type="text" id="cache_prefix" name="cache_prefix" class="form-input @error('cache_prefix') is-invalid @enderror" value="{{ old('cache_prefix', $config['cache']['prefix'] ?? 'tyro_') }}">
+                    <span class="form-hint">Prefix for cache keys.</span>
                     @error('cache_prefix')
                         <span class="form-error">{{ $message }}</span>
                     @enderror
@@ -161,27 +166,38 @@
             <h3 class="card-title">Middleware Configuration</h3>
         </div>
         <div class="card-body">
-            <div class="form-group">
-                <label for="middleware_role" class="form-label">Role Middleware Name</label>
-                <input type="text" id="middleware_role" name="middleware[role]" class="form-input @error('middleware.role') is-invalid @enderror" value="{{ old('middleware.role', $config['middleware']['role'] ?? 'role') }}">
-                <span class="form-hint">The middleware alias for role checks.</span>
-                @error('middleware.role')
-                    <span class="form-error">{{ $message }}</span>
-                @enderror
+            <div class="alert alert-info" style="margin-bottom: 1rem;">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                <div class="alert-content">
+                    <p class="alert-message">Configure the middleware alias names used in route definitions.</p>
+                </div>
             </div>
 
-            <div class="form-group">
-                <label for="middleware_privilege" class="form-label">Privilege Middleware Name</label>
-                <input type="text" id="middleware_privilege" name="middleware[privilege]" class="form-input @error('middleware.privilege') is-invalid @enderror" value="{{ old('middleware.privilege', $config['middleware']['privilege'] ?? 'privilege') }}">
-                <span class="form-hint">The middleware alias for privilege checks.</span>
-                @error('middleware.privilege')
-                    <span class="form-error">{{ $message }}</span>
-                @enderror
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="middleware_role" class="form-label">Role Middleware Name</label>
+                    <input type="text" id="middleware_role" name="middleware[role]" class="form-input @error('middleware.role') is-invalid @enderror" value="{{ old('middleware.role', $config['middleware']['role'] ?? 'role') }}">
+                    <span class="form-hint">Middleware alias for role checks (e.g., <code>role:admin</code>).</span>
+                    @error('middleware.role')
+                        <span class="form-error">{{ $message }}</span>
+                    @enderror
+                </div>
+
+                <div class="form-group">
+                    <label for="middleware_privilege" class="form-label">Privilege Middleware Name</label>
+                    <input type="text" id="middleware_privilege" name="middleware[privilege]" class="form-input @error('middleware.privilege') is-invalid @enderror" value="{{ old('middleware.privilege', $config['middleware']['privilege'] ?? 'privilege') }}">
+                    <span class="form-hint">Middleware alias for privilege checks (e.g., <code>privilege:edit-posts</code>).</span>
+                    @error('middleware.privilege')
+                        <span class="form-error">{{ $message }}</span>
+                    @enderror
+                </div>
             </div>
         </div>
     </div>
 
-    <!-- User Suspension Settings -->
+    <!-- User Suspension -->
     <div class="card" style="margin-bottom: 1.5rem;">
         <div class="card-header">
             <h3 class="card-title">User Suspension</h3>
@@ -189,17 +205,17 @@
         <div class="card-body">
             <div class="form-group">
                 <label class="toggle-label">
-                    <input type="checkbox" name="suspension_enabled" class="toggle-input" value="1" {{ old('suspension_enabled', $config['suspension']['enabled'] ?? true) ? 'checked' : '' }}>
+                    <input type="checkbox" name="suspension_enabled" class="toggle-input" value="1" {{ old('suspension_enabled', $config['suspension']['enabled'] ?? false) ? 'checked' : '' }}>
                     <span class="toggle-slider"></span>
-                    <span class="toggle-text">Enable User Suspension</span>
+                    <span class="toggle-text">Enable Suspension Feature</span>
                 </label>
-                <span class="form-hint" style="margin-top: 0.5rem;">Allow suspending users to prevent login.</span>
+                <span class="form-hint" style="margin-top: 0.5rem;">Allow suspending user accounts.</span>
             </div>
 
-            <div class="form-group">
-                <label for="suspension_column" class="form-label">Suspension Column</label>
+            <div class="form-group" style="margin-top: 1rem;">
+                <label for="suspension_column" class="form-label">Suspension Column Name</label>
                 <input type="text" id="suspension_column" name="suspension_column" class="form-input @error('suspension_column') is-invalid @enderror" value="{{ old('suspension_column', $config['suspension']['column'] ?? 'is_suspended') }}">
-                <span class="form-hint">The database column that tracks suspension status.</span>
+                <span class="form-hint">Column name in users table for suspension status.</span>
                 @error('suspension_column')
                     <span class="form-error">{{ $message }}</span>
                 @enderror

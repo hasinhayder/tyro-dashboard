@@ -126,11 +126,11 @@
         font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
         background-color: var(--bg-secondary);
         min-height: 100vh;
-        line-height: 1.5;
+        line-height: 1.6;
         color: var(--text-primary);
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
-        font-size: 14px;
+        font-size: 16px;
     }
 
     /* Dashboard Layout */
@@ -141,7 +141,7 @@
 
     /* Sidebar - shadcn style */
     .sidebar {
-        width: 240px;
+        width: 280px;
         background-color: var(--sidebar-bg);
         border-right: 1px solid var(--border-color);
         position: fixed;
@@ -154,7 +154,7 @@
     }
 
     .sidebar-header {
-        padding: 1rem 1rem;
+        padding: 1.25rem 1.25rem;
         border-bottom: 1px solid var(--border-color);
     }
 
@@ -166,23 +166,23 @@
     }
 
     .sidebar-logo-icon {
-        width: 28px;
-        height: 28px;
+        width: 36px;
+        height: 36px;
         background: var(--text-primary);
-        border-radius: 6px;
+        border-radius: 8px;
         display: flex;
         align-items: center;
         justify-content: center;
     }
 
     .sidebar-logo-icon svg {
-        width: 16px;
-        height: 16px;
+        width: 20px;
+        height: 20px;
         color: var(--bg-primary);
     }
 
     .sidebar-logo-text {
-        font-size: 0.875rem;
+        font-size: 1rem;
         font-weight: 600;
         color: var(--text-primary);
         letter-spacing: -0.01em;
@@ -198,27 +198,27 @@
     }
 
     .sidebar-section-title {
-        font-size: 0.6875rem;
+        font-size: 0.75rem;
         font-weight: 500;
         text-transform: uppercase;
         letter-spacing: 0.05em;
         color: var(--text-muted);
-        padding: 0.5rem 0.75rem;
-        margin-bottom: 0.125rem;
+        padding: 0.625rem 1rem;
+        margin-bottom: 0.25rem;
     }
 
     .sidebar-link {
         display: flex;
         align-items: center;
-        gap: 0.625rem;
-        padding: 0.5rem 0.75rem;
-        border-radius: 6px;
+        gap: 0.75rem;
+        padding: 0.625rem 1rem;
+        border-radius: 8px;
         color: var(--sidebar-text);
         text-decoration: none;
-        font-size: 0.8125rem;
+        font-size: 0.9375rem;
         font-weight: 500;
         transition: all 0.15s ease;
-        margin-bottom: 1px;
+        margin-bottom: 2px;
     }
 
     .sidebar-link:hover {
@@ -233,8 +233,8 @@
     }
 
     .sidebar-link svg {
-        width: 16px;
-        height: 16px;
+        width: 20px;
+        height: 20px;
         flex-shrink: 0;
         opacity: 0.7;
     }
@@ -247,7 +247,7 @@
     /* Main Content */
     .main-content {
         flex: 1;
-        margin-left: 240px;
+        margin-left: 280px;
         min-height: 100vh;
         display: flex;
         flex-direction: column;
@@ -257,8 +257,8 @@
     .topbar {
         background-color: var(--bg-primary);
         border-bottom: 1px solid var(--border-color);
-        padding: 0 1rem;
-        height: 52px;
+        padding: 0 1.5rem;
+        height: 64px;
         display: flex;
         align-items: center;
         justify-content: space-between;
@@ -295,8 +295,8 @@
     .breadcrumb {
         display: flex;
         align-items: center;
-        gap: 0.375rem;
-        font-size: 0.8125rem;
+        gap: 0.5rem;
+        font-size: 0.9375rem;
         color: var(--text-muted);
     }
 
@@ -364,15 +364,15 @@
     }
 
     .user-avatar {
-        width: 28px;
-        height: 28px;
+        width: 36px;
+        height: 36px;
         border-radius: 50%;
         background: var(--text-primary);
         display: flex;
         align-items: center;
         justify-content: center;
         color: var(--bg-primary);
-        font-size: 0.6875rem;
+        font-size: 0.8125rem;
         font-weight: 600;
     }
 
@@ -381,16 +381,16 @@
     }
 
     .user-name {
-        font-size: 0.8125rem;
+        font-size: 0.9375rem;
         font-weight: 500;
         color: var(--text-primary);
-        line-height: 1.2;
+        line-height: 1.3;
     }
 
     .user-role {
-        font-size: 0.6875rem;
+        font-size: 0.8125rem;
         color: var(--text-muted);
-        line-height: 1.2;
+        line-height: 1.3;
     }
 
     .user-dropdown-arrow {
@@ -461,14 +461,14 @@
 
     /* Page Content */
     .page-content {
-        padding: 1.5rem;
+        padding: 2rem;
         flex: 1;
         /* max-width: 1200px; */
     }
 
     /* Page Header */
     .page-header {
-        margin-bottom: 1.5rem;
+        margin-bottom: 2rem;
     }
 
     .page-header-row {
@@ -480,7 +480,7 @@
     }
 
     .page-title {
-        font-size: 1.5rem;
+        font-size: 1.875rem;
         font-weight: 600;
         color: var(--text-primary);
         letter-spacing: -0.025em;
@@ -488,8 +488,8 @@
     }
 
     .page-description {
-        margin-top: 0.25rem;
-        font-size: 0.8125rem;
+        margin-top: 0.375rem;
+        font-size: 0.9375rem;
         color: var(--text-muted);
     }
 
@@ -502,7 +502,7 @@
     }
 
     .card-header {
-        padding: 1rem 1.25rem;
+        padding: 1.25rem 1.5rem;
         border-bottom: 1px solid var(--border-color);
         display: flex;
         align-items: center;
@@ -510,17 +510,17 @@
     }
 
     .card-title {
-        font-size: 0.875rem;
+        font-size: 1rem;
         font-weight: 600;
         color: var(--text-primary);
     }
 
     .card-body {
-        padding: 1.25rem;
+        padding: 1.5rem;
     }
 
     .card-footer {
-        padding: 1rem 1.25rem;
+        padding: 1.25rem 1.5rem;
         border-top: 1px solid var(--border-color);
         background-color: var(--bg-secondary);
         border-radius: 0 0 8px 8px;
@@ -537,8 +537,8 @@
     .stat-card {
         background: var(--bg-primary);
         border: 1px solid var(--border-color);
-        border-radius: 8px;
-        padding: 1.25rem;
+        border-radius: 10px;
+        padding: 1.5rem;
         transition: all 0.15s ease;
     }
 
@@ -547,18 +547,18 @@
     }
 
     .stat-icon {
-        width: 36px;
-        height: 36px;
-        border-radius: 8px;
+        width: 44px;
+        height: 44px;
+        border-radius: 10px;
         display: flex;
         align-items: center;
         justify-content: center;
-        margin-bottom: 0.75rem;
+        margin-bottom: 1rem;
     }
 
     .stat-icon svg {
-        width: 18px;
-        height: 18px;
+        width: 22px;
+        height: 22px;
     }
 
     .stat-icon-primary {
@@ -587,14 +587,14 @@
     }
 
     .stat-label {
-        font-size: 0.75rem;
+        font-size: 0.875rem;
         font-weight: 500;
         color: var(--text-muted);
-        margin-bottom: 0.25rem;
+        margin-bottom: 0.375rem;
     }
 
     .stat-value {
-        font-size: 1.75rem;
+        font-size: 2rem;
         font-weight: 700;
         color: var(--text-primary);
         line-height: 1;
@@ -630,20 +630,20 @@
 
     .table th,
     .table td {
-        padding: 0.75rem 1rem;
+        padding: 1rem 1.25rem;
         text-align: left;
         border-bottom: 1px solid var(--border-color);
     }
 
     .table th {
-        font-size: 0.75rem;
+        font-size: 0.875rem;
         font-weight: 500;
         color: var(--text-muted);
         background-color: var(--bg-secondary);
     }
 
     .table td {
-        font-size: 0.8125rem;
+        font-size: 0.9375rem;
         color: var(--text-primary);
     }
 
@@ -660,12 +660,12 @@
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        gap: 0.375rem;
-        padding: 0.5rem 0.875rem;
-        font-size: 0.8125rem;
+        gap: 0.5rem;
+        padding: 0.625rem 1rem;
+        font-size: 0.9375rem;
         font-weight: 500;
         font-family: inherit;
-        border-radius: 6px;
+        border-radius: 8px;
         border: none;
         cursor: pointer;
         transition: all 0.15s ease;
@@ -675,18 +675,18 @@
     }
 
     .btn svg {
-        width: 14px;
-        height: 14px;
+        width: 18px;
+        height: 18px;
     }
 
     .btn-sm {
-        padding: 0.375rem 0.625rem;
-        font-size: 0.75rem;
+        padding: 0.5rem 0.75rem;
+        font-size: 0.875rem;
     }
 
     .btn-lg {
-        padding: 0.625rem 1.25rem;
-        font-size: 0.875rem;
+        padding: 0.75rem 1.5rem;
+        font-size: 1rem;
     }
 
     .btn-primary {
@@ -762,15 +762,15 @@
 
     /* Form Elements - shadcn style */
     .form-group {
-        margin-bottom: 1rem;
+        margin-bottom: 1.25rem;
     }
 
     .form-label {
         display: block;
-        font-size: 0.8125rem;
+        font-size: 0.9375rem;
         font-weight: 500;
         color: var(--text-primary);
-        margin-bottom: 0.375rem;
+        margin-bottom: 0.5rem;
     }
 
     .form-label-optional {
@@ -782,11 +782,11 @@
     .form-select,
     .form-textarea {
         width: 100%;
-        padding: 0.5rem 0.75rem;
-        font-size: 0.8125rem;
+        padding: 0.625rem 0.875rem;
+        font-size: 0.9375rem;
         font-family: inherit;
         border: 1px solid var(--input-border);
-        border-radius: 6px;
+        border-radius: 8px;
         background-color: var(--input-bg);
         color: var(--text-primary);
         transition: border-color 0.15s ease, box-shadow 0.15s ease;
@@ -827,15 +827,15 @@
     }
 
     .form-hint {
-        font-size: 0.75rem;
+        font-size: 0.8125rem;
         color: var(--text-muted);
-        margin-top: 0.375rem;
+        margin-top: 0.5rem;
     }
 
     .form-error {
-        font-size: 0.75rem;
+        font-size: 0.8125rem;
         color: var(--error-color);
-        margin-top: 0.375rem;
+        margin-top: 0.5rem;
     }
 
     .form-row {
@@ -847,9 +847,9 @@
     /* Checkbox & Radio - shadcn style */
     .checkbox-input,
     .radio-input {
-        width: 16px;
-        height: 16px;
-        border-radius: 4px;
+        width: 20px;
+        height: 20px;
+        border-radius: 5px;
         border: 1px solid var(--input-border);
         background-color: transparent;
         cursor: pointer;
@@ -873,10 +873,10 @@
     .checkbox-input:checked::after {
         content: '';
         position: absolute;
-        left: 5px;
+        left: 6px;
         top: 2px;
-        width: 4px;
-        height: 8px;
+        width: 5px;
+        height: 10px;
         border: solid var(--bg-primary);
         border-width: 0 2px 2px 0;
         transform: rotate(45deg);
@@ -885,10 +885,10 @@
     .radio-input:checked::after {
         content: '';
         position: absolute;
-        left: 4px;
-        top: 4px;
-        width: 6px;
-        height: 6px;
+        left: 5px;
+        top: 5px;
+        width: 8px;
+        height: 8px;
         background: var(--bg-primary);
         border-radius: 50%;
     }
@@ -897,7 +897,7 @@
     .toggle-label {
         display: flex;
         align-items: center;
-        gap: 0.625rem;
+        gap: 0.75rem;
         cursor: pointer;
     }
 
@@ -910,10 +910,10 @@
 
     .toggle-slider {
         position: relative;
-        width: 36px;
-        height: 20px;
+        width: 44px;
+        height: 24px;
         background-color: var(--input-border);
-        border-radius: 20px;
+        border-radius: 24px;
         transition: 0.2s;
         flex-shrink: 0;
     }
@@ -921,8 +921,8 @@
     .toggle-slider:before {
         position: absolute;
         content: "";
-        height: 16px;
-        width: 16px;
+        height: 20px;
+        width: 20px;
         left: 2px;
         bottom: 2px;
         background-color: white;
@@ -936,11 +936,11 @@
     }
 
     .toggle-input:checked + .toggle-slider:before {
-        transform: translateX(16px);
+        transform: translateX(20px);
     }
 
     .toggle-text {
-        font-size: 0.8125rem;
+        font-size: 0.9375rem;
         font-weight: 500;
         color: var(--text-primary);
     }
@@ -949,9 +949,9 @@
     .badge {
         display: inline-flex;
         align-items: center;
-        gap: 0.25rem;
-        padding: 0.125rem 0.5rem;
-        font-size: 0.6875rem;
+        gap: 0.375rem;
+        padding: 0.25rem 0.625rem;
+        font-size: 0.8125rem;
         font-weight: 500;
         border-radius: 9999px;
         line-height: 1.5;
@@ -985,18 +985,18 @@
 
     /* Alerts - shadcn style */
     .alert {
-        padding: 0.875rem 1rem;
-        border-radius: 8px;
+        padding: 1rem 1.25rem;
+        border-radius: 10px;
         border: 1px solid;
-        margin-bottom: 1rem;
+        margin-bottom: 1.25rem;
         display: flex;
         align-items: flex-start;
-        gap: 0.75rem;
+        gap: 0.875rem;
     }
 
     .alert svg {
-        width: 16px;
-        height: 16px;
+        width: 20px;
+        height: 20px;
         flex-shrink: 0;
         margin-top: 0.125rem;
     }
@@ -1007,12 +1007,12 @@
 
     .alert-title {
         font-weight: 600;
-        font-size: 0.8125rem;
-        margin-bottom: 0.125rem;
+        font-size: 0.9375rem;
+        margin-bottom: 0.25rem;
     }
 
     .alert-message {
-        font-size: 0.8125rem;
+        font-size: 0.9375rem;
     }
 
     .alert-success {
