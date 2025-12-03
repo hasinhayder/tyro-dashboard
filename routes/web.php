@@ -49,6 +49,7 @@ Route::middleware('tyro-dashboard.admin')->group(function () {
         Route::get('/{id}/edit', [RoleController::class, 'edit'])->name('edit');
         Route::put('/{id}', [RoleController::class, 'update'])->name('update');
         Route::delete('/{id}', [RoleController::class, 'destroy'])->name('destroy');
+        Route::delete('/{id}/users/{userId}', [RoleController::class, 'removeUser'])->name('remove-user');
     });
 
     // Privilege Management
@@ -60,5 +61,6 @@ Route::middleware('tyro-dashboard.admin')->group(function () {
         Route::get('/{id}/edit', [PrivilegeController::class, 'edit'])->name('edit');
         Route::put('/{id}', [PrivilegeController::class, 'update'])->name('update');
         Route::delete('/{id}', [PrivilegeController::class, 'destroy'])->name('destroy');
+        Route::delete('/{id}/roles/{roleId}', [PrivilegeController::class, 'removeRole'])->name('remove-role');
     });
 });

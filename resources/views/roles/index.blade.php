@@ -62,14 +62,14 @@
                 @foreach($roles as $role)
                 <tr>
                     <td>
-                        <div style="display: flex; align-items: center; gap: 0.75rem;">
+                        <a href="{{ route('tyro-dashboard.roles.show', $role->id) }}" style="display: flex; align-items: center; gap: 0.75rem; text-decoration: none;">
                             <div style="width: 36px; height: 36px; border-radius: 0.5rem; background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%); display: flex; align-items: center; justify-content: center;">
                                 <svg style="width: 18px; height: 18px; color: white;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
                                 </svg>
                             </div>
-                            <span style="font-weight: 500;">{{ $role->name }}</span>
-                        </div>
+                            <span style="font-weight: 500; color: var(--text-primary);">{{ $role->name }}</span>
+                        </a>
                     </td>
                     <td>
                         <code style="padding: 0.25rem 0.5rem; background-color: var(--bg-secondary); border-radius: 0.25rem; font-size: 0.8125rem;">{{ $role->slug }}</code>

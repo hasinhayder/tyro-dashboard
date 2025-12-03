@@ -62,14 +62,14 @@
                 @foreach($privileges as $privilege)
                 <tr>
                     <td>
-                        <div style="display: flex; align-items: center; gap: 0.75rem;">
+                        <a href="{{ route('tyro-dashboard.privileges.show', $privilege->id) }}" style="display: flex; align-items: center; gap: 0.75rem; text-decoration: none;">
                             <div style="width: 36px; height: 36px; border-radius: 0.5rem; background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%); display: flex; align-items: center; justify-content: center;">
                                 <svg style="width: 18px; height: 18px; color: white;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z" />
                                 </svg>
                             </div>
-                            <span style="font-weight: 500;">{{ $privilege->name }}</span>
-                        </div>
+                            <span style="font-weight: 500; color: var(--text-primary);">{{ $privilege->name }}</span>
+                        </a>
                     </td>
                     <td>
                         <code style="padding: 0.25rem 0.5rem; background-color: var(--bg-secondary); border-radius: 0.25rem; font-size: 0.8125rem;">{{ $privilege->slug }}</code>

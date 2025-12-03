@@ -1270,17 +1270,26 @@
     /* Action buttons */
     .action-buttons {
         display: flex;
-        gap: 0.125rem;
+        align-items: center;
+        gap: 0.25rem;
+    }
+
+    .action-buttons form {
+        display: flex;
+        align-items: center;
     }
 
     .action-btn {
-        padding: 0.375rem;
+        padding: 0.5rem;
         border: none;
         background: transparent;
         color: var(--text-muted);
         cursor: pointer;
-        border-radius: 4px;
+        border-radius: 6px;
         transition: all 0.15s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
 
     .action-btn:hover {
@@ -1294,8 +1303,9 @@
     }
 
     .action-btn svg {
-        width: 14px;
-        height: 14px;
+        width: 18px;
+        height: 18px;
+        display: block;
     }
 
     /* Badge list */

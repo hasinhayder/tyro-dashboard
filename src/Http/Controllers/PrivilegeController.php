@@ -146,4 +146,17 @@ class PrivilegeController extends BaseController
             ->route('tyro-dashboard.privileges.index')
             ->with('success', 'Privilege deleted successfully.');
     }
+
+    /**
+     * Remove this privilege from a specific role.
+     */
+    public function removeRole($id, $roleId)
+    {
+        $privilege = Privilege::findOrFail($id);
+        $privilege->roles()->detach($roleId);
+
+        return redirect()
+            ->route('tyro-dashboard.privileges.show', $id)
+            ->with('success', 'Privilege removed from role successfully.');
+    }
 }

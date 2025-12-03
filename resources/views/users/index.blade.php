@@ -79,7 +79,7 @@
                 @foreach($users as $listUser)
                 <tr>
                     <td>
-                        <div class="user-cell">
+                        <a href="{{ route('tyro-dashboard.users.edit', $listUser->id) }}" class="user-cell" style="text-decoration: none;">
                             <div class="user-cell-avatar">
                                 {{ strtoupper(substr($listUser->name, 0, 1)) }}
                             </div>
@@ -87,7 +87,7 @@
                                 <div class="user-cell-name">{{ $listUser->name }}</div>
                                 <div class="user-cell-email">{{ $listUser->email }}</div>
                             </div>
-                        </div>
+                        </a>
                     </td>
                     <td>
                         <div class="badge-list">

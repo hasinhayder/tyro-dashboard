@@ -152,4 +152,17 @@ class RoleController extends BaseController
             ->route('tyro-dashboard.roles.index')
             ->with('success', 'Role deleted successfully.');
     }
+
+    /**
+     * Remove a user from the specified role.
+     */
+    public function removeUser($id, $userId)
+    {
+        $role = Role::findOrFail($id);
+        $role->users()->detach($userId);
+
+        return redirect()
+            ->route('tyro-dashboard.roles.show', $id)
+            ->with('success', 'User removed from role successfully.');
+    }
 }
