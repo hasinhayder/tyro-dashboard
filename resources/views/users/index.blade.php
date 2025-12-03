@@ -205,7 +205,7 @@
 @push('scripts')
 <script>
     function openSuspendModal(userId, userName) {
-        document.getElementById('suspendForm').action = '{{ route('tyro-dashboard.users.suspend', '') }}/' + userId;
+        document.getElementById('suspendForm').action = '{{ url(config('tyro-dashboard.route_prefix', 'dashboard')) }}/users/' + userId + '/suspend';
         document.getElementById('suspendUserName').textContent = userName;
         document.getElementById('reason').value = '';
         openModal('suspendModal');
