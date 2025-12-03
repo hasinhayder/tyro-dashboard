@@ -1,115 +1,193 @@
 <style>
     /* ============================================
-       SHADCN-INSPIRED DESIGN SYSTEM
-       Clean, minimal, modern UI
+       SHADCN UI DESIGN SYSTEM
+       Compatible with shadcn/ui theming
     ============================================ */
     
     :root {
-        /* Light theme - shadcn inspired */
-        --background: 0 0% 100%;
-        --foreground: 240 10% 3.9%;
-        --card: 0 0% 100%;
-        --card-foreground: 240 10% 3.9%;
-        --popover: 0 0% 100%;
-        --popover-foreground: 240 10% 3.9%;
-        --primary: 240 5.9% 10%;
-        --primary-foreground: 0 0% 98%;
-        --secondary: 240 4.8% 95.9%;
-        --secondary-foreground: 240 5.9% 10%;
-        --muted: 240 4.8% 95.9%;
-        --muted-foreground: 240 3.8% 46.1%;
-        --accent: 240 4.8% 95.9%;
-        --accent-foreground: 240 5.9% 10%;
-        --destructive: 0 84.2% 60.2%;
-        --destructive-foreground: 0 0% 98%;
-        --border: 240 5.9% 90%;
-        --input: 240 5.9% 90%;
-        --ring: 240 5.9% 10%;
-        --radius: 0.5rem;
+        /* shadcn UI Variables (oklch) */
+        --radius: 0.625rem;
+        --background: oklch(1 0 0);
+        --foreground: oklch(0.145 0 0);
+        --card: oklch(1 0 0);
+        --card-foreground: oklch(0.145 0 0);
+        --popover: oklch(1 0 0);
+        --popover-foreground: oklch(0.145 0 0);
+        --primary: oklch(0.205 0 0);
+        --primary-foreground: oklch(0.985 0 0);
+        --secondary: oklch(0.97 0 0);
+        --secondary-foreground: oklch(0.205 0 0);
+        --muted: oklch(0.97 0 0);
+        --muted-foreground: oklch(0.556 0 0);
+        --accent: oklch(0.97 0 0);
+        --accent-foreground: oklch(0.205 0 0);
+        --destructive: oklch(0.577 0.245 27.325);
+        --border: oklch(0.922 0 0);
+        --input: oklch(0.922 0 0);
+        --ring: oklch(0.708 0 0);
+        --chart-1: oklch(0.646 0.222 41.116);
+        --chart-2: oklch(0.6 0.118 184.704);
+        --chart-3: oklch(0.398 0.07 227.392);
+        --chart-4: oklch(0.828 0.189 84.429);
+        --chart-5: oklch(0.769 0.188 70.08);
+        --sidebar: oklch(0.985 0 0);
+        --sidebar-foreground: oklch(0.145 0 0);
+        --sidebar-primary: oklch(0.205 0 0);
+        --sidebar-primary-foreground: oklch(0.985 0 0);
+        --sidebar-accent: oklch(0.97 0 0);
+        --sidebar-accent-foreground: oklch(0.205 0 0);
+        --sidebar-border: oklch(0.922 0 0);
+        --sidebar-ring: oklch(0.708 0 0);
         
-        /* Semantic colors */
-        --bg-primary: #ffffff;
-        --bg-secondary: #fafafa;
-        --bg-tertiary: #f4f4f5;
-        --text-primary: #09090b;
-        --text-secondary: #71717a;
-        --text-muted: #a1a1aa;
-        --border-color: #e4e4e7;
-        --border-color-light: #f4f4f5;
-        --input-bg: #ffffff;
-        --input-border: #e4e4e7;
-        --input-focus-border: #18181b;
-        --btn-primary-bg: #18181b;
-        --btn-primary-text: #fafafa;
-        --btn-primary-hover: #27272a;
-        --btn-secondary-bg: #ffffff;
-        --btn-secondary-text: #18181b;
-        --btn-secondary-hover: #f4f4f5;
-        --btn-danger-bg: #ef4444;
-        --btn-danger-text: #ffffff;
-        --btn-danger-hover: #dc2626;
-        --btn-success-bg: #22c55e;
-        --btn-success-text: #ffffff;
-        --btn-success-hover: #16a34a;
-        --btn-warning-bg: #f59e0b;
-        --btn-warning-text: #ffffff;
-        --btn-warning-hover: #d97706;
-        --link-color: #18181b;
-        --link-hover: #3f3f46;
-        --error-color: #ef4444;
-        --error-bg: #fef2f2;
-        --error-border: #fecaca;
-        --success-color: #22c55e;
-        --success-bg: #f0fdf4;
-        --success-border: #bbf7d0;
-        --warning-color: #f59e0b;
-        --warning-bg: #fffbeb;
-        --warning-border: #fde68a;
-        --info-color: #3b82f6;
-        --info-bg: #eff6ff;
-        --info-border: #bfdbfe;
-        --sidebar-bg: #fafafa;
-        --sidebar-text: #71717a;
-        --sidebar-text-active: #09090b;
-        --sidebar-hover: #f4f4f5;
-        --sidebar-active: #ffffff;
+        /* Extended semantic colors (derived from shadcn variables) */
+        --success: oklch(0.627 0.194 149.214);
+        --success-foreground: oklch(1 0 0);
+        --warning: oklch(0.769 0.188 70.08);
+        --warning-foreground: oklch(0.205 0 0);
+        --info: oklch(0.623 0.214 259.815);
+        --info-foreground: oklch(1 0 0);
+        
+        /* Card shadows */
         --card-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
         --card-shadow-hover: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+
+        /* Mappings to legacy variables */
+        --bg-primary: var(--background);
+        --bg-secondary: var(--muted);
+        --bg-tertiary: var(--accent);
+        --text-primary: var(--foreground);
+        --text-secondary: var(--muted-foreground);
+        --text-muted: var(--muted-foreground);
+        --border-color: var(--border);
+        --border-color-light: var(--border);
+        --input-bg: var(--background);
+        --input-border: var(--input);
+        --input-focus-border: var(--ring);
+        --btn-primary-bg: var(--primary);
+        --btn-primary-text: var(--primary-foreground);
+        --btn-primary-hover: var(--primary);
+        --btn-secondary-bg: var(--secondary);
+        --btn-secondary-text: var(--secondary-foreground);
+        --btn-secondary-hover: var(--secondary);
+        --btn-danger-bg: var(--destructive);
+        --btn-danger-text: var(--destructive-foreground);
+        --btn-danger-hover: var(--destructive);
+        --btn-success-bg: var(--success);
+        --btn-success-text: var(--success-foreground);
+        --btn-success-hover: var(--success);
+        --btn-warning-bg: var(--warning);
+        --btn-warning-text: var(--warning-foreground);
+        --btn-warning-hover: var(--warning);
+        --link-color: var(--primary);
+        --link-hover: var(--primary);
+        --error-color: var(--destructive);
+        --error-bg: color-mix(in srgb, var(--destructive), transparent 90%);
+        --error-border: var(--destructive);
+        --success-color: var(--success);
+        --success-bg: color-mix(in srgb, var(--success), transparent 90%);
+        --success-border: var(--success);
+        --warning-color: var(--warning);
+        --warning-bg: color-mix(in srgb, var(--warning), transparent 90%);
+        --warning-border: var(--warning);
+        --info-color: var(--info);
+        --info-bg: color-mix(in srgb, var(--info), transparent 90%);
+        --info-border: var(--info);
+        --sidebar-bg: var(--sidebar);
+        --sidebar-text: var(--sidebar-foreground);
+        --sidebar-text-active: var(--sidebar-primary-foreground);
+        --sidebar-hover: var(--sidebar-accent);
+        --sidebar-active: var(--sidebar-primary);
     }
 
+    .dark {
+        --background: oklch(0.145 0 0);
+        --foreground: oklch(0.985 0 0);
+        --card: oklch(0.205 0 0);
+        --card-foreground: oklch(0.985 0 0);
+        --popover: oklch(0.205 0 0);
+        --popover-foreground: oklch(0.985 0 0);
+        --primary: oklch(0.922 0 0);
+        --primary-foreground: oklch(0.205 0 0);
+        --secondary: oklch(0.269 0 0);
+        --secondary-foreground: oklch(0.985 0 0);
+        --muted: oklch(0.269 0 0);
+        --muted-foreground: oklch(0.708 0 0);
+        --accent: oklch(0.269 0 0);
+        --accent-foreground: oklch(0.985 0 0);
+        --destructive: oklch(0.704 0.191 22.216);
+        --border: oklch(1 0 0 / 10%);
+        --input: oklch(1 0 0 / 15%);
+        --ring: oklch(0.556 0 0);
+        --chart-1: oklch(0.488 0.243 264.376);
+        --chart-2: oklch(0.696 0.17 162.48);
+        --chart-3: oklch(0.769 0.188 70.08);
+        --chart-4: oklch(0.627 0.265 303.9);
+        --chart-5: oklch(0.645 0.246 16.439);
+        --sidebar: oklch(0.205 0 0);
+        --sidebar-foreground: oklch(0.985 0 0);
+        --sidebar-primary: oklch(0.488 0.243 264.376);
+        --sidebar-primary-foreground: oklch(0.985 0 0);
+        --sidebar-accent: oklch(0.269 0 0);
+        --sidebar-accent-foreground: oklch(0.985 0 0);
+        --sidebar-border: oklch(1 0 0 / 10%);
+        --sidebar-ring: oklch(0.556 0 0);
+        
+        /* Extended semantic colors (dark mode) */
+        --success: oklch(0.696 0.17 162.48);
+        --success-foreground: oklch(0.145 0 0);
+        --warning: oklch(0.769 0.188 70.08);
+        --warning-foreground: oklch(0.145 0 0);
+        --info: oklch(0.488 0.243 264.376);
+        --info-foreground: oklch(0.985 0 0);
+        
+        /* Card shadows */
+        --card-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.2);
+        --card-shadow-hover: 0 4px 6px -1px rgb(0 0 0 / 0.3), 0 2px 4px -2px rgb(0 0 0 / 0.2);
+    }
+    
+    /* Support for html.dark class (Laravel default) */
     html.dark {
-        --bg-primary: #09090b;
-        --bg-secondary: #18181b;
-        --bg-tertiary: #27272a;
-        --text-primary: #fafafa;
-        --text-secondary: #a1a1aa;
-        --text-muted: #71717a;
-        --border-color: #27272a;
-        --border-color-light: #18181b;
-        --input-bg: #18181b;
-        --input-border: #3f3f46;
-        --input-focus-border: #fafafa;
-        --btn-primary-bg: #fafafa;
-        --btn-primary-text: #18181b;
-        --btn-primary-hover: #e4e4e7;
-        --btn-secondary-bg: #27272a;
-        --btn-secondary-text: #fafafa;
-        --btn-secondary-hover: #3f3f46;
-        --link-color: #fafafa;
-        --link-hover: #d4d4d8;
-        --error-bg: rgba(239, 68, 68, 0.1);
-        --error-border: rgba(239, 68, 68, 0.2);
-        --success-bg: rgba(34, 197, 94, 0.1);
-        --success-border: rgba(34, 197, 94, 0.2);
-        --warning-bg: rgba(245, 158, 11, 0.1);
-        --warning-border: rgba(245, 158, 11, 0.2);
-        --info-bg: rgba(59, 130, 246, 0.1);
-        --info-border: rgba(59, 130, 246, 0.2);
-        --sidebar-bg: #09090b;
-        --sidebar-text: #a1a1aa;
-        --sidebar-text-active: #fafafa;
-        --sidebar-hover: #18181b;
-        --sidebar-active: #27272a;
+        --background: oklch(0.145 0 0);
+        --foreground: oklch(0.985 0 0);
+        --card: oklch(0.205 0 0);
+        --card-foreground: oklch(0.985 0 0);
+        --popover: oklch(0.205 0 0);
+        --popover-foreground: oklch(0.985 0 0);
+        --primary: oklch(0.922 0 0);
+        --primary-foreground: oklch(0.205 0 0);
+        --secondary: oklch(0.269 0 0);
+        --secondary-foreground: oklch(0.985 0 0);
+        --muted: oklch(0.269 0 0);
+        --muted-foreground: oklch(0.708 0 0);
+        --accent: oklch(0.269 0 0);
+        --accent-foreground: oklch(0.985 0 0);
+        --destructive: oklch(0.704 0.191 22.216);
+        --border: oklch(1 0 0 / 10%);
+        --input: oklch(1 0 0 / 15%);
+        --ring: oklch(0.556 0 0);
+        --chart-1: oklch(0.488 0.243 264.376);
+        --chart-2: oklch(0.696 0.17 162.48);
+        --chart-3: oklch(0.769 0.188 70.08);
+        --chart-4: oklch(0.627 0.265 303.9);
+        --chart-5: oklch(0.645 0.246 16.439);
+        --sidebar: oklch(0.205 0 0);
+        --sidebar-foreground: oklch(0.985 0 0);
+        --sidebar-primary: oklch(0.488 0.243 264.376);
+        --sidebar-primary-foreground: oklch(0.985 0 0);
+        --sidebar-accent: oklch(0.269 0 0);
+        --sidebar-accent-foreground: oklch(0.985 0 0);
+        --sidebar-border: oklch(1 0 0 / 10%);
+        --sidebar-ring: oklch(0.556 0 0);
+        
+        /* Extended semantic colors (dark mode) */
+        --success: oklch(0.696 0.17 162.48);
+        --success-foreground: oklch(0.145 0 0);
+        --warning: oklch(0.769 0.188 70.08);
+        --warning-foreground: oklch(0.145 0 0);
+        --info: oklch(0.488 0.243 264.376);
+        --info-foreground: oklch(0.985 0 0);
+        
+        /* Card shadows */
         --card-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.2);
         --card-shadow-hover: 0 4px 6px -1px rgb(0 0 0 / 0.3), 0 2px 4px -2px rgb(0 0 0 / 0.2);
     }
