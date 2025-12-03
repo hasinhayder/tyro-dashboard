@@ -139,4 +139,17 @@
     </div>
     @endif
 </div>
+
+@push('scripts')
+<script>
+    // Auto-focus search input and move cursor to end if search is present
+    document.addEventListener('DOMContentLoaded', function() {
+        const searchInput = document.querySelector('input[name="search"]');
+        if (searchInput && searchInput.value) {
+            searchInput.focus();
+            searchInput.setSelectionRange(searchInput.value.length, searchInput.value.length);
+        }
+    });
+</script>
+@endpush
 @endsection
