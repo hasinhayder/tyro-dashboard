@@ -1,0 +1,58 @@
+{
+    "name": "hasinhayder/tyro-dashboard",
+    "description": "Tyro Dashboard - Beautiful admin dashboard for managing Tyro roles, privileges, users, and settings",
+    "keywords": [
+        "laravel",
+        "dashboard",
+        "admin",
+        "roles",
+        "privileges",
+        "users",
+        "settings",
+        "tyro",
+        "blade"
+    ],
+    "license": "MIT",
+    "type": "library",
+    "require": {
+        "php": "^8.2",
+        "laravel/framework": "^12.0",
+        "hasinhayder/tyro": "^1.0|@dev",
+        "hasinhayder/tyro-login": "^1.0|@dev"
+    },
+    "require-dev": {
+        "laravel/pint": "^1.25",
+        "nunomaduro/collision": "^8.6",
+        "orchestra/testbench": "^10.0",
+        "pestphp/pest": "^3.0",
+        "pestphp/pest-plugin-laravel": "^3.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "HasinHayder\\TyroDashboard\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "HasinHayder\\TyroDashboard\\Tests\\": "tests/"
+        }
+    },
+    "scripts": {
+        "test": "vendor/bin/pest"
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "HasinHayder\\TyroDashboard\\Providers\\TyroDashboardServiceProvider"
+            ]
+        }
+    },
+    "config": {
+        "sort-packages": true,
+        "allow-plugins": {
+            "pestphp/pest-plugin": true
+        }
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true
+}
