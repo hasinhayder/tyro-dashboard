@@ -16,7 +16,7 @@
         <div>
             <h1 class="page-title">{{ $privilege->name }}</h1>
             <p class="page-description">
-                <code style="padding: 0.375rem 0.625rem; background-color: var(--bg-secondary); border-radius: 0.375rem; font-size: 0.9375rem;">{{ $privilege->slug }}</code>
+                <code style="padding: 0.375rem 0.625rem; background-color: var(--muted); border-radius: 0.375rem; font-size: 0.9375rem;">{{ $privilege->slug }}</code>
             </p>
         </div>
         <div class="btn-group">
@@ -45,17 +45,17 @@
         <div class="card-body">
             <div style="margin-bottom: 1rem;">
                 <label class="form-label" style="margin-bottom: 0.375rem; font-size: 0.9375rem;">Name</label>
-                <p style="font-size: 1rem; color: var(--text-primary);">{{ $privilege->name }}</p>
+                <p style="font-size: 1rem; color: var(--foreground);">{{ $privilege->name }}</p>
             </div>
             <div style="margin-bottom: 1rem;">
                 <label class="form-label" style="margin-bottom: 0.375rem; font-size: 0.9375rem;">Slug</label>
                 <p>
-                    <code style="padding: 0.375rem 0.625rem; background-color: var(--bg-secondary); border-radius: 0.375rem; font-size: 0.9375rem;">{{ $privilege->slug }}</code>
+                    <code style="padding: 0.375rem 0.625rem; background-color: var(--muted); border-radius: 0.375rem; font-size: 0.9375rem;">{{ $privilege->slug }}</code>
                 </p>
             </div>
             <div>
                 <label class="form-label" style="margin-bottom: 0.375rem; font-size: 0.9375rem;">Description</label>
-                <p style="font-size: 1rem; color: var(--text-secondary);">{{ $privilege->description ?: 'No description provided.' }}</p>
+                <p style="font-size: 1rem; color: var(--muted-foreground);">{{ $privilege->description ?: 'No description provided.' }}</p>
             </div>
         </div>
     </div>
@@ -85,7 +85,7 @@
                                             <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
                                         </svg>
                                     </div>
-                                    <span style="font-weight: 500; font-size: 0.9375rem; color: var(--text-primary);">{{ $role->name }}</span>
+                                    <span style="font-weight: 500; font-size: 0.9375rem; color: var(--foreground);">{{ $role->name }}</span>
                                 </a>
                             </td>
                             <td style="text-align: right;">

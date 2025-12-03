@@ -3,6 +3,7 @@
 namespace HasinHayder\TyroDashboard\Providers;
 
 use HasinHayder\TyroDashboard\Console\Commands\InstallCommand;
+use HasinHayder\TyroDashboard\Console\Commands\PublishStyleCommand;
 use HasinHayder\TyroDashboard\Console\Commands\VersionCommand;
 use HasinHayder\TyroDashboard\Http\Middleware\EnsureIsAdmin;
 use Illuminate\Routing\Router;
@@ -56,6 +57,7 @@ class TyroDashboardServiceProvider extends ServiceProvider
 
         $this->commands([
             InstallCommand::class,
+            PublishStyleCommand::class,
             VersionCommand::class,
         ]);
     }
@@ -107,6 +109,11 @@ class TyroDashboardServiceProvider extends ServiceProvider
             $viewsPath . '/dashboard/user.blade.php' => resource_path('views/vendor/tyro-dashboard/dashboard/user.blade.php'),
             $viewsPath . '/profile' => resource_path('views/vendor/tyro-dashboard/profile'),
         ], 'tyro-dashboard-views-user');
+
+        // Publish styles
+        $this->publishes([
+            $viewsPath . '/partials/styles.blade.php' => resource_path('views/vendor/tyro-dashboard/partials/styles.blade.php'),
+        ], 'tyro-dashboard-styles');
 
         // Publish all
         $this->publishes([

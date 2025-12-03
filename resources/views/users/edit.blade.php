@@ -104,14 +104,14 @@
                         {{ strtoupper(substr($editUser->name, 0, 1)) }}
                     </div>
                     <div>
-                        <div style="font-weight: 600; color: var(--text-primary);">{{ $editUser->name }}</div>
-                        <div style="font-size: 0.875rem; color: var(--text-muted);">Member since {{ $editUser->created_at->format('M d, Y') }}</div>
+                        <div style="font-weight: 600; color: var(--foreground);">{{ $editUser->name }}</div>
+                        <div style="font-size: 0.875rem; color: var(--muted-foreground);">Member since {{ $editUser->created_at->format('M d, Y') }}</div>
                     </div>
                 </div>
 
-                <div style="padding: 1rem; background-color: var(--bg-secondary); border-radius: 0.5rem;">
+                <div style="padding: 1rem; background-color: var(--muted); border-radius: 0.5rem;">
                     <div style="display: flex; justify-content: space-between; align-items: center;">
-                        <span style="font-size: 0.875rem; color: var(--text-secondary);">Status</span>
+                        <span style="font-size: 0.875rem; color: var(--muted-foreground);">Status</span>
                         @if(method_exists($editUser, 'isSuspended') && $editUser->isSuspended())
                             <span class="badge badge-danger">Suspended</span>
                         @else
@@ -119,9 +119,9 @@
                         @endif
                     </div>
                     @if(method_exists($editUser, 'isSuspended') && $editUser->isSuspended() && method_exists($editUser, 'getSuspensionReason') && $editUser->getSuspensionReason())
-                        <div style="margin-top: 0.75rem; padding-top: 0.75rem; border-top: 1px solid var(--border-color);">
-                            <span style="font-size: 0.75rem; color: var(--text-muted);">Suspension Reason:</span>
-                            <p style="font-size: 0.875rem; color: var(--text-secondary); margin-top: 0.25rem;">{{ $editUser->getSuspensionReason() }}</p>
+                        <div style="margin-top: 0.75rem; padding-top: 0.75rem; border-top: 1px solid var(--border);">
+                            <span style="font-size: 0.75rem; color: var(--muted-foreground);">Suspension Reason:</span>
+                            <p style="font-size: 0.875rem; color: var(--muted-foreground); margin-top: 0.25rem;">{{ $editUser->getSuspensionReason() }}</p>
                         </div>
                     @endif
                 </div>
@@ -150,12 +150,12 @@
         </div>
 
         @if($editUser->id !== $user->id)
-        <div class="card" style="border-color: var(--error-border);">
-            <div class="card-header" style="background-color: var(--error-bg);">
-                <h3 class="card-title" style="color: var(--error-color);">Danger Zone</h3>
+        <div class="card" style="border-color: var(--destructive);">
+            <div class="card-header" style="background-color: color-mix(in srgb, var(--destructive), transparent 90%);">
+                <h3 class="card-title" style="color: var(--destructive);">Danger Zone</h3>
             </div>
             <div class="card-body">
-                <p style="font-size: 0.875rem; color: var(--text-secondary); margin-bottom: 1rem;">
+                <p style="font-size: 0.875rem; color: var(--muted-foreground); margin-bottom: 1rem;">
                     Once you delete a user, there is no going back. Please be certain.
                 </p>
                 <form action="{{ route('tyro-dashboard.users.destroy', $editUser->id) }}" method="POST">
@@ -188,7 +188,7 @@
         <form action="{{ route('tyro-dashboard.users.suspend', $editUser->id) }}" method="POST">
             @csrf
             <div class="modal-body">
-                <p style="margin-bottom: 1rem; color: var(--text-secondary);">
+                <p style="margin-bottom: 1rem; color: var(--muted-foreground);">
                     You are about to suspend <strong>{{ $editUser->name }}</strong>. This will revoke all their active sessions.
                 </p>
                 <div class="form-group">

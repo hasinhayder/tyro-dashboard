@@ -16,7 +16,7 @@
         <div>
             <h1 class="page-title">{{ $role->name }}</h1>
             <p class="page-description">
-                <code style="padding: 0.375rem 0.625rem; background-color: var(--bg-secondary); border-radius: 0.375rem; font-size: 0.9375rem;">{{ $role->slug }}</code>
+                <code style="padding: 0.375rem 0.625rem; background-color: var(--muted); border-radius: 0.375rem; font-size: 0.9375rem;">{{ $role->slug }}</code>
             </p>
         </div>
         <div class="btn-group">
@@ -56,12 +56,12 @@
                         @foreach($role->privileges as $privilege)
                         <tr>
                             <td>
-                                <a href="{{ route('tyro-dashboard.privileges.show', $privilege->id) }}" style="font-weight: 500; font-size: 0.9375rem; color: var(--text-primary); text-decoration: none;">
+                                <a href="{{ route('tyro-dashboard.privileges.show', $privilege->id) }}" style="font-weight: 500; font-size: 0.9375rem; color: var(--foreground); text-decoration: none;">
                                     {{ $privilege->name }}
                                 </a>
                             </td>
                             <td>
-                                <code style="padding: 0.375rem 0.625rem; background-color: var(--bg-secondary); border-radius: 0.375rem; font-size: 0.875rem;">{{ $privilege->slug }}</code>
+                                <code style="padding: 0.375rem 0.625rem; background-color: var(--muted); border-radius: 0.375rem; font-size: 0.875rem;">{{ $privilege->slug }}</code>
                             </td>
                         </tr>
                         @endforeach
@@ -130,7 +130,7 @@
                 </table>
             </div>
             @if($role->users->count() > 10)
-            <div style="padding: 1rem; text-align: center; border-top: 1px solid var(--border-color);">
+            <div style="padding: 1rem; text-align: center; border-top: 1px solid var(--border);">
                 <a href="{{ route('tyro-dashboard.users.index', ['role' => $role->slug]) }}" class="btn btn-sm btn-secondary">View All {{ $role->users->count() }} Users</a>
             </div>
             @endif

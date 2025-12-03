@@ -68,14 +68,14 @@
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z" />
                                 </svg>
                             </div>
-                            <span style="font-weight: 500; color: var(--text-primary);">{{ $privilege->name }}</span>
+                            <span style="font-weight: 500; color: var(--foreground);">{{ $privilege->name }}</span>
                         </a>
                     </td>
                     <td>
-                        <code style="padding: 0.25rem 0.5rem; background-color: var(--bg-secondary); border-radius: 0.25rem; font-size: 0.8125rem;">{{ $privilege->slug }}</code>
+                        <code style="padding: 0.25rem 0.5rem; background-color: var(--muted); border-radius: 0.25rem; font-size: 0.8125rem;">{{ $privilege->slug }}</code>
                     </td>
                     <td>
-                        <span style="font-size: 0.875rem; color: var(--text-secondary);">{{ Str::limit($privilege->description, 50) ?: '-' }}</span>
+                        <span style="font-size: 0.875rem; color: var(--muted-foreground);">{{ Str::limit($privilege->description, 50) ?: '-' }}</span>
                     </td>
                     <td>
                         <span class="badge badge-secondary">{{ $privilege->roles_count }} roles</span>

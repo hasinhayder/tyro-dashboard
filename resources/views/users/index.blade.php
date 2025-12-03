@@ -184,7 +184,7 @@
         <form id="suspendForm" method="POST">
             @csrf
             <div class="modal-body">
-                <p style="margin-bottom: 1rem; color: var(--text-secondary);">
+                <p style="margin-bottom: 1rem; color: var(--muted-foreground);">
                     You are about to suspend <strong id="suspendUserName"></strong>. This will revoke all their active sessions.
                 </p>
                 <div class="form-group">

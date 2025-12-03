@@ -34,7 +34,7 @@
 
         @if(method_exists($user, 'roles') && $user->roles && $user->roles->count())
         <div style="margin-bottom: 1.5rem;">
-            <strong style="font-size: 0.9375rem; color: var(--text-secondary);">Your Roles:</strong>
+            <strong style="font-size: 0.9375rem; color: var(--muted-foreground);">Your Roles:</strong>
             <div class="badge-list" style="margin-top: 0.5rem;">
                 @foreach($user->roles as $role)
                     <span class="badge badge-primary" style="font-size: 0.875rem;">{{ $role->name }}</span>

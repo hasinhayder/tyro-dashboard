@@ -43,14 +43,14 @@
                         <span class="form-error">{{ $message }}</span>
                     @enderror
                     @if($user->email_verified_at)
-                        <span class="form-hint" style="color: var(--success-color);">
+                        <span class="form-hint" style="color: var(--success);">
                             <svg style="width: 14px; height: 14px; display: inline-block; vertical-align: middle; margin-right: 4px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                             </svg>
                             Email verified on {{ $user->email_verified_at->format('M d, Y') }}
                         </span>
                     @else
-                        <span class="form-hint" style="color: var(--warning-color);">Email not verified</span>
+                        <span class="form-hint" style="color: var(--warning);">Email not verified</span>
                     @endif
                 </div>
             </div>
@@ -106,11 +106,11 @@
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem;">
             <div>
                 <label class="form-label" style="margin-bottom: 0.25rem;">Account ID</label>
-                <p style="font-size: 0.875rem; color: var(--text-secondary);">#{{ $user->id }}</p>
+                <p style="font-size: 0.875rem; color: var(--muted-foreground);">#{{ $user->id }}</p>
             </div>
             <div>
                 <label class="form-label" style="margin-bottom: 0.25rem;">Member Since</label>
-                <p style="font-size: 0.875rem; color: var(--text-secondary);">{{ $user->created_at->format('F d, Y') }}</p>
+                <p style="font-size: 0.875rem; color: var(--muted-foreground);">{{ $user->created_at->format('F d, Y') }}</p>
             </div>
             @if(method_exists($user, 'roles') && $user->roles->count())
             <div>
