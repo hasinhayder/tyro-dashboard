@@ -599,7 +599,7 @@
 
     .btn-danger {
         background-color: var(--destructive);
-        color: #fff;
+        color: var(--destructive-foreground);
     }
 
     .btn-danger:hover {
