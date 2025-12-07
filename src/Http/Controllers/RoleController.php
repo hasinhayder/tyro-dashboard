@@ -93,10 +93,12 @@ class RoleController extends BaseController
     {
         $role = Role::with('privileges')->findOrFail($id);
         $privileges = Privilege::all();
+        $protectedRoles = config('tyro-dashboard.protected.roles', []);
 
         return view('tyro-dashboard::roles.edit', $this->getViewData([
             'role' => $role,
             'privileges' => $privileges,
+            'protectedRoles' => $protectedRoles,
         ]));
     }
 
