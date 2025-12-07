@@ -24,56 +24,56 @@
   <a href="#-license">License</a>
 </p>
 
-<p align="center">
-  <img src="https://raw.githubusercontent.com/hasinhayder/tyro-dashboard/main/.github/assets/screenshot.png" alt="Tyro Dashboard Screenshot" width="800">
-</p>
-
 ---
 
 Tyro Dashboard is a beautiful, feature-rich admin dashboard for Laravel 12 that provides a complete interface for managing users, roles, privileges, and package settings. It seamlessly integrates with the [Tyro RBAC](https://github.com/hasinhayder/tyro) package and optionally with [Tyro Login](https://github.com/hasinhayder/tyro-login) for a complete user management solution.
 
-## ✨ Features
+## Features
 
 <table>
   <tr>
-    <td>🎨 <strong>Beautiful UI</strong></td>
+    <td><strong>Beautiful UI</strong></td>
     <td>Modern, responsive design that matches Tyro Login aesthetics with attention to every detail</td>
   </tr>
   <tr>
-    <td>👥 <strong>User Management</strong></td>
+    <td><strong>User Management</strong></td>
     <td>Create, edit, suspend, and manage users with an intuitive interface and role assignment</td>
   </tr>
   <tr>
-    <td>🔐 <strong>Role Management</strong></td>
+    <td><strong>Role Management</strong></td>
     <td>Full CRUD operations for roles with privilege assignment and protection for critical roles</td>
   </tr>
   <tr>
-    <td>🛡️ <strong>Privilege Management</strong></td>
+    <td><strong>Privilege Management</strong></td>
     <td>Manage privileges and assign them to roles for fine-grained access control</td>
   </tr>
   <tr>
-    <td>⚙️ <strong>Settings Management</strong></td>
+    <td><strong>Settings Management</strong></td>
     <td>Configure Tyro and Tyro Login packages from a beautiful UI interface</td>
   </tr>
   <tr>
-    <td>👤 <strong>Profile Management</strong></td>
+    <td><strong>Profile Management</strong></td>
     <td>Users can update their own profile information with self-service account management</td>
   </tr>
   <tr>
-    <td>🌙 <strong>Dark Mode</strong></td>
+    <td><strong>2FA Management</strong></td>
+    <td>Self-service 2FA setup and reset for users, with administrative override capabilities</td>
+  </tr>
+  <tr>
+    <td><strong>Dark Mode</strong></td>
     <td>Built-in dark/light theme support that respects user preferences and system settings</td>
   </tr>
   <tr>
-    <td>📱 <strong>Responsive Design</strong></td>
+    <td><strong>Responsive Design</strong></td>
     <td>Works perfectly on all device sizes from mobile phones to large desktop monitors</td>
   </tr>
   <tr>
-    <td>🔒 <strong>Role-Based Access</strong></td>
+    <td><strong>Role-Based Access</strong></td>
     <td>Admin-only features are protected by configurable role-based access control</td>
   </tr>
 </table>
 
-## 📦 Requirements
+## Requirements
 
 | Requirement | Version |
 |------------|---------|
@@ -82,7 +82,7 @@ Tyro Dashboard is a beautiful, feature-rich admin dashboard for Laravel 12 that 
 | **[Tyro](https://github.com/hasinhayder/tyro)** | ^1.0 (required) |
 | **[Tyro Login](https://github.com/hasinhayder/tyro-login)** | ^1.0 (optional) |
 
-## 🚀 Quick Start
+## Quick Start
 
 Get up and running in under 5 minutes!
 
@@ -98,15 +98,15 @@ composer require hasinhayder/tyro-dashboard
 php artisan tyro-dashboard:install
 ```
 
-**That's it!** 🎉 Your admin dashboard is now available at `/dashboard`
+**That's it!** Your admin dashboard is now available at `/dashboard`
 
 <details>
-<summary><strong>📋 What the installer does</strong></summary>
+<summary><strong>What the installer does</strong></summary>
 
-- ✅ Checks dependencies (Tyro package)
-- ✅ Publishes the configuration file
-- ✅ Optionally publishes views for customization
-- ✅ Helps you configure admin roles and branding
+- Checks dependencies (Tyro package)
+- Publishes the configuration file
+- Optionally publishes views for customization
+- Helps you configure admin roles and branding
 
 </details>
 
@@ -127,7 +127,7 @@ php artisan vendor:publish --tag=tyro-dashboard-views
 
 </details>
 
-## ⚙️ Configuration
+## Configuration
 
 After publishing, you can modify the configuration in `config/tyro-dashboard.php`:
 
@@ -181,7 +181,7 @@ TYRO_DASHBOARD_APP_NAME="My Application"
 TYRO_DASHBOARD_LOGO="/images/logo.svg"
 ```
 
-## 🔗 Routes
+## Routes
 
 The dashboard provides the following routes:
 
@@ -207,7 +207,7 @@ The dashboard provides the following routes:
 | `/dashboard/settings/tyro` | Tyro package settings |
 | `/dashboard/settings/tyro-login` | Tyro Login settings |
 
-## 🛡️ Access Control
+## Access Control
 
 Tyro Dashboard implements role-based access control:
 
@@ -216,9 +216,9 @@ Tyro Dashboard implements role-based access control:
 | **Admin/Super-Admin** | Full access to all dashboard features including user management, role/privilege management, and package settings |
 | **Regular Users** | Access to dashboard home and profile management only |
 
-> **💡 Tip:** Configure admin roles via the `admin_roles` setting in `config/tyro-dashboard.php`
+> **Tip:** Configure admin roles via the `admin_roles` setting in `config/tyro-dashboard.php`
 
-## 🎨 Customization
+## Customization
 
 ### Publishing Views
 
@@ -295,7 +295,7 @@ TYRO_DASHBOARD_LOGO="/images/logo.svg"
 TYRO_DASHBOARD_PREFIX="admin"
 ```
 
-## 📋 Artisan Commands
+## Artisan Commands
 
 | Command | Description |
 |---------|-------------|
@@ -304,7 +304,7 @@ TYRO_DASHBOARD_PREFIX="admin"
 | `php artisan tyro-dashboard:publish-style` | Publish styles and theme files |
 | `php artisan tyro-dashboard:publish-style --theme-only` | Publish only theme variables (recommended) |
 
-## 🤝 Part of the Tyro Ecosystem
+## Part of the Tyro Ecosystem
 
 Tyro Dashboard works seamlessly with:
 
@@ -315,11 +315,11 @@ Tyro Dashboard works seamlessly with:
 
 Together, they provide a complete user management solution for Laravel 12.
 
-## 📝 License
+## License
 
 The MIT License (MIT). Please see [License File](LICENSE) for more information.
 
-## 🙏 Credits
+## Credits
 
 - [Hasin Hayder](https://github.com/hasinhayder)
 - [All Contributors](../../contributors)
@@ -327,9 +327,9 @@ The MIT License (MIT). Please see [License File](LICENSE) for more information.
 ---
 
 <p align="center">
-  <sub>Built with ❤️ for the Laravel community</sub>
+  <sub>Built with love for the Laravel community</sub>
 </p>
 
 <p align="center">
-  <a href="https://github.com/hasinhayder/tyro-dashboard/stargazers">⭐ Star us on GitHub</a>
+  <a href="https://github.com/hasinhayder/tyro-dashboard/stargazers">Star us on GitHub</a>
 </p>
