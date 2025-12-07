@@ -99,7 +99,7 @@
 
     <!-- Two-Factor Authentication -->
     @if(config('tyro-login.two_factor.enabled'))
-    <div class="card">
+    <div class="card" style="margin-top: 1.5rem;">
         <div class="card-header">
             <h3 class="card-title">Two-Factor Authentication (2FA)</h3>
         </div>
@@ -117,10 +117,10 @@
                 </form>
             @else
                 <p style="margin-bottom: 1rem; color: var(--muted-foreground);">
-                    Two-factor authentication is currently <strong>disabled</strong> for your account. You can enable it to add an extra layer of security.
+                    Two-factor authentication is currently <strong>disabled</strong> for your account.
                 </p>
                 
-                <a href="{{ route('tyro-login.2fa.index') }}" class="btn btn-primary">Setup 2FA</a>
+                <button type="button" class="btn btn-secondary" disabled>Reset 2FA Configuration</button>
             @endif
         </div>
     </div>
