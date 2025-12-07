@@ -3,9 +3,9 @@
 namespace HasinHayder\TyroDashboard\Http\Controllers;
 
 use HasinHayder\Tyro\Models\Role;
+use HasinHayder\Tyro\Support\PasswordRules;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Validation\Rules\Password;
 
 class UserController extends BaseController
 {
@@ -71,7 +71,7 @@ class UserController extends BaseController
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'password' => ['required', 'confirmed', Password::defaults()],
+            'password' => array_merge(['required', 'confirmed'], PasswordRules::get(['name' => $request->input('name'), 'email' => $request->input('email')])),
             'roles' => ['array'],
             'roles.*' => ['exists:roles,id'],
         ]);
@@ -119,7 +119,7 @@ class UserController extends BaseController
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email,' . $user->id],
-            'password' => ['nullable', 'confirmed', Password::defaults()],
+            'password' => array_merge(['nullable', 'confirmed'], PasswordRules::get(['name' => $request->input('name'), 'email' => $request->input('email')])),
             'roles' => ['array'],
             'roles.*' => ['exists:roles,id'],
         ]);
