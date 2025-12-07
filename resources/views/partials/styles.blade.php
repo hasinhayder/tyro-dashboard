@@ -599,7 +599,7 @@
 
     .btn-danger {
         background-color: var(--destructive);
-        color: var(--destructive-foreground);
+        color: #fff;
     }
 
     .btn-danger:hover {
@@ -617,7 +617,7 @@
 
     .btn-warning {
         background-color: var(--warning);
-        color: var(--warning-foreground);
+        color: #fff;
     }
 
     .btn-warning:hover {
