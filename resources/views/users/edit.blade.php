@@ -126,7 +126,30 @@
                     @endif
                 </div>
 
-                <div style="margin-top: 1rem;">
+                <!-- 2FA Status & Reset -->
+                @if(config('tyro-login.two_factor.enabled'))
+                <div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--border);">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+                        <span style="font-size: 0.875rem; color: var(--muted-foreground);">Two-Factor Authentication</span>
+                        @if($editUser->two_factor_secret)
+                            <span class="badge badge-success">Enabled</span>
+                        @else
+                            <span class="badge badge-secondary">Disabled</span>
+                        @endif
+                    </div>
+                    @if($editUser->two_factor_secret)
+                        <form action="{{ route('tyro-dashboard.users.2fa.reset', $editUser->id) }}" method="POST">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="btn btn-sm btn-outline-warning" style="width: 100%;" onclick="return confirm('Are you sure you want to reset 2FA for this user?')">
+                                Reset 2FA
+                            </button>
+                        </form>
+                    @endif
+                </div>
+                @endif
+
+                <div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--border);">
                     @if(method_exists($editUser, 'isSuspended') && $editUser->isSuspended())
                         <form action="{{ route('tyro-dashboard.users.unsuspend', $editUser->id) }}" method="POST">
                             @csrf

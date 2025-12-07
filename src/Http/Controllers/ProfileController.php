@@ -59,4 +59,22 @@ class ProfileController extends BaseController
             ->route('tyro-dashboard.profile')
             ->with('success', 'Password updated successfully.');
     }
+
+    /**
+     * Reset 2FA.
+     */
+    public function reset2FA(Request $request)
+    {
+        $user = $request->user();
+
+        $user->forceFill([
+            'two_factor_secret' => null,
+            'two_factor_recovery_codes' => null,
+            'two_factor_confirmed_at' => null,
+        ])->save();
+
+        return redirect()
+            ->route('tyro-dashboard.profile')
+            ->with('success', 'Two-factor authentication has been reset.');
+    }
 }

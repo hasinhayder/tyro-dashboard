@@ -24,6 +24,7 @@ Route::prefix('profile')->name('profile')->group(function () {
     Route::get('/', [ProfileController::class, 'index']);
     Route::put('/update', [ProfileController::class, 'update'])->name('.update');
     Route::put('/password', [ProfileController::class, 'updatePassword'])->name('.password');
+    Route::delete('/2fa/reset', [ProfileController::class, 'reset2FA'])->name('.2fa.reset');
 });
 
 // Admin-only routes
@@ -35,6 +36,7 @@ Route::middleware('tyro-dashboard.admin')->group(function () {
         Route::post('/', [UserController::class, 'store'])->name('store');
         Route::get('/{id}/edit', [UserController::class, 'edit'])->name('edit');
         Route::put('/{id}', [UserController::class, 'update'])->name('update');
+        Route::delete('/{id}/2fa', [UserController::class, 'reset2FA'])->name('2fa.reset');
         Route::post('/{id}/suspend', [UserController::class, 'suspend'])->name('suspend');
         Route::post('/{id}/unsuspend', [UserController::class, 'unsuspend'])->name('unsuspend');
         Route::delete('/{id}', [UserController::class, 'destroy'])->name('destroy');

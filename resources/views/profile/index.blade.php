@@ -97,6 +97,36 @@
     </div>
 </div>
 
+    <!-- Two-Factor Authentication -->
+    @if(config('tyro-login.two_factor.enabled'))
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">Two-Factor Authentication (2FA)</h3>
+        </div>
+        <div class="card-body">
+            @if($user->two_factor_secret)
+                <p style="margin-bottom: 1rem; color: var(--muted-foreground);">
+                    Two-factor authentication is currently <strong>enabled</strong> for your account.
+                </p>
+                <form action="{{ route('tyro-dashboard.profile.2fa.reset') }}" method="POST">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" class="btn btn-warning" onclick="return confirm('Are you sure you want to reset your 2FA? You will need to set it up again.')">
+                        Reset 2FA Configuration
+                    </button>
+                </form>
+            @else
+                <p style="margin-bottom: 1rem; color: var(--muted-foreground);">
+                    Two-factor authentication is currently <strong>disabled</strong> for your account. You can enable it to add an extra layer of security.
+                </p>
+                
+                <a href="{{ route('tyro-login.2fa.index') }}" class="btn btn-primary">Setup 2FA</a>
+            @endif
+        </div>
+    </div>
+    @endif
+</div>
+
 <!-- Account Information -->
 <div class="card" style="margin-top: 1.5rem;">
     <div class="card-header">

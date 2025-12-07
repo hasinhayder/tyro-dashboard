@@ -209,7 +209,25 @@ class UserController extends BaseController
         $user->delete();
 
         return redirect()
-            ->route('tyro-dashboard.users.index')
             ->with('success', 'User deleted successfully.');
+    }
+
+    /**
+     * Reset 2FA for the specified user.
+     */
+    public function reset2FA($id)
+    {
+        $userModel = $this->getUserModel();
+        $user = $userModel::findOrFail($id);
+
+        $user->forceFill([
+            'two_factor_secret' => null,
+            'two_factor_recovery_codes' => null,
+            'two_factor_confirmed_at' => null,
+        ])->save();
+
+        return redirect()
+            ->route('tyro-dashboard.users.edit', $user->id)
+            ->with('success', 'Two-factor authentication has been reset for this user.');
     }
 }
