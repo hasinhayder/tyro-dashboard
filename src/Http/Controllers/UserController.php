@@ -209,6 +209,7 @@ class UserController extends BaseController
         $user->delete();
 
         return redirect()
+            ->route('tyro-dashboard.users.index')
             ->with('success', 'User deleted successfully.');
     }
 
