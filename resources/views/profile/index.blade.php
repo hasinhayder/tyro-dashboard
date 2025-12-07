@@ -125,7 +125,6 @@
         </div>
     </div>
     @endif
-</div>
 
 <!-- Account Information -->
 <div class="card" style="margin-top: 1.5rem;">
