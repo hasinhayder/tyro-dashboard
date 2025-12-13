@@ -219,10 +219,38 @@ class ResourceController extends BaseController
         $rules = [];
         foreach ($config['fields'] as $field => $fieldConfig) {
             if (isset($fieldConfig['rules'])) {
-                $rules[$field] = $fieldConfig['rules'];
-                // Fix unique validation on update if necessary
-                // This is a basic implementation, user might need to use Rule::unique()->ignore(...) in rules string or array
-                // Ideally, we parse rules and append ignore logic, but that's complex for strings.
+                $fieldRules = $fieldConfig['rules'];
+
+                // Helper to append ignore ID to unique rules
+                $processRule = function($rule) use ($field, $id) {
+                    if (is_string($rule) && Str::startsWith($rule, 'unique:')) {
+                        $parts = explode(',', substr($rule, 7));
+                        // Case 1: unique:table
+                        if (count($parts) == 1) {
+                            return "unique:{$parts[0]},{$field},{$id}";
+                        }
+                        // Case 2: unique:table,column
+                        elseif (count($parts) == 2) {
+                            return $rule . ",{$id}";
+                        }
+                    }
+                    return $rule;
+                };
+
+                if (is_string($fieldRules)) {
+                    $rulesList = explode('|', $fieldRules);
+                    foreach ($rulesList as &$r) {
+                        $r = $processRule($r);
+                    }
+                    $rules[$field] = implode('|', $rulesList);
+                } elseif (is_array($fieldRules)) {
+                    foreach ($fieldRules as &$r) {
+                        $r = $processRule($r);
+                    }
+                    $rules[$field] = $fieldRules;
+                } else {
+                    $rules[$field] = $fieldRules;
+                }
             }
         }
 
