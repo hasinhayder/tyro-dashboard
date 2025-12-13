@@ -15,12 +15,14 @@
     <div class="page-header-row">
         <h1 class="page-title">{{ Str::singular($config['title']) }} Details</h1>
         <div>
+            @if(!($isReadonly ?? false))
             <a href="{{ route('tyro-dashboard.resources.edit', [$resource, $item->id]) }}" class="btn btn-primary">Edit</a>
             <form action="{{ route('tyro-dashboard.resources.destroy', [$resource, $item->id]) }}" method="POST" onsubmit="return confirm('Are you sure?')" style="display: inline;">
                 @csrf
                 @method('DELETE')
                 <button type="submit" class="btn btn-danger">Delete</button>
             </form>
+            @endif
         </div>
     </div>
 </div>

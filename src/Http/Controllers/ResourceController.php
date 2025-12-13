@@ -17,6 +17,29 @@ class ResourceController extends BaseController
         return $resources[$key];
     }
 
+    protected function isReadonly($config)
+    {
+        $readonlyRoles = $config['readonly'] ?? [];
+        if (empty($readonlyRoles)) {
+            return false;
+        }
+
+        $user = auth()->user();
+        if (!$user || !method_exists($user, 'tyroRoleSlugs')) {
+            return false;
+        }
+
+        $userRoles = $user->tyroRoleSlugs();
+        
+        foreach ($readonlyRoles as $role) {
+            if (in_array($role, $userRoles)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     public function index($resource)
     {
         $config = $this->getResourceConfig($resource);
@@ -81,13 +104,18 @@ class ResourceController extends BaseController
         return view('tyro-dashboard::resources.index', $this->getViewData([
             'resource' => $resource,
             'config' => $config,
-            'items' => $items
+            'items' => $items,
+            'isReadonly' => $this->isReadonly($config)
         ]));
     }
 
     public function create($resource)
     {
         $config = $this->getResourceConfig($resource);
+        
+        if ($this->isReadonly($config)) {
+            abort(403, 'This resource is read-only for your role.');
+        }
         
         $viewData = [
             'resource' => $resource,
@@ -114,6 +142,11 @@ class ResourceController extends BaseController
     public function store(Request $request, $resource)
     {
         $config = $this->getResourceConfig($resource);
+        
+        if ($this->isReadonly($config)) {
+            abort(403, 'This resource is read-only for your role.');
+        }
+
         $modelClass = $config['model'];
 
         $rules = [];
@@ -181,13 +214,19 @@ class ResourceController extends BaseController
         return view('tyro-dashboard::resources.show', $this->getViewData([
             'resource' => $resource,
             'config' => $config,
-            'item' => $item
+            'item' => $item,
+            'isReadonly' => $this->isReadonly($config)
         ]));
     }
 
     public function edit($resource, $id)
     {
         $config = $this->getResourceConfig($resource);
+        
+        if ($this->isReadonly($config)) {
+            abort(403, 'This resource is read-only for your role.');
+        }
+
         $modelClass = $config['model'];
         
         $item = $modelClass::findOrFail($id);
@@ -224,6 +263,11 @@ class ResourceController extends BaseController
     public function update(Request $request, $resource, $id)
     {
         $config = $this->getResourceConfig($resource);
+        
+        if ($this->isReadonly($config)) {
+            abort(403, 'This resource is read-only for your role.');
+        }
+
         $modelClass = $config['model'];
         
         $item = $modelClass::findOrFail($id);
@@ -339,6 +383,11 @@ class ResourceController extends BaseController
     public function destroy($resource, $id)
     {
         $config = $this->getResourceConfig($resource);
+        
+        if ($this->isReadonly($config)) {
+            abort(403, 'This resource is read-only for your role.');
+        }
+
         $modelClass = $config['model'];
         
         $item = $modelClass::findOrFail($id);

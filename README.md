@@ -197,6 +197,10 @@ Open `config/tyro-dashboard.php` and add your resources to the `resources` array
         'model' => 'App\Models\Post',
         'title' => 'Posts',
         // 'icon' => '<svg>...</svg>', // Optional SVG icon
+        
+        // Read-only configuration: Users with these roles can only view (index/show)
+        'readonly' => ['editor', 'viewer'],
+
         'fields' => [
             // Basic Fields
             'title' => ['type' => 'text', 'label' => 'Title', 'rules' => 'required|max:255', 'searchable' => true],
