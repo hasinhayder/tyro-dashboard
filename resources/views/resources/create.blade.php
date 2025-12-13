@@ -47,8 +47,12 @@
                                 @endforeach
                             @elseif(isset($field['options']))
                                 @foreach($field['options'] as $value => $label)
-                                    <option value="{{ $value }}" {{ old($key) == $value ? 'selected' : '' }}>
-                                        {{ $label }}
+                                    @php
+                                        $optionValue = is_int($value) ? $label : $value;
+                                        $optionLabel = $label;
+                                    @endphp
+                                    <option value="{{ $optionValue }}" {{ old($key) == $optionValue ? 'selected' : '' }}>
+                                        {{ $optionLabel }}
                                     </option>
                                 @endforeach
                             @endif
@@ -64,8 +68,12 @@
                                 @endforeach
                             @elseif(isset($field['options']))
                                 @foreach($field['options'] as $value => $label)
-                                    <option value="{{ $value }}" {{ in_array($value, old($key, [])) ? 'selected' : '' }}>
-                                        {{ $label }}
+                                    @php
+                                        $optionValue = is_int($value) ? $label : $value;
+                                        $optionLabel = $label;
+                                    @endphp
+                                    <option value="{{ $optionValue }}" {{ in_array($optionValue, old($key, [])) ? 'selected' : '' }}>
+                                        {{ $optionLabel }}
                                     </option>
                                 @endforeach
                             @endif
@@ -82,9 +90,13 @@
                                 @endforeach
                             @elseif(isset($field['options']))
                                 @foreach($field['options'] as $value => $label)
+                                    @php
+                                        $optionValue = is_int($value) ? $label : $value;
+                                        $optionLabel = $label;
+                                    @endphp
                                     <div class="form-check">
-                                        <input type="radio" name="{{ $key }}" id="{{ $key }}_{{ $value }}" value="{{ $value }}" {{ old($key) == $value ? 'checked' : '' }}>
-                                        <label for="{{ $key }}_{{ $value }}">{{ $label }}</label>
+                                        <input type="radio" name="{{ $key }}" id="{{ $key }}_{{ $optionValue }}" value="{{ $optionValue }}" {{ old($key) == $optionValue ? 'checked' : '' }}>
+                                        <label for="{{ $key }}_{{ $optionValue }}">{{ $optionLabel }}</label>
                                     </div>
                                 @endforeach
                             @endif
@@ -101,9 +113,13 @@
                                 @endforeach
                             @elseif(isset($field['options']))
                                 @foreach($field['options'] as $value => $label)
+                                    @php
+                                        $optionValue = is_int($value) ? $label : $value;
+                                        $optionLabel = $label;
+                                    @endphp
                                     <div class="form-check">
-                                        <input type="checkbox" name="{{ $key }}[]" id="{{ $key }}_{{ $value }}" value="{{ $value }}" {{ in_array($value, old($key, [])) ? 'checked' : '' }}>
-                                        <label for="{{ $key }}_{{ $value }}">{{ $label }}</label>
+                                        <input type="checkbox" name="{{ $key }}[]" id="{{ $key }}_{{ $optionValue }}" value="{{ $optionValue }}" {{ in_array($optionValue, old($key, [])) ? 'checked' : '' }}>
+                                        <label for="{{ $key }}_{{ $optionValue }}">{{ $optionLabel }}</label>
                                     </div>
                                 @endforeach
                             @endif
