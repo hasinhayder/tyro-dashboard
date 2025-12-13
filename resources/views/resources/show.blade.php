@@ -32,7 +32,21 @@
                 <div class="detail-item">
                     <div class="detail-label" style="font-weight: 500; color: var(--text-secondary); margin-bottom: 0.25rem;">{{ $field['label'] }}</div>
                     <div class="detail-value" style="font-size: 1rem; color: var(--text-primary);">
-                        @if(isset($field['relationship']))
+                        @if($field['type'] === 'file')
+                            @if($item->$key)
+                                <a href="{{ Storage::url($item->$key) }}" target="_blank" style="color: var(--primary); text-decoration: none;">View File</a>
+                            @else
+                                -
+                            @endif
+                        @elseif($field['type'] === 'multiselect' || ($field['type'] === 'checkbox' && isset($field['relationship'])))
+                             @if(isset($field['relationship']))
+                                 {{ $item->{$field['relationship']}->pluck($field['option_label'] ?? 'name')->implode(', ') }}
+                             @else
+                                 {{ is_array($item->$key) ? implode(', ', $item->$key) : $item->$key }}
+                             @endif
+                        @elseif(($field['type'] === 'select' || $field['type'] === 'radio') && isset($field['options']))
+                            {{ $field['options'][$item->$key] ?? $item->$key }}
+                        @elseif(isset($field['relationship']))
                             {{ optional($item->{$field['relationship']})->{$field['option_label'] ?? 'name'} ?? '-' }}
                         @elseif($field['type'] === 'boolean')
                             <span class="badge {{ $item->$key ? 'badge-success' : 'badge-secondary' }}">

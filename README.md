@@ -239,6 +239,16 @@ Open `config/tyro-dashboard.php` and add your resources to the `resources` array
                 'relationship' => 'tags', // Method name in Post model (belongsToMany)
                 'option_label' => 'name',
             ],
+            'status' => [
+                'type' => 'select',
+                'label' => 'Status',
+                'options' => [
+                    'draft' => 'Draft',
+                    'published' => 'Published',
+                    'archived' => 'Archived',
+                ],
+                'rules' => 'required',
+            ],
         ],
     ],
 ],

@@ -76,6 +76,8 @@
                                     @else
                                         {{ is_array($item->$key) ? implode(', ', $item->$key) : $item->$key }}
                                     @endif
+                                @elseif(($field['type'] === 'select' || $field['type'] === 'radio') && isset($field['options']))
+                                    {{ $field['options'][$item->$key] ?? $item->$key }}
                                 @elseif(isset($field['relationship']))
                                     {{ optional($item->{$field['relationship']})->{$field['option_label'] ?? 'name'} ?? '-' }}
                                 @elseif($field['type'] === 'boolean')
