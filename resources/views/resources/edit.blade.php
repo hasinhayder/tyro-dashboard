@@ -67,6 +67,69 @@
                             @endif
                         </select>
                         
+                    @elseif($field['type'] === 'multiselect')
+                        <select name="{{ $key }}[]" id="{{ $key }}" class="form-select @error($key) is-invalid @enderror" multiple>
+                            @if(isset($options[$key]))
+                                @foreach($options[$key] as $option)
+                                    <option value="{{ $option->id }}" {{ in_array($option->id, old($key, $selectedValues[$key] ?? ($item->$key ?? []))) ? 'selected' : '' }}>
+                                        {{ $option->{$field['option_label'] ?? 'name'} }}
+                                    </option>
+                                @endforeach
+                            @elseif(isset($field['options']))
+                                @foreach($field['options'] as $value => $label)
+                                    <option value="{{ $value }}" {{ in_array($value, old($key, $item->$key ?? [])) ? 'selected' : '' }}>
+                                        {{ $label }}
+                                    </option>
+                                @endforeach
+                            @endif
+                        </select>
+
+                    @elseif($field['type'] === 'radio')
+                        <div class="radio-group">
+                            @if(isset($options[$key]))
+                                @foreach($options[$key] as $option)
+                                    <div class="form-check">
+                                        <input type="radio" name="{{ $key }}" id="{{ $key }}_{{ $option->id }}" value="{{ $option->id }}" {{ old($key, $item->$key) == $option->id ? 'checked' : '' }}>
+                                        <label for="{{ $key }}_{{ $option->id }}">{{ $option->{$field['option_label'] ?? 'name'} }}</label>
+                                    </div>
+                                @endforeach
+                            @elseif(isset($field['options']))
+                                @foreach($field['options'] as $value => $label)
+                                    <div class="form-check">
+                                        <input type="radio" name="{{ $key }}" id="{{ $key }}_{{ $value }}" value="{{ $value }}" {{ old($key, $item->$key) == $value ? 'checked' : '' }}>
+                                        <label for="{{ $key }}_{{ $value }}">{{ $label }}</label>
+                                    </div>
+                                @endforeach
+                            @endif
+                        </div>
+
+                    @elseif($field['type'] === 'checkbox' && (isset($options[$key]) || isset($field['options'])))
+                        <div class="checkbox-group">
+                            @if(isset($options[$key]))
+                                @foreach($options[$key] as $option)
+                                    <div class="form-check">
+                                        <input type="checkbox" name="{{ $key }}[]" id="{{ $key }}_{{ $option->id }}" value="{{ $option->id }}" {{ in_array($option->id, old($key, $selectedValues[$key] ?? ($item->$key ?? []))) ? 'checked' : '' }}>
+                                        <label for="{{ $key }}_{{ $option->id }}">{{ $option->{$field['option_label'] ?? 'name'} }}</label>
+                                    </div>
+                                @endforeach
+                            @elseif(isset($field['options']))
+                                @foreach($field['options'] as $value => $label)
+                                    <div class="form-check">
+                                        <input type="checkbox" name="{{ $key }}[]" id="{{ $key }}_{{ $value }}" value="{{ $value }}" {{ in_array($value, old($key, $item->$key ?? [])) ? 'checked' : '' }}>
+                                        <label for="{{ $key }}_{{ $value }}">{{ $label }}</label>
+                                    </div>
+                                @endforeach
+                            @endif
+                        </div>
+
+                    @elseif($field['type'] === 'file')
+                        <input type="file" name="{{ $key }}" id="{{ $key }}" class="form-input @error($key) is-invalid @enderror">
+                        @if(!empty($item->$key))
+                            <div style="margin-top: 0.5rem;">
+                                <small>Current file: <a href="{{ Storage::url($item->$key) }}" target="_blank">{{ basename($item->$key) }}</a></small>
+                            </div>
+                        @endif
+                        
                     @elseif($field['type'] === 'boolean')
                         <div class="form-check">
                             <input type="checkbox" name="{{ $key }}" id="{{ $key }}" value="1" {{ old($key, $item->$key) ? 'checked' : '' }}>

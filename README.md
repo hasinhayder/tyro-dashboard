@@ -171,33 +171,13 @@ return [
 
 Tyro Dashboard allows you to instantly generate complete CRUD interfaces for your models by simply adding them to the configuration. No need to create controllers or views manually!
 
-### 1. Configure Resources
+### Workflow
 
-Open `config/tyro-dashboard.php` and add your resources to the `resources` array:
+1.  **Create your Model & Migration**: Standard Laravel models. Ensure relationships are defined if you plan to use them.
+2.  **Configure Resource**: Add the resource definition to `config/tyro-dashboard.php`.
+3.  **Scaffold (Optional)**: Use the helper command to generate files if starting from scratch.
 
-```php
-'resources' => [
-    'posts' => [
-        'model' => 'App\Models\Post',
-        'title' => 'Posts',
-        // 'icon' => '<svg>...</svg>', // Optional SVG icon
-        'fields' => [
-            'title' => ['type' => 'text', 'label' => 'Title', 'rules' => 'required|max:255', 'searchable' => true],
-            'content' => ['type' => 'textarea', 'label' => 'Content', 'rules' => 'required', 'hide_in_index' => true],
-            'is_published' => ['type' => 'boolean', 'label' => 'Published'],
-            'category_id' => [
-                'type' => 'select', 
-                'label' => 'Category', 
-                'relationship' => 'category', // Method name in Model
-                'option_label' => 'name',
-                'rules' => 'required'
-            ],
-        ],
-    ],
-],
-```
-
-### 2. Scaffolding
+### 1. Scaffolding (Optional)
 
 If you need to create the Model, Migration, and other resources in your main application, you can use the helper command:
 
@@ -207,20 +187,119 @@ php artisan tyro-dashboard:make-resource Post
 
 This will interactively create the Model, Migration, Controller (optional), and Requests, and provide the configuration snippet to add to `tyro-dashboard.php`.
 
-### Field Options
+### 2. Configure Resources
+
+Open `config/tyro-dashboard.php` and add your resources to the `resources` array. Here is a comprehensive example showing all available field types:
+
+```php
+'resources' => [
+    'posts' => [
+        'model' => 'App\Models\Post',
+        'title' => 'Posts',
+        // 'icon' => '<svg>...</svg>', // Optional SVG icon
+        'fields' => [
+            // Basic Fields
+            'title' => ['type' => 'text', 'label' => 'Title', 'rules' => 'required|max:255', 'searchable' => true],
+            'slug' => ['type' => 'text', 'label' => 'Slug', 'hide_in_index' => true],
+            'content' => ['type' => 'textarea', 'label' => 'Content', 'rules' => 'required', 'hide_in_index' => true],
+            'published_at' => ['type' => 'date', 'label' => 'Publish Date'],
+            
+            // Boolean (Toggle)
+            'is_published' => ['type' => 'boolean', 'label' => 'Published'],
+            
+            // File Upload
+            // Files are automatically stored in public disk under the resource name folder
+            'cover_image' => ['type' => 'file', 'label' => 'Cover Image', 'rules' => 'image|max:2048'],
+            
+            // Select (BelongsTo Relationship)
+            'category_id' => [
+                'type' => 'select', 
+                'label' => 'Category', 
+                'relationship' => 'category', // Method name in Post model (belongsTo)
+                'option_label' => 'name',     // Attribute to display
+                'rules' => 'required'
+            ],
+
+            // Radio Buttons (Static Options)
+            'priority' => [
+                'type' => 'radio',
+                'label' => 'Priority',
+                'options' => [
+                    'low' => 'Low Priority',
+                    'medium' => 'Medium Priority',
+                    'high' => 'High Priority',
+                ],
+                'default' => 'medium'
+            ],
+
+            // Multiselect (BelongsToMany Relationship)
+            'tags' => [
+                'type' => 'multiselect', // or 'checkbox' for a list of checkboxes
+                'label' => 'Tags',
+                'relationship' => 'tags', // Method name in Post model (belongsToMany)
+                'option_label' => 'name',
+            ],
+        ],
+    ],
+],
+```
+
+### Field Definitions & Options
 
 | Option | Description |
 |--------|-------------|
-| `type` | Field type: `text`, `textarea`, `select`, `boolean`, `password`, `hidden`, `email`, `number`, `date` |
-| `label` | Label to display in forms and tables |
-| `rules` | Laravel validation rules (e.g., `required|email`) |
-| `searchable` | Set to `true` to include this field in search queries |
-| `sortable` | Set to `true` to allow sorting by this field |
-| `hide_in_index` | Set to `true` to hide this field from the list view |
-| `hide_in_form` | Set to `true` to hide this field from create/edit forms |
-| `relationship` | (For `select`) The name of the relationship method on the model |
-| `option_label` | (For `select`) The attribute to display in the dropdown (default: `name`) |
-| `options` | (For `select`) Array of key-value pairs for static options |
+| `type` | Field type. See **Supported Field Types** below. |
+| `label` | Label to display in forms and tables. |
+| `rules` | Laravel validation rules (e.g., `required|email`). |
+| `searchable` | Set to `true` to include this field in search queries. |
+| `sortable` | Set to `true` to allow sorting by this field. |
+| `hide_in_index` | Set to `true` to hide this field from the list view. |
+| `hide_in_form` | Set to `true` to hide this field from create/edit forms. |
+| `relationship` | The name of the relationship method on the model. Required for relational fields. |
+| `option_label` | The attribute to display for options (e.g., `name`, `title`). Default: `name`. |
+| `options` | Array of key-value pairs for static options (for `select`, `radio`, `checkbox`). |
+
+### Supported Field Types
+
+| Type | Description | Relationship Support |
+|------|-------------|---------------------|
+| `text` | Standard text input | No |
+| `textarea` | Multi-line text area | No |
+| `email` | Email input | No |
+| `number` | Number input | No |
+| `password` | Password input (value hidden in edit) | No |
+| `date` | Date picker input | No |
+| `boolean` | Checkbox for boolean values (true/false) | No |
+| `file` | File upload input. Handles storage automatically. | No |
+| `select` | Dropdown menu. | **Yes** (`belongsTo`) |
+| `radio` | Radio button group. | **Yes** (`belongsTo`) |
+| `multiselect` | Multiple select dropdown. | **Yes** (`belongsToMany`) |
+| `checkbox` | Checkbox group for multiple selection. | **Yes** (`belongsToMany`) |
+
+### Handling Relationships
+
+**BelongsTo (Single Selection)**
+Use `select` or `radio` types.
+-   Set `relationship` to the method name in your model (e.g., `'category'`).
+-   Set `option_label` to the column you want to display (e.g., `'name'`).
+-   The field key should be the foreign key (e.g., `'category_id'`).
+
+**BelongsToMany (Multiple Selection)**
+Use `multiselect` or `checkbox` types.
+-   Set `relationship` to the method name in your model (e.g., `'tags'`).
+-   The field key can be the relationship name or any unique string (e.g., `'tags'`).
+-   Tyro Dashboard automatically handles `sync()` for these relationships.
+
+```php
+// In Post Model
+public function category() {
+    return $this->belongsTo(Category::class);
+}
+
+public function tags() {
+    return $this->belongsToMany(Tag::class);
+}
+```
 
 ### Environment Variables
 
