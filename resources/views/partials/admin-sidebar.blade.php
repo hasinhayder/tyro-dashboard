@@ -55,6 +55,35 @@
         <div class="sidebar-section">
             <div class="sidebar-section-title">Resources</div>
             @foreach(config('tyro-dashboard.resources') as $key => $resource)
+                @php
+                    // Check access (logic duplicated from Controller for view)
+                    $canAccess = true;
+                    if (isset($resource['roles']) && !empty($resource['roles'])) {
+                        $canAccess = false;
+                        $user = auth()->user();
+                        if ($user && method_exists($user, 'tyroRoleSlugs')) {
+                            $userRoles = $user->tyroRoleSlugs();
+                            // Check allowed roles
+                            foreach ($resource['roles'] as $role) {
+                                if (in_array($role, $userRoles)) {
+                                    $canAccess = true;
+                                    break;
+                                }
+                            }
+                            // Check readonly roles (if not already allowed)
+                            if (!$canAccess && isset($resource['readonly']) && !empty($resource['readonly'])) {
+                                foreach ($resource['readonly'] as $role) {
+                                    if (in_array($role, $userRoles)) {
+                                        $canAccess = true;
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                @endphp
+                
+                @if($canAccess)
                 <a href="{{ route('tyro-dashboard.resources.index', $key) }}" class="sidebar-link {{ request()->is('*resources/'.$key.'*') ? 'active' : '' }}">
                     @if(isset($resource['icon']))
                         {!! $resource['icon'] !!}
@@ -65,6 +94,7 @@
                     @endif
                     {{ $resource['title'] }}
                 </a>
+                @endif
             @endforeach
         </div>
         @endif

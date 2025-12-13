@@ -40,9 +40,51 @@ class ResourceController extends BaseController
         return false;
     }
 
+    protected function hasAccess($config)
+    {
+        // If 'roles' (access_roles) is not defined, it's visible to all (default behavior)
+        // unless we want to enforce strictness. Given the requirement "these resources will be hidden to all other roles",
+        // it implies that IF roles are defined, we check. IF NOT, we assume open.
+        $accessRoles = $config['roles'] ?? [];
+        $readonlyRoles = $config['readonly'] ?? [];
+        
+        if (empty($accessRoles)) {
+            // No strict access defined, so allowed.
+            return true;
+        }
+
+        $user = auth()->user();
+        if (!$user || !method_exists($user, 'tyroRoleSlugs')) {
+            return false;
+        }
+
+        $userRoles = $user->tyroRoleSlugs();
+
+        // Check for full access
+        foreach ($accessRoles as $role) {
+            if (in_array($role, $userRoles)) {
+                return true;
+            }
+        }
+
+        // Check for readonly access (which also grants visibility)
+        foreach ($readonlyRoles as $role) {
+            if (in_array($role, $userRoles)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     public function index($resource)
     {
         $config = $this->getResourceConfig($resource);
+        
+        if (!$this->hasAccess($config)) {
+            abort(403, 'You do not have permission to view this resource.');
+        }
+
         $modelClass = $config['model'];
         
         if (!class_exists($modelClass)) {
@@ -113,6 +155,10 @@ class ResourceController extends BaseController
     {
         $config = $this->getResourceConfig($resource);
         
+        if (!$this->hasAccess($config)) {
+            abort(403, 'You do not have permission to view this resource.');
+        }
+
         if ($this->isReadonly($config)) {
             abort(403, 'This resource is read-only for your role.');
         }
@@ -143,6 +189,10 @@ class ResourceController extends BaseController
     {
         $config = $this->getResourceConfig($resource);
         
+        if (!$this->hasAccess($config)) {
+            abort(403, 'You do not have permission to view this resource.');
+        }
+
         if ($this->isReadonly($config)) {
             abort(403, 'This resource is read-only for your role.');
         }
@@ -207,6 +257,11 @@ class ResourceController extends BaseController
     public function show($resource, $id)
     {
         $config = $this->getResourceConfig($resource);
+        
+        if (!$this->hasAccess($config)) {
+            abort(403, 'You do not have permission to view this resource.');
+        }
+
         $modelClass = $config['model'];
         
         $item = $modelClass::findOrFail($id);
@@ -223,6 +278,10 @@ class ResourceController extends BaseController
     {
         $config = $this->getResourceConfig($resource);
         
+        if (!$this->hasAccess($config)) {
+            abort(403, 'You do not have permission to view this resource.');
+        }
+
         if ($this->isReadonly($config)) {
             abort(403, 'This resource is read-only for your role.');
         }
@@ -264,6 +323,10 @@ class ResourceController extends BaseController
     {
         $config = $this->getResourceConfig($resource);
         
+        if (!$this->hasAccess($config)) {
+            abort(403, 'You do not have permission to view this resource.');
+        }
+
         if ($this->isReadonly($config)) {
             abort(403, 'This resource is read-only for your role.');
         }
@@ -384,6 +447,10 @@ class ResourceController extends BaseController
     {
         $config = $this->getResourceConfig($resource);
         
+        if (!$this->hasAccess($config)) {
+            abort(403, 'You do not have permission to view this resource.');
+        }
+
         if ($this->isReadonly($config)) {
             abort(403, 'This resource is read-only for your role.');
         }

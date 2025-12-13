@@ -198,7 +198,12 @@ Open `config/tyro-dashboard.php` and add your resources to the `resources` array
         'title' => 'Posts',
         // 'icon' => '<svg>...</svg>', // Optional SVG icon
         
+        // Full Access roles (Optional): Only these roles can access this resource.
+        // If not set, all admin users can access.
+        'roles' => ['admin', 'manager'],
+
         // Read-only configuration: Users with these roles can only view (index/show)
+        // They can access even if they are not in the 'roles' list above.
         'readonly' => ['editor', 'viewer'],
 
         'fields' => [
