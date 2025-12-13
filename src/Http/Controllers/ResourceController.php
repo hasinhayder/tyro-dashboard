@@ -43,11 +43,23 @@ class ResourceController extends BaseController
         if (request()->has('search') && request('search')) {
             $search = request('search');
             $query->where(function($q) use ($search, $config) {
-                 foreach($config['fields'] as $field => $fieldConfig) {
-                     if (($fieldConfig['searchable'] ?? false)) {
-                         $q->orWhere($field, 'like', "%{$search}%");
-                     }
-                 }
+                $searchableFields = $config['search'] ?? [];
+
+                foreach($config['fields'] as $field => $fieldConfig) {
+                    if (($fieldConfig['searchable'] ?? false)) {
+                        $searchableFields[] = $field;
+                    }
+                }
+                
+                $searchableFields = array_unique($searchableFields);
+
+                foreach($searchableFields as $field) {
+                    // Check if the field is a relationship field or a regular column
+                    // For now, we assume simple column search unless complex logic is needed.
+                    // To be safe, we can check if it exists in fields config to see type, 
+                    // but user might want to search hidden columns too.
+                    $q->orWhere($field, 'like', "%{$search}%");
+                }
             });
         }
 
