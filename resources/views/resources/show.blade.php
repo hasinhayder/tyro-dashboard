@@ -54,6 +54,8 @@
                             </span>
                         @elseif($field['type'] === 'textarea')
                             <div style="white-space: pre-wrap;">{{ $item->$key }}</div>
+                        @elseif($field['type'] === 'richtext')
+                            <div class="richtext-content">{!! $item->$key !!}</div>
                         @else
                             {{ $item->$key }}
                         @endif

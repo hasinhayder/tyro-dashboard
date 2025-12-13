@@ -10,6 +10,40 @@
 <span>Create</span>
 @endsection
 
+@push('styles')
+    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+@endpush
+
+@push('scripts')
+    <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            @foreach($config['fields'] as $key => $field)
+                @if(($field['type'] ?? '') === 'richtext')
+                    (function() {
+                        var key = '{{ $key }}';
+                        if(document.getElementById('editor-' + key)) {
+                            var quill = new Quill('#editor-' + key, {
+                                theme: 'snow'
+                            });
+                            var textarea = document.getElementById(key);
+                            
+                            // Set initial content
+                            if (textarea.value) {
+                                quill.root.innerHTML = textarea.value;
+                            }
+
+                            quill.on('text-change', function() {
+                                textarea.value = quill.root.innerHTML;
+                            });
+                        }
+                    })();
+                @endif
+            @endforeach
+        });
+    </script>
+@endpush
+
 @section('content')
 <div class="page-header">
     <h1 class="page-title">Create {{ Str::singular($config['title']) }}</h1>
@@ -35,6 +69,12 @@
                     
                     @if($field['type'] === 'textarea')
                         <textarea name="{{ $key }}" id="{{ $key }}" class="form-input @error($key) is-invalid @enderror" rows="5">{{ old($key) }}</textarea>
+                    
+                    @elseif($field['type'] === 'richtext')
+                        <div class="richtext-wrapper">
+                            <div id="editor-{{ $key }}" style="height: 200px; background: #fff;"></div>
+                            <textarea name="{{ $key }}" id="{{ $key }}" style="display:none">{{ old($key) }}</textarea>
+                        </div>
                     
                     @elseif($field['type'] === 'select')
                         <select name="{{ $key }}" id="{{ $key }}" class="form-select @error($key) is-invalid @enderror">
