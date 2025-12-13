@@ -54,6 +54,7 @@
         --warning-foreground: oklch(0.205 0 0);
         --info: oklch(0.623 0.214 259.815);
         --info-foreground: oklch(1 0 0);
+        --danger: #ef4444;
         
         /* Card shadows */
         --card-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
@@ -98,6 +99,8 @@
         --sidebar-accent-foreground: oklch(0.985 0 0);
         --sidebar-border: oklch(1 0 0 / 10%);
         --sidebar-ring: oklch(0.556 0 0);
+
+        --danger: #f87171;
         
         /* Extended semantic colors (dark mode) */
         --success: oklch(0.696 0.17 162.48);

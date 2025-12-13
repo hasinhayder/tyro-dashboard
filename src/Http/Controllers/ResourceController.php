@@ -5,6 +5,7 @@ namespace HasinHayder\TyroDashboard\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\QueryException;
 
 class ResourceController extends BaseController
 {
@@ -240,7 +241,45 @@ class ResourceController extends BaseController
             }
         }
 
-        $item = $modelClass::create($data);
+        try {
+            $item = $modelClass::create($data);
+        } catch (QueryException $e) {
+            $errorCode = $e->errorInfo[1] ?? 0;
+            $errorMessage = $e->getMessage();
+            $field = null;
+
+            // MySQL: Column 'title' cannot be null (1048)
+            if ($errorCode == 1048 && preg_match("/Column '([^']+)' cannot be null/", $errorMessage, $matches)) {
+                $field = $matches[1];
+            }
+            // MySQL: Field 'title' doesn't have a default value (1364)
+            elseif ($errorCode == 1364 && preg_match("/Field '([^']+)' doesn't have a default value/", $errorMessage, $matches)) {
+                $field = $matches[1];
+            }
+            // SQLite: NOT NULL constraint failed: posts.title
+            elseif (strpos($errorMessage, 'NOT NULL constraint failed') !== false) {
+                if (preg_match("/NOT NULL constraint failed: .+\.([^\s]+)/", $errorMessage, $matches)) {
+                    $field = $matches[1];
+                }
+            }
+            // PostgreSQL: null value in column "title" violates not-null constraint
+            elseif (strpos($errorMessage, 'violates not-null constraint') !== false) {
+                if (preg_match('/null value in column "([^"]+)"/', $errorMessage, $matches)) {
+                    $field = $matches[1];
+                }
+            }
+
+            if ($field) {
+                return back()->withInput()->withErrors([$field => "The {$field} field is required."]);
+            }
+            
+            // Fallback if we can't identify the field but it's a constraint violation
+            if ($errorCode == 1048 || $errorCode == 1364 || strpos($errorMessage, 'constraint') !== false) {
+                 return back()->withInput()->with('error', 'Database error: Missing required fields.');
+            }
+
+            throw $e;
+        }
 
         // Sync relationships
         foreach ($relationshipsToSync as $field => $values) {
@@ -429,7 +468,45 @@ class ResourceController extends BaseController
             }
         }
 
-        $item->update($data);
+        try {
+            $item->update($data);
+        } catch (QueryException $e) {
+            $errorCode = $e->errorInfo[1] ?? 0;
+            $errorMessage = $e->getMessage();
+            $field = null;
+
+            // MySQL: Column 'title' cannot be null (1048)
+            if ($errorCode == 1048 && preg_match("/Column '([^']+)' cannot be null/", $errorMessage, $matches)) {
+                $field = $matches[1];
+            }
+            // MySQL: Field 'title' doesn't have a default value (1364)
+            elseif ($errorCode == 1364 && preg_match("/Field '([^']+)' doesn't have a default value/", $errorMessage, $matches)) {
+                $field = $matches[1];
+            }
+            // SQLite: NOT NULL constraint failed: posts.title
+            elseif (strpos($errorMessage, 'NOT NULL constraint failed') !== false) {
+                if (preg_match("/NOT NULL constraint failed: .+\.([^\s]+)/", $errorMessage, $matches)) {
+                    $field = $matches[1];
+                }
+            }
+            // PostgreSQL: null value in column "title" violates not-null constraint
+            elseif (strpos($errorMessage, 'violates not-null constraint') !== false) {
+                if (preg_match('/null value in column "([^"]+)"/', $errorMessage, $matches)) {
+                    $field = $matches[1];
+                }
+            }
+
+            if ($field) {
+                return back()->withInput()->withErrors([$field => "The {$field} field is required."]);
+            }
+            
+            // Fallback if we can't identify the field but it's a constraint violation
+            if ($errorCode == 1048 || $errorCode == 1364 || strpos($errorMessage, 'constraint') !== false) {
+                 return back()->withInput()->with('error', 'Database error: Missing required fields.');
+            }
+
+            throw $e;
+        }
 
         // Sync relationships
         foreach ($relationshipsToSync as $field => $values) {
