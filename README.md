@@ -161,9 +161,27 @@ return [
         'app_name' => env('TYRO_DASHBOARD_APP_NAME', env('APP_NAME', 'Laravel')),
         'logo' => env('TYRO_DASHBOARD_LOGO', null),
     ],
+
+    // Resource UI Settings
+    'resource_ui' => [
+        'show_global_errors' => env('TYRO_SHOW_GLOBAL_ERRORS', true),
+        'show_field_errors' => env('TYRO_SHOW_FIELD_ERRORS', true),
+    ],
 ];
 ```
 ```
+
+### Environment Variables
+
+You can configure the dashboard behavior using your `.env` file:
+
+```dotenv
+TYRO_DASHBOARD_PREFIX=dashboard
+TYRO_DASHBOARD_APP_NAME="My App"
+TYRO_SHOW_GLOBAL_ERRORS=true
+TYRO_SHOW_FIELD_ERRORS=true
+```
+
 
 </details>
 

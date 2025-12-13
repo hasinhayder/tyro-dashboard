@@ -166,4 +166,17 @@ return [
         //     ],
         // ],
     ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Resource UI Settings
+    |--------------------------------------------------------------------------
+    |
+    | Configure the appearance and behavior of resource forms and lists.
+    |
+    */
+    'resource_ui' => [
+        'show_global_errors' => env('TYRO_SHOW_GLOBAL_ERRORS', true),
+        'show_field_errors' => env('TYRO_SHOW_FIELD_ERRORS', true),
+    ],
 ];

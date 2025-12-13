@@ -179,7 +179,9 @@
                     @endif
 
                     @error($key)
-                        <div class="form-error" style="color: var(--danger); font-size: 0.875rem; margin-top: 0.25rem;">{{ $message }}</div>
+                        @if(config('tyro-dashboard.resource_ui.show_field_errors', true))
+                            <div class="form-error" style="color: var(--danger); font-size: 0.875rem; margin-top: 0.25rem;">{{ $message }}</div>
+                        @endif
                     @enderror
                 </div>
             @endforeach
