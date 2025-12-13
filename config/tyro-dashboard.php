@@ -128,4 +128,42 @@ return [
         'show_flash_messages' => true,
         'auto_dismiss_seconds' => 5,
     ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Dynamic Resources (CRUD)
+    |--------------------------------------------------------------------------
+    |
+    | Define your resources here to automatically generate CRUD interfaces.
+    |
+    */
+    // 'resources' => [
+    //     // Example:
+    //     // 'posts' => [
+    //     //     'model' => 'App\Models\Post',
+    //     //     'title' => 'Posts',
+    //     //     'icon' => '<svg>...</svg>', // Optional SVG icon
+    //     //     'fields' => [
+    //     //         'title' => ['type' => 'text', 'label' => 'Title', 'rules' => 'required'],
+    //     //         'content' => ['type' => 'textarea', 'label' => 'Content'],
+    //     //     ],
+    //     // ],
+    // ],
+    'resources' => [
+        // 'posts' => [
+        //     'model' => 'App\Models\Post',
+        //     'title' => 'Posts',
+        //     'fields' => [
+        //         'title' => ['type' => 'text', 'label' => 'Title', 'rules' => 'required'],
+        //         'content' => ['type' => 'textarea', 'label' => 'Content'],
+        //         'category_id' => [
+        //             'type' => 'select',
+        //             'label' => 'Category',
+        //             'relationship' => 'category', // Name of the relationship method in Post model
+        //             'option_label' => 'name',
+        //         ],
+        //         'is_published' => ['type' => 'boolean', 'label' => 'Published'],
+        //     ],
+        // ],
+    ],
 ];

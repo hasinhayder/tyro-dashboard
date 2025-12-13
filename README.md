@@ -163,8 +163,64 @@ return [
     ],
 ];
 ```
+```
 
 </details>
+
+## Dynamic CRUD Resources
+
+Tyro Dashboard allows you to instantly generate complete CRUD interfaces for your models by simply adding them to the configuration. No need to create controllers or views manually!
+
+### 1. Configure Resources
+
+Open `config/tyro-dashboard.php` and add your resources to the `resources` array:
+
+```php
+'resources' => [
+    'posts' => [
+        'model' => 'App\Models\Post',
+        'title' => 'Posts',
+        // 'icon' => '<svg>...</svg>', // Optional SVG icon
+        'fields' => [
+            'title' => ['type' => 'text', 'label' => 'Title', 'rules' => 'required|max:255', 'searchable' => true],
+            'content' => ['type' => 'textarea', 'label' => 'Content', 'rules' => 'required', 'hide_in_index' => true],
+            'is_published' => ['type' => 'boolean', 'label' => 'Published'],
+            'category_id' => [
+                'type' => 'select', 
+                'label' => 'Category', 
+                'relationship' => 'category', // Method name in Model
+                'option_label' => 'name',
+                'rules' => 'required'
+            ],
+        ],
+    ],
+],
+```
+
+### 2. Scaffolding
+
+If you need to create the Model, Migration, and other resources in your main application, you can use the helper command:
+
+```bash
+php artisan tyro-dashboard:make-resource Post
+```
+
+This will interactively create the Model, Migration, Controller (optional), and Requests, and provide the configuration snippet to add to `tyro-dashboard.php`.
+
+### Field Options
+
+| Option | Description |
+|--------|-------------|
+| `type` | Field type: `text`, `textarea`, `select`, `boolean`, `password`, `hidden`, `email`, `number`, `date` |
+| `label` | Label to display in forms and tables |
+| `rules` | Laravel validation rules (e.g., `required|email`) |
+| `searchable` | Set to `true` to include this field in search queries |
+| `sortable` | Set to `true` to allow sorting by this field |
+| `hide_in_index` | Set to `true` to hide this field from the list view |
+| `hide_in_form` | Set to `true` to hide this field from create/edit forms |
+| `relationship` | (For `select`) The name of the relationship method on the model |
+| `option_label` | (For `select`) The attribute to display in the dropdown (default: `name`) |
+| `options` | (For `select`) Array of key-value pairs for static options |
 
 ### Environment Variables
 

@@ -65,4 +65,16 @@ Route::middleware('tyro-dashboard.admin')->group(function () {
         Route::delete('/{id}', [PrivilegeController::class, 'destroy'])->name('destroy');
         Route::delete('/{id}/roles/{roleId}', [PrivilegeController::class, 'removeRole'])->name('remove-role');
     });
+
+    // Dynamic Resources
+    // This route group handles all dynamic resources defined in config
+    Route::prefix('resources/{resource}')->name('resources.')->group(function () {
+        Route::get('/', [\HasinHayder\TyroDashboard\Http\Controllers\ResourceController::class, 'index'])->name('index');
+        Route::get('/create', [\HasinHayder\TyroDashboard\Http\Controllers\ResourceController::class, 'create'])->name('create');
+        Route::post('/', [\HasinHayder\TyroDashboard\Http\Controllers\ResourceController::class, 'store'])->name('store');
+        Route::get('/{id}', [\HasinHayder\TyroDashboard\Http\Controllers\ResourceController::class, 'show'])->name('show');
+        Route::get('/{id}/edit', [\HasinHayder\TyroDashboard\Http\Controllers\ResourceController::class, 'edit'])->name('edit');
+        Route::put('/{id}', [\HasinHayder\TyroDashboard\Http\Controllers\ResourceController::class, 'update'])->name('update');
+        Route::delete('/{id}', [\HasinHayder\TyroDashboard\Http\Controllers\ResourceController::class, 'destroy'])->name('destroy');
+    });
 });

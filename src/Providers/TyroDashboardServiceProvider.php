@@ -3,6 +3,7 @@
 namespace HasinHayder\TyroDashboard\Providers;
 
 use HasinHayder\TyroDashboard\Console\Commands\InstallCommand;
+use HasinHayder\TyroDashboard\Console\Commands\MakeResourceCommand;
 use HasinHayder\TyroDashboard\Console\Commands\PublishCommand;
 use HasinHayder\TyroDashboard\Console\Commands\PublishStyleCommand;
 use HasinHayder\TyroDashboard\Console\Commands\VersionCommand;
@@ -58,6 +59,7 @@ class TyroDashboardServiceProvider extends ServiceProvider
 
         $this->commands([
             InstallCommand::class,
+            MakeResourceCommand::class,
             PublishCommand::class,
             PublishStyleCommand::class,
             VersionCommand::class,
