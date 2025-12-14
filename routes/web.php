@@ -1,6 +1,7 @@
 <?php
 
 use HasinHayder\TyroDashboard\Http\Controllers\DashboardController;
+use HasinHayder\TyroDashboard\Http\Controllers\ExamplesController;
 use HasinHayder\TyroDashboard\Http\Controllers\PrivilegeController;
 use HasinHayder\TyroDashboard\Http\Controllers\ProfileController;
 use HasinHayder\TyroDashboard\Http\Controllers\RoleController;
@@ -19,8 +20,18 @@ use Illuminate\Support\Facades\Route;
 // Dashboard Home
 Route::get('/', [DashboardController::class, 'index'])->name('index');
 
-// Dashboard Components (copy-ready UI blocks)
-Route::get('/components', [DashboardController::class, 'components'])->name('components');
+// Backwards-compatible alias for the Examples Components page
+Route::get('/components', [ExamplesController::class, 'components'])->name('components');
+
+// Examples (copy-ready sample pages)
+Route::prefix('examples')->name('examples.')->group(function () {
+    Route::get('/components', [ExamplesController::class, 'components'])->name('components');
+    Route::get('/crm', [ExamplesController::class, 'crm'])->name('crm');
+    Route::get('/mail', [ExamplesController::class, 'mail'])->name('mail');
+    Route::get('/report', [ExamplesController::class, 'report'])->name('report');
+    Route::get('/media', [ExamplesController::class, 'media'])->name('media');
+    Route::get('/support', [ExamplesController::class, 'support'])->name('support');
+});
 
 // Profile Management (all authenticated users)
 Route::prefix('profile')->name('profile')->group(function () {
