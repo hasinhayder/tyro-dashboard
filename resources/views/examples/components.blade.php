@@ -1,20 +1,24 @@
 @extends($isAdmin ? 'tyro-dashboard::layouts.admin' : 'tyro-dashboard::layouts.user')
 
-@section('title', 'Example Components')
+@section('title', 'Dashboard Components')
 
 @section('breadcrumb')
 <a href="{{ route('tyro-dashboard.index') }}">Dashboard</a>
 <span class="breadcrumb-separator">/</span>
-<span>Examples</span>
-<span class="breadcrumb-separator">/</span>
 <span>Components</span>
+<span class="breadcrumb-separator">/</span>
+<span>Dashboard Components</span>
 @endsection
+
+@push('styles')
+<link href="https://cdn.jsdelivr.net/npm/quill@1.3.7/dist/quill.snow.css" rel="stylesheet">
+@endpush
 
 @section('content')
 <div class="page-header">
     <div class="page-header-row">
         <div>
-            <h1 class="page-title">Example Components</h1>
+            <h1 class="page-title">Dashboard Components</h1>
             <p class="page-description" style="font-size: 1rem;">Copy-ready building blocks: cards, charts, progress, tables, tabs, dropdowns, forms, and rich text.</p>
         </div>
         <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
@@ -33,6 +37,8 @@
         </div>
     </div>
 </div>
+
+@php($quillInitialHtml = '<h3>Announcement</h3><p>Use <strong>Quill</strong> for rich text content in forms.</p><ul><li>Bold / Italic</li><li>Lists</li><li>Links</li></ul><p><em>Tip:</em> copy the generated HTML below.</p>')
 
 {{-- Alerts (success/warning) --}}
 <div class="grid-2" style="margin-bottom: 1.5rem;">
@@ -530,7 +536,7 @@
         </div>
     </div>
 
-    {{-- Rich text + sparklines --}}
+    {{-- Rich text (Quill) + sparklines --}}
     <div class="card">
         <div class="card-header">
             <h3 class="card-title" style="font-size: 1.0625rem;">Rich Text + Sparklines</h3>
@@ -538,18 +544,15 @@
         </div>
         <div class="card-body">
             <div style="border: 1px solid var(--border); border-radius: 10px; padding: 1rem; background: var(--background); margin-bottom: 1rem;">
-                <div style="font-size: 0.875rem; color: var(--muted-foreground); margin-bottom: 0.5rem;">Announcement</div>
-                <h3 style="font-size: 1.125rem; margin-bottom: 0.5rem;">Scheduled maintenance</h3>
-                <p style="color: var(--muted-foreground); margin-bottom: 0.75rem;">
-                    We’ll be performing a short maintenance window tonight. Expected downtime: <strong>5 minutes</strong>.
-                </p>
-                <div style="display:flex; gap: 0.5rem; flex-wrap: wrap;">
-                    <span class="badge badge-primary">Status</span>
-                    <span class="badge badge-warning">Planned</span>
+                <div style="display:flex; align-items:center; justify-content: space-between; gap: 1rem; margin-bottom: 0.75rem;">
+                    <div style="font-size: 0.875rem; color: var(--muted-foreground);">Rich text editor</div>
+                    <span class="badge badge-primary">Quill.js</span>
                 </div>
+                <div id="td-quill-editor" style="min-height: 160px; background: var(--background);"></div>
+                <script type="application/json" id="td-quill-initial">@json($quillInitialHtml)</script>
                 <div style="margin-top: 0.75rem; padding: 0.75rem 1rem; border-radius: 8px; background: var(--muted); border: 1px solid var(--border);">
-                    <div style="font-size: 0.8125rem; color: var(--muted-foreground); margin-bottom: 0.25rem;">Copyable snippet</div>
-                    <div style="font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace; font-size: 0.8125rem; color: var(--foreground);">&lt;span class=&quot;badge badge-warning&quot;&gt;Planned&lt;/span&gt;</div>
+                    <div style="font-size: 0.8125rem; color: var(--muted-foreground); margin-bottom: 0.5rem;">Generated HTML</div>
+                    <textarea id="td-quill-html" class="form-textarea" readonly style="min-height: 120px; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;"></textarea>
                 </div>
             </div>
 
@@ -619,8 +622,48 @@
 </div>
 
 @push('scripts')
+<script src="https://cdn.jsdelivr.net/npm/quill@1.3.7/dist/quill.min.js"></script>
 <script>
     (function () {
+        function initQuill() {
+            var editorEl = document.getElementById('td-quill-editor');
+            if (!editorEl || typeof window.Quill === 'undefined') return;
+
+            var quill = new window.Quill(editorEl, {
+                theme: 'snow',
+                modules: {
+                    toolbar: [
+                        ['bold', 'italic', 'underline'],
+                        [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+                        ['link'],
+                        ['clean']
+                    ]
+                }
+            });
+
+            // Seed initial content
+            try {
+                var initialNode = document.getElementById('td-quill-initial');
+                var initialHtml = '';
+                if (initialNode && initialNode.textContent) {
+                    initialHtml = JSON.parse(initialNode.textContent);
+                }
+                if (initialHtml) {
+                    quill.clipboard.dangerouslyPasteHTML(initialHtml);
+                }
+            } catch (e) {
+                // no-op
+            }
+
+            var output = document.getElementById('td-quill-html');
+            function sync() {
+                if (!output) return;
+                output.value = quill.root.innerHTML;
+            }
+            quill.on('text-change', sync);
+            sync();
+        }
+
         function initTabs() {
             document.querySelectorAll('[data-td-tabset]').forEach(function (tabset) {
                 var links = tabset.querySelectorAll('[data-td-tab]');
@@ -675,6 +718,7 @@
         document.addEventListener('DOMContentLoaded', function () {
             initTabs();
             initDropdowns();
+            initQuill();
         });
     })();
 </script>

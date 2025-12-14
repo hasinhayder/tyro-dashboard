@@ -207,29 +207,4 @@ class ExamplesController extends BaseController
             'activity' => $activity,
         ]));
     }
-
-    public function crm(Request $request)
-    {
-        return view('tyro-dashboard::examples.crm', $this->getViewData());
-    }
-
-    public function mail(Request $request)
-    {
-        return view('tyro-dashboard::examples.mail', $this->getViewData());
-    }
-
-    public function report(Request $request)
-    {
-        return view('tyro-dashboard::examples.report', $this->getViewData());
-    }
-
-    public function media(Request $request)
-    {
-        return view('tyro-dashboard::examples.media', $this->getViewData());
-    }
-
-    public function support(Request $request)
-    {
-        return view('tyro-dashboard::examples.support', $this->getViewData());
-    }
 }

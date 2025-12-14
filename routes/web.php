@@ -23,15 +23,8 @@ Route::get('/', [DashboardController::class, 'index'])->name('index');
 // Backwards-compatible alias for the Examples Components page
 Route::get('/components', [ExamplesController::class, 'components'])->name('components');
 
-// Examples (copy-ready sample pages)
-Route::prefix('examples')->name('examples.')->group(function () {
-    Route::get('/components', [ExamplesController::class, 'components'])->name('components');
-    Route::get('/crm', [ExamplesController::class, 'crm'])->name('crm');
-    Route::get('/mail', [ExamplesController::class, 'mail'])->name('mail');
-    Route::get('/report', [ExamplesController::class, 'report'])->name('report');
-    Route::get('/media', [ExamplesController::class, 'media'])->name('media');
-    Route::get('/support', [ExamplesController::class, 'support'])->name('support');
-});
+// Optional alias (kept for backwards compatibility if anyone bookmarked it)
+Route::get('/examples/components', [ExamplesController::class, 'components'])->name('examples.components');
 
 // Profile Management (all authenticated users)
 Route::prefix('profile')->name('profile')->group(function () {
