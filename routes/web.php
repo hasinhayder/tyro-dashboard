@@ -1,7 +1,7 @@
 <?php
 
 use HasinHayder\TyroDashboard\Http\Controllers\DashboardController;
-use HasinHayder\TyroDashboard\Http\Controllers\ExamplesController;
+use HasinHayder\TyroDashboard\Http\Controllers\ComponentsController;
 use HasinHayder\TyroDashboard\Http\Controllers\PrivilegeController;
 use HasinHayder\TyroDashboard\Http\Controllers\ProfileController;
 use HasinHayder\TyroDashboard\Http\Controllers\RoleController;
@@ -21,10 +21,10 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', [DashboardController::class, 'index'])->name('index');
 
 // Backwards-compatible alias for the Examples Components page
-Route::get('/components', [ExamplesController::class, 'components'])->name('components');
+Route::get('/components', [ComponentsController::class, 'components'])->name('components');
 
 // Optional alias (kept for backwards compatibility if anyone bookmarked it)
-Route::get('/examples/components', [ExamplesController::class, 'components'])->name('examples.components');
+Route::get('/examples/components', [ComponentsController::class, 'components'])->name('examples.components');
 
 // Profile Management (all authenticated users)
 Route::prefix('profile')->name('profile')->group(function () {
