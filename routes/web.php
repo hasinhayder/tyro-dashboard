@@ -19,6 +19,9 @@ use Illuminate\Support\Facades\Route;
 // Dashboard Home
 Route::get('/', [DashboardController::class, 'index'])->name('index');
 
+// Dashboard Components (copy-ready UI blocks)
+Route::get('/components', [DashboardController::class, 'components'])->name('components');
+
 // Profile Management (all authenticated users)
 Route::prefix('profile')->name('profile')->group(function () {
     Route::get('/', [ProfileController::class, 'index']);
