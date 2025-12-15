@@ -1,3 +1,4 @@
+<script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.4/build/qrcode.min.js"></script>
 <script>
     (function () {
         function $(id) { return document.getElementById(id); }
@@ -476,6 +477,229 @@
             renderInvoice();
         }
 
+        // Password Generator
+        function buildPasswordSets() {
+            var sets = [];
+            var upper = $('td-password-uppercase');
+            var lower = $('td-password-lowercase');
+            var nums = $('td-password-numbers');
+            var syms = $('td-password-symbols');
+
+            if (upper && upper.checked) sets.push('ABCDEFGHIJKLMNOPQRSTUVWXYZ');
+            if (lower && lower.checked) sets.push('abcdefghijklmnopqrstuvwxyz');
+            if (nums && nums.checked) sets.push('0123456789');
+            if (syms && syms.checked) sets.push('!@#$%^&*()-_=+[]{};:,.?/');
+
+            return sets;
+        }
+
+        function randomInt(maxExclusive) {
+            maxExclusive = Math.floor(maxExclusive);
+            if (!(maxExclusive > 0)) return 0;
+
+            if (window.crypto && window.crypto.getRandomValues) {
+                var range = 0x100000000;
+                var limit = Math.floor(range / maxExclusive) * maxExclusive;
+                var x = new Uint32Array(1);
+                do {
+                    window.crypto.getRandomValues(x);
+                } while (x[0] >= limit);
+                return x[0] % maxExclusive;
+            }
+
+            return Math.floor(Math.random() * maxExclusive);
+        }
+
+        function pickOne(str) {
+            return str.charAt(randomInt(str.length));
+        }
+
+        function shuffleArray(arr) {
+            for (var i = arr.length - 1; i > 0; i--) {
+                var j = randomInt(i + 1);
+                var tmp = arr[i];
+                arr[i] = arr[j];
+                arr[j] = tmp;
+            }
+            return arr;
+        }
+
+        function generatePassword(length, sets) {
+            var all = sets.join('');
+            if (!all) return '';
+
+            var out = [];
+            for (var i = 0; i < sets.length && out.length < length; i++) {
+                out.push(pickOne(sets[i]));
+            }
+            while (out.length < length) {
+                out.push(pickOne(all));
+            }
+            return shuffleArray(out).join('');
+        }
+
+        async function copyToClipboard(text) {
+            if (!text) return false;
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                try {
+                    await navigator.clipboard.writeText(text);
+                    return true;
+                } catch (e) {
+                    // fall through
+                }
+            }
+
+            try {
+                var ta = document.createElement('textarea');
+                ta.value = text;
+                ta.style.position = 'fixed';
+                ta.style.left = '-9999px';
+                document.body.appendChild(ta);
+                ta.focus();
+                ta.select();
+                var ok = document.execCommand('copy');
+                document.body.removeChild(ta);
+                return ok;
+            } catch (e2) {
+                return false;
+            }
+        }
+
+        function initPasswordGenerator() {
+            var gen = $('td-password-generate');
+            var out = $('td-password-output');
+            if (!gen || !out) return;
+
+            gen.addEventListener('click', function () {
+                var lengthEl = $('td-password-length');
+                var qtyEl = $('td-password-quantity');
+
+                var length = clamp(toNum(lengthEl ? lengthEl.value : 16), 4, 128);
+                var quantity = clamp(Math.floor(toNum(qtyEl ? qtyEl.value : 1)), 1, 10);
+                var sets = buildPasswordSets();
+
+                if (sets.length === 0) {
+                    out.value = '';
+                    alert('Select at least one character type.');
+                    return;
+                }
+
+                var lines = [];
+                for (var i = 0; i < quantity; i++) {
+                    lines.push(generatePassword(length, sets));
+                }
+                out.value = lines.join('\n');
+            });
+
+            var clearBtn = $('td-password-clear');
+            if (clearBtn) {
+                clearBtn.addEventListener('click', function () {
+                    out.value = '';
+                });
+            }
+
+            var copyBtn = $('td-password-copy');
+            if (copyBtn) {
+                copyBtn.addEventListener('click', async function () {
+                    var text = (out.value || '').trim();
+                    if (!text) return;
+
+                    var prev = copyBtn.textContent;
+                    var ok = await copyToClipboard(text);
+                    copyBtn.textContent = ok ? 'Copied' : 'Copy failed';
+                    setTimeout(function () { copyBtn.textContent = prev; }, 1200);
+                });
+            }
+        }
+
+        // QR Generator
+        function normalizeHexColor(value, fallback) {
+            var v = String(value || '').trim();
+            if (/^#[0-9a-fA-F]{6}$/.test(v)) return v;
+            return fallback;
+        }
+
+        function initQrGenerator() {
+            var gen = $('td-qr-generate');
+            var canvas = $('td-qr-canvas');
+            var placeholder = $('td-qr-placeholder');
+            var download = $('td-qr-download');
+            if (!gen || !canvas || !placeholder || !download) return;
+
+            function setEmpty() {
+                canvas.style.display = 'none';
+                placeholder.style.display = '';
+                download.disabled = true;
+            }
+
+            async function renderQr() {
+                var contentEl = $('td-qr-content');
+                var sizeEl = $('td-qr-size');
+                var errEl = $('td-qr-error');
+                var fgEl = $('td-qr-foreground');
+                var bgEl = $('td-qr-background');
+
+                var content = String(contentEl ? contentEl.value : '').trim();
+                if (!content) {
+                    setEmpty();
+                    alert('Enter some content to encode.');
+                    return;
+                }
+
+                if (!window.QRCode || !window.QRCode.toCanvas) {
+                    alert('QR library failed to load.');
+                    return;
+                }
+
+                var size = clamp(toNum(sizeEl ? sizeEl.value : 256), 96, 1024);
+                var ec = String(errEl ? errEl.value : 'M');
+                var fg = normalizeHexColor(fgEl ? fgEl.value : '#000000', '#000000');
+                var bg = normalizeHexColor(bgEl ? bgEl.value : '#ffffff', '#ffffff');
+
+                placeholder.style.display = 'none';
+                canvas.style.display = '';
+
+                try {
+                    await window.QRCode.toCanvas(canvas, content, {
+                        errorCorrectionLevel: ec,
+                        width: size,
+                        margin: 1,
+                        color: { dark: fg, light: bg },
+                    });
+                    download.disabled = false;
+                } catch (e) {
+                    setEmpty();
+                    alert('Could not generate QR for this content.');
+                }
+            }
+
+            gen.addEventListener('click', renderQr);
+
+            var clearBtn = $('td-qr-clear');
+            if (clearBtn) {
+                clearBtn.addEventListener('click', function () {
+                    var contentEl = $('td-qr-content');
+                    if (contentEl) contentEl.value = '';
+                    setEmpty();
+                });
+            }
+
+            download.addEventListener('click', function () {
+                if (download.disabled) return;
+                try {
+                    var url = canvas.toDataURL('image/png');
+                    var a = document.createElement('a');
+                    a.href = url;
+                    a.download = 'qr-code.png';
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                } catch (e) {
+                    alert('Download failed.');
+                }
+            });
+        }
+
         function initInvoice() {
             var dateInput = $('td-inv-date');
             if (dateInput && !dateInput.value) {
@@ -547,6 +771,10 @@
                 $(id).addEventListener('input', calcEmi);
             });
             calcEmi();
+
+            // QR + Password
+            initQrGenerator();
+            initPasswordGenerator();
 
             // BMI
             (function initBmi() {

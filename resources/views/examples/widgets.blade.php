@@ -1,5 +1,4 @@
 @extends($isAdmin ? 'tyro-dashboard::layouts.admin' : 'tyro-dashboard::layouts.user')
-<!-- @extends('tyro-dashboard::layouts.app') -->
 
 @push('styles')
 <style>
@@ -20,6 +19,7 @@
 @endsection
 
 @section('content')
+
 <div class="page-header">
     <div class="page-header-row">
         <div>
@@ -51,6 +51,11 @@
 <div class="grid-2" style="margin-bottom: 1.5rem;">
     @include('tyro-dashboard::examples.partials.widgets.roi-calculator')
     @include('tyro-dashboard::examples.partials.widgets.emi-calculator')
+</div>
+
+<div class="grid-2" style="margin-bottom: 1.5rem;">
+    @include('tyro-dashboard::examples.partials.widgets.qr-generator')
+    @include('tyro-dashboard::examples.partials.widgets.password-generator')
 </div>
 
 <div class="grid-2" style="margin-bottom: 1.5rem;">
