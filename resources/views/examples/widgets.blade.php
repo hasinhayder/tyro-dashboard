@@ -1,4 +1,13 @@
 @extends($isAdmin ? 'tyro-dashboard::layouts.admin' : 'tyro-dashboard::layouts.user')
+<!-- @extends('tyro-dashboard::layouts.app') -->
+
+@push('styles')
+<style>
+.btn{
+    padding: 0.68rem 1rem;
+}
+</style>
+@endpush
 
 @section('title', 'Widgets')
 

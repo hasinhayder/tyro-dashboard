@@ -21,7 +21,8 @@
         </div>
         <div style="display:flex; gap: 0.5rem; margin-top: 0.75rem; flex-wrap: wrap;">
             <button class="btn btn-primary btn-sm" type="button" id="td-img-load">Search</button>
-            <button class="btn btn-secondary btn-sm" type="button" id="td-img-keys">Set API keys</button>
+            <button class="btn btn-secondary btn-sm" type="button" id="td-img-unsplash-key-btn">Unsplash Key</button>
+            <button class="btn btn-secondary btn-sm" type="button" id="td-img-pixabay-key-btn">Pixabay Key</button>
             <a href="#" class="btn btn-ghost btn-sm" id="td-img-open" onclick="return false;" style="display:none;">Open results</a>
         </div>
 

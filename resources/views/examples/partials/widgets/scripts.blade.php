@@ -257,19 +257,23 @@
             }
         }
 
-        function promptImageApiKeys() {
+        function promptUnsplashKey() {
             var unsplash = prompt('Unsplash Access Key (optional):', getStoredKey(TD_IMG_KEYS.unsplash));
             if (unsplash !== null) setStoredKey(TD_IMG_KEYS.unsplash, unsplash);
+        }
 
+        function promptPixabayKey() {
             var pixabay = prompt('Pixabay API Key (optional):', getStoredKey(TD_IMG_KEYS.pixabay));
             if (pixabay !== null) setStoredKey(TD_IMG_KEYS.pixabay, pixabay);
         }
 
         function clearImages() {
-            $('td-img-grid').innerHTML = '';
+            var grid = $('td-img-grid');
+            if (grid) grid.innerHTML = '';
         }
 
         function addImage(url, alt, href) {
+            if (!$('td-img-grid')) return;
             var wrap = document.createElement(href ? 'a' : 'div');
             if (href) {
                 wrap.href = href;
@@ -295,6 +299,7 @@
         }
 
         function addImageMessage(text) {
+            if (!$('td-img-grid')) return;
             var note = document.createElement('div');
             note.style.gridColumn = '1 / -1';
             note.style.border = '1px solid var(--border)';
@@ -321,7 +326,7 @@
 
                 var apiKey = getStoredKey(TD_IMG_KEYS.pixabay);
                 if (!apiKey) {
-                    addImageMessage('Pixabay key not set. Click “Set API keys” to enable real search, or use “Open results”.');
+                    addImageMessage('Pixabay key not set. Click “Pixabay Key” to enable real search, or use “Open results”.');
                     return;
                 }
 
@@ -846,16 +851,36 @@
             $('td-stock-load').click();
 
             // Images
-            $('td-img-load').addEventListener('click', function () {
-                var q = $('td-img-query').value;
-                var p = $('td-img-provider').value;
-                loadImages(q, p);
-            });
-            $('td-img-keys').addEventListener('click', function () {
-                promptImageApiKeys();
-                $('td-img-load').click();
-            });
-            $('td-img-load').click();
+            (function initImageFinder() {
+                var loadBtn = $('td-img-load');
+                var queryEl = $('td-img-query');
+                var providerEl = $('td-img-provider');
+                var unsplashBtn = $('td-img-unsplash-key-btn');
+                var pixabayBtn = $('td-img-pixabay-key-btn');
+                var grid = $('td-img-grid');
+
+                if (!loadBtn || !queryEl || !providerEl || !unsplashBtn || !pixabayBtn || !grid) return;
+                if (loadBtn.dataset && loadBtn.dataset.tdInit === '1') return;
+                if (loadBtn.dataset) loadBtn.dataset.tdInit = '1';
+
+                loadBtn.addEventListener('click', function () {
+                    var q = queryEl.value;
+                    var p = providerEl.value;
+                    loadImages(q, p);
+                });
+
+                unsplashBtn.addEventListener('click', function () {
+                    promptUnsplashKey();
+                    loadBtn.click();
+                });
+
+                pixabayBtn.addEventListener('click', function () {
+                    promptPixabayKey();
+                    loadBtn.click();
+                });
+
+                loadBtn.click();
+            })();
 
             // Unit converter
             (function initUnitConverter() {
