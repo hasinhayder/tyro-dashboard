@@ -50,11 +50,11 @@
             <button id="td-qr-clear" class="btn btn-ghost btn-sm" type="button">Clear</button>
         </div>
 
-        <div id="td-qr-container" style="display: flex; justify-content: center; align-items: center; min-height: 200px; border: 1px solid var(--border); border-radius: 10px; background: var(--muted); position: relative;">
+        <div id="td-qr-container" style="display: flex; justify-content: center; align-items: center; min-height: 200px; border: 1px solid var(--border); border-radius: 10px; background: var(--muted); position: relative; padding:30px;">
             <div id="td-qr-placeholder" style="color: var(--muted-foreground); text-align: center;">
                 <div>Enter content and click Generate</div>
             </div>
-            <canvas id="td-qr-canvas" style="display: none; max-width: 100%; height: auto;"></canvas>
+            <div id="td-qr-output" style="display: none; max-width: 100%;"></div>
         </div>
 
         <div style="margin-top: 1rem; font-size: 0.875rem; color: var(--muted-foreground); line-height: 1.5;">

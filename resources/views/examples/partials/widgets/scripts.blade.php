@@ -1,4 +1,4 @@
-<script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.4/build/qrcode.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <script>
     (function () {
         function $(id) { return document.getElementById(id); }
@@ -621,13 +621,14 @@
 
         function initQrGenerator() {
             var gen = $('td-qr-generate');
-            var canvas = $('td-qr-canvas');
+            var outEl = $('td-qr-output');
             var placeholder = $('td-qr-placeholder');
             var download = $('td-qr-download');
-            if (!gen || !canvas || !placeholder || !download) return;
+            if (!gen || !outEl || !placeholder || !download) return;
 
             function setEmpty() {
-                canvas.style.display = 'none';
+                outEl.style.display = 'none';
+                outEl.innerHTML = '';
                 placeholder.style.display = '';
                 download.disabled = true;
             }
@@ -646,7 +647,7 @@
                     return;
                 }
 
-                if (!window.QRCode || !window.QRCode.toCanvas) {
+                if (!window.QRCode) {
                     alert('QR library failed to load.');
                     return;
                 }
@@ -657,19 +658,37 @@
                 var bg = normalizeHexColor(bgEl ? bgEl.value : '#ffffff', '#ffffff');
 
                 placeholder.style.display = 'none';
-                canvas.style.display = '';
+                outEl.style.display = '';
 
                 try {
-                    await window.QRCode.toCanvas(canvas, content, {
-                        errorCorrectionLevel: ec,
+                    outEl.innerHTML = '';
+
+                    new window.QRCode(outEl, {
+                        text: content,
                         width: size,
-                        margin: 1,
-                        color: { dark: fg, light: bg },
+                        height: size,
+                        colorDark: fg,
+                        colorLight: bg,
+                        correctLevel: (window.QRCode.CorrectLevel && window.QRCode.CorrectLevel[ec]) ? window.QRCode.CorrectLevel[ec] : window.QRCode.CorrectLevel.M
                     });
+
+                    var innerCanvas = outEl.querySelector('canvas');
+                    if (innerCanvas) {
+                        innerCanvas.style.maxWidth = '100%';
+                        innerCanvas.style.height = 'auto';
+                        innerCanvas.style.display = 'block';
+                    }
+                    var innerImg = outEl.querySelector('img');
+                    if (innerImg) {
+                        innerImg.style.maxWidth = '100%';
+                        innerImg.style.height = 'auto';
+                        innerImg.style.display = 'block';
+                    }
+                    
                     download.disabled = false;
                 } catch (e) {
                     setEmpty();
-                    alert('Could not generate QR for this content.');
+                    alert('Could not generate QR for this content: ' + (e.message || e));
                 }
             }
 
@@ -687,7 +706,15 @@
             download.addEventListener('click', function () {
                 if (download.disabled) return;
                 try {
-                    var url = canvas.toDataURL('image/png');
+                    var innerCanvas = outEl.querySelector('canvas');
+                    var innerImg = outEl.querySelector('img');
+                    var url = null;
+                    if (innerCanvas && innerCanvas.toDataURL) {
+                        url = innerCanvas.toDataURL('image/png');
+                    } else if (innerImg && innerImg.src) {
+                        url = innerImg.src;
+                    }
+                    if (!url) throw new Error('No QR image available');
                     var a = document.createElement('a');
                     a.href = url;
                     a.download = 'qr-code.png';
