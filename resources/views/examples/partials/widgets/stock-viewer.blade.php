@@ -11,8 +11,11 @@
                 <input id="td-stock-symbol" class="form-input" type="text" placeholder="aapl.us" value="aapl.us" />
                 <div class="form-hint">Examples: <strong>aapl.us</strong>, <strong>tsla.us</strong>, <strong>googl.us</strong></div>
             </div>
-            <div style="display:flex; align-items:flex-end; gap: 0.5rem; flex-wrap: wrap;">
-                <button class="btn btn-primary btn-sm" type="button" id="td-stock-load">Load</button>
+            <div class="form-group" style="margin-bottom: 0;">
+                <label class="form-label" style="visibility: hidden;">Actions</label>
+                <div style="display:flex; gap: 0.5rem; flex-wrap: wrap;">
+                    <button class="btn btn-primary" type="button" id="td-stock-load">Load</button>
+                </div>
             </div>
         </div>
 

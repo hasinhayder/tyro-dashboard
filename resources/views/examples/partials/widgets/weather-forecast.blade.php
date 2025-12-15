@@ -10,9 +10,12 @@
                 <label class="form-label">Area / Location</label>
                 <input id="td-forecast-location" class="form-input" type="text" placeholder="Tokyo" value="Tokyo" />
             </div>
-            <div style="display:flex; align-items:flex-end; gap: 0.5rem; flex-wrap: wrap;">
-                <button class="btn btn-primary btn-sm" type="button" id="td-forecast-load">Load</button>
-                <button class="btn btn-ghost btn-sm" type="button" id="td-forecast-geo">Use my location</button>
+            <div class="form-group" style="margin-bottom: 0;">
+                <label class="form-label" style="visibility: hidden;">Actions</label>
+                <div style="display:flex; gap: 0.5rem; flex-wrap: wrap;">
+                    <button class="btn btn-primary" type="button" id="td-forecast-load">Load</button>
+                    <button class="btn btn-ghost" type="button" id="td-forecast-geo">Use my location</button>
+                </div>
             </div>
         </div>
 

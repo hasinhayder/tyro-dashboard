@@ -11,9 +11,12 @@
                 <input id="td-weather-location" class="form-input" type="text" placeholder="Dhaka, Bangladesh" value="Dhaka" />
                 <div class="form-hint">No API key required.</div>
             </div>
-            <div style="display:flex; align-items:flex-end; gap: 0.5rem; flex-wrap: wrap;">
-                <button class="btn btn-primary btn-sm" type="button" id="td-weather-now">Check</button>
-                <button class="btn btn-ghost btn-sm" type="button" id="td-weather-geo">Use my location</button>
+            <div class="form-group" style="margin-bottom: 0;">
+                <label class="form-label" style="visibility: hidden;">Actions</label>
+                <div style="display:flex; gap: 0.5rem; flex-wrap: wrap;">
+                    <button class="btn btn-primary" type="button" id="td-weather-now">Check</button>
+                    <button class="btn btn-ghost" type="button" id="td-weather-geo">Use my location</button>
+                </div>
             </div>
         </div>
 

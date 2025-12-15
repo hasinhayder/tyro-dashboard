@@ -5,14 +5,19 @@
         <span class="badge badge-secondary">XKCD</span>
     </div>
     <div class="card-body">
-        <div style="display:flex; gap: 0.5rem; flex-wrap: wrap; align-items: end;">
+        <div style="display:flex; gap: 0.5rem; flex-wrap: wrap; align-items: flex-start;">
             <div class="form-group" style="margin-bottom: 0; min-width: 180px;">
                 <label class="form-label">Comic # (optional)</label>
                 <input id="td-xkcd-id" class="form-input" type="number" inputmode="numeric" min="1" step="1" placeholder="Latest" />
             </div>
-            <button class="btn btn-primary btn-sm" type="button" id="td-xkcd-load">Load</button>
-            <button class="btn btn-ghost btn-sm" type="button" id="td-xkcd-latest">Latest</button>
-            <span class="badge badge-secondary" id="td-xkcd-meta">—</span>
+            <div class="form-group" style="margin-bottom: 0;">
+                <label class="form-label" style="visibility: hidden;">Actions</label>
+                <div style="display:flex; gap: 0.5rem; flex-wrap: wrap;">
+                    <button class="btn btn-primary" type="button" id="td-xkcd-load">Load</button>
+                    <button class="btn btn-ghost" type="button" id="td-xkcd-latest">Latest</button>
+                    <span class="badge badge-secondary" id="td-xkcd-meta">—</span>
+                </div>
+            </div>
         </div>
 
         <div style="margin-top: 1rem; border: 1px solid var(--border); border-radius: 10px; background: var(--background); overflow: hidden;">

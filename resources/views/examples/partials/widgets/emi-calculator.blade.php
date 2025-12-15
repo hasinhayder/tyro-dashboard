@@ -21,9 +21,12 @@
                 <input id="td-emi-months" class="form-input" type="number" inputmode="numeric" min="1" step="1" value="60" />
                 <div class="form-hint">E.g. 60 months = 5 years.</div>
             </div>
-            <div style="display:flex; align-items:flex-end; gap: 0.5rem; flex-wrap: wrap;">
-                <button class="btn btn-primary btn-sm" type="button" id="td-emi-calc">Calculate</button>
-                <button class="btn btn-ghost btn-sm" type="button" id="td-emi-reset">Reset</button>
+            <div class="form-group" style="margin-bottom: 0;">
+                <label class="form-label" style="visibility: hidden;">Actions</label>
+                <div style="display:flex; gap: 0.5rem; flex-wrap: wrap;">
+                    <button class="btn btn-primary" type="button" id="td-emi-calc">Calculate</button>
+                    <button class="btn btn-ghost" type="button" id="td-emi-reset">Reset</button>
+                </div>
             </div>
         </div>
 

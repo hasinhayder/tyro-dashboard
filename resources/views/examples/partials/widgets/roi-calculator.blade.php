@@ -21,9 +21,12 @@
                 <input id="td-roi-years" class="form-input" type="number" inputmode="decimal" min="0" step="0.1" value="2" />
                 <div class="form-hint">Used for annualized ROI (CAGR).</div>
             </div>
-            <div style="display:flex; align-items:flex-end; gap: 0.5rem; flex-wrap: wrap;">
-                <button class="btn btn-primary btn-sm" type="button" id="td-roi-calc">Calculate</button>
-                <button class="btn btn-ghost btn-sm" type="button" id="td-roi-reset">Reset</button>
+            <div class="form-group" style="margin-bottom: 0;">
+                <label class="form-label" style="visibility: hidden;">Actions</label>
+                <div style="display:flex; gap: 0.5rem; flex-wrap: wrap;">
+                    <button class="btn btn-primary" type="button" id="td-roi-calc">Calculate</button>
+                    <button class="btn btn-ghost" type="button" id="td-roi-reset">Reset</button>
+                </div>
             </div>
         </div>
 

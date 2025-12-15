@@ -11,9 +11,12 @@
                 <input id="td-flight-icao24" class="form-input" type="text" placeholder="e.g. 3c6444" value="" />
                 <div class="form-hint">Tip: if you don’t know ICAO24, use “Nearby”.</div>
             </div>
-            <div style="display:flex; align-items:flex-end; gap: 0.5rem; flex-wrap: wrap;">
-                <button class="btn btn-primary btn-sm" type="button" id="td-flight-track">Track</button>
-                <button class="btn btn-ghost btn-sm" type="button" id="td-flight-reset">Reset</button>
+            <div class="form-group" style="margin-bottom: 0;">
+                <label class="form-label" style="visibility: hidden;">Actions</label>
+                <div style="display:flex; gap: 0.5rem; flex-wrap: wrap;">
+                    <button class="btn btn-primary" type="button" id="td-flight-track">Track</button>
+                    <button class="btn btn-ghost" type="button" id="td-flight-reset">Reset</button>
+                </div>
             </div>
         </div>
 
@@ -28,14 +31,19 @@
             </div>
         </div>
 
-        <div style="display:flex; gap: 0.5rem; margin-top: 0.75rem; flex-wrap: wrap; align-items: end;">
+        <div style="display:flex; gap: 0.5rem; margin-top: 0.75rem; flex-wrap: wrap; align-items: flex-start;">
             <div class="form-group" style="margin-bottom: 0; min-width: 170px;">
                 <label class="form-label">Radius (km)</label>
                 <input id="td-flight-radius" class="form-input" type="number" inputmode="decimal" min="1" step="1" value="150" />
             </div>
-            <button class="btn btn-secondary btn-sm" type="button" id="td-flight-near">Nearby</button>
-            <button class="btn btn-ghost btn-sm" type="button" id="td-flight-geo">Use my location</button>
-            <span class="badge badge-secondary" id="td-flight-status">—</span>
+            <div class="form-group" style="margin-bottom: 0;">
+                <label class="form-label" style="visibility: hidden;">Actions</label>
+                <div style="display:flex; gap: 0.5rem; flex-wrap: wrap;">
+                    <button class="btn btn-secondary" type="button" id="td-flight-near">Nearby</button>
+                    <button class="btn btn-ghost" type="button" id="td-flight-geo">Use my location</button>
+                    <span class="badge badge-secondary" id="td-flight-status">—</span>
+                </div>
+            </div>
         </div>
 
         <div style="margin-top: 1rem; border: 1px solid var(--border); border-radius: 10px; background: var(--background); overflow:hidden;">

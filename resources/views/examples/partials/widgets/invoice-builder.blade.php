@@ -64,10 +64,13 @@
                 <label class="form-label">Discount</label>
                 <input id="td-inv-discount-amt" class="form-input" type="number" inputmode="decimal" min="0" step="0.01" value="0" style="width: 140px;" />
             </div>
-            <div style="display:flex; align-items:flex-end; gap: 0.5rem; flex-wrap: wrap;">
-                <button class="btn btn-primary btn-sm" type="button" id="td-inv-add">Add line</button>
-                <button class="btn btn-secondary btn-sm" type="button" id="td-inv-print">Print</button>
-                <button class="btn btn-ghost btn-sm" type="button" id="td-inv-export">Export JSON</button>
+            <div class="form-group" style="margin-bottom: 0;">
+                <label class="form-label" style="visibility: hidden;">Actions</label>
+                <div style="display:flex; gap: 0.5rem; flex-wrap: wrap;">
+                    <button class="btn btn-primary" type="button" id="td-inv-add">Add line</button>
+                    <button class="btn btn-secondary" type="button" id="td-inv-print">Print</button>
+                    <button class="btn btn-ghost" type="button" id="td-inv-export">Export JSON</button>
+                </div>
             </div>
         </div>
 

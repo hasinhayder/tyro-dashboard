@@ -234,11 +234,48 @@
         }
 
         // Images
+        var TD_IMG_KEYS = {
+            unsplash: 'td-img-unsplash-key',
+            pixabay: 'td-img-pixabay-key'
+        };
+
+        function getStoredKey(storageKey) {
+            try {
+                return String(localStorage.getItem(storageKey) || '').trim();
+            } catch (e) {
+                return '';
+            }
+        }
+
+        function setStoredKey(storageKey, value) {
+            try {
+                var v = String(value || '').trim();
+                if (!v) localStorage.removeItem(storageKey);
+                else localStorage.setItem(storageKey, v);
+            } catch (e) {
+                // ignore
+            }
+        }
+
+        function promptImageApiKeys() {
+            var unsplash = prompt('Unsplash Access Key (optional):', getStoredKey(TD_IMG_KEYS.unsplash));
+            if (unsplash !== null) setStoredKey(TD_IMG_KEYS.unsplash, unsplash);
+
+            var pixabay = prompt('Pixabay API Key (optional):', getStoredKey(TD_IMG_KEYS.pixabay));
+            if (pixabay !== null) setStoredKey(TD_IMG_KEYS.pixabay, pixabay);
+        }
+
         function clearImages() {
             $('td-img-grid').innerHTML = '';
         }
-        function addImage(url) {
-            var wrap = document.createElement('div');
+
+        function addImage(url, alt, href) {
+            var wrap = document.createElement(href ? 'a' : 'div');
+            if (href) {
+                wrap.href = href;
+                wrap.target = '_blank';
+                wrap.rel = 'noopener';
+            }
             wrap.style.border = '1px solid var(--border)';
             wrap.style.borderRadius = '10px';
             wrap.style.overflow = 'hidden';
@@ -246,7 +283,7 @@
 
             var img = document.createElement('img');
             img.src = url;
-            img.alt = 'Result';
+            img.alt = alt || 'Result';
             img.loading = 'lazy';
             img.style.display = 'block';
             img.style.width = '100%';
@@ -256,7 +293,20 @@
             wrap.appendChild(img);
             $('td-img-grid').appendChild(wrap);
         }
-        function loadImages(query, provider) {
+
+        function addImageMessage(text) {
+            var note = document.createElement('div');
+            note.style.gridColumn = '1 / -1';
+            note.style.border = '1px solid var(--border)';
+            note.style.borderRadius = '10px';
+            note.style.padding = '0.875rem 1rem';
+            note.style.background = 'var(--muted)';
+            note.style.color = 'var(--muted-foreground)';
+            note.textContent = text;
+            $('td-img-grid').appendChild(note);
+        }
+
+        async function loadImages(query, provider) {
             clearImages();
             var openBtn = $('td-img-open');
             openBtn.style.display = 'none';
@@ -268,21 +318,74 @@
                 openBtn.style.display = '';
                 openBtn.href = 'https://pixabay.com/images/search/' + encodeURIComponent(query) + '/';
                 openBtn.onclick = function () { window.open(openBtn.href, '_blank', 'noopener'); return false; };
-                var note = document.createElement('div');
-                note.style.gridColumn = '1 / -1';
-                note.style.border = '1px solid var(--border)';
-                note.style.borderRadius = '10px';
-                note.style.padding = '0.875rem 1rem';
-                note.style.background = 'var(--muted)';
-                note.style.color = 'var(--muted-foreground)';
-                note.textContent = 'Pixabay API typically needs an API key; this demo opens the Pixabay search page.';
-                $('td-img-grid').appendChild(note);
+
+                var apiKey = getStoredKey(TD_IMG_KEYS.pixabay);
+                if (!apiKey) {
+                    addImageMessage('Pixabay key not set. Click “Set API keys” to enable real search, or use “Open results”.');
+                    return;
+                }
+
+                try {
+                    var url = 'https://pixabay.com/api/?key=' + encodeURIComponent(apiKey)
+                        + '&q=' + encodeURIComponent(query)
+                        + '&image_type=photo&per_page=8&safesearch=true';
+                    var res = await fetch(url, { headers: { 'Accept': 'application/json' } });
+                    var data = await res.json();
+                    if (!res.ok) throw new Error((data && data.message) ? data.message : 'Pixabay API error');
+
+                    var hits = (data && data.hits) ? data.hits : [];
+                    if (!hits.length) {
+                        addImageMessage('No Pixabay results found.');
+                        return;
+                    }
+
+                    hits.slice(0, 8).forEach(function (h) {
+                        addImage(h.webformatURL || h.previewURL, h.tags || 'Pixabay image', h.pageURL || openBtn.href);
+                    });
+                } catch (e) {
+                    addImageMessage('Pixabay search failed: ' + String(e && e.message ? e.message : e));
+                }
                 return;
             }
 
+            // Unsplash
+            openBtn.style.display = '';
+            openBtn.href = 'https://unsplash.com/s/photos/' + encodeURIComponent(query);
+            openBtn.onclick = function () { window.open(openBtn.href, '_blank', 'noopener'); return false; };
+
+            var unsplashKey = getStoredKey(TD_IMG_KEYS.unsplash);
+            if (unsplashKey) {
+                try {
+                    var u = 'https://api.unsplash.com/search/photos?query=' + encodeURIComponent(query)
+                        + '&per_page=8&client_id=' + encodeURIComponent(unsplashKey);
+                    var ures = await fetch(u, { headers: { 'Accept': 'application/json' } });
+                    var udata = await ures.json();
+                    if (!ures.ok) {
+                        throw new Error((udata && (udata.errors || udata.error)) ? (udata.errors ? udata.errors.join(', ') : udata.error) : 'Unsplash API error');
+                    }
+
+                    var results = (udata && udata.results) ? udata.results : [];
+                    if (!results.length) {
+                        addImageMessage('No Unsplash results found.');
+                        return;
+                    }
+
+                    results.slice(0, 8).forEach(function (r) {
+                        var imgUrl = (r.urls && (r.urls.small || r.urls.regular)) ? (r.urls.small || r.urls.regular) : null;
+                        if (!imgUrl) return;
+                        var alt = (r.alt_description || r.description || 'Unsplash image');
+                        var href = (r.links && r.links.html) ? r.links.html : openBtn.href;
+                        addImage(imgUrl, alt, href);
+                    });
+                    return;
+                } catch (e) {
+                    addImageMessage('Unsplash API search failed, using fallback images.');
+                }
+            }
+
             for (var i = 0; i < 8; i++) {
-                var url = 'https://source.unsplash.com/600x400/?' + encodeURIComponent(query) + '&sig=' + i;
-                addImage(url);
+                var fallbackUrl = 'https://source.unsplash.com/600x400/?' + encodeURIComponent(query) + '&sig=' + i;
+                addImage(fallbackUrl, 'Unsplash image', openBtn.href);
             }
         }
 
@@ -747,6 +850,10 @@
                 var q = $('td-img-query').value;
                 var p = $('td-img-provider').value;
                 loadImages(q, p);
+            });
+            $('td-img-keys').addEventListener('click', function () {
+                promptImageApiKeys();
+                $('td-img-load').click();
             });
             $('td-img-load').click();
 
