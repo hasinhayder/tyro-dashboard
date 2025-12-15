@@ -136,4 +136,119 @@ class WidgetsController extends BaseController
             'provider' => 'open.er-api.com',
         ]);
     }
+
+    public function flightStates(Request $request): JsonResponse
+    {
+        $icao24 = Str::lower(trim((string) $request->query('icao24', '')));
+        $callsign = strtoupper(trim((string) $request->query('callsign', '')));
+
+        $lamin = $request->query('lamin');
+        $lamax = $request->query('lamax');
+        $lomin = $request->query('lomin');
+        $lomax = $request->query('lomax');
+
+        $hasBbox = $lamin !== null || $lamax !== null || $lomin !== null || $lomax !== null;
+
+        if ($icao24 !== '' && !preg_match('/^[0-9a-f]{6}$/', $icao24)) {
+            return response()->json(['error' => 'Invalid ICAO24 (expected 6 hex characters)'], 422);
+        }
+
+        if ($hasBbox) {
+            if ($lamin === null || $lamax === null || $lomin === null || $lomax === null) {
+                return response()->json(['error' => 'Bounding box requires lamin, lamax, lomin, lomax'], 422);
+            }
+
+            $lamin = (float) $lamin;
+            $lamax = (float) $lamax;
+            $lomin = (float) $lomin;
+            $lomax = (float) $lomax;
+
+            if ($lamin < -90 || $lamin > 90 || $lamax < -90 || $lamax > 90 || $lomin < -180 || $lomin > 180 || $lomax < -180 || $lomax > 180) {
+                return response()->json(['error' => 'Bounding box out of range'], 422);
+            }
+
+            if ($lamin >= $lamax || $lomin >= $lomax) {
+                return response()->json(['error' => 'Bounding box min must be < max'], 422);
+            }
+        }
+
+        if ($icao24 === '' && !$hasBbox) {
+            return response()->json(['error' => 'Provide either icao24 or a bounding box (lamin/lamax/lomin/lomax)'], 422);
+        }
+
+        $query = [];
+        if ($icao24 !== '') {
+            $query['icao24'] = $icao24;
+        }
+        if ($hasBbox) {
+            $query['lamin'] = $lamin;
+            $query['lamax'] = $lamax;
+            $query['lomin'] = $lomin;
+            $query['lomax'] = $lomax;
+        }
+
+        $url = 'https://opensky-network.org/api/states/all';
+
+        try {
+            $response = Http::timeout(8)->acceptJson()->get($url, $query);
+        } catch (\Throwable $e) {
+            return response()->json(['error' => 'Failed to reach flight provider'], 502);
+        }
+
+        if (!$response->ok()) {
+            return response()->json([
+                'error' => 'Flight provider returned an error',
+                'status' => $response->status(),
+            ], 502);
+        }
+
+        $json = $response->json();
+        if (!is_array($json) || !array_key_exists('states', $json)) {
+            return response()->json(['error' => 'Unexpected flight provider format'], 502);
+        }
+
+        $states = is_array($json['states'] ?? null) ? $json['states'] : [];
+
+        $mapped = [];
+        foreach ($states as $s) {
+            if (!is_array($s) || count($s) < 17) {
+                continue;
+            }
+
+            $state = [
+                'icao24' => $s[0] ?? null,
+                'callsign' => isset($s[1]) ? (trim((string) $s[1]) ?: null) : null,
+                'origin_country' => $s[2] ?? null,
+                'time_position' => $s[3] ?? null,
+                'last_contact' => $s[4] ?? null,
+                'longitude' => $s[5] ?? null,
+                'latitude' => $s[6] ?? null,
+                'baro_altitude' => $s[7] ?? null,
+                'on_ground' => $s[8] ?? null,
+                'velocity' => $s[9] ?? null,
+                'true_track' => $s[10] ?? null,
+                'vertical_rate' => $s[11] ?? null,
+                'geo_altitude' => $s[13] ?? null,
+                'squawk' => $s[14] ?? null,
+                'spi' => $s[15] ?? null,
+                'position_source' => $s[16] ?? null,
+            ];
+
+            if ($callsign !== '' && $state['callsign']) {
+                $cs = strtoupper((string) $state['callsign']);
+                if (!str_starts_with($cs, $callsign)) {
+                    continue;
+                }
+            }
+
+            $mapped[] = $state;
+        }
+
+        return response()->json([
+            'time' => $json['time'] ?? null,
+            'count' => count($mapped),
+            'states' => $mapped,
+            'provider' => 'opensky-network.org',
+        ]);
+    }
 }

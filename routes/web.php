@@ -35,6 +35,7 @@ Route::get('/examples/widgets', [WidgetsController::class, 'widgets'])->name('ex
 Route::get('/examples/widgets/xkcd/{id?}', [WidgetsController::class, 'xkcd'])->where('id', '[0-9]+')->name('examples.widgets.xkcd');
 Route::get('/examples/widgets/stocks/{symbol}', [WidgetsController::class, 'stockQuote'])->name('examples.widgets.stocks');
 Route::get('/examples/widgets/fx/{base}', [WidgetsController::class, 'fxRates'])->name('examples.widgets.fx');
+Route::get('/examples/widgets/flights', [WidgetsController::class, 'flightStates'])->name('examples.widgets.flights');
 
 // Profile Management (all authenticated users)
 Route::prefix('profile')->name('profile')->group(function () {

@@ -163,6 +163,75 @@
         </div>
     </div>
 
+    {{-- Flight Tracker --}}
+    <div class="card" id="flight-tracker">
+        <div class="card-header">
+            <h3 class="card-title" style="font-size: 1.0625rem;">Flight Tracker</h3>
+            <span class="badge badge-secondary">Aviation</span>
+        </div>
+        <div class="card-body">
+            <div class="form-row">
+                <div class="form-group" style="margin-bottom: 0;">
+                    <label class="form-label">ICAO24 (hex)</label>
+                    <input id="td-flight-icao24" class="form-input" type="text" placeholder="e.g. 3c6444" value="" />
+                    <div class="form-hint">Tip: if you don’t know ICAO24, use “Nearby”.</div>
+                </div>
+                <div style="display:flex; align-items:flex-end; gap: 0.5rem; flex-wrap: wrap;">
+                    <button class="btn btn-primary btn-sm" type="button" id="td-flight-track">Track</button>
+                    <button class="btn btn-ghost btn-sm" type="button" id="td-flight-reset">Reset</button>
+                </div>
+            </div>
+
+            <div class="form-row" style="margin-top: 0.75rem;">
+                <div class="form-group" style="margin-bottom: 0;">
+                    <label class="form-label">Latitude</label>
+                    <input id="td-flight-lat" class="form-input" type="number" inputmode="decimal" step="0.0001" placeholder="23.8103" value="" />
+                </div>
+                <div class="form-group" style="margin-bottom: 0;">
+                    <label class="form-label">Longitude</label>
+                    <input id="td-flight-lon" class="form-input" type="number" inputmode="decimal" step="0.0001" placeholder="90.4125" value="" />
+                </div>
+            </div>
+
+            <div style="display:flex; gap: 0.5rem; margin-top: 0.75rem; flex-wrap: wrap; align-items: end;">
+                <div class="form-group" style="margin-bottom: 0; min-width: 170px;">
+                    <label class="form-label">Radius (km)</label>
+                    <input id="td-flight-radius" class="form-input" type="number" inputmode="decimal" min="1" step="1" value="150" />
+                </div>
+                <button class="btn btn-secondary btn-sm" type="button" id="td-flight-near">Nearby</button>
+                <button class="btn btn-ghost btn-sm" type="button" id="td-flight-geo">Use my location</button>
+                <span class="badge badge-secondary" id="td-flight-status">—</span>
+            </div>
+
+            <div style="margin-top: 1rem; border: 1px solid var(--border); border-radius: 10px; background: var(--background); overflow:hidden;">
+                <div style="padding: 0.75rem 1rem; border-bottom: 1px solid var(--border); background: var(--muted); display:flex; justify-content: space-between; gap: 1rem; align-items:center; flex-wrap: wrap;">
+                    <div style="font-weight: 700; font-size: 0.9375rem;">Results</div>
+                    <div class="badge-list">
+                        <span class="badge badge-primary" id="td-flight-count">Flights: —</span>
+                        <span class="badge badge-secondary" id="td-flight-updated">Updated: —</span>
+                    </div>
+                </div>
+                <div class="table-container">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Callsign</th>
+                                <th>Country</th>
+                                <th>Lat</th>
+                                <th>Lon</th>
+                                <th style="text-align:right;">Alt (m)</th>
+                                <th style="text-align:right;">Speed (km/h)</th>
+                            </tr>
+                        </thead>
+                        <tbody id="td-flight-tbody">
+                            <tr><td colspan="6" style="color: var(--muted-foreground);">Search by ICAO24 or find nearby flights.</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </div>
 
 <div class="grid-2" style="margin-bottom: 1.5rem;">
@@ -1039,6 +1108,182 @@
                     $(id).addEventListener('input', calcBmi);
                 });
                 calcBmi();
+            })();
+
+            // Flight tracker
+            (function initFlightTracker() {
+                var proxyBase = '{{ route('tyro-dashboard.examples.widgets.flights') }}';
+
+                function setStatus(text) {
+                    $('td-flight-status').textContent = text;
+                }
+
+                function fmt(num, digits) {
+                    if (num === null || typeof num === 'undefined') return '—';
+                    var n = Number(num);
+                    if (!Number.isFinite(n)) return '—';
+                    return (typeof digits === 'number') ? n.toFixed(digits) : String(n);
+                }
+
+                function haversineKm(lat1, lon1, lat2, lon2) {
+                    var R = 6371;
+                    var toRad = function (d) { return d * Math.PI / 180; };
+                    var dLat = toRad(lat2 - lat1);
+                    var dLon = toRad(lon2 - lon1);
+                    var a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+                        Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) *
+                        Math.sin(dLon / 2) * Math.sin(dLon / 2);
+                    var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+                    return R * c;
+                }
+
+                function renderRows(states, opts) {
+                    var tbody = $('td-flight-tbody');
+                    tbody.innerHTML = '';
+
+                    if (!states || !states.length) {
+                        tbody.innerHTML = '<tr><td colspan="6" style="color: var(--muted-foreground);">No flights found.</td></tr>';
+                        return;
+                    }
+
+                    states.forEach(function (s) {
+                        var cs = (s.callsign || '').trim() || '—';
+                        var country = s.origin_country || '—';
+                        var lat = fmt(s.latitude, 4);
+                        var lon = fmt(s.longitude, 4);
+                        var alt = fmt(s.geo_altitude != null ? s.geo_altitude : s.baro_altitude, 0);
+                        var speed = '—';
+                        if (s.velocity != null && Number.isFinite(Number(s.velocity))) {
+                            speed = fmt(Number(s.velocity) * 3.6, 0);
+                        }
+
+                        var tr = document.createElement('tr');
+                        tr.innerHTML = '' +
+                            '<td style="font-weight: 600;">' + escapeHtml(cs) + '</td>' +
+                            '<td style="color: var(--muted-foreground);">' + escapeHtml(country) + '</td>' +
+                            '<td>' + escapeHtml(lat) + '</td>' +
+                            '<td>' + escapeHtml(lon) + '</td>' +
+                            '<td style="text-align:right;">' + escapeHtml(alt) + '</td>' +
+                            '<td style="text-align:right;">' + escapeHtml(speed) + '</td>';
+                        tbody.appendChild(tr);
+                    });
+                }
+
+                function escapeHtml(str) {
+                    return String(str)
+                        .replace(/&/g, '&amp;')
+                        .replace(/</g, '&lt;')
+                        .replace(/>/g, '&gt;')
+                        .replace(/"/g, '&quot;')
+                        .replace(/'/g, '&#039;');
+                }
+
+                async function fetchStates(params) {
+                    var url = proxyBase + '?' + new URLSearchParams(params).toString();
+                    setStatus('Loading…');
+                    $('td-flight-count').textContent = 'Flights: —';
+                    $('td-flight-updated').textContent = 'Updated: —';
+
+                    var res = await fetch(url, { headers: { 'Accept': 'application/json' } });
+                    var json = await res.json().catch(function () { return null; });
+                    if (!res.ok || !json) {
+                        throw new Error((json && json.error) ? json.error : 'Failed to load flights');
+                    }
+                    return json;
+                }
+
+                function bboxFromRadius(lat, lon, radiusKm) {
+                    var latDelta = radiusKm / 111;
+                    var cos = Math.cos((lat * Math.PI) / 180);
+                    var denom = 111 * Math.max(0.2, Math.abs(cos));
+                    var lonDelta = radiusKm / denom;
+                    return {
+                        lamin: lat - latDelta,
+                        lamax: lat + latDelta,
+                        lomin: lon - lonDelta,
+                        lomax: lon + lonDelta,
+                    };
+                }
+
+                async function trackByIcao24() {
+                    var icao24 = ($('td-flight-icao24').value || '').trim().toLowerCase();
+                    if (!/^[0-9a-f]{6}$/.test(icao24)) {
+                        setStatus('Enter a valid ICAO24 (6 hex).');
+                        return;
+                    }
+
+                    try {
+                        var json = await fetchStates({ icao24: icao24 });
+                        $('td-flight-count').textContent = 'Flights: ' + (json.count != null ? json.count : (json.states || []).length);
+                        $('td-flight-updated').textContent = 'Updated: ' + (json.time ? new Date(Number(json.time) * 1000).toLocaleTimeString() : '—');
+                        setStatus('OK');
+                        renderRows((json.states || []).slice(0, 10));
+                    } catch (e) {
+                        setStatus(String(e && e.message ? e.message : e));
+                        renderRows([]);
+                    }
+                }
+
+                async function findNearby() {
+                    var lat = toNum($('td-flight-lat').value);
+                    var lon = toNum($('td-flight-lon').value);
+                    var radiusKm = Math.max(1, toNum($('td-flight-radius').value) || 150);
+                    if (!Number.isFinite(lat) || !Number.isFinite(lon)) {
+                        setStatus('Enter lat/lon (or use my location).');
+                        return;
+                    }
+
+                    var bb = bboxFromRadius(lat, lon, radiusKm);
+
+                    try {
+                        var json = await fetchStates({
+                            lamin: bb.lamin,
+                            lamax: bb.lamax,
+                            lomin: bb.lomin,
+                            lomax: bb.lomax,
+                        });
+
+                        var states = (json.states || []).filter(function (s) {
+                            return Number.isFinite(Number(s.latitude)) && Number.isFinite(Number(s.longitude));
+                        });
+
+                        states.forEach(function (s) {
+                            s._distKm = haversineKm(lat, lon, Number(s.latitude), Number(s.longitude));
+                        });
+                        states.sort(function (a, b) { return (a._distKm || 0) - (b._distKm || 0); });
+
+                        $('td-flight-count').textContent = 'Flights: ' + states.length;
+                        $('td-flight-updated').textContent = 'Updated: ' + (json.time ? new Date(Number(json.time) * 1000).toLocaleTimeString() : '—');
+                        setStatus('OK');
+                        renderRows(states.slice(0, 12));
+                    } catch (e) {
+                        setStatus(String(e && e.message ? e.message : e));
+                        renderRows([]);
+                    }
+                }
+
+                $('td-flight-track').addEventListener('click', trackByIcao24);
+                $('td-flight-near').addEventListener('click', findNearby);
+                $('td-flight-geo').addEventListener('click', async function () {
+                    try {
+                        var loc = await getBrowserLocation();
+                        $('td-flight-lat').value = loc.lat.toFixed(4);
+                        $('td-flight-lon').value = loc.lon.toFixed(4);
+                        await findNearby();
+                    } catch (e) {
+                        setStatus(String(e && e.message ? e.message : e));
+                    }
+                });
+                $('td-flight-reset').addEventListener('click', function () {
+                    $('td-flight-icao24').value = '';
+                    $('td-flight-lat').value = '';
+                    $('td-flight-lon').value = '';
+                    $('td-flight-radius').value = 150;
+                    $('td-flight-count').textContent = 'Flights: —';
+                    $('td-flight-updated').textContent = 'Updated: —';
+                    $('td-flight-tbody').innerHTML = '<tr><td colspan="6" style="color: var(--muted-foreground);">Search by ICAO24 or find nearby flights.</td></tr>';
+                    setStatus('—');
+                });
             })();
 
             // XKCD
