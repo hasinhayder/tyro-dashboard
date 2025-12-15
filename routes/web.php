@@ -2,6 +2,7 @@
 
 use HasinHayder\TyroDashboard\Http\Controllers\DashboardController;
 use HasinHayder\TyroDashboard\Http\Controllers\ComponentsController;
+use HasinHayder\TyroDashboard\Http\Controllers\WidgetsController;
 use HasinHayder\TyroDashboard\Http\Controllers\PrivilegeController;
 use HasinHayder\TyroDashboard\Http\Controllers\ProfileController;
 use HasinHayder\TyroDashboard\Http\Controllers\RoleController;
@@ -25,6 +26,15 @@ Route::get('/components', [ComponentsController::class, 'components'])->name('co
 
 // Optional alias (kept for backwards compatibility if anyone bookmarked it)
 Route::get('/examples/components', [ComponentsController::class, 'components'])->name('examples.components');
+
+// Widgets (interactive examples)
+Route::get('/widgets', [WidgetsController::class, 'widgets'])->name('widgets');
+Route::get('/examples/widgets', [WidgetsController::class, 'widgets'])->name('examples.widgets');
+
+// Same-origin proxies for third-party widget data (avoid browser CORS)
+Route::get('/examples/widgets/xkcd/{id?}', [WidgetsController::class, 'xkcd'])->where('id', '[0-9]+')->name('examples.widgets.xkcd');
+Route::get('/examples/widgets/stocks/{symbol}', [WidgetsController::class, 'stockQuote'])->name('examples.widgets.stocks');
+Route::get('/examples/widgets/fx/{base}', [WidgetsController::class, 'fxRates'])->name('examples.widgets.fx');
 
 // Profile Management (all authenticated users)
 Route::prefix('profile')->name('profile')->group(function () {
