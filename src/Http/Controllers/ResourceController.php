@@ -15,7 +15,19 @@ class ResourceController extends BaseController
         if (!array_key_exists($key, $resources)) {
             abort(404, "Resource {$key} not found");
         }
-        return $resources[$key];
+
+        $config = $resources[$key];
+
+        // Auto-generate labels if missing
+        if (isset($config['fields'])) {
+            foreach ($config['fields'] as $fieldKey => &$fieldConfig) {
+                if (!isset($fieldConfig['label'])) {
+                    $fieldConfig['label'] = Str::headline($fieldKey);
+                }
+            }
+        }
+
+        return $config;
     }
 
     protected function isReadonly($config)
