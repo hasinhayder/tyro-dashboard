@@ -14,6 +14,8 @@
 <link href="https://cdn.jsdelivr.net/npm/quill@1.3.7/dist/quill.snow.css" rel="stylesheet">
 @endpush
 
+
+
 @section('content')
 <div class="page-header">
     <div class="page-header-row">
@@ -51,3 +53,11 @@
 @include('tyro-dashboard::examples.partials.components.scripts')
 @endpush
 @endsection
+
+@push('scripts')
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        window.scrollTo(0, 0);
+    });
+</script>
+@endpush
