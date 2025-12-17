@@ -54,9 +54,14 @@
                         @endforeach
                     </div>
                 </div>
-                <button type="submit" class="btn btn-secondary">Filter</button>
+
+                <button type="button" class="btn btn-ghost text-danger" id="clearColumnFiltersBtn" style="display: none;">
+                    Clear Filters
+                </button>
+
+                <!-- <button type="submit" class="btn btn-secondary">Filter</button> -->
                 @if(request()->has('search'))
-                    <a href="{{ route('tyro-dashboard.resources.index', $resource) }}" class="btn btn-ghost">Clear</a>
+                    <a href="{{ route('tyro-dashboard.resources.index', $resource) }}" class="btn btn-ghost">Clear Search</a>
                 @endif
             </div>
         </form>
@@ -169,6 +174,7 @@
         const storageKey = 'tyro_hidden_cols_' + resourceName;
         const dropdownBtn = document.getElementById('filterColumnsBtn');
         const dropdownMenu = document.getElementById('filterColumnsDropdown');
+        const clearFiltersBtn = document.getElementById('clearColumnFiltersBtn');
         const checkboxes = document.querySelectorAll('.column-toggle');
         
         // Toggle dropdown
@@ -195,16 +201,19 @@
             const savedState = localStorage.getItem(storageKey);
             if (savedState) {
                 const hiddenCols = JSON.parse(savedState);
-                checkboxes.forEach(cb => {
-                    const colKey = cb.dataset.target;
-                    if (hiddenCols.includes(colKey)) {
-                        cb.checked = false;
-                        toggleColumn(colKey, false);
-                    } else {
-                        cb.checked = true;
-                        toggleColumn(colKey, true);
-                    }
-                });
+                if (hiddenCols.length > 0) {
+                    checkboxes.forEach(cb => {
+                        const colKey = cb.dataset.target;
+                        if (hiddenCols.includes(colKey)) {
+                            cb.checked = false;
+                            toggleColumn(colKey, false);
+                        } else {
+                            cb.checked = true;
+                            toggleColumn(colKey, true);
+                        }
+                    });
+                    updateClearButtonVisibility();
+                }
             }
         };
 
@@ -217,6 +226,13 @@
                 }
             });
             localStorage.setItem(storageKey, JSON.stringify(hiddenCols));
+            updateClearButtonVisibility();
+        };
+
+        // Update Clear Button Visibility
+        const updateClearButtonVisibility = () => {
+            const hasHiddenCols = Array.from(checkboxes).some(cb => !cb.checked);
+            clearFiltersBtn.style.display = hasHiddenCols ? 'inline-block' : 'none';
         };
 
         // Toggle column visibility
@@ -226,6 +242,16 @@
                 cell.style.display = show ? '' : 'none';
             });
         };
+
+        // Clear Filters
+        clearFiltersBtn.addEventListener('click', function() {
+            checkboxes.forEach(cb => {
+                cb.checked = true;
+                toggleColumn(cb.dataset.target, true);
+            });
+            localStorage.removeItem(storageKey);
+            updateClearButtonVisibility();
+        });
 
         // Handle checkbox changes
         checkboxes.forEach(cb => {
