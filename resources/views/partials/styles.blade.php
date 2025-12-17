@@ -840,7 +840,7 @@
         align-items: center;
         gap: 0.375rem;
         padding: 0.25rem 0.625rem;
-        font-size: 0.8125rem;
+        /* font-size: 0.8125rem; */
         font-weight: 500;
         border-radius: 9999px;
         line-height: 1.5;
@@ -1148,7 +1148,7 @@
     .user-cell-name {
         font-weight: 500;
         color: var(--foreground);
-        font-size: 0.8125rem;
+        /* font-size: 0.8125rem; */
     }
 
     .user-cell-email {
