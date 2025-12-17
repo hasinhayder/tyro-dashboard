@@ -29,12 +29,30 @@
 <div class="card" style="margin-bottom: 1rem;">
     <div class="card-body">
         <form action="{{ route('tyro-dashboard.resources.index', $resource) }}" method="GET">
-            <div class="filters-bar">
+            <div class="filters-bar" style="display: flex; gap: 10px; align-items: center;">
                 <div class="search-box">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                     </svg>
                     <input type="text" name="search" class="form-input" placeholder="Search..." value="{{ request('search') }}">
+                </div>
+<div class="dropdown" style="position: relative;">
+                    <button type="button" class="btn btn-secondary" id="filterColumnsBtn" style="display: flex; align-items: center; gap: 5px;">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 16px; height: 16px;">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M9 17V7m0 10a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h2a2 2 0 012 2m0 10a2 2 0 002 2h2a2 2 0 002-2M9 7a2 2 0 012-2h2a2 2 0 012 2m0 10V7m0 10a2 2 0 002 2h2a2 2 0 002-2V7a2 2 0 00-2-2h-2a2 2 0 00-2 2" />
+                        </svg>
+                        Filter Columns
+                    </button>
+                    <div class="dropdown-menu" id="filterColumnsDropdown" style="display: none; position: absolute; top: 100%; right: 0; background: white; border: 1px solid #ddd; box-shadow: 0 4px 6px rgba(0,0,0,0.1); border-radius: 4px; min-width: 200px; padding: 0.5rem; z-index: 1000; margin-top: 4px;">
+                        @foreach($config['fields'] as $key => $field)
+                            @if(!($field['hide_in_index'] ?? false))
+                                <label style="display: flex; align-items: center; padding: 4px 8px; cursor: pointer; color: #333; user-select: none;">
+                                    <input type="checkbox" class="column-toggle" data-target="{{ $key }}" checked style="margin-right: 8px;">
+                                    {{ $field['label'] }}
+                                </label>
+                            @endif
+                        @endforeach
+                    </div>
                 </div>
                 <button type="submit" class="btn btn-secondary">Filter</button>
                 @if(request()->has('search'))
@@ -54,7 +72,7 @@
                 <tr>
                     @foreach($config['fields'] as $key => $field)
                         @if(!($field['hide_in_index'] ?? false))
-                            <th>{{ $field['label'] }}</th>
+<th data-col="{{ $key }}">{{ $field['label'] }}</th>
                         @endif
                     @endforeach
                     <th style="text-align: right;">Actions</th>
@@ -65,7 +83,7 @@
                 <tr>
                     @foreach($config['fields'] as $key => $field)
                         @if(!($field['hide_in_index'] ?? false))
-                            <td>
+<td data-col="{{ $key }}">
                                 @if($field['type'] === 'file')
                                     @if($item->$key)
                                         <a href="{{ Storage::url($item->$key) }}" target="_blank" style="color: var(--primary); text-decoration: none;">View</a>
@@ -145,4 +163,80 @@
     </div>
     @endif
 </div>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const resourceName = '{{ $resource }}';
+        const storageKey = 'tyro_hidden_cols_' + resourceName;
+        const dropdownBtn = document.getElementById('filterColumnsBtn');
+        const dropdownMenu = document.getElementById('filterColumnsDropdown');
+        const checkboxes = document.querySelectorAll('.column-toggle');
+        
+        // Toggle dropdown
+        dropdownBtn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            const isVisible = dropdownMenu.style.display === 'block';
+            dropdownMenu.style.display = isVisible ? 'none' : 'block';
+        });
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function(e) {
+            if (!dropdownMenu.contains(e.target) && e.target !== dropdownBtn) {
+                dropdownMenu.style.display = 'none';
+            }
+        });
+
+        // Prevent closing when clicking inside dropdown
+        dropdownMenu.addEventListener('click', function(e) {
+            e.stopPropagation();
+        });
+
+        // Load saved state
+        const loadState = () => {
+            const savedState = localStorage.getItem(storageKey);
+            if (savedState) {
+                const hiddenCols = JSON.parse(savedState);
+                checkboxes.forEach(cb => {
+                    const colKey = cb.dataset.target;
+                    if (hiddenCols.includes(colKey)) {
+                        cb.checked = false;
+                        toggleColumn(colKey, false);
+                    } else {
+                        cb.checked = true;
+                        toggleColumn(colKey, true);
+                    }
+                });
+            }
+        };
+
+        // Save state
+        const saveState = () => {
+            const hiddenCols = [];
+            checkboxes.forEach(cb => {
+                if (!cb.checked) {
+                    hiddenCols.push(cb.dataset.target);
+                }
+            });
+            localStorage.setItem(storageKey, JSON.stringify(hiddenCols));
+        };
+
+        // Toggle column visibility
+        const toggleColumn = (colKey, show) => {
+            const cells = document.querySelectorAll(`[data-col="${colKey}"]`);
+            cells.forEach(cell => {
+                cell.style.display = show ? '' : 'none';
+            });
+        };
+
+        // Handle checkbox changes
+        checkboxes.forEach(cb => {
+            cb.addEventListener('change', function() {
+                toggleColumn(this.dataset.target, this.checked);
+                saveState();
+            });
+        });
+
+        // Initial load
+        loadState();
+    });
+</script>
 @endsection
