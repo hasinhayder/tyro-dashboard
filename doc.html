@@ -1,0 +1,1980 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tyro Dashboard Documentation - Beautiful Admin Dashboard for Laravel 12</title>
+    <meta name="description" content="Complete documentation for Tyro Dashboard - Beautiful, modern admin dashboard for managing Tyro roles, privileges, users, and package settings in Laravel 12.">
+    <meta name="keywords" content="Laravel, Admin Dashboard, Tyro, RBAC, User Management, Role Management, PHP, Laravel 12, Documentation">
+    <meta name="author" content="Hasin Hayder">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@700;800;900&display=swap" rel="stylesheet">
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="doc-style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+</head>
+
+<body class="doc-page">
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="navbar-container">
+            <a href="index.html" class="navbar-brand">
+                <span class="navbar-logo">Tyro Dashboard</span>
+                <span class="navbar-badge">v1.0</span>
+            </a>
+
+            <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Toggle menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+
+            <div class="navbar-links">
+                <a href="#installation" class="navbar-link">Installation</a>
+                <a href="#features" class="navbar-link">Features</a>
+                <a href="#screenshots" class="navbar-link">Screenshots</a>
+                <a href="index.html" class="navbar-link">Home</a>
+                <a href="https://github.com/hasinhayder/tyro-dashboard" class="navbar-cta" target="_blank" rel="noopener">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                    </svg>
+                    GitHub
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Theme Toggle -->
+    <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+        <svg class="sun-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="5"></circle>
+            <line x1="12" y1="1" x2="12" y2="3"></line>
+            <line x1="12" y1="21" x2="12" y2="23"></line>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+            <line x1="1" y1="12" x2="3" y2="12"></line>
+            <line x1="21" y1="12" x2="23" y2="12"></line>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+        </svg>
+        <svg class="moon-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+        </svg>
+    </button>
+
+    <!-- Spotlight Search -->
+    <div class="spotlight-overlay" id="spotlightOverlay"></div>
+    <div class="spotlight-container" id="spotlightContainer">
+        <input type="text" class="spotlight-search" id="spotlightSearch" placeholder="Search documentation..." autocomplete="off">
+        <div class="spotlight-results" id="spotlightResults"></div>
+    </div>
+    <div class="spotlight-shortcut" id="spotlightShortcut">
+        Press <kbd>⌘</kbd><kbd>K</kbd> to search
+    </div>
+
+    <div class="doc-layout">
+        <!-- Sidebar Navigation -->
+        <aside class="doc-sidebar">
+            <nav class="doc-nav">
+                <div class="doc-nav-section">
+                    <div class="doc-nav-title">Getting Started</div>
+                    <ul class="doc-nav-list">
+                        <li><a href="#introduction" class="doc-nav-link active">Introduction</a></li>
+                        <li><a href="#features" class="doc-nav-link">Features</a></li>
+                        <li><a href="#requirements" class="doc-nav-link">Requirements</a></li>
+                        <li><a href="#installation" class="doc-nav-link">Installation</a></li>
+                        <li><a href="#screenshots" class="doc-nav-link">Screenshots</a></li>
+                    </ul>
+                </div>
+
+                <div class="doc-nav-section">
+                    <div class="doc-nav-title">Configuration</div>
+                    <ul class="doc-nav-list">
+                        <li><a href="#routes-config" class="doc-nav-link">Route Settings</a></li>
+                        <li><a href="#admin-roles" class="doc-nav-link">Admin Roles</a></li>
+                        <li><a href="#pagination" class="doc-nav-link">Pagination</a></li>
+                        <li><a href="#branding" class="doc-nav-link">Branding</a></li>
+                    </ul>
+                </div>
+
+                <div class="doc-nav-section">
+                    <div class="doc-nav-title">Features</div>
+                    <ul class="doc-nav-list">
+                        <li><a href="#user-management" class="doc-nav-link">User Management</a></li>
+                        <li><a href="#role-management" class="doc-nav-link">Role Management</a></li>
+                        <li><a href="#privilege-management" class="doc-nav-link">Privilege Management</a></li>
+                        <li><a href="#settings-management" class="doc-nav-link">Settings Management</a></li>
+                        <li><a href="#profile-management" class="doc-nav-link">Profile Management</a></li>
+                        <li><a href="#crud-workflow" class="doc-nav-link">CRUD Workflow</a></li>
+                    </ul>
+                </div>
+
+                <div class="doc-nav-section">
+                    <div class="doc-nav-title">Resource Configuration</div>
+                    <ul class="doc-nav-list">
+                        <li><a href="#search-config" class="doc-nav-link">Search Settings</a></li>
+                        <li><a href="#field-types" class="doc-nav-link">Field Types</a></li>
+                        <li><a href="#rich-text" class="doc-nav-link">Rich Text Editor</a></li>
+                        <li><a href="#readonly-resources" class="doc-nav-link">Readonly Resources</a></li>
+                        <li><a href="#error-visibility" class="doc-nav-link">Error Visibility</a></li>
+                    </ul>
+                </div>
+
+                <div class="doc-nav-section">
+                    <div class="doc-nav-title">Customization</div>
+                    <ul class="doc-nav-list">
+                        <li><a href="#publishing" class="doc-nav-link">Publishing Assets</a></li>
+                        <li><a href="#theme-customization" class="doc-nav-link">Theme Customization</a></li>
+                        <li><a href="#env-variables" class="doc-nav-link">Environment Variables</a></li>
+                        <li><a href="#artisan-commands" class="doc-nav-link">Artisan Commands</a></li>
+                    </ul>
+                </div>
+
+                <div class="doc-nav-section">
+                    <div class="doc-nav-title">Reference</div>
+                    <ul class="doc-nav-list">
+                        <li><a href="#routes" class="doc-nav-link">Routes Reference</a></li>
+                        <li><a href="#access-control" class="doc-nav-link">Access Control</a></li>
+                        <li><a href="#faq" class="doc-nav-link">FAQ</a></li>
+                        <li><a href="index.html" class="doc-nav-link">← Back to Home</a></li>
+                    </ul>
+                </div>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="doc-content">
+            <a href="index.html" class="doc-back-link">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="19" y1="12" x2="5" y2="12"></line>
+                    <polyline points="12 19 5 12 12 5"></polyline>
+                </svg>
+                Back to Home
+            </a>
+
+            <header class="doc-header">
+                <h1 class="doc-title">Tyro Dashboard Documentation</h1>
+                <p class="doc-subtitle">Everything you need to build a beautiful admin dashboard for managing Tyro roles, privileges, users, and package settings in Laravel 12.</p>
+            </header>
+
+            <!-- Introduction -->
+            <section id="introduction" class="doc-section">
+                <h2 class="doc-section-title">Introduction</h2>
+                <p class="doc-text">
+                    <strong>Tyro Dashboard</strong> is a beautiful, modern admin dashboard package for Laravel 12 that provides a complete interface for managing users, roles, privileges, and package settings. It seamlessly integrates with the <a href="https://github.com/hasinhayder/tyro" target="_blank">Tyro RBAC</a> package and optionally with <a href="https://github.com/hasinhayder/tyro-login" target="_blank">Tyro Login</a>.
+                </p>
+                <p class="doc-text">
+                    With Tyro Dashboard, you get a professional-grade admin panel with dark/light theme support, responsive design, and intuitive user interfaces – all without writing any frontend code.
+                </p>
+
+                <div class="doc-alert doc-alert-success">
+                    <strong>Quick Setup:</strong> Install via Composer and run the installer – your admin dashboard will be ready at <code class="doc-inline-code">/dashboard</code> in under 5 minutes.
+                </div>
+
+                <div class="doc-alert doc-alert-info">
+                    <strong>Tyro Ecosystem:</strong> Tyro Dashboard works best with Tyro (RBAC) and Tyro Login (Authentication). Together, they provide a complete user management solution for Laravel 12.
+                </div>
+            </section>
+
+            <!-- Features -->
+            <section id="features" class="doc-section">
+                <h2 class="doc-section-title">Features</h2>
+                <p class="doc-text">Tyro Dashboard comes packed with features to help you manage your application effectively:</p>
+
+                <div class="doc-features-grid">
+                    <div class="doc-feature-item">
+                        <h3 class="doc-feature-title">Beautiful UI</h3>
+                        <p class="doc-feature-desc">Modern, responsive design that matches Tyro Login aesthetics with attention to every detail.</p>
+                    </div>
+                    <div class="doc-feature-item">
+                        <h3 class="doc-feature-title">User Management</h3>
+                        <p class="doc-feature-desc">Create, edit, suspend, and manage users with an intuitive interface and role assignment.</p>
+                    </div>
+                    <div class="doc-feature-item">
+                        <h3 class="doc-feature-title">Role Management</h3>
+                        <p class="doc-feature-desc">Full CRUD operations for roles with privilege assignment and protection for critical roles.</p>
+                    </div>
+                    <div class="doc-feature-item">
+                        <h3 class="doc-feature-title">Privilege Management</h3>
+                        <p class="doc-feature-desc">Manage privileges and assign them to roles for fine-grained access control.</p>
+                    </div>
+                    <div class="doc-feature-item">
+                        <h3 class="doc-feature-title">Settings Management</h3>
+                        <p class="doc-feature-desc">Configure Tyro and Tyro Login packages from a beautiful UI interface.</p>
+                    </div>
+                    <div class="doc-feature-item">
+                        <h3 class="doc-feature-title">Profile Management</h3>
+                        <p class="doc-feature-desc">Users can update their own profile information with self-service account management.</p>
+                    </div>
+                    <div class="doc-feature-item">
+                        <h3 class="doc-feature-title">Dark Mode</h3>
+                        <p class="doc-feature-desc">Built-in dark/light theme support that respects user preferences and system settings.</p>
+                    </div>
+                    <div class="doc-feature-item">
+                        <h3 class="doc-feature-title">Responsive Design</h3>
+                        <p class="doc-feature-desc">Works perfectly on all device sizes from mobile phones to large desktop monitors.</p>
+                    </div>
+                    <div class="doc-feature-item">
+                        <h3 class="doc-feature-title">Role-Based Access</h3>
+                        <p class="doc-feature-desc">Admin-only features are protected by configurable role-based access control.</p>
+                    </div>
+                </div>
+            </section>
+
+
+
+            <!-- Resource Configuration -->
+            <section id="resource-configuration" class="doc-section">
+                <h2 class="doc-section-title">Resource Configuration</h2>
+                <p class="doc-text">Tyro Dashboard provides flexible configuration options for your resources, allowing you to customize search behavior, field types, and access control.</p>
+
+                <!-- Search Settings -->
+                <h3 id="search-config" class="doc-feature-title" style="margin-top: 2rem;">Search Settings</h3>
+                <p class="doc-text">
+                    You can configure which fields are searchable in the resource listing. This can be done globally for the resource or on a per-field basis.
+                </p>
+                <div class="doc-code-block">
+                    <pre><code class="language-php">// Option 1: Global search configuration
+'search' => ['name', 'email'],
+
+// Option 2: Per-field configuration
+'fields' => [
+    'name' => [
+        'type' => 'text',
+        'searchable' => true
+    ],
+    // ...
+]</code></pre>
+                </div>
+
+                <!-- Field Types -->
+                <h3 id="field-types" class="doc-feature-title" style="margin-top: 2rem;">Field Types</h3>
+                <p class="doc-text">
+                    Tyro supports various field types to handle different kinds of data. Specify the <code>type</code> in your field configuration.
+                </p>
+                
+                <div class="table-container">
+                    <table class="doc-table">
+                        <thead>
+                            <tr>
+                                <th>Type</th>
+                                <th>Description</th>
+                                <th>Options</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code>text</code></td>
+                                <td>Standard text input</td>
+                                <td><code>label</code>, <code>required</code>, <code>placeholder</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>number</code></td>
+                                <td>Numeric input</td>
+                                <td><code>min</code>, <code>max</code>, <code>step</code>, <code>prefix</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>select</code></td>
+                                <td>Dropdown selection</td>
+                                <td><code>options</code> (array)</td>
+                            </tr>
+                            <tr>
+                                <td><code>toggle</code></td>
+                                <td>Boolean switch</td>
+                                <td><code>label</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>richtext</code></td>
+                                <td>Rich text editor</td>
+                                <td><code>height</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>textarea</code></td>
+                                <td>Multi-line text area</td>
+                                <td><code>rows</code></td>
+                            </tr>
+                             <tr>
+                                <td><code>password</code></td>
+                                <td>Password input</td>
+                                <td><code>required</code></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="doc-code-block">
+                    <pre><code class="language-php">'status' => [
+    'type' => 'select',
+    'options' => ['active', 'inactive'],
+    'label' => 'Account Status',
+    'required' => true
+],
+'is_admin' => [
+    'type' => 'toggle',
+    'label' => 'Administrator Access'
+]</code></pre>
+                </div>
+
+                <!-- Rich Text Editor -->
+                <h3 id="rich-text" class="doc-feature-title" style="margin-top: 2rem;">Rich Text Editor</h3>
+                <p class="doc-text">
+                    Enable a rich text editor (Quill.js) for any text field by setting the type to <code>richtext</code>. This provides a user-friendly interface for editing formatted content.
+                </p>
+                <div class="doc-code-block">
+                    <pre><code class="language-php">'fields' => [
+    'bio' => [
+        'type' => 'richtext',
+        'label' => 'Biography',
+        'required' => true
+    ]
+]</code></pre>
+                </div>
+
+                <!-- Readonly Resources -->
+                <h3 id="readonly-resources" class="doc-feature-title" style="margin-top: 2rem;">Readonly Resources</h3>
+                <p class="doc-text">
+                    You can mark a resource as readonly for specific roles. This prevents users with those roles from creating, editing, or deleting records, while still allowing them to view the resource.
+                </p>
+                <div class="doc-code-block">
+                    <pre><code class="language-php">'readonly' => true, // Make readonly for everyone
+
+// Or restrict for specific roles
+'readonly' => ['editor', 'viewer'],</code></pre>
+                </div>
+
+                <!-- Error Visibility -->
+                <h3 id="error-visibility" class="doc-feature-title" style="margin-top: 2rem;">Error Visibility</h3>
+                <p class="doc-text">
+                    Control the visibility of error messages in the UI. You can toggle the global error summary at the top of the page and the individual field error messages.
+                </p>
+                <p class="doc-text">
+                    These settings can be configured in <code>config/tyro-dashboard.php</code> or via environment variables.
+                </p>
+                <div class="doc-code-block">
+                    <pre><code class="language-bash"># .env file
+
+# Show/Hide the top error summary (default: true)
+TYRO_SHOW_GLOBAL_ERRORS=true
+
+# Show/Hide errors under individual fields (default: true)
+TYRO_SHOW_FIELD_ERRORS=true</code></pre>
+                </div>
+            </section>
+
+            <!-- Screenshots -->
+            <section id="screenshots" class="doc-section">
+                <h2 class="doc-section-title">Screenshots</h2>
+                <p class="doc-text">Here are some screenshots of Tyro Dashboard in action:</p>
+
+                <div class="doc-screenshots-grid">
+                    <div class="doc-screenshot-item">
+                        <a href="images/1-tyro-dashboard-landing-light.png" class="doc-screenshot-link" data-lightbox="screenshots">
+                            <img src="images/1-tyro-dashboard-landing-light.png" alt="Dashboard Landing Light Mode" class="doc-screenshot-img">
+                        </a>
+                        <p class="doc-screenshot-caption">Dashboard Landing Light Mode</p>
+                    </div>
+                    <div class="doc-screenshot-item">
+                        <a href="images/1-tyro-dashboard-landing-dark.png" class="doc-screenshot-link" data-lightbox="screenshots">
+                            <img src="images/1-tyro-dashboard-landing-dark.png" alt="Dashboard Landing Dark Mode" class="doc-screenshot-img">
+                        </a>
+                        <p class="doc-screenshot-caption">Dashboard Landing Dark Mode</p>
+                    </div>
+                    <div class="doc-screenshot-item">
+                        <a href="images/2-tyro-dashboard-profile-light.png" class="doc-screenshot-link" data-lightbox="screenshots">
+                            <img src="images/2-tyro-dashboard-profile-light.png" alt="Profile Management Light Mode" class="doc-screenshot-img">
+                        </a>
+                        <p class="doc-screenshot-caption">Profile Management Light Mode</p>
+                    </div>
+                    <div class="doc-screenshot-item">
+                        <a href="images/2-tyro-dashboard-profile-dark.png" class="doc-screenshot-link" data-lightbox="screenshots">
+                            <img src="images/2-tyro-dashboard-profile-dark.png" alt="Profile Management Dark Mode" class="doc-screenshot-img">
+                        </a>
+                        <p class="doc-screenshot-caption">Profile Management Dark Mode</p>
+                    </div>
+                    <div class="doc-screenshot-item">
+                        <a href="images/3-tyro-dashboard-users-light.png" class="doc-screenshot-link" data-lightbox="screenshots">
+                            <img src="images/3-tyro-dashboard-users-light.png" alt="User Management Light Mode" class="doc-screenshot-img">
+                        </a>
+                        <p class="doc-screenshot-caption">User Management Light Mode</p>
+                    </div>
+                    <div class="doc-screenshot-item">
+                        <a href="images/3-tyro-dashboard-users-dark.png" class="doc-screenshot-link" data-lightbox="screenshots">
+                            <img src="images/3-tyro-dashboard-users-dark.png" alt="User Management Dark Mode" class="doc-screenshot-img">
+                        </a>
+                        <p class="doc-screenshot-caption">User Management Dark Mode</p>
+                    </div>
+                    <div class="doc-screenshot-item">
+                        <a href="images/4-tyro-dashboard-roles-light.png" class="doc-screenshot-link" data-lightbox="screenshots">
+                            <img src="images/4-tyro-dashboard-roles-light.png" alt="Role Management Light Mode" class="doc-screenshot-img">
+                        </a>
+                        <p class="doc-screenshot-caption">Role Management Light Mode</p>
+                    </div>
+                    <div class="doc-screenshot-item">
+                        <a href="images/4-tyro-dashboard-roles-dark.png" class="doc-screenshot-link" data-lightbox="screenshots">
+                            <img src="images/4-tyro-dashboard-roles-dark.png" alt="Role Management Dark Mode" class="doc-screenshot-img">
+                        </a>
+                        <p class="doc-screenshot-caption">Role Management Dark Mode</p>
+                    </div>
+                    <div class="doc-screenshot-item">
+                        <a href="images/5-tyro-dashboard-create-role-light.png" class="doc-screenshot-link" data-lightbox="screenshots">
+                            <img src="images/5-tyro-dashboard-create-role-light.png" alt="Create Role Light Mode" class="doc-screenshot-img">
+                        </a>
+                        <p class="doc-screenshot-caption">Create Role Light Mode</p>
+                    </div>
+                    <div class="doc-screenshot-item">
+                        <a href="images/5-tyro-dashboard-create-role-dark.png" class="doc-screenshot-link" data-lightbox="screenshots">
+                            <img src="images/5-tyro-dashboard-create-role-dark.png" alt="Create Role Dark Mode" class="doc-screenshot-img">
+                        </a>
+                        <p class="doc-screenshot-caption">Create Role Dark Mode</p>
+                    </div>
+                </div>
+
+                <div class="doc-screenshots-grid">
+                    <div class="doc-screenshot-item">
+                        <a href="images/6-tyro-dashboard-role-detail-light.png" class="doc-screenshot-link" data-lightbox="screenshots">
+                            <img src="images/6-tyro-dashboard-role-detail-light.png" alt="Role Detail Light Mode" class="doc-screenshot-img">
+                        </a>
+                        <p class="doc-screenshot-caption">Role Detail Light Mode</p>
+                    </div>
+                    <div class="doc-screenshot-item">
+                        <a href="images/6-tyro-dashboard-role-detail-dark.png" class="doc-screenshot-link" data-lightbox="screenshots">
+                            <img src="images/6-tyro-dashboard-role-detail-dark.png" alt="Role Detail Dark Mode" class="doc-screenshot-img">
+                        </a>
+                        <p class="doc-screenshot-caption">Role Detail Dark Mode</p>
+                    </div>
+                    <div class="doc-screenshot-item">
+                        <a href="images/7-tyro-dashboard-edit-user-light.png" class="doc-screenshot-link" data-lightbox="screenshots">
+                            <img src="images/7-tyro-dashboard-edit-user-light.png" alt="Edit User Light Mode" class="doc-screenshot-img">
+                        </a>
+                        <p class="doc-screenshot-caption">Edit User Light Mode</p>
+                    </div>
+                    <div class="doc-screenshot-item">
+                        <a href="images/7-tyro-dashboard-edit-user-dark.png" class="doc-screenshot-link" data-lightbox="screenshots">
+                            <img src="images/7-tyro-dashboard-edit-user-dark.png" alt="Edit User Dark Mode" class="doc-screenshot-img">
+                        </a>
+                        <p class="doc-screenshot-caption">Edit User Dark Mode</p>
+                    </div>
+                    <div class="doc-screenshot-item">
+                        <a href="images/8-tyro-dashboard-privileges-light.png" class="doc-screenshot-link" data-lightbox="screenshots">
+                            <img src="images/8-tyro-dashboard-privileges-light.png" alt="Privilege Management Light Mode" class="doc-screenshot-img">
+                        </a>
+                        <p class="doc-screenshot-caption">Privilege Management Light Mode</p>
+                    </div>
+                    <div class="doc-screenshot-item">
+                        <a href="images/8-tyro-dashboard-privileges-dark.png" class="doc-screenshot-link" data-lightbox="screenshots">
+                            <img src="images/8-tyro-dashboard-privileges-dark.png" alt="Privilege Management Dark Mode" class="doc-screenshot-img">
+                        </a>
+                        <p class="doc-screenshot-caption">Privilege Management Dark Mode</p>
+                    </div>
+                    <div class="doc-screenshot-item">
+                        <a href="images/9-tyro-dashboard-create-privilege-light.png" class="doc-screenshot-link" data-lightbox="screenshots">
+                            <img src="images/9-tyro-dashboard-create-privilege-light.png" alt="Create Privilege Light Mode" class="doc-screenshot-img">
+                        </a>
+                        <p class="doc-screenshot-caption">Create Privilege Light Mode</p>
+                    </div>
+                    <div class="doc-screenshot-item">
+                        <a href="images/9-tyro-dashboard-create-privilege-dark.png" class="doc-screenshot-link" data-lightbox="screenshots">
+                            <img src="images/9-tyro-dashboard-create-privilege-dark.png" alt="Create Privilege Dark Mode" class="doc-screenshot-img">
+                        </a>
+                        <p class="doc-screenshot-caption">Create Privilege Dark Mode</p>
+                    </div>
+                    <div class="doc-screenshot-item">
+                        <a href="images/10-tyro-dashboard-privilege-detail-light.png" class="doc-screenshot-link" data-lightbox="screenshots">
+                            <img src="images/10-tyro-dashboard-privilege-detail-light.png" alt="Privilege Detail Light Mode" class="doc-screenshot-img">
+                        </a>
+                        <p class="doc-screenshot-caption">Privilege Detail Light Mode</p>
+                    </div>
+                    <div class="doc-screenshot-item">
+                        <a href="images/10-tyro-dashboard-privilege-detail-dark.png" class="doc-screenshot-link" data-lightbox="screenshots">
+                            <img src="images/10-tyro-dashboard-privilege-detail-dark.png" alt="Privilege Detail Dark Mode" class="doc-screenshot-img">
+                        </a>
+                        <p class="doc-screenshot-caption">Privilege Detail Dark Mode</p>
+                    </div>
+                </div>
+
+                <div class="doc-screenshots-grid">
+                    <div class="doc-screenshot-item">
+                        <a href="images/11-tyro-dashboard-edit-privilege-light.png" class="doc-screenshot-link" data-lightbox="screenshots">
+                            <img src="images/11-tyro-dashboard-edit-privilege-light.png" alt="Edit Privilege Light Mode" class="doc-screenshot-img">
+                        </a>
+                        <p class="doc-screenshot-caption">Edit Privilege Light Mode</p>
+                    </div>
+                    <div class="doc-screenshot-item">
+                        <a href="images/11-tyro-dashboard-edit-privilege-dark.png" class="doc-screenshot-link" data-lightbox="screenshots">
+                            <img src="images/11-tyro-dashboard-edit-privilege-dark.png" alt="Edit Privilege Dark Mode" class="doc-screenshot-img">
+                        </a>
+                        <p class="doc-screenshot-caption">Edit Privilege Dark Mode</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Requirements -->
+            <section id="requirements" class="doc-section">
+                <h2 class="doc-section-title">Requirements</h2>
+                <ul class="doc-list">
+                    <li><strong>PHP:</strong> 8.2 or higher</li>
+                    <li><strong>Laravel:</strong> 12.x</li>
+                    <li><strong>Tyro Package:</strong> hasinhayder/tyro ^1.0 (required)</li>
+                    <li><strong>Tyro Login:</strong> hasinhayder/tyro-login ^1.0 (optional but recommended)</li>
+                    <li><strong>Database:</strong> Any database supported by Laravel</li>
+                </ul>
+            </section>
+
+            <!-- Installation -->
+            <section id="installation" class="doc-section">
+                <h2 class="doc-section-title">Installation</h2>
+                <p class="doc-text">Install Tyro Dashboard in just two simple steps:</p>
+
+                <h3 class="doc-section-subtitle">Step 1: Install via Composer</h3>
+                <div class="doc-code-block">
+                    <div class="doc-code-header">
+                        <span class="doc-code-title">Terminal</span>
+                        <button class="doc-code-copy" type="button">Copy</button>
+                    </div>
+                    <pre><code class="language-bash">composer require hasinhayder/tyro-dashboard</code></pre>
+                </div>
+
+                <h3 class="doc-section-subtitle">Step 2: Run the Interactive Installer</h3>
+                <div class="doc-code-block">
+                    <div class="doc-code-header">
+                        <span class="doc-code-title">Terminal</span>
+                        <button class="doc-code-copy" type="button">Copy</button>
+                    </div>
+                    <pre><code class="language-bash">php artisan tyro-dashboard:install</code></pre>
+                </div>
+
+                <p class="doc-text">The installer will:</p>
+                <ul class="doc-list">
+                    <li>Check dependencies (Tyro package)</li>
+                    <li>Publish the configuration file</li>
+                    <li>Optionally publish views for customization</li>
+                    <li>Help you configure admin roles and branding</li>
+                </ul>
+
+                <div class="doc-alert doc-alert-success">
+                    <strong>Done!</strong> Your admin dashboard is now available at <code class="doc-inline-code">/dashboard</code>. Login with an admin account to access all features.
+                </div>
+
+                <h3 class="doc-section-subtitle">Manual Installation</h3>
+                <p class="doc-text">If you prefer manual setup:</p>
+                <div class="doc-code-block">
+                    <div class="doc-code-header">
+                        <span class="doc-code-title">Terminal</span>
+                        <button class="doc-code-copy" type="button">Copy</button>
+                    </div>
+                    <pre><code class="language-bash"># Publish configuration
+php artisan vendor:publish --tag=tyro-dashboard-config
+
+# Optionally publish views
+php artisan vendor:publish --tag=tyro-dashboard-views</code></pre>
+                </div>
+            </section>
+
+            <!-- Route Settings -->
+            <section id="routes-config" class="doc-section">
+                <h2 class="doc-section-title">Route Settings</h2>
+                <p class="doc-text">Configure how Tyro Dashboard routes are registered:</p>
+
+                <div class="doc-code-block">
+                    <div class="doc-code-header">
+                        <span class="doc-code-title">config/tyro-dashboard.php</span>
+                        <button class="doc-code-copy" type="button">Copy</button>
+                    </div>
+                    <pre><code class="language-php">'routes' => [
+    // URL prefix for all dashboard routes
+    'prefix' => env('TYRO_DASHBOARD_PREFIX', 'dashboard'),
+
+    // Middleware applied to all dashboard routes
+    'middleware' => ['web', 'auth'],
+
+    // Route name prefix
+    'name_prefix' => 'tyro-dashboard.',
+],</code></pre>
+                </div>
+
+                <h3 class="doc-section-subtitle">Environment Variables</h3>
+                <div class="doc-code-block">
+                    <div class="doc-code-header">
+                        <span class="doc-code-title">.env</span>
+                        <button class="doc-code-copy" type="button">Copy</button>
+                    </div>
+                    <pre><code class="language-bash"># Change dashboard URL from /dashboard to /admin
+TYRO_DASHBOARD_PREFIX=admin</code></pre>
+                </div>
+            </section>
+
+            <!-- Admin Roles -->
+            <section id="admin-roles" class="doc-section">
+                <h2 class="doc-section-title">Admin Roles</h2>
+                <p class="doc-text">Configure which roles have full admin access to the dashboard:</p>
+
+                <div class="doc-code-block">
+                    <div class="doc-code-header">
+                        <span class="doc-code-title">config/tyro-dashboard.php</span>
+                        <button class="doc-code-copy" type="button">Copy</button>
+                    </div>
+                    <pre><code class="language-php">// Users with these roles have full admin access
+'admin_roles' => ['admin', 'super-admin'],</code></pre>
+                </div>
+
+                <p class="doc-text">Users with these roles can:</p>
+                <ul class="doc-list">
+                    <li>Manage all users (create, edit, suspend, delete)</li>
+                    <li>Manage all roles and privileges</li>
+                    <li>Access and modify package settings</li>
+                    <li>View the full admin dashboard</li>
+                </ul>
+
+                <p class="doc-text">Users without admin roles can only:</p>
+                <ul class="doc-list">
+                    <li>Access the dashboard home page</li>
+                    <li>Manage their own profile</li>
+                </ul>
+            </section>
+
+            <!-- Pagination -->
+            <section id="pagination" class="doc-section">
+                <h2 class="doc-section-title">Pagination Settings</h2>
+                <p class="doc-text">Configure how many items appear per page in lists:</p>
+
+                <div class="doc-code-block">
+                    <div class="doc-code-header">
+                        <span class="doc-code-title">config/tyro-dashboard.php</span>
+                        <button class="doc-code-copy" type="button">Copy</button>
+                    </div>
+                    <pre><code class="language-php">'pagination' => [
+    'users' => 15,      // Users per page
+    'roles' => 15,      // Roles per page
+    'privileges' => 15, // Privileges per page
+],</code></pre>
+                </div>
+            </section>
+
+            <!-- Branding -->
+            <section id="branding" class="doc-section">
+                <h2 class="doc-section-title">Branding</h2>
+                <p class="doc-text">Customize the dashboard with your brand identity:</p>
+
+                <div class="doc-code-block">
+                    <div class="doc-code-header">
+                        <span class="doc-code-title">config/tyro-dashboard.php</span>
+                        <button class="doc-code-copy" type="button">Copy</button>
+                    </div>
+                    <pre><code class="language-php">'branding' => [
+    // Application name shown in dashboard
+    'app_name' => env('TYRO_DASHBOARD_APP_NAME', env('APP_NAME', 'Laravel')),
+
+    // URL to your logo (null for text-based logo)
+    'logo' => env('TYRO_DASHBOARD_LOGO', null),
+],</code></pre>
+                </div>
+
+                <h3 class="doc-section-subtitle">Environment Variables</h3>
+                <div class="doc-code-block">
+                    <div class="doc-code-header">
+                        <span class="doc-code-title">.env</span>
+                        <button class="doc-code-copy" type="button">Copy</button>
+                    </div>
+                    <pre><code class="language-bash">TYRO_DASHBOARD_APP_NAME="My Application"
+TYRO_DASHBOARD_LOGO="/images/logo.svg"</code></pre>
+                </div>
+            </section>
+
+            <!-- User Management -->
+            <section id="user-management" class="doc-section">
+                <h2 class="doc-section-title">User Management</h2>
+                <p class="doc-text">The User Management section allows administrators to:</p>
+
+                <ul class="doc-list">
+                    <li><strong>View Users:</strong> Browse all users with search and pagination</li>
+                    <li><strong>Create Users:</strong> Add new users with name, email, and role assignment</li>
+                    <li><strong>Edit Users:</strong> Update user information and change roles</li>
+                    <li><strong>Suspend Users:</strong> Temporarily disable user accounts</li>
+                    <li><strong>Delete Users:</strong> Remove users from the system</li>
+                </ul>
+
+                <div class="doc-alert doc-alert-info">
+                    <strong>Note:</strong> User management is only available to users with admin roles configured in <code class="doc-inline-code">admin_roles</code>.
+                </div>
+
+                <h3 class="doc-section-subtitle">Routes</h3>
+                <table class="doc-table">
+                    <thead>
+                        <tr>
+                            <th>Route</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code class="doc-inline-code">/dashboard/users</code></td>
+                            <td>List all users</td>
+                        </tr>
+                        <tr>
+                            <td><code class="doc-inline-code">/dashboard/users/create</code></td>
+                            <td>Create new user form</td>
+                        </tr>
+                        <tr>
+                            <td><code class="doc-inline-code">/dashboard/users/{id}/edit</code></td>
+                            <td>Edit user form</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <!-- Role Management -->
+            <section id="role-management" class="doc-section">
+                <h2 class="doc-section-title">Role Management</h2>
+                <p class="doc-text">Manage roles for your application's access control:</p>
+
+                <ul class="doc-list">
+                    <li><strong>View Roles:</strong> Browse all roles with their assigned privileges</li>
+                    <li><strong>Create Roles:</strong> Add new roles with name, slug, and description</li>
+                    <li><strong>Edit Roles:</strong> Update role information and assign/remove privileges</li>
+                    <li><strong>View Role Details:</strong> See all privileges assigned to a role</li>
+                    <li><strong>Delete Roles:</strong> Remove roles (protected roles cannot be deleted)</li>
+                </ul>
+
+                <div class="doc-alert doc-alert-warning">
+                    <strong>Protected Roles:</strong> Critical roles like <code class="doc-inline-code">admin</code>, <code class="doc-inline-code">super-admin</code>, and <code class="doc-inline-code">user</code> cannot be deleted through the dashboard.
+                </div>
+
+                <h3 class="doc-section-subtitle">Routes</h3>
+                <table class="doc-table">
+                    <thead>
+                        <tr>
+                            <th>Route</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code class="doc-inline-code">/dashboard/roles</code></td>
+                            <td>List all roles</td>
+                        </tr>
+                        <tr>
+                            <td><code class="doc-inline-code">/dashboard/roles/create</code></td>
+                            <td>Create new role form</td>
+                        </tr>
+                        <tr>
+                            <td><code class="doc-inline-code">/dashboard/roles/{id}</code></td>
+                            <td>View role details</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <!-- Privilege Management -->
+            <section id="privilege-management" class="doc-section">
+                <h2 class="doc-section-title">Privilege Management</h2>
+                <p class="doc-text">Manage privileges for fine-grained access control:</p>
+
+                <ul class="doc-list">
+                    <li><strong>View Privileges:</strong> Browse all privileges in the system</li>
+                    <li><strong>Create Privileges:</strong> Add new privileges with name, slug, and description</li>
+                    <li><strong>Edit Privileges:</strong> Update privilege information</li>
+                    <li><strong>Delete Privileges:</strong> Remove privileges from the system</li>
+                </ul>
+
+                <h3 class="doc-section-subtitle">Routes</h3>
+                <table class="doc-table">
+                    <thead>
+                        <tr>
+                            <th>Route</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code class="doc-inline-code">/dashboard/privileges</code></td>
+                            <td>List all privileges</td>
+                        </tr>
+                        <tr>
+                            <td><code class="doc-inline-code">/dashboard/privileges/create</code></td>
+                            <td>Create new privilege form</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <!-- Settings Management -->
+            <section id="settings-management" class="doc-section">
+                <h2 class="doc-section-title">Settings Management</h2>
+                <p class="doc-text">Configure Tyro packages through a beautiful UI:</p>
+
+                <h3 class="doc-section-subtitle">Tyro Settings</h3>
+                <p class="doc-text">Configure the main Tyro RBAC package settings:</p>
+                <ul class="doc-list">
+                    <li>Default role assignment</li>
+                    <li>Cache settings</li>
+                    <li>Permission checking behavior</li>
+                </ul>
+
+                <h3 class="doc-section-subtitle">Tyro Login Settings</h3>
+                <p class="doc-text">Configure Tyro Login package settings (if installed):</p>
+                <ul class="doc-list">
+                    <li>Layout options</li>
+                    <li>Branding settings</li>
+                    <li>Security features (lockout, captcha, OTP)</li>
+                    <li>Email verification settings</li>
+                    <li>Social login configuration</li>
+                </ul>
+
+                <div class="doc-alert doc-alert-info">
+                    <strong>Note:</strong> The Tyro Login settings page only appears if the <code class="doc-inline-code">hasinhayder/tyro-login</code> package is installed.
+                </div>
+
+                <h3 class="doc-section-subtitle">Routes</h3>
+                <table class="doc-table">
+                    <thead>
+                        <tr>
+                            <th>Route</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code class="doc-inline-code">/dashboard/settings/tyro</code></td>
+                            <td>Tyro package settings</td>
+                        </tr>
+                        <tr>
+                            <td><code class="doc-inline-code">/dashboard/settings/tyro-login</code></td>
+                            <td>Tyro Login settings</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <!-- Profile Management -->
+            <section id="profile-management" class="doc-section">
+                <h2 class="doc-section-title">Profile Management</h2>
+                <p class="doc-text">All authenticated users can manage their own profile:</p>
+
+                <ul class="doc-list">
+                    <li><strong>Update Name:</strong> Change display name</li>
+                    <li><strong>Update Email:</strong> Change email address</li>
+                    <li><strong>Change Password:</strong> Update account password</li>
+                    <li><strong>Profile Picture:</strong> Upload or change avatar</li>
+                </ul>
+
+                <h3 class="doc-section-subtitle">Route</h3>
+                <table class="doc-table">
+                    <thead>
+                        <tr>
+                            <th>Route</th>
+                            <th>Description</th>
+                            <th>Access</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code class="doc-inline-code">/dashboard/profile</code></td>
+                            <td>User profile settings</td>
+                            <td>All authenticated users</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <!-- CRUD Workflow -->
+            <section id="crud-workflow" class="doc-section">
+                <h2 class="doc-section-title">CRUD Workflow</h2>
+                <p class="doc-text">Creating a new resource in Tyro Dashboard is a streamlined process. Follow these steps to set up a complete CRUD interface in minutes.</p>
+
+                <h3 class="doc-feature-title" style="margin-top: 2rem;">1. Create Migration & Model</h3>
+                <p class="doc-text">Start by creating your standard Laravel model and migration.</p>
+                <div class="doc-code-block">
+                    <pre><code class="language-bash">php artisan make:model Product -m</code></pre>
+                </div>
+
+                <h3 class="doc-feature-title" style="margin-top: 2rem;">2. Create Resource Controller</h3>
+                <p class="doc-text">Create a controller that extends <code>TyroResourceController</code>. This is where you define your resource configuration.</p>
+                <div class="doc-code-block">
+                    <pre><code class="language-php">namespace App\Http\Controllers\Admin;
+
+use Tyro\Dashboard\Controllers\TyroResourceController;
+use App\Models\Product;
+
+class ProductController extends TyroResourceController
+{
+    // The Eloquent model associated with this resource
+    protected $model = Product::class;
+    
+    // The page title
+    protected $title = 'Products';
+
+    // Define the fields for the resource
+    public function fields()
+    {
+        return [
+            'name' => [
+                'type' => 'text',
+                'label' => 'Product Name',
+                'required' => true,
+                'searchable' => true
+            ],
+            'price' => [
+                'type' => 'number',
+                'prefix' => '$',
+                'required' => true
+            ],
+            'status' => [
+                'type' => 'select',
+                'options' => ['active', 'draft', 'archived']
+            ],
+            'description' => [
+                'type' => 'richtext'
+            ]
+        ];
+    }
+}</code></pre>
+                </div>
+
+                <h3 class="doc-feature-title" style="margin-top: 2rem;">3. Add Route</h3>
+                <p class="doc-text">Register your resource route in <code>routes/web.php</code>. Tyro provides a helper macro <code>tyroResource</code> that registers all necessary routes (index, create, store, edit, update, destroy).</p>
+                <div class="doc-code-block">
+                    <pre><code class="language-php">use App\Http\Controllers\Admin\ProductController;
+
+Route::middleware(['auth', 'tyro'])->prefix('dashboard')->group(function () {
+    Route::tyroResource('products', ProductController::class);
+});</code></pre>
+                </div>
+            </section>
+
+            <!-- Resource Configuration -->
+            <section id="search-config" class="doc-section">
+                <h2 class="doc-section-title">Search Configuration</h2>
+                <p class="doc-text">By default, Tyro searches in columns defined in your <code>fields()</code> method where <code>'searchable' => true</code>. You can customize the search behavior by overriding the <code>search()</code> method.</p>
+                
+                <div class="doc-code-block">
+                    <pre><code class="language-php">public function search()
+{
+    return [
+        'columns' => ['name', 'email', 'description'], // Columns to search
+        'placeholder' => 'Search users...' // Placeholder text for search input
+    ];
+}</code></pre>
+                </div>
+            </section>
+
+            <section id="field-types" class="doc-section">
+                <h2 class="doc-section-title">Field Types</h2>
+                <p class="doc-text">Tyro supports a variety of field types to handle different data formats. Here is a complete reference:</p>
+
+                <table class="doc-table">
+                    <thead>
+                        <tr>
+                            <th>Type</th>
+                            <th>Description</th>
+                            <th>Options</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code class="doc-inline-code">text</code></td>
+                            <td>Standard text input</td>
+                            <td>required, label, placeholder</td>
+                        </tr>
+                        <tr>
+                            <td><code class="doc-inline-code">number</code></td>
+                            <td>Numeric input</td>
+                            <td>prefix, suffix, step, min, max</td>
+                        </tr>
+                        <tr>
+                            <td><code class="doc-inline-code">email</code></td>
+                            <td>Email input with validation</td>
+                            <td>required, label</td>
+                        </tr>
+                        <tr>
+                            <td><code class="doc-inline-code">password</code></td>
+                            <td>Password input (masked)</td>
+                            <td>required, label</td>
+                        </tr>
+                        <tr>
+                            <td><code class="doc-inline-code">textarea</code></td>
+                            <td>Multi-line text area</td>
+                            <td>rows, placeholder</td>
+                        </tr>
+                        <tr>
+                            <td><code class="doc-inline-code">richtext</code></td>
+                            <td>WYSIWYG editor (Trix)</td>
+                            <td>height, toolbar options</td>
+                        </tr>
+                        <tr>
+                            <td><code class="doc-inline-code">select</code></td>
+                            <td>Dropdown menu</td>
+                            <td>options (array or closure)</td>
+                        </tr>
+                        <tr>
+                            <td><code class="doc-inline-code">toggle</code></td>
+                            <td>Boolean switch</td>
+                            <td>active_label, inactive_label</td>
+                        </tr>
+                         <tr>
+                            <td><code class="doc-inline-code">date</code></td>
+                            <td>Date picker</td>
+                            <td>format</td>
+                        </tr>
+                        <tr>
+                            <td><code class="doc-inline-code">image</code></td>
+                            <td>Image uploader</td>
+                            <td>disk, path, preview_width</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <section id="rich-text" class="doc-section">
+                <h2 class="doc-section-title">Rich Text Editor</h2>
+                <p class="doc-text">To enable a rich text editor for a field, simply set the type to <code>richtext</code>. Tyro uses Trix editor by default.</p>
+                <div class="doc-code-block">
+                    <pre><code class="language-php">'bio' => [
+    'type' => 'richtext',
+    'label' => 'Biography',
+]</code></pre>
+                </div>
+            </section>
+
+            <section id="readonly-resources" class="doc-section">
+                <h2 class="doc-section-title">Readonly Resources</h2>
+                <p class="doc-text">If you want to disable creating, editing, or deleting records for a specific resource, you can set the <code>$readonly</code> property.</p>
+                <div class="doc-code-block">
+                    <pre><code class="language-php">protected $readonly = true;</code></pre>
+                </div>
+                <p class="doc-text">This will remove the "Create" button and the "Edit/Delete" actions from the index view.</p>
+            </section>
+
+            <section id="error-visibility" class="doc-section">
+                <h2 class="doc-section-title">Error Visibility</h2>
+                <p class="doc-text">You can control whether validation errors are shown globally or inline. Override the <code>$showErrors</code> property.</p>
+                <div class="doc-code-block">
+                    <pre><code class="language-php">protected $showErrors = true; // Default is true</code></pre>
+                </div>
+            </section>
+
+            <!-- Publishing Assets -->
+            <section id="publishing" class="doc-section">
+                <h2 class="doc-section-title">Publishing Assets</h2>
+                <p class="doc-text">Customize Tyro Dashboard by publishing assets:</p>
+
+                <h3 class="doc-section-subtitle">Publish Configuration</h3>
+                <div class="doc-code-block">
+                    <div class="doc-code-header">
+                        <span class="doc-code-title">Terminal</span>
+                        <button class="doc-code-copy" type="button">Copy</button>
+                    </div>
+                    <pre><code class="language-bash">php artisan vendor:publish --tag=tyro-dashboard-config</code></pre>
+                </div>
+
+                <h3 class="doc-section-subtitle">Publish Views</h3>
+                <div class="doc-code-block">
+                    <div class="doc-code-header">
+                        <span class="doc-code-title">Terminal</span>
+                        <button class="doc-code-copy" type="button">Copy</button>
+                    </div>
+                    <pre><code class="language-bash">php artisan vendor:publish --tag=tyro-dashboard-views</code></pre>
+                </div>
+                <p class="doc-text">Views will be published to <code class="doc-inline-code">resources/views/vendor/tyro-dashboard/</code>.</p>
+            </section>
+
+            <!-- Theme Customization -->
+            <section id="theme-customization" class="doc-section">
+                <h2 class="doc-section-title">Theme Customization (shadcn Variables)</h2>
+                <p class="doc-text">
+                    Tyro Dashboard uses <a href="https://ui.shadcn.com" target="_blank">shadcn/ui</a> CSS variables for theming, making it easy to customize colors and integrate with shadcn-based projects. The theme system is fully compatible with the <a href="https://tweakcn.com" target="_blank">tweakcn.com</a> visual theme editor.
+                </p>
+
+                <h3 class="doc-section-subtitle">Publishing Theme Files</h3>
+                <p class="doc-text">Publish the theme variables to customize the look and feel of your dashboard:</p>
+                <div class="doc-code-block">
+                    <div class="doc-code-header">
+                        <span class="doc-code-title">Terminal</span>
+                        <button class="doc-code-copy" type="button">Copy</button>
+                    </div>
+                    <pre><code class="language-bash"># Publish only theme variables (recommended for color customization)
+php artisan tyro-dashboard:publish-style --theme-only
+
+# Or publish complete styles (theme + component styles)
+php artisan tyro-dashboard:publish-style</code></pre>
+                </div>
+                <p class="doc-text">Theme files will be published to <code class="doc-inline-code">resources/views/vendor/tyro-dashboard/partials/</code>.</p>
+
+                <h3 class="doc-section-subtitle">Visual Theme Editing with tweakcn</h3>
+                <p class="doc-text">The easiest way to customize your theme is using <a href="https://tweakcn.com" target="_blank">tweakcn.com</a>:</p>
+                <ol class="doc-list">
+                    <li>Visit <a href="https://tweakcn.com" target="_blank">tweakcn.com</a></li>
+                    <li>Use the visual editor to create your perfect color palette</li>
+                    <li>Copy the generated CSS variables</li>
+                    <li>Publish your theme: <code class="doc-inline-code">php artisan tyro-dashboard:publish-style --theme-only</code></li>
+                    <li>Paste the variables into <code class="doc-inline-code">resources/views/vendor/tyro-dashboard/partials/shadcn-theme.blade.php</code></li>
+                </ol>
+
+                <div class="doc-alert doc-alert-info">
+                    <strong>Pro Tip:</strong> Use tweakcn.com's visual editor to preview your color changes in real-time before applying them to your project.
+                </div>
+
+                <h3 class="doc-section-subtitle">Theme File Structure</h3>
+                <p class="doc-text">After publishing, your theme structure will be:</p>
+                <div class="doc-code-block">
+                    <div class="doc-code-header">
+                        <span class="doc-code-title">File Structure</span>
+                    </div>
+                    <pre><code class="language-text">resources/views/vendor/tyro-dashboard/partials/
+├── shadcn-theme.blade.php  # Theme variables (edit this!)
+└── styles.blade.php        # Component styles (includes theme)</code></pre>
+                </div>
+                <p class="doc-text">
+                    The <code class="doc-inline-code">shadcn-theme.blade.php</code> file contains only CSS variables, making it safe to edit without breaking component styles.
+                </p>
+
+                <h3 class="doc-section-subtitle">Available CSS Variables</h3>
+                <p class="doc-text">Tyro Dashboard uses standard shadcn CSS variables in oklch color format for both light and dark modes:</p>
+                <table class="doc-table">
+                    <thead>
+                        <tr>
+                            <th>Variable</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Basic Variables -->
+                        <tr>
+                            <td><code class="doc-inline-code">--radius</code></td>
+                            <td>Default border radius</td>
+                        </tr>
+
+                        <!-- Core Colors -->
+                        <tr>
+                            <td><code class="doc-inline-code">--background</code></td>
+                            <td>Page background color</td>
+                        </tr>
+                        <tr>
+                            <td><code class="doc-inline-code">--foreground</code></td>
+                            <td>Default text color</td>
+                        </tr>
+                        <tr>
+                            <td><code class="doc-inline-code">--primary</code></td>
+                            <td>Primary buttons and links</td>
+                        </tr>
+                        <tr>
+                            <td><code class="doc-inline-code">--primary-foreground</code></td>
+                            <td>Primary text color</td>
+                        </tr>
+                        <tr>
+                            <td><code class="doc-inline-code">--secondary</code></td>
+                            <td>Secondary elements</td>
+                        </tr>
+                        <tr>
+                            <td><code class="doc-inline-code">--secondary-foreground</code></td>
+                            <td>Secondary text color</td>
+                        </tr>
+
+                        <!-- Muted Colors -->
+                        <tr>
+                            <td><code class="doc-inline-code">--muted</code></td>
+                            <td>Muted backgrounds</td>
+                        </tr>
+                        <tr>
+                            <td><code class="doc-inline-code">--muted-foreground</code></td>
+                            <td>Muted text color</td>
+                        </tr>
+
+                        <!-- Accent Colors -->
+                        <tr>
+                            <td><code class="doc-inline-code">--accent</code></td>
+                            <td>Accent backgrounds</td>
+                        </tr>
+                        <tr>
+                            <td><code class="doc-inline-code">--accent-foreground</code></td>
+                            <td>Accent text color</td>
+                        </tr>
+
+                        <!-- Destructive Colors -->
+                        <tr>
+                            <td><code class="doc-inline-code">--destructive</code></td>
+                            <td>Error and danger states</td>
+                        </tr>
+
+                        <!-- Border and Input -->
+                        <tr>
+                            <td><code class="doc-inline-code">--border</code></td>
+                            <td>Border colors</td>
+                        </tr>
+                        <tr>
+                            <td><code class="doc-inline-code">--input</code></td>
+                            <td>Input field borders</td>
+                        </tr>
+                        <tr>
+                            <td><code class="doc-inline-code">--ring</code></td>
+                            <td>Focus ring colors</td>
+                        </tr>
+
+                        <!-- Card and Popover -->
+                        <tr>
+                            <td><code class="doc-inline-code">--card</code></td>
+                            <td>Card background colors</td>
+                        </tr>
+                        <tr>
+                            <td><code class="doc-inline-code">--card-foreground</code></td>
+                            <td>Card text color</td>
+                        </tr>
+                        <tr>
+                            <td><code class="doc-inline-code">--popover</code></td>
+                            <td>Popover background colors</td>
+                        </tr>
+                        <tr>
+                            <td><code class="doc-inline-code">--popover-foreground</code></td>
+                            <td>Popover text color</td>
+                        </tr>
+
+                        <!-- Chart Colors -->
+                        <tr>
+                            <td><code class="doc-inline-code">--chart-1</code></td>
+                            <td>Chart color 1</td>
+                        </tr>
+                        <tr>
+                            <td><code class="doc-inline-code">--chart-2</code></td>
+                            <td>Chart color 2</td>
+                        </tr>
+                        <tr>
+                            <td><code class="doc-inline-code">--chart-3</code></td>
+                            <td>Chart color 3</td>
+                        </tr>
+                        <tr>
+                            <td><code class="doc-inline-code">--chart-4</code></td>
+                            <td>Chart color 4</td>
+                        </tr>
+                        <tr>
+                            <td><code class="doc-inline-code">--chart-5</code></td>
+                            <td>Chart color 5</td>
+                        </tr>
+
+                        <!-- Sidebar Colors -->
+                        <tr>
+                            <td><code class="doc-inline-code">--sidebar</code></td>
+                            <td>Sidebar background</td>
+                        </tr>
+                        <tr>
+                            <td><code class="doc-inline-code">--sidebar-foreground</code></td>
+                            <td>Sidebar text color</td>
+                        </tr>
+                        <tr>
+                            <td><code class="doc-inline-code">--sidebar-primary</code></td>
+                            <td>Sidebar primary color</td>
+                        </tr>
+                        <tr>
+                            <td><code class="doc-inline-code">--sidebar-primary-foreground</code></td>
+                            <td>Sidebar primary text</td>
+                        </tr>
+                        <tr>
+                            <td><code class="doc-inline-code">--sidebar-accent</code></td>
+                            <td>Sidebar accent color</td>
+                        </tr>
+                        <tr>
+                            <td><code class="doc-inline-code">--sidebar-accent-foreground</code></td>
+                            <td>Sidebar accent text</td>
+                        </tr>
+                        <tr>
+                            <td><code class="doc-inline-code">--sidebar-border</code></td>
+                            <td>Sidebar border color</td>
+                        </tr>
+                        <tr>
+                            <td><code class="doc-inline-code">--sidebar-ring</code></td>
+                            <td>Sidebar focus ring</td>
+                        </tr>
+
+                        <!-- Extended Semantic Colors -->
+                        <tr>
+                            <td><code class="doc-inline-code">--success</code></td>
+                            <td>Success states</td>
+                        </tr>
+                        <tr>
+                            <td><code class="doc-inline-code">--success-foreground</code></td>
+                            <td>Success text color</td>
+                        </tr>
+                        <tr>
+                            <td><code class="doc-inline-code">--warning</code></td>
+                            <td>Warning states</td>
+                        </tr>
+                        <tr>
+                            <td><code class="doc-inline-code">--warning-foreground</code></td>
+                            <td>Warning text color</td>
+                        </tr>
+                        <tr>
+                            <td><code class="doc-inline-code">--info</code></td>
+                            <td>Info states</td>
+                        </tr>
+                        <tr>
+                            <td><code class="doc-inline-code">--info-foreground</code></td>
+                            <td>Info text color</td>
+                        </tr>
+
+                        <!-- Card Shadows -->
+                        <tr>
+                            <td><code class="doc-inline-code">--card-shadow</code></td>
+                            <td>Default card shadow</td>
+                        </tr>
+                        <tr>
+                            <td><code class="doc-inline-code">--card-shadow-hover</code></td>
+                            <td>Card hover shadow</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h3 class="doc-section-subtitle">Manual Theme Editing</h3>
+                <p class="doc-text">If you prefer to edit the theme manually, open <code class="doc-inline-code">resources/views/vendor/tyro-dashboard/partials/shadcn-theme.blade.php</code> and modify the CSS variables:</p>
+
+                <div class="doc-code-block">
+                    <div class="doc-code-header">
+                        <span class="doc-code-title">resources/views/vendor/tyro-dashboard/partials/shadcn-theme.blade.php</span>
+                        <button class="doc-code-copy" type="button">Copy</button>
+                    </div>
+                    <pre><code class="language-css" id="theme-code">&lt;style&gt;
+    :root {
+        /* Base radius for components */
+        --radius: 0.625rem;
+
+        /* Light mode colors */
+        --background: oklch(1 0 0);
+        --foreground: oklch(0.145 0 0);
+        --card: oklch(1 0 0);
+        --card-foreground: oklch(0.145 0 0);
+        --popover: oklch(1 0 0);
+        --popover-foreground: oklch(0.145 0 0);
+        --primary: oklch(0.205 0 0);
+        --primary-foreground: oklch(0.985 0 0);
+        --secondary: oklch(0.97 0 0);
+        --secondary-foreground: oklch(0.205 0 0);
+        --muted: oklch(0.97 0 0);
+        --muted-foreground: oklch(0.556 0 0);
+        --accent: oklch(0.97 0 0);
+        --accent-foreground: oklch(0.205 0 0);
+        --destructive: oklch(0.577 0.245 27.325);
+        --border: oklch(0.922 0 0);
+        --input: oklch(0.922 0 0);
+        --ring: oklch(0.708 0 0);
+
+        /* Chart colors */
+        --chart-1: oklch(0.646 0.222 41.116);
+        --chart-2: oklch(0.6 0.118 184.704);
+        --chart-3: oklch(0.398 0.07 227.392);
+        --chart-4: oklch(0.828 0.189 84.429);
+        --chart-5: oklch(0.769 0.188 70.08);
+
+        /* Sidebar colors */
+        --sidebar: oklch(0.985 0 0);
+        --sidebar-foreground: oklch(0.145 0 0);
+        --sidebar-primary: oklch(0.205 0 0);
+        --sidebar-primary-foreground: oklch(0.985 0 0);
+        --sidebar-accent: oklch(0.97 0 0);
+        --sidebar-accent-foreground: oklch(0.205 0 0);
+        --sidebar-border: oklch(0.922 0 0);
+        --sidebar-ring: oklch(0.708 0 0);
+
+        /* Extended semantic colors */
+        --success: oklch(0.627 0.194 149.214);
+        --success-foreground: oklch(1 0 0);
+        --warning: oklch(0.769 0.188 70.08);
+        --warning-foreground: oklch(0.205 0 0);
+        --info: oklch(0.623 0.214 259.815);
+        --info-foreground: oklch(1 0 0);
+
+        /* Card shadows */
+        --card-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+        --card-shadow-hover: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+    }
+
+    /* Dark mode colors - using .dark class */
+    .dark {
+        --background: oklch(0.145 0 0);
+        --foreground: oklch(0.985 0 0);
+        --card: oklch(0.205 0 0);
+        --card-foreground: oklch(0.985 0 0);
+        --popover: oklch(0.205 0 0);
+        --popover-foreground: oklch(0.985 0 0);
+        --primary: oklch(0.922 0 0);
+        --primary-foreground: oklch(0.205 0 0);
+        --secondary: oklch(0.269 0 0);
+        --secondary-foreground: oklch(0.985 0 0);
+        --muted: oklch(0.269 0 0);
+        --muted-foreground: oklch(0.708 0 0);
+        --accent: oklch(0.269 0 0);
+        --accent-foreground: oklch(0.985 0 0);
+        --destructive: oklch(0.704 0.191 22.216);
+        --border: oklch(1 0 0 / 10%);
+        --input: oklch(1 0 0 / 15%);
+        --ring: oklch(0.556 0 0);
+
+        /* Chart colors (dark mode) */
+        --chart-1: oklch(0.488 0.243 264.376);
+        --chart-2: oklch(0.696 0.17 162.48);
+        --chart-3: oklch(0.769 0.188 70.08);
+        --chart-4: oklch(0.627 0.265 303.9);
+        --chart-5: oklch(0.645 0.246 16.439);
+
+        /* Sidebar colors (dark mode) */
+        --sidebar: oklch(0.205 0 0);
+        --sidebar-foreground: oklch(0.985 0 0);
+        --sidebar-primary: oklch(0.488 0.243 264.376);
+        --sidebar-primary-foreground: oklch(0.985 0 0);
+        --sidebar-accent: oklch(0.269 0 0);
+        --sidebar-accent-foreground: oklch(0.985 0 0);
+        --sidebar-border: oklch(1 0 0 / 10%);
+        --sidebar-ring: oklch(0.556 0 0);
+
+        /* Extended semantic colors (dark mode) */
+        --success: oklch(0.696 0.17 162.48);
+        --success-foreground: oklch(0.145 0 0);
+        --warning: oklch(0.769 0.188 70.08);
+        --warning-foreground: oklch(0.145 0 0);
+        --info: oklch(0.488 0.243 264.376);
+        --info-foreground: oklch(0.985 0 0);
+
+        /* Card shadows (dark mode) */
+        --card-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.2);
+        --card-shadow-hover: 0 4px 6px -1px rgb(0 0 0 / 0.3), 0 2px 4px -2px rgb(0 0 0 / 0.2);
+    }
+&lt;/style&gt;</code></pre>
+                    <div style="text-align: center; padding: 8px; border-top: 1px solid var(--color-border);">
+                        <button id="themeCodeToggle" style="color: var(--color-primary); background: none; border: none; font-size: 0.875rem; font-weight: 500; cursor: pointer; padding: 4px 8px; border-radius: 4px; transition: all 0.2s ease;" onmouseover="this.style.backgroundColor='var(--color-primary)'; this.style.color='white';" onmouseout="this.style.backgroundColor='transparent'; this.style.color='var(--color-primary)';">View More</button>
+                    </div>
+                </div>
+
+                <div class="doc-alert doc-alert-success">
+                    <strong>Shadcn Compatibility:</strong> These variables follow the exact shadcn/ui specification, ensuring compatibility with shadcn-based components and the tweakcn.com visual editor.
+                </div>
+
+                <script>
+                    (function() {
+                        const themeCode = document.getElementById('theme-code');
+                        const toggleBtn = document.getElementById('themeCodeToggle');
+                        const codeBlock = themeCode.parentElement;
+                        const allLines = themeCode.textContent.split('\n');
+                        const previewLines = 15;
+
+                        // Store original content
+                        const originalContent = themeCode.textContent;
+
+                        function updateCodeDisplay() {
+                            const isExpanded = toggleBtn.textContent === 'View Less';
+
+                            if (!isExpanded) {
+                                // Show only first 15 lines
+                                const previewContent = allLines.slice(0, previewLines).join('\n');
+                                themeCode.textContent = previewContent + '\n// ... (click "View More" to see complete theme)';
+                            } else {
+                                // Show all lines
+                                themeCode.textContent = originalContent;
+                            }
+
+                            // Re-highlight the code
+                            if (typeof hljs !== 'undefined') {
+                                // Remove existing highlighting
+                                themeCode.removeAttribute('data-highlighted');
+                                hljs.highlightElement(themeCode);
+                            }
+                        }
+
+                        toggleBtn.addEventListener('click', function() {
+                            const isExpanded = toggleBtn.textContent === 'View Less';
+                            toggleBtn.textContent = isExpanded ? 'View More' : 'View Less';
+                            updateCodeDisplay();
+                        });
+
+                        // Initialize display
+                        updateCodeDisplay();
+                    })();
+                </script>
+            </section>
+
+            <!-- Environment Variables -->
+            <section id="env-variables" class="doc-section">
+                <h2 class="doc-section-title">Environment Variables</h2>
+                <p class="doc-text">Complete list of environment variables for Tyro Dashboard:</p>
+
+                <table class="doc-table">
+                    <thead>
+                        <tr>
+                            <th>Variable</th>
+                            <th>Description</th>
+                            <th>Default</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code class="doc-inline-code">TYRO_DASHBOARD_PREFIX</code></td>
+                            <td>URL prefix for dashboard routes</td>
+                            <td><code class="doc-inline-code">dashboard</code></td>
+                        </tr>
+                        <tr>
+                            <td><code class="doc-inline-code">TYRO_DASHBOARD_APP_NAME</code></td>
+                            <td>Application name shown in dashboard</td>
+                            <td><code class="doc-inline-code">APP_NAME</code></td>
+                        </tr>
+                        <tr>
+                            <td><code class="doc-inline-code">TYRO_DASHBOARD_LOGO</code></td>
+                            <td>URL to custom logo</td>
+                            <td><code class="doc-inline-code">null</code></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <!-- Artisan Commands -->
+            <section id="artisan-commands" class="doc-section">
+                <h2 class="doc-section-title">Artisan Commands</h2>
+                <p class="doc-text">Tyro Dashboard provides the following artisan commands:</p>
+
+                <table class="doc-table">
+                    <thead>
+                        <tr>
+                            <th>Command</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code class="doc-inline-code">php artisan tyro-dashboard:install</code></td>
+                            <td>Interactive installation wizard</td>
+                        </tr>
+                        <tr>
+                            <td><code class="doc-inline-code">php artisan tyro-dashboard:version</code></td>
+                            <td>Display version information</td>
+                        </tr>
+                        <tr>
+                            <td><code class="doc-inline-code">php artisan tyro-dashboard:publish-style</code></td>
+                            <td>Publish styles and theme files</td>
+                        </tr>
+                        <tr>
+                            <td><code class="doc-inline-code">php artisan tyro-dashboard:publish-style --theme-only</code></td>
+                            <td>Publish only theme variables (recommended)</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <!-- Routes Reference -->
+            <section id="routes" class="doc-section">
+                <h2 class="doc-section-title">Routes Reference</h2>
+                <p class="doc-text">Complete list of routes provided by Tyro Dashboard:</p>
+
+                <table class="doc-table">
+                    <thead>
+                        <tr>
+                            <th>Route</th>
+                            <th>Description</th>
+                            <th>Access</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code class="doc-inline-code">/dashboard</code></td>
+                            <td>Main dashboard home page</td>
+                            <td><span class="route-badge route-badge-all">All Authenticated</span></td>
+                        </tr>
+                        <tr>
+                            <td><code class="doc-inline-code">/dashboard/profile</code></td>
+                            <td>User profile settings</td>
+                            <td><span class="route-badge route-badge-all">All Authenticated</span></td>
+                        </tr>
+                        <tr>
+                            <td><code class="doc-inline-code">/dashboard/users</code></td>
+                            <td>User management list</td>
+                            <td><span class="route-badge route-badge-admin">Admin Only</span></td>
+                        </tr>
+                        <tr>
+                            <td><code class="doc-inline-code">/dashboard/users/create</code></td>
+                            <td>Create new user</td>
+                            <td><span class="route-badge route-badge-admin">Admin Only</span></td>
+                        </tr>
+                        <tr>
+                            <td><code class="doc-inline-code">/dashboard/users/{id}/edit</code></td>
+                            <td>Edit user details</td>
+                            <td><span class="route-badge route-badge-admin">Admin Only</span></td>
+                        </tr>
+                        <tr>
+                            <td><code class="doc-inline-code">/dashboard/roles</code></td>
+                            <td>Role management list</td>
+                            <td><span class="route-badge route-badge-admin">Admin Only</span></td>
+                        </tr>
+                        <tr>
+                            <td><code class="doc-inline-code">/dashboard/roles/create</code></td>
+                            <td>Create new role</td>
+                            <td><span class="route-badge route-badge-admin">Admin Only</span></td>
+                        </tr>
+                        <tr>
+                            <td><code class="doc-inline-code">/dashboard/roles/{id}</code></td>
+                            <td>View role details</td>
+                            <td><span class="route-badge route-badge-admin">Admin Only</span></td>
+                        </tr>
+                        <tr>
+                            <td><code class="doc-inline-code">/dashboard/privileges</code></td>
+                            <td>Privilege management list</td>
+                            <td><span class="route-badge route-badge-admin">Admin Only</span></td>
+                        </tr>
+                        <tr>
+                            <td><code class="doc-inline-code">/dashboard/privileges/create</code></td>
+                            <td>Create new privilege</td>
+                            <td><span class="route-badge route-badge-admin">Admin Only</span></td>
+                        </tr>
+                        <tr>
+                            <td><code class="doc-inline-code">/dashboard/settings/tyro</code></td>
+                            <td>Tyro package settings</td>
+                            <td><span class="route-badge route-badge-admin">Admin Only</span></td>
+                        </tr>
+                        <tr>
+                            <td><code class="doc-inline-code">/dashboard/settings/tyro-login</code></td>
+                            <td>Tyro Login settings</td>
+                            <td><span class="route-badge route-badge-admin">Admin Only</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <!-- Access Control -->
+            <section id="access-control" class="doc-section" style="background: linear-gradient(135deg, #ffffff 0%, #f8fafc 50%, #f1f5f9 100%); padding: 2rem; border-radius: 12px; margin: 2rem 0; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                <h2 class="doc-section-title">Access Control</h2>
+                <p class="doc-text">Tyro Dashboard implements role-based access control:</p>
+
+                <h3 class="doc-section-subtitle">Admin & Super-Admin</h3>
+                <p class="doc-text">Users with admin roles have full access to:</p>
+                <ul class="doc-list">
+                    <li>User management (create, edit, suspend, delete)</li>
+                    <li>Role management (create, edit, delete)</li>
+                    <li>Privilege management (create, edit, delete)</li>
+                    <li>Package settings configuration</li>
+                    <li>Dashboard home and statistics</li>
+                </ul>
+
+                <h3 class="doc-section-subtitle">Regular Users</h3>
+                <p class="doc-text">Users without admin roles can only access:</p>
+                <ul class="doc-list">
+                    <li>Dashboard home page</li>
+                    <li>Profile management (their own profile)</li>
+                </ul>
+
+                <div class="doc-alert doc-alert-info">
+                    <strong>Configurable:</strong> Admin roles can be configured via the <code class="doc-inline-code">admin_roles</code> setting in <code class="doc-inline-code">config/tyro-dashboard.php</code>.
+                </div>
+            </section>
+
+            <!-- FAQ -->
+            <section id="faq" class="doc-section">
+                <h2 class="doc-section-title">Frequently Asked Questions</h2>
+
+                <h3 class="doc-section-subtitle">Can I use Tyro Dashboard without Tyro Login?</h3>
+                <p class="doc-text">Yes! Tyro Dashboard only requires the Tyro RBAC package. Tyro Login is optional and adds beautiful authentication pages. Without Tyro Login, you'll use Laravel's default authentication.</p>
+
+                <h3 class="doc-section-subtitle">How do I change the dashboard URL?</h3>
+                <p class="doc-text">Set <code class="doc-inline-code">TYRO_DASHBOARD_PREFIX=admin</code> in your <code class="doc-inline-code">.env</code> file to change from <code class="doc-inline-code">/dashboard</code> to <code class="doc-inline-code">/admin</code>.</p>
+
+                <h3 class="doc-section-subtitle">How do I add more admin roles?</h3>
+                <p class="doc-text">Edit the <code class="doc-inline-code">admin_roles</code> array in <code class="doc-inline-code">config/tyro-dashboard.php</code> to include additional role slugs.</p>
+
+                <h3 class="doc-section-subtitle">Can I customize the dashboard views?</h3>
+                <p class="doc-text">Yes! Run <code class="doc-inline-code">php artisan vendor:publish --tag=tyro-dashboard-views</code> to publish views to <code class="doc-inline-code">resources/views/vendor/tyro-dashboard/</code> where you can modify them.</p>
+
+                <h3 class="doc-section-subtitle">Why can't I delete certain roles?</h3>
+                <p class="doc-text">Critical roles like <code class="doc-inline-code">admin</code>, <code class="doc-inline-code">super-admin</code>, and <code class="doc-inline-code">user</code> are protected and cannot be deleted through the dashboard to prevent accidental lockout.</p>
+
+                <h3 class="doc-section-subtitle">Does Tyro Dashboard work with dark mode?</h3>
+                <p class="doc-text">Yes! Tyro Dashboard includes built-in dark/light theme support. The theme respects user preferences and system settings, with a manual toggle available.</p>
+            </section>
+
+            <!-- Footer Navigation -->
+            <div style="margin-top: var(--spacing-3xl); padding-top: var(--spacing-xl); border-top: 2px solid var(--color-border); text-align: center;">
+                <a href="index.html" class="btn btn-primary">← Back to Home</a>
+                <a href="https://github.com/hasinhayder/tyro-dashboard" class="btn btn-secondary" target="_blank" rel="noopener">View on GitHub</a>
+            </div>
+        </main>
+    </div>
+
+    <!-- Lightbox -->
+    <div class="lightbox" id="lightbox">
+        <button class="lightbox-close" aria-label="Close lightbox">
+            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="18" y1="6" x2="6" y2="18"></line>
+                <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+        </button>
+        <div class="lightbox-content">
+            <img src="" alt="" class="lightbox-image" id="lightboxImage">
+            <div class="lightbox-caption" id="lightboxCaption"></div>
+        </div>
+        <button class="lightbox-nav lightbox-prev" aria-label="Previous image">
+            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="15 18 9 12 15 6"></polyline>
+            </svg>
+        </button>
+        <button class="lightbox-nav lightbox-next" aria-label="Next image">
+            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="9 18 15 12 9 6"></polyline>
+            </svg>
+        </button>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/php.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/bash.min.js"></script>
+    <script>
+        // Initialize highlight.js before script.js loads
+        document.addEventListener('DOMContentLoaded', function () {
+            document.querySelectorAll('.doc-code-block pre code').forEach(function (el) {
+                hljs.highlightElement(el);
+            });
+
+            // Add copy functionality to code blocks
+            document.querySelectorAll('.doc-code-block').forEach(function (block) {
+                const header = block.querySelector('.doc-code-header');
+                if (header && !header.querySelector('.doc-code-copy')) {
+                    const copyBtn = document.createElement('button');
+                    copyBtn.className = 'doc-code-copy';
+                    copyBtn.innerHTML = 'Copy';
+                    copyBtn.setAttribute('type', 'button');
+
+                    copyBtn.addEventListener('click', function () {
+                        const code = block.querySelector('code');
+                        const text = code.textContent;
+                        navigator.clipboard.writeText(text).then(function () {
+                            const originalText = copyBtn.innerHTML;
+                            copyBtn.innerHTML = '✓ Copied!';
+                            setTimeout(function () {
+                                copyBtn.innerHTML = originalText;
+                            }, 2000);
+                        });
+                    });
+
+                    header.appendChild(copyBtn);
+                }
+            });
+        });
+    </script>
+    <script src="script.js"></script>
+    <script>
+        // Sidebar navigation highlighting
+        const sections = document.querySelectorAll('.doc-section');
+        const navLinks = document.querySelectorAll('.doc-nav-link[href^="#"]');
+
+        window.addEventListener('scroll', () => {
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                if (pageYOffset >= sectionTop - 150) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === `#${current}`) {
+                    link.classList.add('active');
+                }
+            });
+        });
+
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('.doc-nav-link[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+    </script>
+
+    <!-- Spotlight Search JavaScript -->
+    <script>
+        (function () {
+            const spotlightOverlay = document.getElementById('spotlightOverlay');
+            const spotlightContainer = document.getElementById('spotlightContainer');
+            const spotlightSearch = document.getElementById('spotlightSearch');
+            const spotlightResults = document.getElementById('spotlightResults');
+            const spotlightShortcut = document.getElementById('spotlightShortcut');
+
+            let isSpotlightOpen = false;
+            let selectedIndex = -1;
+            let searchResults = [];
+
+            // Index all documentation sections for search
+            const docSections = [
+                // Getting Started
+                { id: 'introduction', title: 'Introduction', description: 'Overview of Tyro Dashboard package', icon: '📖' },
+                { id: 'features', title: 'Features', description: 'List of all dashboard features', icon: '✨' },
+                { id: 'requirements', title: 'Requirements', description: 'System requirements', icon: '📋' },
+                { id: 'installation', title: 'Installation', description: 'How to install the package', icon: '🚀' },
+
+                // Configuration
+                { id: 'routes-config', title: 'Route Settings', description: 'Configure dashboard routes and prefix', icon: '🛣️' },
+                { id: 'admin-roles', title: 'Admin Roles', description: 'Configure admin access roles', icon: '👤' },
+                { id: 'pagination', title: 'Pagination', description: 'Configure items per page', icon: '📄' },
+                { id: 'branding', title: 'Branding', description: 'Customize app name and logo', icon: '🏷️' },
+
+                // Features
+                { id: 'user-management', title: 'User Management', description: 'Create, edit, and manage users', icon: '👥' },
+                { id: 'role-management', title: 'Role Management', description: 'Manage roles and privileges', icon: '🔐' },
+                { id: 'privilege-management', title: 'Privilege Management', description: 'Fine-grained access control', icon: '🛡️' },
+                { id: 'settings-management', title: 'Settings Management', description: 'Configure Tyro packages', icon: '⚙️' },
+                { id: 'profile-management', title: 'Profile Management', description: 'User profile settings', icon: '👤' },
+
+                // Customization
+                { id: 'publishing', title: 'Publishing Assets', description: 'Publish views and config', icon: '📦' },
+                { id: 'theme-customization', title: 'Theme Customization', description: 'shadcn theme colors and tweakcn', icon: '🎨' },
+                { id: 'env-variables', title: 'Environment Variables', description: 'Configuration options', icon: '⚙️' },
+                { id: 'artisan-commands', title: 'Artisan Commands', description: 'Available CLI commands', icon: '⌨️' },
+
+                // Reference
+                { id: 'routes', title: 'Routes Reference', description: 'All available routes', icon: '🛣️' },
+                { id: 'access-control', title: 'Access Control', description: 'Role-based permissions', icon: '🔒' },
+                { id: 'faq', title: 'FAQ', description: 'Frequently asked questions', icon: '❓' }
+            ];
+
+            // Show shortcut hint after a delay
+            setTimeout(() => {
+                spotlightShortcut.classList.add('show');
+            }, 2000);
+
+            // Hide shortcut hint after 5 seconds
+            setTimeout(() => {
+                spotlightShortcut.classList.remove('show');
+            }, 7000);
+
+            function openSpotlight() {
+                isSpotlightOpen = true;
+                spotlightOverlay.classList.add('active');
+                spotlightContainer.classList.add('active');
+                spotlightSearch.value = '';
+                spotlightResults.innerHTML = '';
+                selectedIndex = -1;
+                searchResults = [];
+                setTimeout(() => {
+                    spotlightSearch.focus();
+                }, 100);
+            }
+
+            function closeSpotlight() {
+                isSpotlightOpen = false;
+                spotlightOverlay.classList.remove('active');
+                spotlightContainer.classList.remove('active');
+                spotlightSearch.value = '';
+                selectedIndex = -1;
+                searchResults = [];
+                renderResults();
+            }
+
+            function performSearch(query) {
+                if (!query.trim()) {
+                    searchResults = [];
+                    renderResults();
+                    return;
+                }
+
+                const lowercaseQuery = query.toLowerCase();
+                searchResults = docSections.filter(section =>
+                    section.title.toLowerCase().includes(lowercaseQuery) ||
+                    section.description.toLowerCase().includes(lowercaseQuery)
+                );
+
+                selectedIndex = searchResults.length > 0 ? 0 : -1;
+                renderResults();
+            }
+
+            function renderResults() {
+                if (searchResults.length === 0 && spotlightSearch.value.trim() !== '') {
+                    spotlightResults.innerHTML = '<div class="spotlight-no-results">No results found</div>';
+                    return;
+                }
+
+                const resultsHtml = searchResults.map((result, index) => `
+                    <div class="spotlight-result ${index === selectedIndex ? 'active' : ''}" data-index="${index}">
+                        <div class="spotlight-result-icon">${result.icon}</div>
+                        <div class="spotlight-result-content">
+                            <div class="spotlight-result-title">${result.title}</div>
+                            <div class="spotlight-result-description">${result.description}</div>
+                        </div>
+                    </div>
+                `).join('');
+
+                spotlightResults.innerHTML = resultsHtml;
+
+                spotlightResults.querySelectorAll('.spotlight-result').forEach(result => {
+                    result.addEventListener('click', function () {
+                        const index = parseInt(this.getAttribute('data-index'));
+                        const selectedResult = searchResults[index];
+                        if (selectedResult) {
+                            closeSpotlight();
+                            const targetElement = document.getElementById(selectedResult.id);
+                            if (targetElement) {
+                                targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                            }
+                        }
+                    });
+                });
+            }
+
+            function navigateResults(direction) {
+                if (searchResults.length === 0) return;
+
+                if (direction === 'down') {
+                    selectedIndex = (selectedIndex + 1) % searchResults.length;
+                } else if (direction === 'up') {
+                    selectedIndex = selectedIndex <= 0 ? searchResults.length - 1 : selectedIndex - 1;
+                }
+
+                renderResults();
+
+                const selectedElement = spotlightResults.querySelector('.spotlight-result.active');
+                if (selectedElement) {
+                    selectedElement.scrollIntoView({ block: 'nearest' });
+                }
+            }
+
+            spotlightSearch.addEventListener('input', function () {
+                performSearch(this.value);
+            });
+
+            spotlightSearch.addEventListener('keydown', function (e) {
+                if (e.key === 'Escape') {
+                    closeSpotlight();
+                } else if (e.key === 'ArrowDown') {
+                    e.preventDefault();
+                    navigateResults('down');
+                } else if (e.key === 'ArrowUp') {
+                    e.preventDefault();
+                    navigateResults('up');
+                } else if (e.key === 'Enter') {
+                    e.preventDefault();
+                    const activeResult = spotlightResults.querySelector('.spotlight-result.active');
+                    if (activeResult) {
+                        activeResult.click();
+                    }
+                }
+            });
+
+            spotlightOverlay.addEventListener('click', function () {
+                closeSpotlight();
+            });
+
+            document.addEventListener('keydown', function (e) {
+                if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+                    e.preventDefault();
+                    if (!isSpotlightOpen) {
+                        openSpotlight();
+                    } else {
+                        closeSpotlight();
+                    }
+                }
+            });
+        })();
+    </script>
+</body>
+
+</html>

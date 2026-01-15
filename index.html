@@ -1,0 +1,1621 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tyro Dashboard - Beautiful Admin Dashboard for Laravel 12</title>
+    <meta name="description" content="A beautiful, modern admin dashboard for managing Tyro roles, privileges, users, and package settings in Laravel 12. Features user management, role & privilege CRUD, settings management, dark mode, and responsive design.">
+    <meta name="keywords" content="Laravel, Admin Dashboard, Tyro, RBAC, User Management, Role Management, PHP, Laravel 12">
+    <meta name="author" content="Hasin Hayder">
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="Tyro Dashboard - Beautiful Admin Dashboard for Laravel 12">
+    <meta property="og:description" content="Modern admin dashboard for managing Tyro roles, privileges, users, and settings in Laravel 12.">
+    <meta property="og:type" content="website">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@700;800;900&display=swap" rel="stylesheet">
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+</head>
+
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="navbar-container">
+            <a href="#" class="navbar-brand">
+                <span class="navbar-logo">Tyro Dashboard</span>
+                <span class="navbar-badge">v1.0</span>
+            </a>
+
+            <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Toggle menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+
+            <div class="navbar-links">
+                <a href="#features" class="navbar-link">Features</a>
+                <a href="#screenshots" class="navbar-link">Screenshots</a>
+                <a href="#installation" class="navbar-link">Installation</a>
+                <a href="#routes" class="navbar-link">Routes</a>
+                <a href="doc.html" class="navbar-link">Documentation</a>
+                <a href="https://github.com/hasinhayder/tyro-dashboard" class="navbar-cta" target="_blank" rel="noopener">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                    </svg>
+                    GitHub
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Theme Toggle -->
+    <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+        <svg class="sun-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="5"></circle>
+            <line x1="12" y1="1" x2="12" y2="3"></line>
+            <line x1="12" y1="21" x2="12" y2="23"></line>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+            <line x1="1" y1="12" x2="3" y2="12"></line>
+            <line x1="21" y1="12" x2="23" y2="12"></line>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+        </svg>
+        <svg class="moon-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+        </svg>
+    </button>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="gradient-orb gradient-orb-1"></div>
+        <div class="gradient-orb gradient-orb-2"></div>
+        <div class="gradient-orb gradient-orb-3"></div>
+
+        <div class="hero-content">
+            <div class="hero-badge">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="3" y="3" width="7" height="7"></rect>
+                    <rect x="14" y="3" width="7" height="7"></rect>
+                    <rect x="14" y="14" width="7" height="7"></rect>
+                    <rect x="3" y="14" width="7" height="7"></rect>
+                </svg>
+                shadcn Theme • Admin Dashboard for Laravel 12
+            </div>
+
+            <h1 class="hero-title">
+                <span class="hero-title-gradient">Tyro Dashboard</span><br>
+                Beautiful Admin Panel
+            </h1>
+
+            <p class="hero-subtitle">
+                A modern, responsive admin dashboard for managing Tyro roles, privileges, users, and package settings. 
+                Built with beautiful UI, dark mode support, and complete CRUD operations for your Laravel 12 application.
+            </p>
+
+            <div class="hero-actions">
+                <a href="#installation" class="btn btn-primary">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                        <polyline points="7 10 12 15 17 10"></polyline>
+                        <line x1="12" y1="15" x2="12" y2="3"></line>
+                    </svg>
+                    Get Started
+                </a>
+                <a href="doc.html" class="btn btn-secondary">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
+                        <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
+                    </svg>
+                    Documentation
+                </a>
+            </div>
+
+            <div class="install-command">
+                <code id="installCommand">composer require hasinhayder/tyro-dashboard</code>
+                <button class="copy-btn" id="copyBtn" aria-label="Copy to clipboard">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                        <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="section section-alt">
+        <div class="section-header">
+            <span class="section-badge">
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                </svg>
+                Features
+            </span>
+            <h2 class="section-title">Everything You Need to Manage Your App</h2>
+            <p class="section-subtitle">
+                A comprehensive admin dashboard with all the tools to manage users, roles, privileges, and settings.
+            </p>
+        </div>
+
+        <div class="features-grid">
+            <!-- Feature 1 -->
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="9" cy="7" r="4"></circle>
+                        <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                        <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                    </svg>
+                </div>
+                <h3 class="feature-title">User Management</h3>
+                <p class="feature-description">
+                    Complete CRUD operations for users. Create, edit, suspend, and manage user accounts with an intuitive interface.
+                </p>
+            </div>
+
+            <!-- Feature 2 -->
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                        <path d="m9 12 2 2 4-4"></path>
+                    </svg>
+                </div>
+                <h3 class="feature-title">Role Management</h3>
+                <p class="feature-description">
+                    Full CRUD operations for roles. Create custom roles, assign privileges, and organize your access control system.
+                </p>
+            </div>
+
+            <!-- Feature 3 -->
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                        <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                    </svg>
+                </div>
+                <h3 class="feature-title">Privilege Management</h3>
+                <p class="feature-description">
+                    Manage privileges and assign them to roles. Fine-grained access control for every feature of your application.
+                </p>
+            </div>
+
+            <!-- Feature 4 -->
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="3"></circle>
+                        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+                    </svg>
+                </div>
+                <h3 class="feature-title">Settings Management</h3>
+                <p class="feature-description">
+                    Configure Tyro and Tyro Login packages from a beautiful UI. No more digging through config files.
+                </p>
+            </div>
+
+            <!-- Feature 5 -->
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="12" cy="7" r="4"></circle>
+                    </svg>
+                </div>
+                <h3 class="feature-title">Profile Management</h3>
+                <p class="feature-description">
+                    Users can update their own profile information. Self-service account management for all authenticated users.
+                </p>
+            </div>
+
+            <!-- Feature 6 -->
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                </div>
+                <h3 class="feature-title">Dark Mode</h3>
+                <p class="feature-description">
+                    Built-in dark/light theme support. Beautiful in any lighting condition, easy on the eyes.
+                </p>
+            </div>
+
+            <!-- Feature 7 -->
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+                        <line x1="8" y1="21" x2="16" y2="21"></line>
+                        <line x1="12" y1="17" x2="12" y2="21"></line>
+                    </svg>
+                </div>
+                <h3 class="feature-title">Responsive Design</h3>
+                <p class="feature-description">
+                    Works perfectly on all device sizes. From mobile phones to large desktop monitors.
+                </p>
+            </div>
+
+            <!-- Feature 8 -->
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                    </svg>
+                </div>
+                <h3 class="feature-title">Admin-Only Access</h3>
+                <p class="feature-description">
+                    Sensitive features are protected by role-based access. Only admins can manage users, roles, and privileges.
+                </p>
+            </div>
+
+            <!-- Feature 9 -->
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="4 17 10 11 4 5"></polyline>
+                        <line x1="12" y1="19" x2="20" y2="19"></line>
+                    </svg>
+                </div>
+                <h3 class="feature-title">Artisan Commands</h3>
+                <p class="feature-description">
+                    Interactive installation wizard and version commands. Easy setup with helpful prompts.
+                </p>
+            </div>
+
+            <!-- Feature 10 -->
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="1"></circle>
+                        <circle cx="19" cy="12" r="1"></circle>
+                        <circle cx="5" cy="12" r="1"></circle>
+                        <path d="M12 5v14"></path>
+                        <path d="M5 19l5-14"></path>
+                        <path d="M19 19l-5-14"></path>
+                    </svg>
+                </div>
+                <h3 class="feature-title">shadcn Theme Customization</h3>
+                <p class="feature-description">
+                    Full shadcn/ui compatibility with visual theme editor support via <a href="https://tweakcn.com" target="_blank" rel="noopener" style="text-decoration: underline; color: var(--color-primary);">tweakcn.com</a>. Customize colors effortlessly.
+                </p>
+            </div>
+
+            <!-- Feature 11 -->
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path>
+                    </svg>
+                </div>
+                <h3 class="feature-title">Developer Friendly</h3>
+                <p class="feature-description">
+                    Configure searchable fields, enable rich text editors, set readonly resources, and toggle UI error visibility with simple config options.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- CRUD Showcase Section -->
+    <section id="crud-showcase" class="section">
+        <div class="section-header">
+            <span class="section-badge">
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="16 18 22 12 16 6"></polyline>
+                    <polyline points="8 6 2 12 8 18"></polyline>
+                </svg>
+                Developer Experience
+            </span>
+            <h2 class="section-title">CRUD in Minutes, Not Hours</h2>
+            <p class="section-subtitle">
+                Define your resources with a simple array configuration. Tyro handles the UI, validation, and database interactions automatically.
+            </p>
+        </div>
+
+        <div class="crud-showcase-container" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 4rem; align-items: center; max-width: 1200px; margin: 0 auto;">
+            <div class="crud-content">
+                <div class="crud-step" style="display: flex; gap: 1.5rem; margin-bottom: 2rem;">
+                    <div class="crud-step-number" style="flex-shrink: 0; width: 40px; height: 40px; background: var(--gradient-primary); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700;">1</div>
+                    <div class="crud-step-content">
+                        <h3 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 0.5rem; color: var(--color-text);">Define Fields</h3>
+                        <p style="color: var(--color-text-secondary);">Simply list your fields and their types. Text, select, boolean, richtext, and more are supported out of the box.</p>
+                    </div>
+                </div>
+                <div class="crud-step" style="display: flex; gap: 1.5rem; margin-bottom: 2rem;">
+                    <div class="crud-step-number" style="flex-shrink: 0; width: 40px; height: 40px; background: var(--gradient-primary); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700;">2</div>
+                    <div class="crud-step-content">
+                        <h3 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 0.5rem; color: var(--color-text);">Auto-Generated UI</h3>
+                        <p style="color: var(--color-text-secondary);">Tyro generates the data tables, search filters, create/edit forms, and validation rules instantly.</p>
+                    </div>
+                </div>
+                <div class="crud-step" style="display: flex; gap: 1.5rem;">
+                        <div class="crud-step-number" style="flex-shrink: 0; width: 40px; height: 40px; background: var(--gradient-primary); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700;">3</div>
+                        <div class="crud-step-content">
+                            <h3 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 0.5rem; color: var(--color-text);">Zero Boilerplate</h3>
+                            <p style="color: var(--color-text-secondary);">No need to write blade files, controllers, or request classes for standard CRUD operations.</p>
+                        </div>
+                    </div>
+                    <div class="section-actions" style="margin-top: 2rem; margin-left: 4rem;">
+                        <a href="doc.html#crud-workflow" class="btn btn-primary">
+                            View Full Guide
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                        </a>
+                    </div>
+                </div>
+            
+            <div class="crud-code-window" style="background: #1e1e1e; border-radius: 12px; padding: 1.5rem; box-shadow: 0 20px 40px -10px rgba(0,0,0,0.3); border: 1px solid #333;">
+                <div class="window-controls" style="display: flex; gap: 8px; margin-bottom: 1.5rem;">
+                    <div style="width: 12px; height: 12px; border-radius: 50%; background: #e85555;"></div>
+                    <div style="width: 12px; height: 12px; border-radius: 50%; background: #eab308;"></div>
+                    <div style="width: 12px; height: 12px; border-radius: 50%; background: #22c55e;"></div>
+                </div>
+                <pre style="margin: 0; font-family: 'Fira Code', monospace; font-size: 14px; line-height: 1.6; color: #d4d4d4; overflow-x: auto;"><code><span style="color: #e85555;">public</span> <span style="color: #e85555;">function</span> <span style="color: #3b82f6;">fields</span>()
+{
+    <span style="color: #e85555;">return</span> [
+        <span style="color: #22c55e;">'name'</span> => [
+            <span style="color: #22c55e;">'type'</span> => <span style="color: #22c55e;">'text'</span>,
+            <span style="color: #22c55e;">'label'</span> => <span style="color: #22c55e;">'Product Name'</span>,
+            <span style="color: #22c55e;">'required'</span> => <span style="color: #e85555;">true</span>,
+            <span style="color: #22c55e;">'searchable'</span> => <span style="color: #e85555;">true</span>
+        ],
+        <span style="color: #22c55e;">'category'</span> => [
+            <span style="color: #22c55e;">'type'</span> => <span style="color: #22c55e;">'select'</span>,
+            <span style="color: #22c55e;">'options'</span> => [<span style="color: #22c55e;">'electronics'</span>, <span style="color: #22c55e;">'furniture'</span>]
+        ],
+        <span style="color: #22c55e;">'price'</span> => [
+            <span style="color: #22c55e;">'type'</span> => <span style="color: #22c55e;">'number'</span>,
+            <span style="color: #22c55e;">'prefix'</span> => <span style="color: #22c55e;">'$'</span>
+        ],
+        <span style="color: #22c55e;">'is_active'</span> => [
+            <span style="color: #22c55e;">'type'</span> => <span style="color: #22c55e;">'toggle'</span>
+        ]
+    ];
+}</code></pre>
+            </div>
+        </div>
+    </section>
+
+    <!-- User Management Section -->
+    <section id="user-management" class="section section-alt">
+        <div class="section-container" style="max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 4rem; align-items: center; padding: 0 20px;">
+            <div class="section-content">
+                <span class="section-badge">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="9" cy="7" r="4"></circle>
+                        <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                        <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                    </svg>
+                    User Management
+                </span>
+                <h2 class="section-title">Complete User Control</h2>
+                <p class="section-subtitle">
+                    Manage your application's users with ease. Filter, search, and perform bulk actions from a centralized dashboard.
+                </p>
+                <ul class="feature-list" style="margin-top: 2rem; list-style: none; padding: 0;">
+                    <li style="display: flex; gap: 0.75rem; margin-bottom: 1rem; align-items: flex-start;">
+                        <div style="background: var(--color-bg-secondary); padding: 4px; border-radius: 50%; color: var(--color-primary);">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                        </div>
+                        <div>
+                            <strong style="color: var(--color-text);">Advanced Filtering</strong>
+                            <p style="margin-top: 0.25rem; color: var(--color-text-secondary); font-size: 0.95rem;">Filter users by role, status, or verification state instantly.</p>
+                        </div>
+                    </li>
+                    <li style="display: flex; gap: 0.75rem; margin-bottom: 1rem; align-items: flex-start;">
+                        <div style="background: var(--color-bg-secondary); padding: 4px; border-radius: 50%; color: var(--color-primary);">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                        </div>
+                        <div>
+                            <strong style="color: var(--color-text);">Bulk Actions</strong>
+                            <p style="margin-top: 0.25rem; color: var(--color-text-secondary); font-size: 0.95rem;">Select multiple users to delete, suspend, or update in one go.</p>
+                        </div>
+                    </li>
+                    <li style="display: flex; gap: 0.75rem; margin-bottom: 1rem; align-items: flex-start;">
+                        <div style="background: var(--color-bg-secondary); padding: 4px; border-radius: 50%; color: var(--color-primary);">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                        </div>
+                        <div>
+                            <strong style="color: var(--color-text);">Profile Editing</strong>
+                            <p style="margin-top: 0.25rem; color: var(--color-text-secondary); font-size: 0.95rem;">Update user details, roles, and permissions directly.</p>
+                        </div>
+                    </li>
+                </ul>
+                <div class="section-actions" style="margin-top: 2rem;">
+                    <a href="doc.html#user-management" class="btn btn-primary">
+                        Read Documentation
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                    </a>
+                </div>
+            </div>
+            <div class="section-image" style="position: relative;">
+                <div class="browser-frame" style="border-radius: 12px; overflow: hidden; box-shadow: var(--shadow-xl); border: 1px solid var(--color-border); background: var(--color-surface);">
+                    <div class="browser-header" style="background: var(--color-bg-secondary); padding: 12px; border-bottom: 1px solid var(--color-border); display: flex; gap: 8px;">
+                        <span style="width: 12px; height: 12px; border-radius: 50%; background: #e85555;"></span>
+                        <span style="width: 12px; height: 12px; border-radius: 50%; background: #eab308;"></span>
+                        <span style="width: 12px; height: 12px; border-radius: 50%; background: #22c55e;"></span>
+                    </div>
+                    <div class="screenshot-card" style="margin: 0; border: none; border-radius: 0;">
+                         <div class="card-image">
+                            <img src="images/3-tyro-dashboard-users-light.png" alt="User Management" data-light="images/3-tyro-dashboard-users-light.png" data-dark="images/3-tyro-dashboard-users-dark.png" class="theme-toggle-img" style="width: 100%; display: block;">
+                            <div class="card-theme-toggle">
+                                <button class="mini-theme-btn" data-light="images/3-tyro-dashboard-users-light.png" data-dark="images/3-tyro-dashboard-users-dark.png">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <circle cx="12" cy="12" r="5"></circle>
+                                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Role Management Section -->
+    <section id="role-management" class="section">
+        <div class="section-container" style="max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 4rem; align-items: center; direction: rtl; padding: 0 20px;">
+            <div class="section-content" style="direction: ltr;">
+                <span class="section-badge">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                        <path d="m9 12 2 2 4-4"></path>
+                    </svg>
+                    Role Management
+                </span>
+                <h2 class="section-title">Powerful Access Control</h2>
+                <p class="section-subtitle">
+                    Define roles and assign permissions with granular precision. Secure your application with Tyro's robust RBAC system.
+                </p>
+                <ul class="feature-list" style="margin-top: 2rem; list-style: none; padding: 0;">
+                    <li style="display: flex; gap: 0.75rem; margin-bottom: 1rem; align-items: flex-start;">
+                        <div style="background: var(--color-bg-secondary); padding: 4px; border-radius: 50%; color: var(--color-primary);">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                        </div>
+                        <div>
+                            <strong style="color: var(--color-text);">Role Hierarchy</strong>
+                            <p style="margin-top: 0.25rem; color: var(--color-text-secondary); font-size: 0.95rem;">Create and manage roles with intuitive hierarchy support.</p>
+                        </div>
+                    </li>
+                    <li style="display: flex; gap: 0.75rem; margin-bottom: 1rem; align-items: flex-start;">
+                        <div style="background: var(--color-bg-secondary); padding: 4px; border-radius: 50%; color: var(--color-primary);">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                        </div>
+                        <div>
+                            <strong style="color: var(--color-text);">Permission Matrix</strong>
+                            <p style="margin-top: 0.25rem; color: var(--color-text-secondary); font-size: 0.95rem;">Visualize and toggle permissions for each role easily.</p>
+                        </div>
+                    </li>
+                    <li style="display: flex; gap: 0.75rem; margin-bottom: 1rem; align-items: flex-start;">
+                        <div style="background: var(--color-bg-secondary); padding: 4px; border-radius: 50%; color: var(--color-primary);">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                        </div>
+                        <div>
+                            <strong style="color: var(--color-text);">Role Assignment</strong>
+                            <p style="margin-top: 0.25rem; color: var(--color-text-secondary); font-size: 0.95rem;">Assign multiple roles to users for flexible access control.</p>
+                        </div>
+                    </li>
+                </ul>
+                <div class="section-actions" style="margin-top: 2rem;">
+                    <a href="doc.html#role-management" class="btn btn-primary">
+                        Explore Roles
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                    </a>
+                </div>
+            </div>
+            <div class="section-image" style="position: relative; direction: ltr;">
+                <div class="browser-frame" style="border-radius: 12px; overflow: hidden; box-shadow: var(--shadow-xl); border: 1px solid var(--color-border); background: var(--color-surface);">
+                    <div class="browser-header" style="background: var(--color-bg-secondary); padding: 12px; border-bottom: 1px solid var(--color-border); display: flex; gap: 8px;">
+                        <span style="width: 12px; height: 12px; border-radius: 50%; background: #e85555;"></span>
+                        <span style="width: 12px; height: 12px; border-radius: 50%; background: #eab308;"></span>
+                        <span style="width: 12px; height: 12px; border-radius: 50%; background: #22c55e;"></span>
+                    </div>
+                    <div class="screenshot-card" style="margin: 0; border: none; border-radius: 0;">
+                         <div class="card-image">
+                            <img src="images/6-tyro-dashboard-role-detail-light.png" alt="Role Management" data-light="images/6-tyro-dashboard-role-detail-light.png" data-dark="images/6-tyro-dashboard-role-detail-dark.png" class="theme-toggle-img" style="width: 100%; display: block;">
+                            <div class="card-theme-toggle">
+                                <button class="mini-theme-btn" data-light="images/6-tyro-dashboard-role-detail-light.png" data-dark="images/6-tyro-dashboard-role-detail-dark.png">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <circle cx="12" cy="12" r="5"></circle>
+                                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Privilege Management Section -->
+    <section id="privilege-management" class="section section-alt">
+        <div class="section-container" style="max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 4rem; align-items: center; padding: 0 20px;">
+            <div class="section-content">
+                <span class="section-badge">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                        <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                    </svg>
+                    Privilege Management
+                </span>
+                <h2 class="section-title">Fine-Grained Permissions</h2>
+                <p class="section-subtitle">
+                    Control every aspect of your application's security. Define privileges and assign them to roles for complete coverage.
+                </p>
+                <ul class="feature-list" style="margin-top: 2rem; list-style: none; padding: 0;">
+                    <li style="display: flex; gap: 0.75rem; margin-bottom: 1rem; align-items: flex-start;">
+                        <div style="background: var(--color-bg-secondary); padding: 4px; border-radius: 50%; color: var(--color-primary);">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                        </div>
+                        <div>
+                            <strong style="color: var(--color-text);">Route Discovery</strong>
+                            <p style="margin-top: 0.25rem; color: var(--color-text-secondary); font-size: 0.95rem;">Automatically discover routes and create privileges with a single click.</p>
+                        </div>
+                    </li>
+                    <li style="display: flex; gap: 0.75rem; margin-bottom: 1rem; align-items: flex-start;">
+                        <div style="background: var(--color-bg-secondary); padding: 4px; border-radius: 50%; color: var(--color-primary);">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                        </div>
+                        <div>
+                            <strong style="color: var(--color-text);">Logical Grouping</strong>
+                            <p style="margin-top: 0.25rem; color: var(--color-text-secondary); font-size: 0.95rem;">Group privileges by resource or module for better organization.</p>
+                        </div>
+                    </li>
+                    <li style="display: flex; gap: 0.75rem; margin-bottom: 1rem; align-items: flex-start;">
+                        <div style="background: var(--color-bg-secondary); padding: 4px; border-radius: 50%; color: var(--color-primary);">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                        </div>
+                        <div>
+                            <strong style="color: var(--color-text);">Descriptive Labels</strong>
+                            <p style="margin-top: 0.25rem; color: var(--color-text-secondary); font-size: 0.95rem;">Add human-readable descriptions to every privilege.</p>
+                        </div>
+                    </li>
+                </ul>
+                <div class="section-actions" style="margin-top: 2rem;">
+                    <a href="doc.html#privilege-management" class="btn btn-primary">
+                        Manage Privileges
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                    </a>
+                </div>
+            </div>
+            <div class="section-image" style="position: relative;">
+                <div class="browser-frame" style="border-radius: 12px; overflow: hidden; box-shadow: var(--shadow-xl); border: 1px solid var(--color-border); background: var(--color-surface);">
+                    <div class="browser-header" style="background: var(--color-bg-secondary); padding: 12px; border-bottom: 1px solid var(--color-border); display: flex; gap: 8px;">
+                        <span style="width: 12px; height: 12px; border-radius: 50%; background: #e85555;"></span>
+                        <span style="width: 12px; height: 12px; border-radius: 50%; background: #eab308;"></span>
+                        <span style="width: 12px; height: 12px; border-radius: 50%; background: #22c55e;"></span>
+                    </div>
+                    <div class="screenshot-card" style="margin: 0; border: none; border-radius: 0;">
+                         <div class="card-image">
+                            <img src="images/8-tyro-dashboard-privileges-light.png" alt="Privilege Management" data-light="images/8-tyro-dashboard-privileges-light.png" data-dark="images/8-tyro-dashboard-privileges-dark.png" class="theme-toggle-img" style="width: 100%; display: block;">
+                            <div class="card-theme-toggle">
+                                <button class="mini-theme-btn" data-light="images/8-tyro-dashboard-privileges-light.png" data-dark="images/8-tyro-dashboard-privileges-dark.png">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <circle cx="12" cy="12" r="5"></circle>
+                                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- shadcn Compatibility Section -->
+    <section id="shadcn-compatibility" class="section shadcn-modern">
+        <!-- Gradient Orbs -->
+        <div class="gradient-orb gradient-orb-4"></div>
+        <div class="gradient-orb gradient-orb-5"></div>
+        <div class="gradient-orb gradient-orb-6"></div>
+
+        <div class="section-header">
+            <span class="section-badge">
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="2" y="2" width="20" height="20" rx="2.18" ry="2.18"></rect>
+                    <line x1="7" y1="2" x2="7" y2="22"></line>
+                    <line x1="17" y1="2" x2="17" y2="22"></line>
+                    <line x1="2" y1="12" x2="22" y2="12"></line>
+                    <line x1="2" y1="7" x2="22" y2="7"></line>
+                    <line x1="2" y1="17" x2="22" y2="17"></line>
+                </svg>
+                Theme System
+            </span>
+            <h2 class="section-title">shadcn/ui Compatible</h2>
+            <p class="section-subtitle">
+                Leverage the power of shadcn/ui design system. Complete theme control with CSS variables for perfect customization.
+            </p>
+        </div>
+
+        <!-- Features Grid -->
+        <div class="shadcn-features-grid">
+            <div class="feature-block">
+                <div class="feature-icon-wrapper">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                        <polyline points="14 2 14 8 20 8"></polyline>
+                        <line x1="16" y1="13" x2="8" y2="13"></line>
+                        <line x1="16" y1="17" x2="8" y2="17"></line>
+                        <line x1="10" y1="9" x2="8" y2="9"></line>
+                    </svg>
+                </div>
+                <div class="feature-content">
+                    <h4>Standard CSS Variables</h4>
+                    <p>Full compatibility with shadcn/ui ecosystem. Use --primary, --secondary, --accent and more for consistent theming.</p>
+                </div>
+            </div>
+
+            <div class="feature-block">
+                <div class="feature-icon-wrapper">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 1 1-8 0 4 4 0 0 1 8 0z"></path>
+                    </svg>
+                </div>
+                <div class="feature-content">
+                    <h4>Dark & Light Modes</h4>
+                    <p>Automatic theme detection and manual switching. All components adapt seamlessly between modes.</p>
+                </div>
+            </div>
+
+            <div class="feature-block">
+                <div class="feature-icon-wrapper">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
+                        <path d="M2 17l10 5 10-5"></path>
+                        <path d="M2 12l10 5 10-5"></path>
+                    </svg>
+                </div>
+                <div class="feature-content">
+                    <h4>Visual Theme Editor</h4>
+                    <p>Use <a href="https://tweakcn.com" target="_blank" class="tweakcn-link">tweakcn.com</a> to customize colors visually and export directly.</p>
+                </div>
+            </div>
+
+          </div>
+
+        <!-- Quick Setup -->
+        <div class="shadcn-setup">
+            <div class="setup-header">
+                <h3>Quick Setup</h3>
+                <p>Start customizing in minutes, not hours</p>
+            </div>
+            
+            <div class="setup-steps">
+                <div class="setup-step">
+                    <div class="step-marker">
+                        <span>1</span>
+                    </div>
+                    <div class="step-info">
+                        <h4>Publish Theme Files</h4>
+                        <p>Generate customizable theme files</p>
+                        <div class="code-snippet">
+                            <code>php artisan tyro-dashboard:publish-style --theme-only</code>
+                            <button class="copy-snippet-btn" onclick="copyToClipboard(this, 'php artisan tyro-dashboard:publish-style --theme-only')">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+        <div class="setup-step">
+                    <div class="step-marker">
+                        <span>2</span>
+                    </div>
+                    <div class="step-info">
+                        <h4>Customize theme variables</h4>
+                        <p>Use tweakcn or any shadcn theme editor to customize colors</p>
+                    </div>
+                </div>
+
+                <div class="setup-step">
+                    <div class="step-marker">
+                        <span>3</span>
+                    </div>
+                    <div class="step-info">
+                        <h4>Apply & Deploy</h4>
+                        <p>Copy variables and see changes instantly</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Screenshots Section -->
+    <section id="screenshots" class="section screenshots-enhanced section-alt">
+        <div class="section-header">
+            <span class="section-badge">
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                    <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                    <polyline points="21 15 16 10 5 21"></polyline>
+                </svg>
+                Live Preview
+            </span>
+            <h2 class="section-title">Beautiful Admin Interface</h2>
+            <p class="section-subtitle">
+                Experience the modern, responsive design with seamless dark mode support. Every screen is crafted for optimal user experience.
+            </p>
+        </div>
+
+        <!-- Screenshot Categories -->
+        <div class="screenshots-categories">
+            <button class="category-btn active" data-category="all">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="3" y="3" width="7" height="7"></rect>
+                    <rect x="14" y="3" width="7" height="7"></rect>
+                    <rect x="14" y="14" width="7" height="7"></rect>
+                    <rect x="3" y="14" width="7" height="7"></rect>
+                </svg>
+                All Screens
+            </button>
+            <button class="category-btn" data-category="dashboard">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                    <line x1="9" y1="9" x2="15" y2="9"></line>
+                    <line x1="9" y1="15" x2="15" y2="15"></line>
+                </svg>
+                Dashboard
+            </button>
+            <button class="category-btn" data-category="users">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="9" cy="7" r="4"></circle>
+                </svg>
+                Users
+            </button>
+            <button class="category-btn" data-category="roles">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                </svg>
+                Roles
+            </button>
+            <button class="category-btn" data-category="privileges">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                    <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                </svg>
+                Privileges
+            </button>
+        </div>
+
+        <!-- Screenshot Grid -->
+        <div class="screenshots-grid">
+            <!-- Dashboard Landing -->
+            <div class="screenshot-card" data-category="dashboard">
+                <div class="card-image">
+                    <a href="images/1-tyro-dashboard-landing-light.png" data-lightbox="images/1-tyro-dashboard-landing-light.png" data-caption="Dashboard Landing" class="card-image-link">
+                        <img src="images/1-tyro-dashboard-landing-light.png" alt="Dashboard Landing" data-light="images/1-tyro-dashboard-landing-light.png" data-dark="images/1-tyro-dashboard-landing-dark.png" class="theme-toggle-img">
+                    </a>
+                    <div class="card-theme-toggle">
+                        <button class="mini-theme-btn" data-light="images/1-tyro-dashboard-landing-light.png" data-dark="images/1-tyro-dashboard-landing-dark.png">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="5"></circle>
+                                <line x1="12" y1="1" x2="12" y2="3"></line>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+                <div class="card-title">Dashboard Landing</div>
+            </div>
+
+            <!-- Profile Management -->
+            <div class="screenshot-card" data-category="dashboard">
+                <div class="card-image">
+                    <a href="images/2-tyro-dashboard-profile-light.png" data-lightbox="images/2-tyro-dashboard-profile-light.png" data-caption="Profile Management" class="card-image-link">
+                        <img src="images/2-tyro-dashboard-profile-light.png" alt="Profile Management" data-light="images/2-tyro-dashboard-profile-light.png" data-dark="images/2-tyro-dashboard-profile-dark.png" class="theme-toggle-img">
+                    </a>
+                    <div class="card-theme-toggle">
+                        <button class="mini-theme-btn" data-light="images/2-tyro-dashboard-profile-light.png" data-dark="images/2-tyro-dashboard-profile-dark.png">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="5"></circle>
+                                <line x1="12" y1="1" x2="12" y2="3"></line>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+                <div class="card-title">Profile Management</div>
+            </div>
+
+            <!-- User Management -->
+            <div class="screenshot-card" data-category="users">
+                <div class="card-image">
+                    <a href="images/3-tyro-dashboard-users-light.png" data-lightbox="images/3-tyro-dashboard-users-light.png" data-caption="User Management" class="card-image-link">
+                        <img src="images/3-tyro-dashboard-users-light.png" alt="User Management" data-light="images/3-tyro-dashboard-users-light.png" data-dark="images/3-tyro-dashboard-users-dark.png" class="theme-toggle-img">
+                    </a>
+                    <div class="card-theme-toggle">
+                        <button class="mini-theme-btn" data-light="images/3-tyro-dashboard-users-light.png" data-dark="images/3-tyro-dashboard-users-dark.png">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="5"></circle>
+                                <line x1="12" y1="1" x2="12" y2="3"></line>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+                <div class="card-title">User Management</div>
+            </div>
+
+            <!-- Edit User -->
+            <div class="screenshot-card" data-category="users">
+                <div class="card-image">
+                    <a href="images/7-tyro-dashboard-edit-user-light.png" data-lightbox="images/7-tyro-dashboard-edit-user-light.png" data-caption="Edit User" class="card-image-link">
+                        <img src="images/7-tyro-dashboard-edit-user-light.png" alt="Edit User" data-light="images/7-tyro-dashboard-edit-user-light.png" data-dark="images/7-tyro-dashboard-edit-user-dark.png" class="theme-toggle-img">
+                    </a>
+                    <div class="card-theme-toggle">
+                        <button class="mini-theme-btn" data-light="images/7-tyro-dashboard-edit-user-light.png" data-dark="images/7-tyro-dashboard-edit-user-dark.png">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="5"></circle>
+                                <line x1="12" y1="1" x2="12" y2="3"></line>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+                <div class="card-title">Edit User</div>
+            </div>
+
+            <!-- Role Management -->
+            <div class="screenshot-card" data-category="roles">
+                <div class="card-image">
+                    <a href="images/4-tyro-dashboard-roles-light.png" data-lightbox="images/4-tyro-dashboard-roles-light.png" data-caption="Role Management" class="card-image-link">
+                        <img src="images/4-tyro-dashboard-roles-light.png" alt="Role Management" data-light="images/4-tyro-dashboard-roles-light.png" data-dark="images/4-tyro-dashboard-roles-dark.png" class="theme-toggle-img">
+                    </a>
+                    <div class="card-theme-toggle">
+                        <button class="mini-theme-btn" data-light="images/4-tyro-dashboard-roles-light.png" data-dark="images/4-tyro-dashboard-roles-dark.png">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="5"></circle>
+                                <line x1="12" y1="1" x2="12" y2="3"></line>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+                <div class="card-title">Role Management</div>
+            </div>
+
+            <!-- Create Role -->
+            <div class="screenshot-card" data-category="roles">
+                <div class="card-image">
+                    <a href="images/5-tyro-dashboard-create-role-light.png" data-lightbox="images/5-tyro-dashboard-create-role-light.png" data-caption="Create Role" class="card-image-link">
+                        <img src="images/5-tyro-dashboard-create-role-light.png" alt="Create Role" data-light="images/5-tyro-dashboard-create-role-light.png" data-dark="images/5-tyro-dashboard-create-role-dark.png" class="theme-toggle-img">
+                    </a>
+                    <div class="card-theme-toggle">
+                        <button class="mini-theme-btn" data-light="images/5-tyro-dashboard-create-role-light.png" data-dark="images/5-tyro-dashboard-create-role-dark.png">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="5"></circle>
+                                <line x1="12" y1="1" x2="12" y2="3"></line>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+                <div class="card-title">Create Role</div>
+            </div>
+
+            <!-- Role Detail -->
+            <div class="screenshot-card" data-category="roles">
+                <div class="card-image">
+                    <a href="images/6-tyro-dashboard-role-detail-light.png" data-lightbox="images/6-tyro-dashboard-role-detail-light.png" data-caption="Role Detail" class="card-image-link">
+                        <img src="images/6-tyro-dashboard-role-detail-light.png" alt="Role Detail" data-light="images/6-tyro-dashboard-role-detail-light.png" data-dark="images/6-tyro-dashboard-role-detail-dark.png" class="theme-toggle-img">
+                    </a>
+                    <div class="card-theme-toggle">
+                        <button class="mini-theme-btn" data-light="images/6-tyro-dashboard-role-detail-light.png" data-dark="images/6-tyro-dashboard-role-detail-dark.png">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="5"></circle>
+                                <line x1="12" y1="1" x2="12" y2="3"></line>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+                <div class="card-title">Role Detail</div>
+            </div>
+
+            <!-- Privilege Management -->
+            <div class="screenshot-card" data-category="privileges">
+                <div class="card-image">
+                    <a href="images/8-tyro-dashboard-privileges-light.png" data-lightbox="images/8-tyro-dashboard-privileges-light.png" data-caption="Privilege Management" class="card-image-link">
+                        <img src="images/8-tyro-dashboard-privileges-light.png" alt="Privilege Management" data-light="images/8-tyro-dashboard-privileges-light.png" data-dark="images/8-tyro-dashboard-privileges-dark.png" class="theme-toggle-img">
+                    </a>
+                    <div class="card-theme-toggle">
+                        <button class="mini-theme-btn" data-light="images/8-tyro-dashboard-privileges-light.png" data-dark="images/8-tyro-dashboard-privileges-dark.png">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="5"></circle>
+                                <line x1="12" y1="1" x2="12" y2="3"></line>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+                <div class="card-title">Privilege Management</div>
+            </div>
+
+            <!-- Create Privilege -->
+            <div class="screenshot-card" data-category="privileges">
+                <div class="card-image">
+                    <a href="images/9-tyro-dashboard-create-privilege-light.png" data-lightbox="images/9-tyro-dashboard-create-privilege-light.png" data-caption="Create Privilege" class="card-image-link">
+                        <img src="images/9-tyro-dashboard-create-privilege-light.png" alt="Create Privilege" data-light="images/9-tyro-dashboard-create-privilege-light.png" data-dark="images/9-tyro-dashboard-create-privilege-dark.png" class="theme-toggle-img">
+                    </a>
+                    <div class="card-theme-toggle">
+                        <button class="mini-theme-btn" data-light="images/9-tyro-dashboard-create-privilege-light.png" data-dark="images/9-tyro-dashboard-create-privilege-dark.png">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="5"></circle>
+                                <line x1="12" y1="1" x2="12" y2="3"></line>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+                <div class="card-title">Create Privilege</div>
+            </div>
+
+            <!-- Privilege Detail -->
+            <div class="screenshot-card" data-category="privileges">
+                <div class="card-image">
+                    <a href="images/10-tyro-dashboard-privilege-detail-light.png" data-lightbox="images/10-tyro-dashboard-privilege-detail-light.png" data-caption="Privilege Detail" class="card-image-link">
+                        <img src="images/10-tyro-dashboard-privilege-detail-light.png" alt="Privilege Detail" data-light="images/10-tyro-dashboard-privilege-detail-light.png" data-dark="images/10-tyro-dashboard-privilege-detail-dark.png" class="theme-toggle-img">
+                    </a>
+                    <div class="card-theme-toggle">
+                        <button class="mini-theme-btn" data-light="images/10-tyro-dashboard-privilege-detail-light.png" data-dark="images/10-tyro-dashboard-privilege-detail-dark.png">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="5"></circle>
+                                <line x1="12" y1="1" x2="12" y2="3"></line>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+                <div class="card-title">Privilege Detail</div>
+            </div>
+
+            <!-- Edit Privilege -->
+            <div class="screenshot-card" data-category="privileges">
+                <div class="card-image">
+                    <a href="images/11-tyro-dashboard-edit-privilege-light.png" data-lightbox="images/11-tyro-dashboard-edit-privilege-light.png" data-caption="Edit Privilege" class="card-image-link">
+                        <img src="images/11-tyro-dashboard-edit-privilege-light.png" alt="Edit Privilege" data-light="images/11-tyro-dashboard-edit-privilege-light.png" data-dark="images/11-tyro-dashboard-edit-privilege-dark.png" class="theme-toggle-img">
+                    </a>
+                    <div class="card-theme-toggle">
+                        <button class="mini-theme-btn" data-light="images/11-tyro-dashboard-edit-privilege-light.png" data-dark="images/11-tyro-dashboard-edit-privilege-dark.png">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="5"></circle>
+                                <line x1="12" y1="1" x2="12" y2="3"></line>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+                <div class="card-title">Edit Privilege</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Installation Section -->
+    <section id="installation" class="section">
+        <div class="section-header">
+            <span class="section-badge">
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                    <polyline points="7 10 12 15 17 10"></polyline>
+                    <line x1="12" y1="15" x2="12" y2="3"></line>
+                </svg>
+                Quick Start
+            </span>
+            <h2 class="section-title">Get Started in Minutes</h2>
+            <p class="section-subtitle">
+                Simple installation with an interactive wizard that guides you through the setup process.
+            </p>
+        </div>
+
+        <div class="steps-container">
+            <div class="step">
+                <div class="step-number">1</div>
+                <div class="step-content">
+                    <h3 class="step-title">Install the Package</h3>
+                    <p class="step-description">Install Tyro Dashboard via Composer. Make sure you have Tyro already installed.</p>
+                    <div class="step-code">
+                        <code>composer require hasinhayder/tyro-dashboard</code>
+                    </div>
+                </div>
+            </div>
+
+            <div class="step">
+                <div class="step-number">2</div>
+                <div class="step-content">
+                    <h3 class="step-title">Run the Installer</h3>
+                    <p class="step-description">Run the interactive installer which will guide you through configuration options.</p>
+                    <div class="step-code">
+                        <code>php artisan tyro-dashboard:install</code>
+                    </div>
+                </div>
+            </div>
+
+            <div class="step">
+                <div class="step-number">3</div>
+                <div class="step-content">
+                    <h3 class="step-title">Access the Dashboard</h3>
+                    <p class="step-description">Navigate to <code>/dashboard</code> in your browser. Login with an admin account to access all features.</p>
+                    <div class="step-code">
+                        <code>http://your-app.test/dashboard</code>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Routes Section -->
+    <section id="routes" class="section section-alt">
+        <div class="section-header">
+            <span class="section-badge">
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <polyline points="12 6 12 12 16 14"></polyline>
+                </svg>
+                Routes
+            </span>
+            <h2 class="section-title">Available Routes</h2>
+            <p class="section-subtitle">
+                All routes provided by Tyro Dashboard and their access levels.
+            </p>
+        </div>
+
+        <div class="routes-table-container">
+            <table class="routes-table">
+                <thead>
+                    <tr>
+                        <th>Route</th>
+                        <th>Description</th>
+                        <th>Access</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>/dashboard</code></td>
+                        <td>Main dashboard home page</td>
+                        <td><span class="route-badge route-badge-all">All Authenticated</span></td>
+                    </tr>
+                    <tr>
+                        <td><code>/dashboard/profile</code></td>
+                        <td>User profile settings</td>
+                        <td><span class="route-badge route-badge-all">All Authenticated</span></td>
+                    </tr>
+                    <tr>
+                        <td><code>/dashboard/users</code></td>
+                        <td>User management list</td>
+                        <td><span class="route-badge route-badge-admin">Admin Only</span></td>
+                    </tr>
+                    <tr>
+                        <td><code>/dashboard/users/create</code></td>
+                        <td>Create new user</td>
+                        <td><span class="route-badge route-badge-admin">Admin Only</span></td>
+                    </tr>
+                    <tr>
+                        <td><code>/dashboard/users/{id}/edit</code></td>
+                        <td>Edit user details</td>
+                        <td><span class="route-badge route-badge-admin">Admin Only</span></td>
+                    </tr>
+                    <tr>
+                        <td><code>/dashboard/roles</code></td>
+                        <td>Role management list</td>
+                        <td><span class="route-badge route-badge-admin">Admin Only</span></td>
+                    </tr>
+                    <tr>
+                        <td><code>/dashboard/roles/create</code></td>
+                        <td>Create new role</td>
+                        <td><span class="route-badge route-badge-admin">Admin Only</span></td>
+                    </tr>
+                    <tr>
+                        <td><code>/dashboard/roles/{id}</code></td>
+                        <td>View role details</td>
+                        <td><span class="route-badge route-badge-admin">Admin Only</span></td>
+                    </tr>
+                    <tr>
+                        <td><code>/dashboard/privileges</code></td>
+                        <td>Privilege management list</td>
+                        <td><span class="route-badge route-badge-admin">Admin Only</span></td>
+                    </tr>
+                    <tr>
+                        <td><code>/dashboard/privileges/create</code></td>
+                        <td>Create new privilege</td>
+                        <td><span class="route-badge route-badge-admin">Admin Only</span></td>
+                    </tr>
+                    <tr>
+                        <td><code>/dashboard/settings/tyro</code></td>
+                        <td>Tyro package settings</td>
+                        <td><span class="route-badge route-badge-admin">Admin Only</span></td>
+                    </tr>
+                    <tr>
+                        <td><code>/dashboard/settings/tyro-login</code></td>
+                        <td>Tyro Login package settings</td>
+                        <td><span class="route-badge route-badge-admin">Admin Only</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <!-- Access Control Section -->
+    <section class="section security-enhanced">
+        <!-- Security Section Background Elements -->
+        <div class="security-bg-pattern"></div>
+
+        <div class="section-header">
+            <span class="section-badge security-badge">
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                </svg>
+                Security
+            </span>
+            <h2 class="section-title">Smart Access Control</h2>
+            <p class="section-subtitle">
+                Simple role-based permissions, session safety, and activity logging to keep your dashboard secure and organized.
+            </p>
+        </div>
+
+        <div class="security-grid">
+            <div class="security-card enhanced-card">
+                <div class="security-icon premium-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                        <path d="m9 12 2 2 4-4"></path>
+                    </svg>
+                </div>
+                <div class="security-content">
+                    <h4>Admin & Super-Admin</h4>
+                    <p>Full control to create, edit, suspend users and manage roles, privileges, and dashboard settings with complete CRUD operations.</p>
+                    <div class="security-features">
+                        <span class="security-tag">User Management</span>
+                        <span class="security-tag">Full Control</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="security-card enhanced-card">
+                <div class="security-icon user-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="12" cy="7" r="4"></circle>
+                    </svg>
+                </div>
+                <div class="security-content">
+                    <h4>User Profile Management</h4>
+                    <p>Users can update their own profile information with self-service account management and full profile editing capabilities.</p>
+                    <div class="security-features">
+                        <span class="security-tag">Self-Service</span>
+                        <span class="security-tag">Profile Edit</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="security-card enhanced-card">
+                <div class="security-icon config-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="3"></circle>
+                        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+                    </svg>
+                </div>
+                <div class="security-content">
+                    <h4>Privilege Management</h4>
+                    <p>Complete privilege CRUD operations with easy assign/detach to roles. Fine-grained access control for every feature.</p>
+                    <div class="security-features">
+                        <span class="security-tag">CRUD Operations</span>
+                        <span class="security-tag">Role Assignment</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="security-card enhanced-card">
+                <div class="security-icon lock-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                        <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                    </svg>
+                </div>
+                <div class="security-content">
+                    <h4>Protected Core Roles</h4>
+                    <p>Important roles like admin, super-admin, and user can't be deleted accidentally. Keeps your system stable.</p>
+                    <div class="security-features">
+                        <span class="security-tag">Safe</span>
+                        <span class="security-tag">Locked</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="security-card enhanced-card">
+                <div class="security-icon theme-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                </div>
+                <div class="security-content">
+                    <h4>Light & Dark Themes</h4>
+                    <p>Built-in dark/light theme support that respects user preferences and system settings with manual toggle available.</p>
+                    <div class="security-features">
+                        <span class="security-tag">Dark Mode</span>
+                        <span class="security-tag">User Choice</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="security-card enhanced-card">
+                <div class="security-icon responsive-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+                        <line x1="8" y1="21" x2="16" y2="21"></line>
+                        <line x1="12" y1="17" x2="12" y2="21"></line>
+                    </svg>
+                </div>
+                <div class="security-content">
+                    <h4>Responsive Design</h4>
+                    <p>Works perfectly on all device sizes from mobile phones to large desktop monitors with adaptive layouts.</p>
+                    <div class="security-features">
+                        <span class="security-tag">Mobile First</span>
+                        <span class="security-tag">All Devices</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section id="faq" class="section section-alt">
+        <div class="section-header">
+            <span class="section-badge">
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+                    <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                </svg>
+                FAQ
+            </span>
+            <h2 class="section-title">Frequently Asked Questions</h2>
+            <p class="section-subtitle">
+                Common questions about Tyro Dashboard.
+            </p>
+        </div>
+
+        <div class="faq-container">
+            <div class="faq-item">
+                <button class="faq-question" aria-expanded="false">
+                    What are the requirements for Tyro Dashboard?
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="6 9 12 15 18 9"></polyline>
+                    </svg>
+                </button>
+                <div class="faq-answer">
+                    <div class="faq-answer-content">
+                        Tyro Dashboard requires PHP 8.2+, Laravel 12.x, and the <code>hasinhayder/tyro</code> package (^1.0). 
+                        The <code>hasinhayder/tyro-login</code> package is optional but recommended for the complete authentication experience.
+                    </div>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <button class="faq-question" aria-expanded="false">
+                    Can I customize the dashboard views?
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="6 9 12 15 18 9"></polyline>
+                    </svg>
+                </button>
+                <div class="faq-answer">
+                    <div class="faq-answer-content">
+                        Yes! You can publish the views using <code>php artisan vendor:publish --tag=tyro-dashboard-views</code>. 
+                        This will copy all views to <code>resources/views/vendor/tyro-dashboard/</code> where you can modify them.
+                    </div>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <button class="faq-question" aria-expanded="false">
+                    How do I change the dashboard route prefix?
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="6 9 12 15 18 9"></polyline>
+                    </svg>
+                </button>
+                <div class="faq-answer">
+                    <div class="faq-answer-content">
+                        Set the <code>TYRO_DASHBOARD_PREFIX</code> environment variable in your <code>.env</code> file. 
+                        For example, <code>TYRO_DASHBOARD_PREFIX=admin</code> will make the dashboard available at <code>/admin</code>.
+                    </div>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <button class="faq-question" aria-expanded="false">
+                    Which roles have admin access?
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="6 9 12 15 18 9"></polyline>
+                    </svg>
+                </button>
+                <div class="faq-answer">
+                    <div class="faq-answer-content">
+                        By default, users with <code>admin</code> or <code>super-admin</code> roles have full admin access. 
+                        You can customize this by modifying the <code>admin_roles</code> array in <code>config/tyro-dashboard.php</code>.
+                    </div>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <button class="faq-question" aria-expanded="false">
+                    Can I add custom branding?
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="6 9 12 15 18 9"></polyline>
+                    </svg>
+                </button>
+                <div class="faq-answer">
+                    <div class="faq-answer-content">
+                        Yes! Set <code>TYRO_DASHBOARD_APP_NAME</code> and <code>TYRO_DASHBOARD_LOGO</code> in your <code>.env</code> file 
+                        to customize the application name and logo that appears in the dashboard.
+                    </div>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <button class="faq-question" aria-expanded="false">
+                    Does it work without Tyro Login?
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="6 9 12 15 18 9"></polyline>
+                    </svg>
+                </button>
+                <div class="faq-answer">
+                    <div class="faq-answer-content">
+                        Yes! Tyro Dashboard works with Tyro alone. The Tyro Login package is optional but recommended
+                        for a complete authentication experience. The dashboard's Tyro Login settings page will only appear if the package is installed.
+                    </div>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <button class="faq-question" aria-expanded="false">
+                    How long does it take to set up?
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="6 9 12 15 18 9"></polyline>
+                    </svg>
+                </button>
+                <div class="faq-answer">
+                    <div class="faq-answer-content">
+                        Under 5 minutes! Just run <code>composer require hasinhayder/tyro-dashboard</code>
+                        and <code>php artisan tyro-dashboard:install</code>. Your admin dashboard will be ready at <code>/dashboard</code>.
+                    </div>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <button class="faq-question" aria-expanded="false">
+                    Is it compatible with shadcn/ui?
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="6 9 12 15 18 9"></polyline>
+                    </svg>
+                </button>
+                <div class="faq-answer">
+                    <div class="faq-answer-content">
+                        Yes! Tyro Dashboard uses shadcn/ui CSS variables and is fully compatible with
+                        <a href="https://tweakcn.com" target="_blank" style="color: var(--color-primary); text-decoration: underline;">tweakcn.com</a>
+                        for visual theme editing. Perfect for shadcn-based projects.
+                    </div>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <button class="faq-question" aria-expanded="false">
+                    What makes Tyro Dashboard different?
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="6 9 12 15 18 9"></polyline>
+                    </svg>
+                </button>
+                <div class="faq-answer">
+                    <div class="faq-answer-content">
+                        It provides a complete, ready-to-use admin interface that integrates seamlessly with Tyro RBAC.
+                        No frontend development needed - just install and configure. Beautiful dark/light themes included.
+                    </div>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <button class="faq-question" aria-expanded="false">
+                    Is Tyro Dashboard really free?
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="6 9 12 15 18 9"></polyline>
+                    </svg>
+                </button>
+                <div class="faq-answer">
+                    <div class="faq-answer-content">
+                        Yes, completely free! Tyro Dashboard is open-source software with no hidden fees or premium tiers.
+                        You can use it, modify it, and contribute to its development at no cost.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+        <div class="cta-content">
+            <h2 class="cta-title">Ready to Build Your Admin Dashboard?</h2>
+            <p class="cta-subtitle">
+                Get Tyro Dashboard today and have a beautiful, functional admin panel in minutes.
+            </p>
+            <div class="cta-buttons">
+                <a href="https://github.com/hasinhayder/tyro-dashboard" class="cta-btn-primary" target="_blank" rel="noopener">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                    </svg>
+                    View on GitHub
+                </a>
+                <a href="doc.html" class="cta-btn-secondary">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
+                        <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
+                    </svg>
+                    Read Documentation
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-brand">
+                <div class="footer-logo">Tyro Dashboard</div>
+                <p class="footer-description">
+                    Beautiful, modern admin dashboard for managing Tyro roles, privileges, users, and package settings in Laravel 12.
+                </p>
+            </div>
+
+            <div class="footer-section">
+                <h4>Package</h4>
+                <ul class="footer-links">
+                    <li><a href="#features">Features</a></li>
+                    <li><a href="#screenshots">Screenshots</a></li>
+                    <li><a href="#installation">Installation</a></li>
+                    <li><a href="#routes">Routes</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-section">
+                <h4>Resources</h4>
+                <ul class="footer-links">
+                    <li><a href="doc.html">Documentation</a></li>
+                    <li><a href="https://github.com/hasinhayder/tyro-dashboard" target="_blank" rel="noopener">GitHub</a></li>
+                    <li><a href="https://packagist.org/packages/hasinhayder/tyro-dashboard" target="_blank" rel="noopener">Packagist</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-section">
+                <h4>Ecosystem</h4>
+                <ul class="footer-links">
+                    <li><a href="https://github.com/hasinhayder/tyro" target="_blank" rel="noopener">Tyro RBAC</a></li>
+                    <li><a href="https://github.com/hasinhayder/tyro-login" target="_blank" rel="noopener">Tyro Login</a></li>
+                    <li><a href="https://laravel.com" target="_blank" rel="noopener">Laravel</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p class="footer-copyright">
+                © 2025 Tyro Dashboard. Built with ❤️ by <a href="https://github.com/hasinhayder" target="_blank" rel="noopener" style="color: var(--color-primary); text-decoration: none;">Hasin Hayder</a>
+            </p>
+            <div class="footer-social">
+                <a href="https://github.com/hasinhayder" target="_blank" rel="noopener" aria-label="GitHub">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                    </svg>
+                </a>
+                <a href="https://twitter.com/haaboreshto" target="_blank" rel="noopener" aria-label="Twitter">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+                    </svg>
+                </a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Lightbox -->
+    <div class="lightbox" id="lightbox">
+        <button class="lightbox-close" aria-label="Close lightbox">
+            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="18" y1="6" x2="6" y2="18"></line>
+                <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+        </button>
+        <div class="lightbox-content">
+            <img src="" alt="" class="lightbox-image" id="lightboxImage">
+            <div class="lightbox-caption" id="lightboxCaption"></div>
+        </div>
+        <button class="lightbox-nav lightbox-prev" aria-label="Previous image">
+            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="15 18 9 12 15 6"></polyline>
+            </svg>
+        </button>
+        <button class="lightbox-nav lightbox-next" aria-label="Next image">
+            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="9 18 15 12 9 6"></polyline>
+            </svg>
+        </button>
+    </div>
+
+    <!-- Scripts -->
+    <script src="script.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script>
+        // Initialize syntax highlighting
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('.step-code code').forEach((el) => {
+                hljs.highlightElement(el);
+            });
+        });
+
+        // Category filter functionality
+        document.addEventListener('DOMContentLoaded', () => {
+            const categoryBtns = document.querySelectorAll('.category-btn');
+            const screenshotCards = document.querySelectorAll('.screenshot-card');
+
+            categoryBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    // Remove active class from all buttons
+                    categoryBtns.forEach(b => b.classList.remove('active'));
+                    // Add active class to clicked button
+                    btn.classList.add('active');
+
+                    const selectedCategory = btn.dataset.category;
+
+                    // Filter screenshots
+                    screenshotCards.forEach(card => {
+                        if (selectedCategory === 'all' || card.dataset.category === selectedCategory) {
+                            card.style.display = 'block';
+                            // Add animation
+                            setTimeout(() => {
+                                card.style.opacity = '1';
+                                card.style.transform = 'scale(1)';
+                            }, 10);
+                        } else {
+                            card.style.opacity = '0';
+                            card.style.transform = 'scale(0.8)';
+                            setTimeout(() => {
+                                card.style.display = 'none';
+                            }, 300);
+                        }
+                    });
+                });
+            });
+
+            // Theme toggle functionality
+            document.addEventListener('click', (e) => {
+                if (e.target.closest('.mini-theme-btn')) {
+                    const btn = e.target.closest('.mini-theme-btn');
+                    const card = btn.closest('.screenshot-card');
+                    const img = card.querySelector('.theme-toggle-img');
+                    const lightSrc = btn.dataset.light;
+                    const darkSrc = btn.dataset.dark;
+                    const imageLink = card.querySelector('.card-image-link');
+
+                    // Toggle image
+                    if (img.src.includes(lightSrc)) {
+                        img.src = darkSrc;
+                        // Update lightbox link href
+                        if (imageLink) {
+                            imageLink.href = darkSrc;
+                            imageLink.dataset.lightbox = darkSrc;
+                        }
+                    } else {
+                        img.src = lightSrc;
+                        // Update lightbox link href
+                        if (imageLink) {
+                            imageLink.href = lightSrc;
+                            imageLink.dataset.lightbox = lightSrc;
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>
