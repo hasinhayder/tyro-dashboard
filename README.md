@@ -383,19 +383,19 @@ The Tyro Dashboard package is open-source software licensed under the [MIT licen
 Built on top of amazing packages:
 - [Tyro](https://github.com/hasinhayder/tyro) — RBAC framework
 - [Tyro Login](https://github.com/hasinhayder/tyro-login) — Authentication system
-- [shadcn](https://ui.shadcn.com/) — Design system inspiration
 
 ---
 
-<div align="center">
 
 ## Ready to Supercharge Your Laravel App?
 
-```bash
+```
 composer require hasinhayder/tyro-dashboard
 php artisan tyro-dashboard:install
 open http://localhost:8000/dashboard
 ```
+
+<div align="center">
 
 **Made with love by [Hasin Hayder](https://github.com/hasinhayder)**
 
