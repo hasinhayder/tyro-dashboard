@@ -26,7 +26,7 @@
         <div class="navbar-container">
             <a href="index.html" class="navbar-brand">
                 <span class="navbar-logo">Tyro Dashboard</span>
-                <span class="navbar-badge">v1.0</span>
+                <span class="navbar-badge">v1.3</span>
             </a>
 
             <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Toggle menu">
@@ -701,6 +701,10 @@ TYRO_DASHBOARD_LOGO="/images/logo.svg"</code></pre>
 
                 <div class="doc-alert doc-alert-info">
                     <strong>Note:</strong> User management is only available to users with admin roles configured in <code class="doc-inline-code">admin_roles</code>.
+                </div>
+
+                <div class="doc-alert doc-alert-success">
+                    <strong>Pro Tip:</strong> You can quickly create an admin user via the command line using <code class="doc-inline-code">php artisan tyro-dashboard:createsuperuser</code>.
                 </div>
 
                 <h3 class="doc-section-subtitle">Routes</h3>
@@ -1554,6 +1558,10 @@ php artisan tyro-dashboard:publish-style</code></pre>
                         <tr>
                             <td><code class="doc-inline-code">php artisan tyro-dashboard:publish-style --theme-only</code></td>
                             <td>Publish only theme variables (recommended)</td>
+                        </tr>
+                        <tr>
+                            <td><code class="doc-inline-code">php artisan tyro-dashboard:createsuperuser</code></td>
+                            <td>Create a superuser with admin privileges interactively</td>
                         </tr>
                     </tbody>
                 </table>
