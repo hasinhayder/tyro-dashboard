@@ -551,7 +551,7 @@
     // ===== Console Easter Egg =====
     console.log(
         '%c Tyro Dashboard %c Made with ❤️ for Laravel ',
-        'background: linear-gradient(135deg, #0d9488, #06b6d4); color: white; padding: 10px 20px; border-radius: 5px 0 0 5px; font-size: 14px; font-weight: bold;',
+        'background: linear-gradient(135deg, #2563eb, #3b82f6); color: white; padding: 10px 20px; border-radius: 5px 0 0 5px; font-size: 14px; font-weight: bold;',
         'background: #1e293b; color: #94a3b8; padding: 10px 20px; border-radius: 0 5px 5px 0; font-size: 14px;'
     );
 

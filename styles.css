@@ -1,18 +1,18 @@
 /* ===========================
-   Tyro Dashboard - Oceanic Theme
-   A serene, sophisticated palette inspired by ocean depths
+   Tyro Dashboard - Professional Theme
+   A clean, modern blue palette for enterprise applications
 =========================== */
 
 /* CSS Variables */
 :root {
-    /* Oceanic Color Palette */
-    --color-primary: #0891b2;
-    --color-primary-light: #22d3ee;
-    --color-primary-dark: #0e7490;
-    --color-primary-darker: #164e63;
-    --color-secondary: #155e75;
-    --color-secondary-light: #0e7490;
-    --color-accent: #06b6d4;
+    /* Professional Blue Palette */
+    --color-primary: #2563eb;
+    --color-primary-light: #60a5fa;
+    --color-primary-dark: #1d4ed8;
+    --color-primary-darker: #1e3a8a;
+    --color-secondary: #475569;
+    --color-secondary-light: #94a3b8;
+    --color-accent: #3b82f6;
 
     /* Light Mode */
     --color-bg: #ffffff;
@@ -25,8 +25,8 @@
     --color-shadow: rgba(15, 23, 42, 0.08);
 
     /* Gradients */
-    --gradient-primary: linear-gradient(135deg, #0891b2 0%, #06b6d4 100%);
-    --gradient-text: linear-gradient(135deg, #0891b2 0%, #22d3ee 100%);
+    --gradient-primary: linear-gradient(135deg, #2563eb 0%, #3b82f6 100%);
+    --gradient-text: linear-gradient(135deg, #2563eb 0%, #60a5fa 100%);
     --gradient-hero: linear-gradient(180deg, #fafafa 0%, #ffffff 100%);
     --gradient-card: linear-gradient(145deg, rgba(255, 255, 255, 0.9) 0%, rgba(250, 250, 250, 0.7) 100%);
 
@@ -72,16 +72,16 @@
     --gradient-hero: linear-gradient(180deg, #0b1220 0%, #0f172a 100%);
     --gradient-card: linear-gradient(145deg, rgba(15, 23, 42, 0.9) 0%, rgba(17, 28, 46, 0.7) 100%);
 
-    /* Oceanic persists in Dark Mode */
-    --color-primary: #22d3ee;
-    --color-primary-light: #67e8f9;
-    --color-primary-dark: #0891b2;
-    --color-primary-darker: #164e63;
-    --color-secondary: #22d3ee;
-    --color-secondary-light: #67e8f9;
-    --color-accent: #06b6d4;
-    --gradient-primary: linear-gradient(135deg, #22d3ee 0%, #0891b2 100%);
-    --gradient-text: linear-gradient(135deg, #22d3ee 0%, #67e8f9 100%);
+    /* Professional Blue in Dark Mode */
+    --color-primary: #3b82f6;
+    --color-primary-light: #60a5fa;
+    --color-primary-dark: #2563eb;
+    --color-primary-darker: #1e40af;
+    --color-secondary: #94a3b8;
+    --color-secondary-light: #cbd5e1;
+    --color-accent: #60a5fa;
+    --gradient-primary: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+    --gradient-text: linear-gradient(135deg, #3b82f6 0%, #60a5fa 100%);
 }
 
 /* Reset & Base */
