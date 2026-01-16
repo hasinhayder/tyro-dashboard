@@ -84,6 +84,10 @@
     --gradient-text: linear-gradient(135deg, #3b82f6 0%, #60a5fa 100%);
 }
 
+[data-theme="dark"] .hero::after {
+    opacity: 0.15;
+}
+
 /* Reset & Base */
 *,
 *::before,
@@ -355,12 +359,29 @@ body {
     overflow: hidden;
 }
 
+.hero::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: 
+        linear-gradient(var(--color-border) 1px, transparent 1px),
+        linear-gradient(90deg, var(--color-border) 1px, transparent 1px);
+    background-size: 50px 50px;
+    opacity: 0.2;
+    pointer-events: none;
+    -webkit-mask-image: radial-gradient(ellipse at center, black, transparent 80%);
+    mask-image: radial-gradient(ellipse at center, black, transparent 80%);
+}
+
 /* Gradient Orbs */
 .gradient-orb {
     position: absolute;
     border-radius: 50%;
-    filter: blur(80px);
-    opacity: 0.4;
+    filter: blur(100px);
+    opacity: 0.25;
     pointer-events: none;
 }
 

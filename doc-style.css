@@ -1,5 +1,28 @@
 /* ===== Documentation Styles for Tyro Dashboard ===== */
 
+/* CSS Variables for Documentation */
+:root {
+    --color-surface: var(--color-bg);
+    --color-surface-hover: var(--color-bg-secondary);
+    --color-text-muted: var(--color-text-tertiary);
+    --font-base: var(--font-sans);
+    
+    /* Shadows */
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    --shadow-2xl: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    --shadow-glow: 0 0 15px rgba(37, 99, 235, 0.5);
+    --shadow-glow-lg: 0 0 25px rgba(37, 99, 235, 0.6);
+}
+
+[data-theme="dark"] {
+    --color-surface: var(--color-bg-secondary);
+    --color-surface-hover: var(--color-bg-tertiary);
+    --shadow-glow: 0 0 15px rgba(59, 130, 246, 0.5);
+    --shadow-glow-lg: 0 0 25px rgba(59, 130, 246, 0.6);
+}
+
 /* Layout */
 .doc-layout {
     display: flex;
@@ -485,6 +508,7 @@
     opacity: 0;
     visibility: hidden;
     transition: all var(--transition-fast);
+    overflow: hidden;
 }
 
 .spotlight-container.active {
@@ -500,7 +524,6 @@
     font-family: var(--font-base);
     background: transparent;
     border: none;
-    border-bottom: 1px solid var(--color-border);
     color: var(--color-text);
     outline: none;
 }
@@ -512,6 +535,10 @@
 .spotlight-results {
     max-height: 400px;
     overflow-y: auto;
+}
+
+.spotlight-results:not(:empty) {
+    border-top: 1px solid var(--color-border);
 }
 
 .spotlight-result {
