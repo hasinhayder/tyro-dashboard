@@ -174,12 +174,22 @@ class InstallCommand extends Command
     }
 
     /**
-     * Run tyro:install without seeding.
+     * Run tyro:install and tyro-login:install without seeding.
      */
     protected function runTyroInstall(): bool
     {
         try {
+            // Run tyro:install
             $exitCode = \Illuminate\Support\Facades\Artisan::call('tyro:install', [
+                '--no-interaction' => true,
+            ]);
+
+            if ($exitCode !== 0) {
+                return false;
+            }
+
+            // Run tyro-login:install
+            $exitCode = \Illuminate\Support\Facades\Artisan::call('tyro-login:install', [
                 '--no-interaction' => true,
             ]);
 
@@ -189,7 +199,7 @@ class InstallCommand extends Command
 
             return true;
         } catch (\Exception $e) {
-            $this->error('Failed to run tyro:install: ' . $e->getMessage());
+            $this->error('Failed to run installation commands: ' . $e->getMessage());
             return false;
         }
     }
