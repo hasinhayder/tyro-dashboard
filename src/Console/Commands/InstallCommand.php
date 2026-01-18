@@ -49,6 +49,15 @@ class InstallCommand extends Command
 
         $this->info('');
 
+        // Run tyro:install without seeding
+        $this->info('Setting up Tyro framework...');
+        if (!$this->runTyroInstall()) {
+            return self::FAILURE;
+        }
+        $this->info('   ✓ Tyro framework setup complete');
+
+        $this->info('');
+
         // Publish config
         $this->info('Publishing configuration...');
         $this->callSilently('vendor:publish', [
@@ -98,6 +107,12 @@ class InstallCommand extends Command
         } else {
             $this->warn('   ⚠ User model may not have HasTyroRoles trait');
             $this->warn('   Run: php artisan tyro:prepare-user-model');
+        }
+
+        // Ask to create super user
+        $this->info('');
+        if ($this->confirm('Would you like to create a super user now?', true)) {
+            $this->call('tyro-dashboard:createsuperuser');
         }
 
         $this->info('');
@@ -156,6 +171,27 @@ class InstallCommand extends Command
         }
 
         return method_exists($userModel, 'tyroRoleSlugs');
+    }
+
+    /**
+     * Run tyro:install without seeding.
+     */
+    protected function runTyroInstall(): bool
+    {
+        try {
+            $exitCode = \Illuminate\Support\Facades\Artisan::call('tyro:install', [
+                '--no-interaction' => true,
+            ]);
+
+            if ($exitCode !== 0) {
+                return false;
+            }
+
+            return true;
+        } catch (\Exception $e) {
+            $this->error('Failed to run tyro:install: ' . $e->getMessage());
+            return false;
+        }
     }
 
 }
