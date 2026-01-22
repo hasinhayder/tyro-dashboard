@@ -2,7 +2,10 @@
 
 namespace HasinHayder\TyroDashboard\Providers;
 
+use HasinHayder\TyroDashboard\Console\Commands\CreateAdminPageCommand;
+use HasinHayder\TyroDashboard\Console\Commands\CreateCommonPageCommand;
 use HasinHayder\TyroDashboard\Console\Commands\CreateSuperUserCommand;
+use HasinHayder\TyroDashboard\Console\Commands\CreateUserPageCommand;
 use HasinHayder\TyroDashboard\Console\Commands\InstallCommand;
 use HasinHayder\TyroDashboard\Console\Commands\MakeResourceCommand;
 use HasinHayder\TyroDashboard\Console\Commands\PublishCommand;
@@ -59,7 +62,10 @@ class TyroDashboardServiceProvider extends ServiceProvider
         }
 
         $this->commands([
+            CreateAdminPageCommand::class,
+            CreateCommonPageCommand::class,
             CreateSuperUserCommand::class,
+            CreateUserPageCommand::class,
             InstallCommand::class,
             MakeResourceCommand::class,
             PublishCommand::class,
