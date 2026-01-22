@@ -145,7 +145,7 @@ BLADE;
         }
 
         $content = file_get_contents($webFile);
-        $routeLine = "Route::get('dashboard/{$pageName}', function () {\n    return view('dashboard.{$pageName}', ['user' => auth()->user()]);\n})->middleware(['auth'])->name('dashboard.{$pageName}');";
+        $routeLine = "Route::view('dashboard/{$pageName}', 'dashboard.{$pageName}')->middleware(['auth'])->name('dashboard.{$pageName}');";
 
         // Check if route already exists
         if (strpos($content, "dashboard.{$pageName}") !== false) {

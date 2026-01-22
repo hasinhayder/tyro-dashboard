@@ -14,6 +14,7 @@ use HasinHayder\TyroDashboard\Console\Commands\VersionCommand;
 use HasinHayder\TyroDashboard\Http\Middleware\EnsureIsAdmin;
 use Illuminate\Routing\Router;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 
 class TyroDashboardServiceProvider extends ServiceProvider
@@ -28,6 +29,7 @@ class TyroDashboardServiceProvider extends ServiceProvider
         $this->registerPublishing();
         $this->registerRoutes();
         $this->registerViews();
+        $this->registerViewComposers();
         $this->registerMiddleware();
         $this->registerCommands();
     }
@@ -46,6 +48,14 @@ class TyroDashboardServiceProvider extends ServiceProvider
     protected function registerViews(): void
     {
         $this->loadViewsFrom(__DIR__ . '/../../resources/views', 'tyro-dashboard');
+    }
+
+    protected function registerViewComposers(): void
+    {
+        // Share authenticated user with all dashboard views
+        View::composer(['tyro-dashboard::*', 'dashboard.*'], function ($view) {
+            $view->with('user', auth()->user());
+        });
     }
 
     protected function registerMiddleware(): void
