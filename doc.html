@@ -111,6 +111,7 @@
                         <li><a href="#privilege-management" class="doc-nav-link">Privilege Management</a></li>
                         <li><a href="#settings-management" class="doc-nav-link">Settings Management</a></li>
                         <li><a href="#profile-management" class="doc-nav-link">Profile Management</a></li>
+                        <li><a href="#page-creation" class="doc-nav-link">Page Creation</a></li>
                         <li><a href="#crud-workflow" class="doc-nav-link">CRUD Workflow</a></li>
                     </ul>
                 </div>
@@ -886,6 +887,363 @@ TYRO_DASHBOARD_LOGO="/images/logo.svg"</code></pre>
                 </table>
             </section>
 
+            <!-- Page Creation -->
+            <section id="page-creation" class="doc-section">
+                <h2 class="doc-section-title">Page Creation</h2>
+                <p class="doc-text">
+                    Tyro Dashboard includes powerful artisan commands to scaffold complete dashboard pages in seconds. These commands automatically handle everything from view creation to route registration and sidebar navigation.
+                </p>
+
+                <div class="doc-alert doc-alert-success" style="margin-top: 1.5rem;">
+                    <strong>Quick Pages:</strong> Create fully functional dashboard pages with a single command. Perfect for building analytics dashboards, reports, settings pages, or any custom functionality.
+                </div>
+
+                <h3 class="doc-section-subtitle" style="margin-top: 3rem;">Available Commands</h3>
+                <p class="doc-text">Three specialized commands let you create pages with different access levels:</p>
+
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; margin: 2rem 0;">
+                    <div style="border: 2px solid var(--color-border); border-radius: 12px; padding: 1.5rem; background: var(--color-surface);">
+                        <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1rem;">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--color-primary);">
+                                <path d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+                            </svg>
+                            <h4 style="margin: 0; font-size: 1.125rem; font-weight: 600;">User Pages</h4>
+                        </div>
+                        <p style="margin: 0; color: var(--color-text-secondary); font-size: 0.9375rem; line-height: 1.6;">Create pages for regular authenticated users. Perfect for dashboards, reports, and user-specific features.</p>
+                    </div>
+
+                    <div style="border: 2px solid var(--color-border); border-radius: 12px; padding: 1.5rem; background: var(--color-surface);">
+                        <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1rem;">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--color-destructive);">
+                                <path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+                            </svg>
+                            <h4 style="margin: 0; font-size: 1.125rem; font-weight: 600;">Admin Pages</h4>
+                        </div>
+                        <p style="margin: 0; color: var(--color-text-secondary); font-size: 0.9375rem; line-height: 1.6;">Create admin-only pages with role-based access control. Ideal for system settings, advanced configurations, and management tools.</p>
+                    </div>
+
+                    <div style="border: 2px solid var(--color-border); border-radius: 12px; padding: 1.5rem; background: var(--color-surface);">
+                        <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1rem;">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--color-success);">
+                                <path d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/>
+                            </svg>
+                            <h4 style="margin: 0; font-size: 1.125rem; font-weight: 600;">Common Pages</h4>
+                        </div>
+                        <p style="margin: 0; color: var(--color-text-secondary); font-size: 0.9375rem; line-height: 1.6;">Create pages accessible to both users and admins. Great for help centers, documentation, and shared resources.</p>
+                    </div>
+                </div>
+
+                <h3 class="doc-section-subtitle" style="margin-top: 3rem;">Create User Page</h3>
+                <p class="doc-text">
+                    The <code class="doc-inline-code">create-user-page</code> command generates pages for regular authenticated users. These pages extend the user layout and appear in the user sidebar.
+                </p>
+
+                <div class="doc-code-block">
+                    <div class="doc-code-header">
+                        <span class="doc-code-lang">bash</span>
+                    </div>
+                    <pre><code class="language-bash"># Interactive mode - prompts for page name
+php artisan tyro-dashboard:create-user-page
+
+# Direct mode - provide page name as argument
+php artisan tyro-dashboard:create-user-page "analytics"
+
+# With multiple words (automatically slugified)
+php artisan tyro-dashboard:create-user-page "Sales Reports"
+# Creates: /dashboard/sales-reports
+
+# Overwrite existing files
+php artisan tyro-dashboard:create-user-page "analytics" --force</code></pre>
+                </div>
+
+                <h4 class="doc-feature-title" style="margin-top: 2rem;">What Gets Created</h4>
+                <div style="background: var(--color-surface); border: 1px solid var(--color-border); border-radius: 8px; padding: 1.5rem; margin: 1.5rem 0;">
+                    <table style="width: 100%; border-collapse: collapse;">
+                        <tr>
+                            <td style="padding: 0.75rem 0; font-weight: 500; width: 40%;">View File:</td>
+                            <td style="padding: 0.75rem 0;"><code style="background: var(--color-muted); padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.875rem;">resources/views/dashboard/{page-name}.blade.php</code></td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 0.75rem 0; border-top: 1px solid var(--color-border); font-weight: 500;">Layout:</td>
+                            <td style="padding: 0.75rem 0; border-top: 1px solid var(--color-border);"><code style="background: var(--color-muted); padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.875rem;">tyro-dashboard::layouts.user</code></td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 0.75rem 0; border-top: 1px solid var(--color-border); font-weight: 500;">Route:</td>
+                            <td style="padding: 0.75rem 0; border-top: 1px solid var(--color-border);"><code style="background: var(--color-muted); padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.875rem;">/dashboard/{page-name}</code></td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 0.75rem 0; border-top: 1px solid var(--color-border); font-weight: 500;">Middleware:</td>
+                            <td style="padding: 0.75rem 0; border-top: 1px solid var(--color-border);"><code style="background: var(--color-muted); padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.875rem;">auth</code></td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 0.75rem 0; border-top: 1px solid var(--color-border); font-weight: 500;">Sidebar:</td>
+                            <td style="padding: 0.75rem 0; border-top: 1px solid var(--color-border);">User sidebar → Menu section</td>
+                        </tr>
+                    </table>
+                </div>
+
+                <h4 class="doc-feature-title" style="margin-top: 2rem;">Generated Route</h4>
+                <div class="doc-code-block">
+                    <pre><code class="language-php">Route::view('dashboard/{page-name}', 'dashboard.{page-name}')
+    ->middleware(['auth'])
+    ->name('dashboard.{page-name}');</code></pre>
+                </div>
+
+                <h3 class="doc-section-subtitle" style="margin-top: 3rem;">Create Admin Page</h3>
+                <p class="doc-text">
+                    The <code class="doc-inline-code">create-admin-page</code> command generates pages exclusively for administrators. These pages are protected with the <code class="doc-inline-code">tyro-dashboard.admin</code> middleware and appear in the admin sidebar.
+                </p>
+
+                <div class="doc-code-block">
+                    <div class="doc-code-header">
+                        <span class="doc-code-lang">bash</span>
+                    </div>
+                    <pre><code class="language-bash"># Interactive mode
+php artisan tyro-dashboard:create-admin-page
+
+# Direct mode
+php artisan tyro-dashboard:create-admin-page "system-logs"
+
+# With multiple words
+php artisan tyro-dashboard:create-admin-page "Advanced Settings"
+# Creates: /dashboard/advanced-settings
+
+# Overwrite existing files
+php artisan tyro-dashboard:create-admin-page "system-logs" --force</code></pre>
+                </div>
+
+                <h4 class="doc-feature-title" style="margin-top: 2rem;">What Gets Created</h4>
+                <div style="background: var(--color-surface); border: 1px solid var(--color-border); border-radius: 8px; padding: 1.5rem; margin: 1.5rem 0;">
+                    <table style="width: 100%; border-collapse: collapse;">
+                        <tr>
+                            <td style="padding: 0.75rem 0; font-weight: 500; width: 40%;">View File:</td>
+                            <td style="padding: 0.75rem 0;"><code style="background: var(--color-muted); padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.875rem;">resources/views/dashboard/{page-name}.blade.php</code></td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 0.75rem 0; border-top: 1px solid var(--color-border); font-weight: 500;">Layout:</td>
+                            <td style="padding: 0.75rem 0; border-top: 1px solid var(--color-border);"><code style="background: var(--color-muted); padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.875rem;">tyro-dashboard::layouts.admin</code></td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 0.75rem 0; border-top: 1px solid var(--color-border); font-weight: 500;">Route:</td>
+                            <td style="padding: 0.75rem 0; border-top: 1px solid var(--color-border);"><code style="background: var(--color-muted); padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.875rem;">/dashboard/{page-name}</code></td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 0.75rem 0; border-top: 1px solid var(--color-border); font-weight: 500;">Middleware:</td>
+                            <td style="padding: 0.75rem 0; border-top: 1px solid var(--color-border);"><code style="background: var(--color-muted); padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.875rem;">auth, tyro-dashboard.admin</code></td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 0.75rem 0; border-top: 1px solid var(--color-border); font-weight: 500;">Sidebar:</td>
+                            <td style="padding: 0.75rem 0; border-top: 1px solid var(--color-border);">Admin sidebar → Administration section</td>
+                        </tr>
+                    </table>
+                </div>
+
+                <h4 class="doc-feature-title" style="margin-top: 2rem;">Generated Route</h4>
+                <div class="doc-code-block">
+                    <pre><code class="language-php">Route::view('dashboard/{page-name}', 'dashboard.{page-name}')
+    ->middleware(['auth', 'tyro-dashboard.admin'])
+    ->name('dashboard.{page-name}');</code></pre>
+                </div>
+
+                <h3 class="doc-section-subtitle" style="margin-top: 3rem;">Create Common Page</h3>
+                <p class="doc-text">
+                    The <code class="doc-inline-code">create-common-page</code> command creates pages accessible to both regular users and administrators. These pages appear in both the user and admin sidebars.
+                </p>
+
+                <div class="doc-code-block">
+                    <div class="doc-code-header">
+                        <span class="doc-code-lang">bash</span>
+                    </div>
+                    <pre><code class="language-bash"># Interactive mode
+php artisan tyro-dashboard:create-common-page
+
+# Direct mode
+php artisan tyro-dashboard:create-common-page "help-center"
+
+# With multiple words
+php artisan tyro-dashboard:create-common-page "Support Documentation"
+# Creates: /dashboard/support-documentation
+
+# Overwrite existing files
+php artisan tyro-dashboard:create-common-page "help-center" --force</code></pre>
+                </div>
+
+                <h4 class="doc-feature-title" style="margin-top: 2rem;">What Gets Created</h4>
+                <div style="background: var(--color-surface); border: 1px solid var(--color-border); border-radius: 8px; padding: 1.5rem; margin: 1.5rem 0;">
+                    <table style="width: 100%; border-collapse: collapse;">
+                        <tr>
+                            <td style="padding: 0.75rem 0; font-weight: 500; width: 40%;">View File:</td>
+                            <td style="padding: 0.75rem 0;"><code style="background: var(--color-muted); padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.875rem;">resources/views/dashboard/{page-name}.blade.php</code></td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 0.75rem 0; border-top: 1px solid var(--color-border); font-weight: 500;">Layout:</td>
+                            <td style="padding: 0.75rem 0; border-top: 1px solid var(--color-border);"><code style="background: var(--color-muted); padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.875rem;">tyro-dashboard::layouts.app</code></td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 0.75rem 0; border-top: 1px solid var(--color-border); font-weight: 500;">Route:</td>
+                            <td style="padding: 0.75rem 0; border-top: 1px solid var(--color-border);"><code style="background: var(--color-muted); padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.875rem;">/dashboard/{page-name}</code></td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 0.75rem 0; border-top: 1px solid var(--color-border); font-weight: 500;">Middleware:</td>
+                            <td style="padding: 0.75rem 0; border-top: 1px solid var(--color-border);"><code style="background: var(--color-muted); padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.875rem;">auth</code></td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 0.75rem 0; border-top: 1px solid var(--color-border); font-weight: 500;">Sidebar:</td>
+                            <td style="padding: 0.75rem 0; border-top: 1px solid var(--color-border);"><strong>Both</strong> user and admin sidebars → Menu section</td>
+                        </tr>
+                    </table>
+                </div>
+
+                <h4 class="doc-feature-title" style="margin-top: 2rem;">Generated Route</h4>
+                <div class="doc-code-block">
+                    <pre><code class="language-php">Route::view('dashboard/{page-name}', 'dashboard.{page-name}')
+    ->middleware(['auth'])
+    ->name('dashboard.{page-name}');</code></pre>
+                </div>
+
+                <h3 class="doc-section-subtitle" style="margin-top: 3rem;">Generated Page Structure</h3>
+                <p class="doc-text">
+                    All generated pages follow a consistent, clean structure that's ready to customize:
+                </p>
+
+
+                <h3 class="doc-section-subtitle" style="margin-top: 3rem;">Generated Page File Locations</h3>
+                <p class="doc-text">
+                    Understanding where files are created and modified helps you customize your pages:
+                </p>
+
+                <div class="doc-code-block">
+                    <div class="doc-code-header">
+                        <span class="doc-code-lang">text</span>
+                        <span style="opacity: 0.7;">Project Structure</span>
+                    </div>
+                    <pre><code class="language-text">your-laravel-app/
+├── resources/
+│   └── views/
+│       ├── dashboard/
+│       │   └── page-name.blade.php          ← New page view created here
+│       └── vendor/
+│           └── tyro-dashboard/
+│               └── partials/
+│                   ├── user-sidebar.blade.php  ← Link added here (user/common)
+│                   └── admin-sidebar.blade.php ← Link added here (admin/common)
+└── routes/
+    └── web.php                                 ← Route registered here</code></pre>
+                </div>
+
+                <h3 class="doc-section-subtitle" style="margin-top: 3rem;">Automatic Features</h3>
+                <p class="doc-text">
+                    Every generated page includes these features out of the box:
+                </p>
+
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; margin: 2rem 0;">
+                    <div style="background: var(--color-surface); border: 1px solid var(--color-border); border-radius: 8px; padding: 1.25rem;">
+                        <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.75rem;">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color: var(--color-success);">
+                                <polyline points="20 6 9 17 4 12"></polyline>
+                            </svg>
+                            <strong style="font-size: 0.9375rem;">Breadcrumb Navigation</strong>
+                        </div>
+                        <p style="margin: 0; font-size: 0.875rem; color: var(--color-text-secondary); line-height: 1.5;">Automatic breadcrumb with link back to dashboard</p>
+                    </div>
+
+                    <div style="background: var(--color-surface); border: 1px solid var(--color-border); border-radius: 8px; padding: 1.25rem;">
+                        <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.75rem;">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color: var(--color-success);">
+                                <polyline points="20 6 9 17 4 12"></polyline>
+                            </svg>
+                            <strong style="font-size: 0.9375rem;">Sidebar Integration</strong>
+                        </div>
+                        <p style="margin: 0; font-size: 0.875rem; color: var(--color-text-secondary); line-height: 1.5;">Automatically added to appropriate sidebar with icon</p>
+                    </div>
+
+                    <div style="background: var(--color-surface); border: 1px solid var(--color-border); border-radius: 8px; padding: 1.25rem;">
+                        <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.75rem;">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color: var(--color-success);">
+                                <polyline points="20 6 9 17 4 12"></polyline>
+                            </svg>
+                            <strong style="font-size: 0.9375rem;">Route Registration</strong>
+                        </div>
+                        <p style="margin: 0; font-size: 0.875rem; color: var(--color-text-secondary); line-height: 1.5;">Named route added to web.php with proper middleware</p>
+                    </div>
+
+                    <div style="background: var(--color-surface); border: 1px solid var(--color-border); border-radius: 8px; padding: 1.25rem;">
+                        <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.75rem;">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color: var(--color-success);">
+                                <polyline points="20 6 9 17 4 12"></polyline>
+                            </svg>
+                            <strong style="font-size: 0.9375rem;">User Context</strong>
+                        </div>
+                        <p style="margin: 0; font-size: 0.875rem; color: var(--color-text-secondary); line-height: 1.5;">$user variable automatically available in all views</p>
+                    </div>
+
+                    <div style="background: var(--color-surface); border: 1px solid var(--color-border); border-radius: 8px; padding: 1.25rem;">
+                        <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.75rem;">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color: var(--color-success);">
+                                <polyline points="20 6 9 17 4 12"></polyline>
+                            </svg>
+                            <strong style="font-size: 0.9375rem;">Dark Mode Ready</strong>
+                        </div>
+                        <p style="margin: 0; font-size: 0.875rem; color: var(--color-text-secondary); line-height: 1.5;">Inherits theme support from dashboard layouts</p>
+                    </div>
+
+                    <div style="background: var(--color-surface); border: 1px solid var(--color-border); border-radius: 8px; padding: 1.25rem;">
+                        <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.75rem;">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color: var(--color-success);">
+                                <polyline points="20 6 9 17 4 12"></polyline>
+                            </svg>
+                            <strong style="font-size: 0.9375rem;">Responsive Design</strong>
+                        </div>
+                        <p style="margin: 0; font-size: 0.875rem; color: var(--color-text-secondary); line-height: 1.5;">Mobile-friendly layout with responsive components</p>
+                    </div>
+                </div>
+
+                <div class="doc-alert doc-alert-info" style="margin-top: 2rem;">
+                    <strong>Smart View Publishing:</strong> If dashboard views haven't been published yet, the commands automatically publish the necessary views before creating your page.
+                </div>
+
+                <h3 class="doc-section-subtitle" style="margin-top: 3rem;">Use Cases</h3>
+                <p class="doc-text">
+                    Here are some practical examples of when to use each command:
+                </p>
+
+                <div style="margin: 2rem 0;">
+                    <div style="border-left: 4px solid var(--color-primary); padding: 1rem 1.5rem; background: var(--color-surface); margin-bottom: 1.5rem;">
+                        <h4 style="margin: 0 0 0.5rem; font-size: 1rem; font-weight: 600;">User Pages</h4>
+                        <ul style="margin: 0.5rem 0 0; padding-left: 1.5rem; line-height: 1.8;">
+                            <li>Personal analytics dashboard</li>
+                            <li>Sales reports and metrics</li>
+                            <li>Order history and tracking</li>
+                            <li>User preferences and settings</li>
+                            <li>Project management boards</li>
+                        </ul>
+                    </div>
+
+                    <div style="border-left: 4px solid var(--color-destructive); padding: 1rem 1.5rem; background: var(--color-surface); margin-bottom: 1.5rem;">
+                        <h4 style="margin: 0 0 0.5rem; font-size: 1rem; font-weight: 600;">Admin Pages</h4>
+                        <ul style="margin: 0.5rem 0 0; padding-left: 1.5rem; line-height: 1.8;">
+                            <li>System logs and monitoring</li>
+                            <li>Application configuration</li>
+                            <li>Advanced security settings</li>
+                            <li>Email template management</li>
+                            <li>API key management</li>
+                            <li>Database backup and restore</li>
+                        </ul>
+                    </div>
+
+                    <div style="border-left: 4px solid var(--color-success); padding: 1rem 1.5rem; background: var(--color-surface);">
+                        <h4 style="margin: 0 0 0.5rem; font-size: 1rem; font-weight: 600;">Common Pages</h4>
+                        <ul style="margin: 0.5rem 0 0; padding-left: 1.5rem; line-height: 1.8;">
+                            <li>Help center and documentation</li>
+                            <li>FAQ and knowledge base</li>
+                            <li>Announcements and news</li>
+                            <li>Company information</li>
+                            <li>Contact and support forms</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
             <!-- CRUD Workflow -->
             <section id="crud-workflow" class="doc-section">
                 <h2 class="doc-section-title">CRUD Workflow</h2>
@@ -1563,8 +1921,184 @@ php artisan tyro-dashboard:publish-style</code></pre>
                             <td><code class="doc-inline-code">php artisan tyro-dashboard:createsuperuser</code></td>
                             <td>Create a superuser with admin privileges interactively</td>
                         </tr>
+                        <tr>
+                            <td><code class="doc-inline-code">php artisan tyro-dashboard:create-user-page</code></td>
+                            <td>Create a new user dashboard page with automatic sidebar linking</td>
+                        </tr>
+                        <tr>
+                            <td><code class="doc-inline-code">php artisan tyro-dashboard:create-admin-page</code></td>
+                            <td>Create a new admin dashboard page with automatic sidebar linking</td>
+                        </tr>
+                        <tr>
+                            <td><code class="doc-inline-code">php artisan tyro-dashboard:create-common-page</code></td>
+                            <td>Create a common page visible to both users and admins</td>
+                        </tr>
                     </tbody>
                 </table>
+
+                <h3 class="doc-section-subtitle" style="margin-top: 3rem;">Page Creation Commands</h3>
+                <p class="doc-text">
+                    Tyro Dashboard includes powerful commands to generate complete dashboard pages in seconds. These commands automatically create views, register routes, and add sidebar navigation links.
+                </p>
+
+                <h4 class="doc-feature-title" style="margin-top: 2rem;">Create User Page</h4>
+                <p class="doc-text">
+                    Creates a new page for regular users, extending the user layout and adding it to the user sidebar.
+                </p>
+                <div class="doc-code-block">
+                    <pre><code class="language-bash"># Interactive mode - prompts for page name
+php artisan tyro-dashboard:create-user-page
+
+# Direct mode - provide page name as argument
+php artisan tyro-dashboard:create-user-page "my-reports"
+
+# Overwrite existing files
+php artisan tyro-dashboard:create-user-page "my-reports" --force</code></pre>
+                </div>
+
+                <p class="doc-text" style="margin-top: 1.5rem;"><strong>What this command does:</strong></p>
+                <ul class="doc-list">
+                    <li>Creates a Blade view file at <code class="doc-inline-code">resources/views/dashboard/{page-name}.blade.php</code></li>
+                    <li>Extends <code class="doc-inline-code">tyro-dashboard::layouts.user</code> layout</li>
+                    <li>Adds a route to <code class="doc-inline-code">routes/web.php</code> with <code class="doc-inline-code">auth</code> middleware</li>
+                    <li>Automatically links the page in the user sidebar under "Menu" section</li>
+                    <li>Includes proper breadcrumb navigation</li>
+                    <li>Publishes user views if not already published</li>
+                </ul>
+
+                <p class="doc-text" style="margin-top: 1.5rem;"><strong>Generated route:</strong></p>
+                <div class="doc-code-block">
+                    <pre><code class="language-php">Route::view('dashboard/{page-name}', 'dashboard.{page-name}')
+    ->middleware(['auth'])
+    ->name('dashboard.{page-name}');</code></pre>
+                </div>
+
+                <h4 class="doc-feature-title" style="margin-top: 2rem;">Create Admin Page</h4>
+                <p class="doc-text">
+                    Creates a new page for administrators, extending the admin layout and adding it to the admin sidebar.
+                </p>
+                <div class="doc-code-block">
+                    <pre><code class="language-bash"># Interactive mode
+php artisan tyro-dashboard:create-admin-page
+
+# Direct mode
+php artisan tyro-dashboard:create-admin-page "system-settings"
+
+# Overwrite existing files
+php artisan tyro-dashboard:create-admin-page "system-settings" --force</code></pre>
+                </div>
+
+                <p class="doc-text" style="margin-top: 1.5rem;"><strong>What this command does:</strong></p>
+                <ul class="doc-list">
+                    <li>Creates a Blade view file at <code class="doc-inline-code">resources/views/dashboard/{page-name}.blade.php</code></li>
+                    <li>Extends <code class="doc-inline-code">tyro-dashboard::layouts.admin</code> layout</li>
+                    <li>Adds a route to <code class="doc-inline-code">routes/web.php</code> with <code class="doc-inline-code">auth</code> and <code class="doc-inline-code">tyro-dashboard.admin</code> middleware</li>
+                    <li>Automatically links the page in the admin sidebar under "Administration" section</li>
+                    <li>Includes proper breadcrumb navigation</li>
+                    <li>Publishes admin views if not already published</li>
+                </ul>
+
+                <p class="doc-text" style="margin-top: 1.5rem;"><strong>Generated route:</strong></p>
+                <div class="doc-code-block">
+                    <pre><code class="language-php">Route::view('dashboard/{page-name}', 'dashboard.{page-name}')
+    ->middleware(['auth', 'tyro-dashboard.admin'])
+    ->name('dashboard.{page-name}');</code></pre>
+                </div>
+
+                <h4 class="doc-feature-title" style="margin-top: 2rem;">Create Common Page</h4>
+                <p class="doc-text">
+                    Creates a page accessible to both regular users and administrators, extending the common app layout.
+                </p>
+                <div class="doc-code-block">
+                    <pre><code class="language-bash"># Interactive mode
+php artisan tyro-dashboard:create-common-page
+
+# Direct mode
+php artisan tyro-dashboard:create-common-page "help-center"
+
+# Overwrite existing files
+php artisan tyro-dashboard:create-common-page "help-center" --force</code></pre>
+                </div>
+
+                <p class="doc-text" style="margin-top: 1.5rem;"><strong>What this command does:</strong></p>
+                <ul class="doc-list">
+                    <li>Creates a Blade view file at <code class="doc-inline-code">resources/views/dashboard/{page-name}.blade.php</code></li>
+                    <li>Extends <code class="doc-inline-code">tyro-dashboard::layouts.app</code> layout</li>
+                    <li>Adds a route to <code class="doc-inline-code">routes/web.php</code> with <code class="doc-inline-code">auth</code> middleware</li>
+                    <li>Automatically links the page in <strong>both user and admin</strong> sidebars under "Menu" section</li>
+                    <li>Includes proper breadcrumb navigation</li>
+                    <li>Publishes all dashboard views if not already published</li>
+                </ul>
+
+                <p class="doc-text" style="margin-top: 1.5rem;"><strong>Generated route:</strong></p>
+                <div class="doc-code-block">
+                    <pre><code class="language-php">Route::view('dashboard/{page-name}', 'dashboard.{page-name}')
+    ->middleware(['auth'])
+    ->name('dashboard.{page-name}');</code></pre>
+                </div>
+
+                <h4 class="doc-feature-title" style="margin-top: 2rem;">Page Structure</h4>
+                <p class="doc-text">
+                    All generated pages follow a consistent structure with proper sections and styling:
+                </p>
+                <div class="doc-code-block">
+                    <pre><code class="language-php">@extends('tyro-dashboard::layouts.user') {{-- or admin/app --}}
+
+@section('title', 'Page Title')
+
+@section('breadcrumb')
+<a href="{{ route('tyro-dashboard.index') }}">Dashboard</a>
+<span class="breadcrumb-separator">/</span>
+<span>Page Title</span>
+@endsection
+
+@section('content')
+<div class="page-header">
+    <div class="page-header-row">
+        <div>
+            <h1 class="page-title">Page Title</h1>
+            <p class="page-description" style="font-size: 1rem;">Welcome to your new page.</p>
+        </div>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title" style="font-size: 1.0625rem;">Page Title Content</h3>
+    </div>
+    <div class="card-body">
+        <p>This is a new dashboard page. Start building your content here.</p>
+    </div>
+</div>
+@endsection</code></pre>
+                </div>
+
+                <h4 class="doc-feature-title" style="margin-top: 2rem;">File Locations</h4>
+                <p class="doc-text">
+                    When you create a page, the following files are created or modified:
+                </p>
+                <div class="doc-code-block">
+                    <pre><code class="language-text">your-laravel-app/
+├── resources/
+│   └── views/
+│       ├── dashboard/
+│       │   └── {page-name}.blade.php          ← New page view created here
+│       └── vendor/
+│           └── tyro-dashboard/
+│               └── partials/
+│                   ├── user-sidebar.blade.php  ← Link added here (user/common pages)
+│                   └── admin-sidebar.blade.php ← Link added here (admin/common pages)
+└── routes/
+    └── web.php                                 ← Route added here</code></pre>
+                </div>
+
+                <div class="doc-alert doc-alert-info" style="margin-top: 2rem;">
+                    <strong>Note:</strong> The <code class="doc-inline-code">$user</code> variable is automatically available in all dashboard pages through a global view composer, so you don't need to pass it manually from routes or controllers.
+                </div>
+
+                <div class="doc-alert doc-alert-success" style="margin-top: 1rem;">
+                    <strong>Pro Tip:</strong> Use these commands to quickly scaffold dashboard sections for analytics, reports, settings, or any custom functionality your application needs.
+                </div>
             </section>
 
             <!-- Routes Reference -->

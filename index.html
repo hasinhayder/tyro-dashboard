@@ -41,6 +41,7 @@
 
             <div class="navbar-links">
                 <a href="#features" class="navbar-link">Features</a>
+                <a href="#instant-pages" class="navbar-link">Quick Pages</a>
                 <a href="#screenshots" class="navbar-link">Screenshots</a>
                 <a href="#installation" class="navbar-link">Installation</a>
                 <a href="#routes" class="navbar-link">Routes</a>
@@ -267,9 +268,9 @@
                         <line x1="12" y1="19" x2="20" y2="19"></line>
                     </svg>
                 </div>
-                <h3 class="feature-title">Artisan Commands</h3>
+                <h3 class="feature-title">Create Pages in Seconds</h3>
                 <p class="feature-description">
-                    Interactive installation wizard, superuser creation tool, and version commands. Easy setup with helpful prompts.
+                    Generate complete admin pages with a single command. Automatic view creation, route registration, and sidebar linking. Build custom dashboards instantly.
                 </p>
             </div>
 
@@ -616,6 +617,247 @@
                             </div>
                         </div>
                     </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Instant Admin Pages Section -->
+    <section id="instant-pages" class="section">
+        <div class="gradient-orb gradient-orb-1" style="top: 10%; left: 10%;"></div>
+        <div class="gradient-orb gradient-orb-2" style="top: 60%; right: 10%;"></div>
+
+        <div class="section-header">
+            <span class="section-badge">
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="16 18 22 12 16 6"></polyline>
+                    <polyline points="8 6 2 12 8 18"></polyline>
+                </svg>
+                Quick Development
+            </span>
+            <h2 class="section-title">Instant Admin Pages</h2>
+            <p class="section-subtitle">
+                Generate complete dashboard pages with a single command. Perfect for building custom analytics, reports, settings, and management interfaces in seconds.
+            </p>
+        </div>
+
+        <div style="max-width: 1200px; margin: 0 auto; padding: 0 20px;">
+            <!-- Command Cards -->
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 2rem; margin-bottom: 4rem;">
+                <div style="background: var(--color-surface); border: 2px solid var(--color-border); border-radius: 16px; padding: 2rem; transition: all 0.3s ease; box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);">
+                    <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem;">
+                        <div style="background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); border-radius: 12px; padding: 0.875rem; display: flex; align-items: center; justify-content: center;">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <h3 style="margin: 0; font-size: 1.25rem; font-weight: 700; color: var(--color-foreground);">User Pages</h3>
+                            <p style="margin: 0.25rem 0 0; font-size: 0.875rem; color: var(--color-muted-foreground);">For authenticated users</p>
+                        </div>
+                    </div>
+                    <p style="margin: 0 0 1.5rem; color: var(--color-text-secondary); line-height: 1.6;">
+                        Create pages accessible to regular users. Perfect for dashboards, reports, analytics, and user-specific features.
+                    </p>
+                    <div style="background: var(--color-muted); border-radius: 8px; padding: 1rem; font-family: 'Monaco', 'Courier New', monospace; font-size: 0.8125rem; overflow-x: auto;">
+                        <code style="color: var(--color-foreground);">tyro-dashboard:create-user-page</code>
+                    </div>
+                    <ul style="margin: 1.5rem 0 0; padding: 0; list-style: none;">
+                        <li style="display: flex; align-items: start; gap: 0.5rem; margin-bottom: 0.75rem;">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color: var(--color-success); margin-top: 2px; flex-shrink: 0;">
+                                <polyline points="20 6 9 17 4 12"></polyline>
+                            </svg>
+                            <span style="font-size: 0.9375rem; color: var(--color-text-secondary);">Auto-links in user sidebar</span>
+                        </li>
+                        <li style="display: flex; align-items: start; gap: 0.5rem; margin-bottom: 0.75rem;">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color: var(--color-success); margin-top: 2px; flex-shrink: 0;">
+                                <polyline points="20 6 9 17 4 12"></polyline>
+                            </svg>
+                            <span style="font-size: 0.9375rem; color: var(--color-text-secondary);">Auth middleware applied</span>
+                        </li>
+                        <li style="display: flex; align-items: start; gap: 0.5rem;">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color: var(--color-success); margin-top: 2px; flex-shrink: 0;">
+                                <polyline points="20 6 9 17 4 12"></polyline>
+                            </svg>
+                            <span style="font-size: 0.9375rem; color: var(--color-text-secondary);">User layout extended</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <div style="background: var(--color-surface); border: 2px solid var(--color-border); border-radius: 16px; padding: 2rem; transition: all 0.3s ease; box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);">
+                    <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem;">
+                        <div style="background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%); border-radius: 12px; padding: 0.875rem; display: flex; align-items: center; justify-content: center;">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <h3 style="margin: 0; font-size: 1.25rem; font-weight: 700; color: var(--color-foreground);">Admin Pages</h3>
+                            <p style="margin: 0.25rem 0 0; font-size: 0.875rem; color: var(--color-muted-foreground);">For administrators only</p>
+                        </div>
+                    </div>
+                    <p style="margin: 0 0 1.5rem; color: var(--color-text-secondary); line-height: 1.6;">
+                        Create admin-only pages with role-based access. Ideal for system settings, logs, configurations, and management tools.
+                    </p>
+                    <div style="background: var(--color-muted); border-radius: 8px; padding: 1rem; font-family: 'Monaco', 'Courier New', monospace; font-size: 0.8125rem; overflow-x: auto;">
+                        <code style="color: var(--color-foreground);">tyro-dashboard:create-admin-page</code>
+                    </div>
+                    <ul style="margin: 1.5rem 0 0; padding: 0; list-style: none;">
+                        <li style="display: flex; align-items: start; gap: 0.5rem; margin-bottom: 0.75rem;">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color: var(--color-success); margin-top: 2px; flex-shrink: 0;">
+                                <polyline points="20 6 9 17 4 12"></polyline>
+                            </svg>
+                            <span style="font-size: 0.9375rem; color: var(--color-text-secondary);">Auto-links in admin sidebar</span>
+                        </li>
+                        <li style="display: flex; align-items: start; gap: 0.5rem; margin-bottom: 0.75rem;">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color: var(--color-success); margin-top: 2px; flex-shrink: 0;">
+                                <polyline points="20 6 9 17 4 12"></polyline>
+                            </svg>
+                            <span style="font-size: 0.9375rem; color: var(--color-text-secondary);">Admin middleware protected</span>
+                        </li>
+                        <li style="display: flex; align-items: start; gap: 0.5rem;">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color: var(--color-success); margin-top: 2px; flex-shrink: 0;">
+                                <polyline points="20 6 9 17 4 12"></polyline>
+                            </svg>
+                            <span style="font-size: 0.9375rem; color: var(--color-text-secondary);">Admin layout extended</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <div style="background: var(--color-surface); border: 2px solid var(--color-border); border-radius: 16px; padding: 2rem; transition: all 0.3s ease; box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);">
+                    <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem;">
+                        <div style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); border-radius: 12px; padding: 0.875rem; display: flex; align-items: center; justify-content: center;">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <h3 style="margin: 0; font-size: 1.25rem; font-weight: 700; color: var(--color-foreground);">Common Pages</h3>
+                            <p style="margin: 0.25rem 0 0; font-size: 0.875rem; color: var(--color-muted-foreground);">For all authenticated users</p>
+                        </div>
+                    </div>
+                    <p style="margin: 0 0 1.5rem; color: var(--color-text-secondary); line-height: 1.6;">
+                        Create pages visible to both users and admins. Great for help centers, documentation, announcements, and shared resources.
+                    </p>
+                    <div style="background: var(--color-muted); border-radius: 8px; padding: 1rem; font-family: 'Monaco', 'Courier New', monospace; font-size: 0.8125rem; overflow-x: auto;">
+                        <code style="color: var(--color-foreground);">tyro-dashboard:create-common-page</code>
+                    </div>
+                    <ul style="margin: 1.5rem 0 0; padding: 0; list-style: none;">
+                        <li style="display: flex; align-items: start; gap: 0.5rem; margin-bottom: 0.75rem;">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color: var(--color-success); margin-top: 2px; flex-shrink: 0;">
+                                <polyline points="20 6 9 17 4 12"></polyline>
+                            </svg>
+                            <span style="font-size: 0.9375rem; color: var(--color-text-secondary);">Links in both sidebars</span>
+                        </li>
+                        <li style="display: flex; align-items: start; gap: 0.5rem; margin-bottom: 0.75rem;">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color: var(--color-success); margin-top: 2px; flex-shrink: 0;">
+                                <polyline points="20 6 9 17 4 12"></polyline>
+                            </svg>
+                            <span style="font-size: 0.9375rem; color: var(--color-text-secondary);">Auth middleware only</span>
+                        </li>
+                        <li style="display: flex; align-items: start; gap: 0.5rem;">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color: var(--color-success); margin-top: 2px; flex-shrink: 0;">
+                                <polyline points="20 6 9 17 4 12"></polyline>
+                            </svg>
+                            <span style="font-size: 0.9375rem; color: var(--color-text-secondary);">Common layout extended</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- What Gets Created -->
+            <div style="background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%); border-radius: 20px; padding: 3rem; margin-bottom: 3rem; border: 1px solid var(--color-border);">
+                <h3 style="margin: 0 0 1rem; font-size: 1.75rem; font-weight: 700; text-align: center; color: var(--color-foreground);">What Gets Created Automatically</h3>
+                <p style="margin: 0 0 2.5rem; text-align: center; color: var(--color-muted-foreground); font-size: 1.0625rem;">Every command generates a complete, production-ready page with zero configuration</p>
+
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.5rem;">
+                    <div style="text-align: center;">
+                        <div style="background: white; border-radius: 50%; width: 64px; height: 64px; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem; box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color: #3b82f6;">
+                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                <polyline points="14 2 14 8 20 8"></polyline>
+                            </svg>
+                        </div>
+                        <h4 style="margin: 0 0 0.5rem; font-size: 1rem; font-weight: 600;">Blade View File</h4>
+                        <p style="margin: 0; font-size: 0.875rem; color: var(--color-muted-foreground);">Complete template with layout</p>
+                    </div>
+
+                    <div style="text-align: center;">
+                        <div style="background: white; border-radius: 50%; width: 64px; height: 64px; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem; box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color: #10b981;">
+                                <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
+                            </svg>
+                        </div>
+                        <h4 style="margin: 0 0 0.5rem; font-size: 1rem; font-weight: 600;">Route Registration</h4>
+                        <p style="margin: 0; font-size: 0.875rem; color: var(--color-muted-foreground);">Added to web.php automatically</p>
+                    </div>
+
+                    <div style="text-align: center;">
+                        <div style="background: white; border-radius: 50%; width: 64px; height: 64px; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem; box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color: #f59e0b;">
+                                <line x1="8" y1="6" x2="21" y2="6"></line>
+                                <line x1="8" y1="12" x2="21" y2="12"></line>
+                                <line x1="8" y1="18" x2="21" y2="18"></line>
+                                <line x1="3" y1="6" x2="3.01" y2="6"></line>
+                                <line x1="3" y1="12" x2="3.01" y2="12"></line>
+                                <line x1="3" y1="18" x2="3.01" y2="18"></line>
+                            </svg>
+                        </div>
+                        <h4 style="margin: 0 0 0.5rem; font-size: 1rem; font-weight: 600;">Sidebar Navigation</h4>
+                        <p style="margin: 0; font-size: 0.875rem; color: var(--color-muted-foreground);">Link with icon added</p>
+                    </div>
+
+                    <div style="text-align: center;">
+                        <div style="background: white; border-radius: 50%; width: 64px; height: 64px; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem; box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color: #8b5cf6;">
+                                <path d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707"></path>
+                            </svg>
+                        </div>
+                        <h4 style="margin: 0 0 0.5rem; font-size: 1rem; font-weight: 600;">Breadcrumb Trail</h4>
+                        <p style="margin: 0; font-size: 0.875rem; color: var(--color-muted-foreground);">Navigation breadcrumbs included</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Example Usage -->
+            <div style="background: var(--color-surface); border-radius: 16px; padding: 3rem; border: 1px solid var(--color-border);">
+                <h3 style="margin: 0 0 1.5rem; font-size: 1.5rem; font-weight: 700; text-align: center;">Simple, Interactive, Powerful</h3>
+                
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem; margin-bottom: 2rem;">
+                    <div>
+                        <div style="background: var(--color-muted); border-radius: 12px; padding: 1.25rem; margin-bottom: 1rem;">
+                            <div style="color: var(--color-muted-foreground); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.5rem;">Step 1</div>
+                            <code style="color: var(--color-foreground); font-size: 0.875rem;">php artisan tyro-dashboard:create-user-page</code>
+                        </div>
+                        <p style="margin: 0; font-size: 0.9375rem; color: var(--color-text-secondary); line-height: 1.6;">Run the command - it prompts for the page name interactively</p>
+                    </div>
+
+                    <div>
+                        <div style="background: var(--color-muted); border-radius: 12px; padding: 1.25rem; margin-bottom: 1rem;">
+                            <div style="color: var(--color-muted-foreground); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.5rem;">Step 2</div>
+                            <code style="color: var(--color-foreground); font-size: 0.875rem;">Enter: "Sales Analytics"</code>
+                        </div>
+                        <p style="margin: 0; font-size: 0.9375rem; color: var(--color-text-secondary); line-height: 1.6;">Type your page name - it auto-generates slug and title</p>
+                    </div>
+
+                    <div>
+                        <div style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); border-radius: 12px; padding: 1.25rem; margin-bottom: 1rem; color: white;">
+                            <div style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.5rem; opacity: 0.9;">Done!</div>
+                            <div style="font-size: 0.875rem; font-weight: 600;">✓ Page created at /dashboard/sales-analytics</div>
+                        </div>
+                        <p style="margin: 0; font-size: 0.9375rem; color: var(--color-text-secondary); line-height: 1.6;">Your page is ready to use with full navigation</p>
+                    </div>
+                </div>
+
+                <div style="text-align: center; padding-top: 2rem; border-top: 1px solid var(--color-border);">
+                    <p style="margin: 0 0 1.5rem; font-size: 1.125rem; color: var(--color-muted-foreground);">Start building your custom dashboard now</p>
+                    <a href="doc.html#page-creation" style="display: inline-flex; align-items: center; gap: 0.5rem; background: var(--color-primary); color: white; padding: 0.875rem 2rem; border-radius: 8px; text-decoration: none; font-weight: 600; transition: all 0.2s ease; box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);">
+                        Read Full Documentation
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                            <polyline points="12 5 19 12 12 19"></polyline>
+                        </svg>
+                    </a>
                 </div>
             </div>
         </div>
