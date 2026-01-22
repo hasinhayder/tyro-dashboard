@@ -22,41 +22,52 @@ class VersionCommand extends Command
     public function handle(): int
     {
         $version = "1.4.0";
-
+        
         $this->info('');
         $this->info('  ╔════════════════════════════════════════╗');
         $this->info('  ║                                        ║');
-        $this->info('  ║     Tyro Dashboard v' . str_pad($version, 19) . '║');
+        $this->info('  ║        Tyro Dashboard                  ║');
         $this->info('  ║                                        ║');
         $this->info('  ╚════════════════════════════════════════╝');
         $this->info('');
-        $this->info('  Admin Dashboard for Laravel applications');
-        $this->info('  Built with ❤️ by Hasin Hayder');
+        $this->info("  Version: <comment>{$version}</comment>");
+        $this->info('  Laravel: <comment>' . app()->version() . '</comment>');
+        $this->info('  PHP: <comment>' . PHP_VERSION . '</comment>');
         $this->info('');
         $this->info('  Dependencies:');
-        
-        // Check Tyro version
-        if (class_exists(\HasinHayder\Tyro\Providers\TyroServiceProvider::class)) {
-            $tyroVersion = config('tyro.version', 'installed');
-            $this->info('  - hasinhayder/tyro: v' . $tyroVersion);
-        } else {
-            $this->warn('  - hasinhayder/tyro: not installed');
-        }
-
-        // Check Tyro Login version
-        if (class_exists(\HasinHayder\TyroLogin\Providers\TyroLoginServiceProvider::class)) {
-            $tyroLoginVersion = config('tyro-login.version', 'installed');
-            $this->info('  - hasinhayder/tyro-login: v' . $tyroLoginVersion);
-        } else {
-            $this->warn('  - hasinhayder/tyro-login: not installed');
-        }
-
+        $this->info('  - hasinhayder/tyro: <comment>' . $this->isDependencyInstalled('tyro') . '</comment>');
+        $this->info('  - hasinhayder/tyro-login: <comment>' . $this->isDependencyInstalled('tyro-login') . '</comment>');
         $this->info('');
-        $this->info('  Configuration:');
-        $this->info('  - Route prefix: /' . config('tyro-dashboard.routes.prefix', 'dashboard'));
-        $this->info('  - Admin roles: ' . implode(', ', config('tyro-dashboard.admin_roles', ['admin', 'super-admin'])));
+        $this->info('  Documentation: <comment>https://hasinhayder.github.io/tyro-dashboard/doc.html</comment>');
+        $this->info('  GitHub: <comment>https://github.com/hasinhayder/tyro-dashboard</comment>');
         $this->info('');
 
         return self::SUCCESS;
+    }
+
+    /**
+     * Check if a dependency is installed
+     */
+    private function isDependencyInstalled(string $package): string
+    {
+        $lockFile = base_path('composer.lock');
+        
+        if (!file_exists($lockFile)) {
+            return 'unknown';
+        }
+
+        $lockData = json_decode(file_get_contents($lockFile), true);
+        
+        if (!isset($lockData['packages'])) {
+            return 'unknown';
+        }
+
+        foreach ($lockData['packages'] as $pkg) {
+            if ($pkg['name'] === "hasinhayder/{$package}") {
+                return 'installed';
+            }
+        }
+
+        return 'not installed';
     }
 }
