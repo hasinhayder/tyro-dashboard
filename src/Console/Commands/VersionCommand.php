@@ -21,7 +21,7 @@ class VersionCommand extends Command
      */
     public function handle(): int
     {
-        $version = config('tyro-dashboard.version', '1.0.0');
+        $version = "1.4.0";
 
         $this->info('');
         $this->info('  ╔════════════════════════════════════════╗');
