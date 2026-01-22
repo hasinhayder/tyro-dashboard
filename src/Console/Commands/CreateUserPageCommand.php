@@ -104,6 +104,8 @@ class CreateUserPageCommand extends Command
 @section('title', '{$pageTitle}')
 
 @section('breadcrumb')
+<a href="{{ route('tyro-dashboard.index') }}">Dashboard</a>
+<span class="breadcrumb-separator">/</span>
 <span>{$pageTitle}</span>
 @endsection
 
