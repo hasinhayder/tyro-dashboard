@@ -88,7 +88,7 @@
                     <rect x="14" y="14" width="7" height="7"></rect>
                     <rect x="3" y="14" width="7" height="7"></rect>
                 </svg>
-                shadcn Theme • Admin Dashboard for Laravel 12
+                Shadcn Theme Compatible • Admin Dashboard for Laravel 12
             </div>
 
             <h1 class="hero-title">
@@ -121,7 +121,17 @@
 
             <div class="install-command">
                 <code id="installCommand">composer require hasinhayder/tyro-dashboard</code>
-                <button class="copy-btn" id="copyBtn" aria-label="Copy to clipboard">
+                <button class="copy-btn" onclick="copyToClipboard(this, 'composer require hasinhayder/tyro-dashboard')" aria-label="Copy to clipboard">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                        <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                    </svg>
+                </button>
+            </div>
+
+            <div class="install-command" style="margin-top: var(--spacing-sm);">
+                <code>php artisan tyro-dashboard:install</code>
+                <button class="copy-btn" onclick="copyToClipboard(this, 'php artisan tyro-dashboard:install')" aria-label="Copy to clipboard">
                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
                         <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
@@ -286,7 +296,7 @@
                         <path d="M19 19l-5-14"></path>
                     </svg>
                 </div>
-                <h3 class="feature-title">shadcn Theme Customization</h3>
+                <h3 class="feature-title">Shadcn Theme Customization</h3>
                 <p class="feature-description">
                     Full shadcn/ui compatibility with visual theme editor support via <a href="https://tweakcn.com" target="_blank" rel="noopener" style="text-decoration: underline; color: var(--color-primary);">tweakcn.com</a>. Customize colors effortlessly.
                 </p>
@@ -825,9 +835,17 @@
                 
                 <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem; margin-bottom: 2rem;">
                     <div>
-                        <div style="background: var(--color-muted); border-radius: 12px; padding: 1.25rem; margin-bottom: 1rem;">
+                        <div style="background: var(--color-muted); border-radius: 12px; padding: 1.25rem; margin-bottom: 1rem; position: relative; group;">
                             <div style="color: var(--color-muted-foreground); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.5rem;">Step 1</div>
-                            <code style="color: var(--color-foreground); font-size: 0.875rem;">php artisan tyro-dashboard:create-user-page</code>
+                            <div style="display: flex; align-items: center; justify-content: space-between; gap: 1rem;">
+                                <code style="color: var(--color-foreground); font-size: 0.875rem;">php artisan tyro-dashboard:create-user-page</code>
+                                <button onclick="copyToClipboard(this, 'php artisan tyro-dashboard:create-user-page')" style="background: var(--color-bg); border: 1px solid var(--color-border); color: var(--color-muted-foreground); padding: 4px; border-radius: 4px; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; justify-content: center;" title="Copy to clipboard">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                                        <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                                    </svg>
+                                </button>
+                            </div>
                         </div>
                         <p style="margin: 0; font-size: 0.9375rem; color: var(--color-text-secondary); line-height: 1.6;">Run the command - it prompts for the page name interactively</p>
                     </div>
@@ -843,7 +861,7 @@
                     <div>
                         <div style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); border-radius: 12px; padding: 1.25rem; margin-bottom: 1rem; color: white;">
                             <div style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.5rem; opacity: 0.9;">Done!</div>
-                            <div style="font-size: 0.875rem; font-weight: 600;">✓ Page created at /dashboard/sales-analytics</div>
+                            <div style="font-size: 0.875rem; font-weight: 600;">✓ Page created at resources/views/dashboard/sales-analytics.blade.php</div>
                         </div>
                         <p style="margin: 0; font-size: 0.9375rem; color: var(--color-text-secondary); line-height: 1.6;">Your page is ready to use with full navigation</p>
                     </div>
