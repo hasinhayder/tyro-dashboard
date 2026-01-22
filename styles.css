@@ -21,6 +21,8 @@
     --color-text: #0f172a;
     --color-text-secondary: #475569;
     --color-text-tertiary: #64748b;
+    --color-foreground: #0f172a;
+    --color-muted-foreground: #64748b;
     --color-border: #e2e8f0;
     --color-shadow: rgba(15, 23, 42, 0.08);
 
@@ -67,6 +69,8 @@
     --color-text: #f8fafc;
     --color-text-secondary: #cbd5e1;
     --color-text-tertiary: #94a3b8;
+    --color-foreground: #f8fafc;
+    --color-muted-foreground: #94a3b8;
     --color-border: #243044;
     --color-shadow: rgba(0, 0, 0, 0.55);
     --gradient-hero: linear-gradient(180deg, #0b1220 0%, #0f172a 100%);
