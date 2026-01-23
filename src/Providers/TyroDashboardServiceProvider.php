@@ -7,6 +7,9 @@ use HasinHayder\TyroDashboard\Console\Commands\CreateCommonPageCommand;
 use HasinHayder\TyroDashboard\Console\Commands\CreateSuperUserCommand;
 use HasinHayder\TyroDashboard\Console\Commands\CreateUserPageCommand;
 use HasinHayder\TyroDashboard\Console\Commands\InstallCommand;
+use HasinHayder\TyroDashboard\Console\Commands\RemoveAdminPageCommand;
+use HasinHayder\TyroDashboard\Console\Commands\RemoveCommonPageCommand;
+use HasinHayder\TyroDashboard\Console\Commands\RemoveUserPageCommand;
 use HasinHayder\TyroDashboard\Console\Commands\MakeResourceCommand;
 use HasinHayder\TyroDashboard\Console\Commands\PublishCommand;
 use HasinHayder\TyroDashboard\Console\Commands\PublishStyleCommand;
@@ -80,6 +83,9 @@ class TyroDashboardServiceProvider extends ServiceProvider
             MakeResourceCommand::class,
             PublishCommand::class,
             PublishStyleCommand::class,
+            RemoveAdminPageCommand::class,
+            RemoveCommonPageCommand::class,
+            RemoveUserPageCommand::class,
             VersionCommand::class,
         ]);
     }
