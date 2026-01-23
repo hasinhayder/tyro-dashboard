@@ -67,12 +67,12 @@
 
     /* Collapsed Sidebar */
     .sidebar.collapsed {
-        width: 60px;
+        width: 25px;
         overflow: hidden;
     }
 
     .sidebar.collapsed .sidebar-header {
-        padding: 1.25rem 0.5rem;
+        display: none;
     }
 
     .sidebar.collapsed .sidebar-logo-text,
@@ -265,7 +265,7 @@
     }
 
     .sidebar.collapsed ~ .main-content {
-        margin-left: 60px;
+        margin-left: 25px;
     }
 
     /* Top Bar - shadcn style */
