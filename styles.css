@@ -2833,7 +2833,59 @@ body {
 
 .setup-header {
     text-align: center;
+    margin-bottom: var(--spacing-2xl);
+}
+
+.setup-tabs {
+    display: flex;
+    justify-content: center;
+    gap: var(--spacing-sm);
     margin-bottom: var(--spacing-3xl);
+    flex-wrap: wrap;
+    background: var(--color-bg-tertiary);
+    padding: 6px;
+    border-radius: var(--radius-xl);
+    width: fit-content;
+    margin-left: auto;
+    margin-right: auto;
+    border: 1px solid var(--color-border);
+}
+
+.setup-tab-btn {
+    padding: 0.75rem 1.25rem;
+    border-radius: var(--radius-lg);
+    border: none;
+    background: transparent;
+    color: var(--color-text-secondary);
+    font-weight: 600;
+    font-size: 0.875rem;
+    cursor: pointer;
+    transition: all var(--transition-base);
+    white-space: nowrap;
+}
+
+.setup-tab-btn:hover {
+    color: var(--color-text);
+}
+
+.setup-tab-btn.active {
+    background: var(--color-bg);
+    color: var(--color-primary);
+    box-shadow: var(--shadow-sm);
+}
+
+.setup-tab-content {
+    display: none;
+}
+
+.setup-tab-content.active {
+    display: block;
+    animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 
 .setup-header h3 {

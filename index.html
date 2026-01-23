@@ -952,77 +952,7 @@
 
           </div>
 
-        <!-- Quick Setup -->
-        <div class="shadcn-setup">
-            <div class="setup-header">
-                <h3>Quick Setup</h3>
-                <p>Start customizing in minutes, not hours</p>
-            </div>
-            
-            <div class="setup-steps">
-                <div class="setup-step">
-                    <div class="step-marker">
-                        <span>1</span>
-                    </div>
-                    <div class="step-info">
-                        <h4>Publish Theme Files</h4>
-                        <p>Generate customizable theme files</p>
-                        <div class="code-snippet">
-                            <code>php artisan tyro-dashboard:publish-style --theme-only</code>
-                            <button class="copy-snippet-btn" onclick="copyToClipboard(this, 'php artisan tyro-dashboard:publish-style --theme-only')">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
-                                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
-                                </svg>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-        <div class="setup-step">
-                    <div class="step-marker">
-                        <span>2</span>
-                    </div>
-                    <div class="step-info">
-                        <h4>Customize theme variables</h4>
-                        <p>Use tweakcn or any shadcn theme editor to customize colors</p>
-                    </div>
-                </div>
-
-                <div class="setup-step">
-                    <div class="step-marker">
-                        <span>3</span>
-                    </div>
-                    <div class="step-info">
-                        <h4>Apply & Deploy</h4>
-                        <p>Copy variables and see changes instantly</p>
-                    </div>
-                </div>
-
-                <div style="text-align: center; border-top: 1px solid var(--color-border, #e2e8f0); padding-top: 1.5rem;">
-                    <a href="doc.html" class="setup-link" style="display: inline-flex; align-items: center; gap: 0.625rem; padding: 0.875rem 1.75rem; border-radius: var(--radius-lg, 12px); background: linear-gradient(135deg, rgba(99, 102, 241, 0.08) 0%, rgba(168, 85, 247, 0.08) 100%); color: var(--color-primary, #6366f1); text-decoration: none; font-weight: 600; font-size: 0.9375rem; transition: all 0.25s ease; border: 1px solid rgba(99, 102, 241, 0.15); box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
-                            <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
-                        </svg>
-                        <span>Read full documentation</span>
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="opacity: 0.6;">
-                            <path d="M5 12h14"></path>
-                            <path d="M12 5l7 7-7 7"></path>
-                        </svg>
-                    </a>
-                </div>
-
-                <style>
-                    a[href="doc.html"].setup-link:hover {
-                        transform: translateY(-2px);
-                        box-shadow: 0 4px 12px rgba(99, 102, 241, 0.15), 0 2px 4px rgba(0, 0, 0, 0.08);
-                        background: linear-gradient(135deg, rgba(99, 102, 241, 0.12) 0%, rgba(168, 85, 247, 0.12) 100%);
-                        border-color: rgba(99, 102, 241, 0.25);
-                    }
-                </style>
-            </div>
-        </div>
+    <!-- Screenshots Section -->
     </section>
 
     <!-- Screenshots Section -->
@@ -1336,6 +1266,113 @@
                 </div>
             </div>
         </div>
+    </section>
+
+    <!-- Quick Setup Section -->
+    <section class="section" id="quick-setup-section">
+        <div class="shadcn-setup" id="quick-setup-tabs">
+                <div class="setup-header">
+                    <h3>Quick Setup</h3>
+                    <p>Start customizing in minutes, not hours</p>
+                </div>
+
+                <div class="setup-tabs">
+                    <button class="setup-tab-btn active" data-tab="quick-theming">Quick Theming</button>
+                    <button class="setup-tab-btn" data-tab="create-superuser">Create Super User</button>
+                    <button class="setup-tab-btn" data-tab="quick-admin">Quick Admin Pages</button>
+                </div>
+                
+                <div class="setup-tab-container">
+                    <!-- Quick Theming Tab -->
+                    <div class="setup-tab-content active" id="quick-theming">
+                        <div class="setup-steps">
+                            <div class="setup-step">
+                                <div class="step-marker"><span>1</span></div>
+                                <div class="step-info">
+                                    <h4>Publish Theme Files</h4>
+                                    <div class="code-snippet">
+                                        <code>php artisan tyro-dashboard:publish-style --theme-only</code>
+                                        <button class="copy-snippet-btn" onclick="copyToClipboard(this, 'php artisan tyro-dashboard:publish-style --theme-only')">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="setup-step">
+                                <div class="step-marker"><span>2</span></div>
+                                <div class="step-info">
+                                    <h4>Customize Variables</h4>
+                                    <p>Use <a href="https://tweakcn.com" target="_blank" style="color: var(--color-primary); text-decoration: underline;">tweakcn.com</a> to create your palette and paste variables into <code>shadcn-theme.blade.php</code>.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Create Super User Tab -->
+                    <div class="setup-tab-content" id="create-superuser">
+                        <div class="setup-steps">
+                            <div class="setup-step">
+                                <div class="step-marker"><span>1</span></div>
+                                <div class="step-info">
+                                    <h4>Run Command</h4>
+                                    <div class="code-snippet">
+                                        <code>php artisan tyro-dashboard:createsuperuser</code>
+                                        <button class="copy-snippet-btn" onclick="copyToClipboard(this, 'php artisan tyro-dashboard:createsuperuser')">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="setup-step">
+                                <div class="step-marker"><span>2</span></div>
+                                <div class="step-info">
+                                    <h4>Interactive Setup</h4>
+                                    <p>Follow the interactive prompts to set your email, name, and password for the superuser account.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Quick Admin Pages Tab -->
+                    <div class="setup-tab-content" id="quick-admin">
+                        <div class="setup-steps">
+                            <div class="setup-step">
+                                <div class="step-marker"><span>1</span></div>
+                                <div class="step-info">
+                                    <h4>Create Admin Page</h4>
+                                    <div class="code-snippet">
+                                        <code>php artisan tyro-dashboard:create-admin-page "Settings"</code>
+                                        <button class="copy-snippet-btn" onclick="copyToClipboard(this, 'php artisan tyro-dashboard:create-admin-page &quot;Settings&quot;')">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="setup-step">
+                                <div class="step-marker"><span>2</span></div>
+                                <div class="step-info">
+                                    <h4>What happens next</h4>
+                                    <p>This command automatically creates the view file, registers the route, and adds it to the admin sidebar.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="text-align: center; border-top: 1px solid var(--color-border, #e2e8f0); padding-top: 1.5rem; margin-top: 2rem;">
+                        <a href="doc.html" class="setup-link" style="display: inline-flex; align-items: center; gap: 0.625rem; padding: 0.875rem 1.75rem; border-radius: var(--radius-lg, 12px); background: linear-gradient(135deg, rgba(99, 102, 241, 0.08) 0%, rgba(168, 85, 247, 0.08) 100%); color: var(--color-primary, #6366f1); text-decoration: none; font-weight: 600; font-size: 0.9375rem; transition: all 0.25s ease; border: 1px solid rgba(99, 102, 241, 0.15); box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
+                                <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
+                            </svg>
+                            <span>Read full documentation</span>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="opacity: 0.6;">
+                                <path d="M5 12h14"></path>
+                                <path d="M12 5l7 7-7 7"></path>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
     </section>
 
     <!-- Routes Section -->
@@ -1843,6 +1880,29 @@
 
         // Category filter functionality
         document.addEventListener('DOMContentLoaded', () => {
+            // Quick Setup Tab Functionality
+            const setupTabBtns = document.querySelectorAll('.setup-tab-btn');
+            const setupTabContents = document.querySelectorAll('.setup-tab-content');
+
+            setupTabBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const targetTab = btn.dataset.tab;
+
+                    // Update buttons
+                    setupTabBtns.forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+
+                    // Update content
+                    setupTabContents.forEach(content => {
+                        if (content.id === targetTab) {
+                            content.classList.add('active');
+                        } else {
+                            content.classList.remove('active');
+                        }
+                    });
+                });
+            });
+
             const categoryBtns = document.querySelectorAll('.category-btn');
             const screenshotCards = document.querySelectorAll('.screenshot-card');
 
