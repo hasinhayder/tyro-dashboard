@@ -58,6 +58,21 @@
     // Apply sidebar state on load
     restoreSidebarState();
 
+    // Add click handler to collapsed sidebar to expand it
+    document.addEventListener('DOMContentLoaded', function() {
+        const sidebar = document.getElementById('sidebar');
+        if (sidebar) {
+            sidebar.addEventListener('click', function(event) {
+                // Only expand if sidebar is collapsed and not clicking on collapse/expand buttons
+                if (this.classList.contains('collapsed') && 
+                    !event.target.closest('.sidebar-expand-btn') && 
+                    !event.target.closest('.sidebar-collapse-btn')) {
+                    toggleSidebarCollapse();
+                }
+            });
+        }
+    });
+
     // User dropdown
     function toggleUserDropdown() {
         const dropdown = document.getElementById('userDropdown');
