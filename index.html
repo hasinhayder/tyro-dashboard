@@ -30,7 +30,7 @@
         <div class="navbar-container">
             <a href="#" class="navbar-brand">
                 <span class="navbar-logo">Tyro Dashboard</span>
-                <span class="navbar-badge">v1.3</span>
+                <span class="navbar-badge">v1.4.2</span>
             </a>
 
             <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Toggle menu">
@@ -876,6 +876,62 @@
                             <polyline points="12 5 19 12 12 19"></polyline>
                         </svg>
                     </a>
+                </div>
+            </div>
+
+            <!-- Page Removal Commands -->
+            <div style="background: var(--color-surface); border-radius: 16px; padding: 3rem; border: 1px solid var(--color-border); margin-top: 3rem;">
+                <div style="text-align: center; margin-bottom: 3rem;">
+                    <h3 style="font-size: 1.75rem; font-weight: 700; margin: 0 0 0.75rem;">Page Removal Commands</h3>
+                    <p style="margin: 0; color: var(--color-text-secondary); font-size: 1.0625rem;">Safely clean up pages you no longer need</p>
+                </div>
+
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin-bottom: 2rem;">
+                    <div style="background: var(--color-surface); border-radius: 12px; padding: 1.5rem; border: 1px solid var(--color-border); border-left: 4px solid #ef4444;">
+                        <h4 style="margin: 0 0 0.75rem; font-size: 1.125rem; font-weight: 600;">Remove Admin Page</h4>
+                        <code style="display: block; background: var(--color-muted); padding: 0.5rem; border-radius: 6px; font-size: 0.8125rem; margin-bottom: 0.75rem; color: var(--color-muted-foreground);">tyro-dashboard:remove-admin-page</code>
+                        <p style="margin: 0; font-size: 0.875rem; color: var(--color-text-secondary); line-height: 1.5;">Remove an admin-only page from dashboard</p>
+                    </div>
+                    
+                    <div style="background: var(--color-surface); border-radius: 12px; padding: 1.5rem; border: 1px solid var(--color-border); border-left: 4px solid #3b82f6;">
+                        <h4 style="margin: 0 0 0.75rem; font-size: 1.125rem; font-weight: 600;">Remove User Page</h4>
+                        <code style="display: block; background: var(--color-muted); padding: 0.5rem; border-radius: 6px; font-size: 0.8125rem; margin-bottom: 0.75rem; color: var(--color-muted-foreground);">tyro-dashboard:remove-user-page</code>
+                        <p style="margin: 0; font-size: 0.875rem; color: var(--color-text-secondary); line-height: 1.5;">Remove a user-facing page from dashboard</p>
+                    </div>
+                    
+                    <div style="background: var(--color-surface); border-radius: 12px; padding: 1.5rem; border: 1px solid var(--color-border); border-left: 4px solid #10b981;">
+                        <h4 style="margin: 0 0 0.75rem; font-size: 1.125rem; font-weight: 600;">Remove Common Page</h4>
+                        <code style="display: block; background: var(--color-muted); padding: 0.5rem; border-radius: 6px; font-size: 0.8125rem; margin-bottom: 0.75rem; color: var(--color-muted-foreground);">tyro-dashboard:remove-common-page</code>
+                        <p style="margin: 0; font-size: 0.875rem; color: var(--color-text-secondary); line-height: 1.5;">Remove a page from both user & admin sidebars</p>
+                    </div>
+                </div>
+
+                <div style="background: linear-gradient(135deg, var(--color-bg-secondary) 0%, var(--color-bg-tertiary) 100%); border-radius: 12px; padding: 2rem; border: 1px solid var(--color-border);">
+                    <h4 style="margin: 0 0 1rem; font-size: 1.125rem; font-weight: 600; display: flex; align-items: center; gap: 0.5rem;">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: #ef4444;">
+                            <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+                            <line x1="12" y1="9" x2="12" y2="13"></line>
+                            <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                        </svg>
+                        What Gets Removed
+                    </h4>
+                    <ul style="margin: 0; padding-left: 1.5rem; display: grid; gap: 0.75rem;">
+                        <li style="line-height: 1.6;">View file from <code style="background: rgba(0,0,0,0.2); padding: 0.125rem 0.375rem; border-radius: 3px; font-size: 0.875rem;">resources/views/dashboard/</code></li>
+                        <li style="line-height: 1.6;">Route definition from <code style="background: rgba(0,0,0,0.2); padding: 0.125rem 0.375rem; border-radius: 3px; font-size: 0.875rem;">routes/web.php</code></li>
+                        <li style="line-height: 1.6;">Sidebar navigation link(s) from the appropriate sidebar files</li>
+                    </ul>
+                </div>
+
+                <div style="background: #fef3c7; border: 1px solid #fbbf24; border-radius: 8px; padding: 1.25rem; margin-top: 1.5rem; color: #92400e;">
+                    <strong style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <line x1="12" y1="8" x2="12" y2="12"></line>
+                            <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                        </svg>
+                        Safety First
+                    </strong>
+                    <p style="margin: 0; font-size: 0.9375rem; line-height: 1.6;">All removal commands ask for confirmation before deleting files. You'll see what will be removed and can cancel if needed.</p>
                 </div>
             </div>
         </div>

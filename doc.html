@@ -26,7 +26,7 @@
         <div class="navbar-container">
             <a href="index.html" class="navbar-brand">
                 <span class="navbar-logo">Tyro Dashboard</span>
-                <span class="navbar-badge">v1.3</span>
+                <span class="navbar-badge">v1.4.2</span>
             </a>
 
             <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Toggle menu">
@@ -112,6 +112,7 @@
                         <li><a href="#settings-management" class="doc-nav-link">Settings Management</a></li>
                         <li><a href="#profile-management" class="doc-nav-link">Profile Management</a></li>
                         <li><a href="#page-creation" class="doc-nav-link">Page Creation</a></li>
+                        <li><a href="#page-removal" class="doc-nav-link">Page Removal</a></li>
                         <li><a href="#crud-workflow" class="doc-nav-link">CRUD Workflow</a></li>
                     </ul>
                 </div>
@@ -1242,6 +1243,174 @@ php artisan tyro-dashboard:create-common-page "help-center" --force</code></pre>
                         </ul>
                     </div>
                 </div>
+
+                <h3 class="doc-section-subtitle" style="margin-top: 4rem;">Page Removal Commands</h3>
+                <p class="doc-text">
+                    Safely remove dashboard pages that were created with the page creation commands. These commands will delete the view file, remove the route from web.php, and remove the sidebar link.
+                </p>
+
+                <div class="doc-alert doc-alert-warning" style="margin-top: 1.5rem;">
+                    <strong>⚠️ Warning:</strong> These commands will permanently delete files. You'll be asked to confirm before deletion.
+                </div>
+
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; margin: 2rem 0;">
+                    <div style="background: var(--color-surface); border-radius: 12px; padding: 1.5rem; border: 1px solid var(--color-border); border-left: 4px solid #ef4444;">
+                        <h4 style="margin: 0 0 0.5rem; font-size: 1.125rem; font-weight: 600;">Remove Admin Page</h4>
+                        <code style="background: var(--color-muted); padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.875rem; color: var(--color-muted-foreground);">tyro-dashboard:remove-admin-page</code>
+                    </div>
+                    
+                    <div style="background: var(--color-surface); border-radius: 12px; padding: 1.5rem; border: 1px solid var(--color-border); border-left: 4px solid #3b82f6;">
+                        <h4 style="margin: 0 0 0.5rem; font-size: 1.125rem; font-weight: 600;">Remove User Page</h4>
+                        <code style="background: var(--color-muted); padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.875rem; color: var(--color-muted-foreground);">tyro-dashboard:remove-user-page</code>
+                    </div>
+                    
+                    <div style="background: var(--color-surface); border-radius: 12px; padding: 1.5rem; border: 1px solid var(--color-border); border-left: 4px solid #10b981;">
+                        <h4 style="margin: 0 0 0.5rem; font-size: 1.125rem; font-weight: 600;">Remove Common Page</h4>
+                        <code style="background: var(--color-muted); padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.875rem; color: var(--color-muted-foreground);">tyro-dashboard:remove-common-page</code>
+                    </div>
+                </div>
+
+                <h4 class="doc-feature-title" style="margin-top: 2rem;">Remove User Page</h4>
+                <p class="doc-text">
+                    Remove a user-facing dashboard page that was created with <code class="doc-inline-code">create-user-page</code>.
+                </p>
+                <div class="doc-code-block">
+                    <pre><code class="language-bash"># Interactive mode - asks for page name
+php artisan tyro-dashboard:remove-user-page
+
+# Direct mode - provide page name as argument
+php artisan tyro-dashboard:remove-user-page "my-reports"</code></pre>
+                </div>
+
+                <h4 class="doc-feature-title" style="margin-top: 2rem;">What Gets Removed</h4>
+                <div style="background: var(--color-surface); border: 1px solid var(--color-border); border-radius: 8px; padding: 1.5rem; margin: 1.5rem 0;">
+                    <table style="width: 100%; border-collapse: collapse;">
+                        <tr style="border-bottom: 1px solid var(--color-border);">
+                            <td style="padding: 0.75rem; font-weight: 600;">View File</td>
+                            <td style="padding: 0.75rem;"><code>resources/views/dashboard/{page-name}.blade.php</code></td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid var(--color-border);">
+                            <td style="padding: 0.75rem; font-weight: 600;">Route</td>
+                            <td style="padding: 0.75rem;">Removed from <code>routes/web.php</code></td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 0.75rem; font-weight: 600;">Sidebar Link</td>
+                            <td style="padding: 0.75rem;">Removed from <code>user-sidebar.blade.php</code></td>
+                        </tr>
+                    </table>
+                </div>
+
+                <h4 class="doc-feature-title" style="margin-top: 2rem;">Remove Admin Page</h4>
+                <p class="doc-text">
+                    Remove an admin-only dashboard page that was created with <code class="doc-inline-code">create-admin-page</code>.
+                </p>
+                <div class="doc-code-block">
+                    <pre><code class="language-bash"># Interactive mode
+php artisan tyro-dashboard:remove-admin-page
+
+# Direct mode
+php artisan tyro-dashboard:remove-admin-page "system-settings"</code></pre>
+                </div>
+
+                <h4 class="doc-feature-title" style="margin-top: 2rem;">What Gets Removed</h4>
+                <div style="background: var(--color-surface); border: 1px solid var(--color-border); border-radius: 8px; padding: 1.5rem; margin: 1.5rem 0;">
+                    <table style="width: 100%; border-collapse: collapse;">
+                        <tr style="border-bottom: 1px solid var(--color-border);">
+                            <td style="padding: 0.75rem; font-weight: 600;">View File</td>
+                            <td style="padding: 0.75rem;"><code>resources/views/dashboard/{page-name}.blade.php</code></td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid var(--color-border);">
+                            <td style="padding: 0.75rem; font-weight: 600;">Route</td>
+                            <td style="padding: 0.75rem;">Removed from <code>routes/web.php</code> (with admin middleware)</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 0.75rem; font-weight: 600;">Sidebar Link</td>
+                            <td style="padding: 0.75rem;">Removed from <code>admin-sidebar.blade.php</code></td>
+                        </tr>
+                    </table>
+                </div>
+
+                <h4 class="doc-feature-title" style="margin-top: 2rem;">Remove Common Page</h4>
+                <p class="doc-text">
+                    Remove a common dashboard page that was created with <code class="doc-inline-code">create-common-page</code>. This removes the page from both user and admin sidebars.
+                </p>
+                <div class="doc-code-block">
+                    <pre><code class="language-bash"># Interactive mode
+php artisan tyro-dashboard:remove-common-page
+
+# Direct mode
+php artisan tyro-dashboard:remove-common-page "help-center"</code></pre>
+                </div>
+
+                <h4 class="doc-feature-title" style="margin-top: 2rem;">What Gets Removed</h4>
+                <div style="background: var(--color-surface); border: 1px solid var(--color-border); border-radius: 8px; padding: 1.5rem; margin: 1.5rem 0;">
+                    <table style="width: 100%; border-collapse: collapse;">
+                        <tr style="border-bottom: 1px solid var(--color-border);">
+                            <td style="padding: 0.75rem; font-weight: 600;">View File</td>
+                            <td style="padding: 0.75rem;"><code>resources/views/dashboard/{page-name}.blade.php</code></td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid var(--color-border);">
+                            <td style="padding: 0.75rem; font-weight: 600;">Route</td>
+                            <td style="padding: 0.75rem;">Removed from <code>routes/web.php</code></td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 0.75rem; font-weight: 600;">Sidebar Links</td>
+                            <td style="padding: 0.75rem;">Removed from both <code>user-sidebar.blade.php</code> and <code>admin-sidebar.blade.php</code></td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div class="doc-alert doc-alert-info" style="margin-top: 2rem;">
+                    <strong>💡 Note:</strong> If the page is not found or files have already been removed, the command will display a "Page not found" message without performing any deletion.
+                </div>
+            </section>
+
+            <!-- Page Removal -->
+            <section id="page-removal" class="doc-section">
+                <h2 class="doc-section-title">Page Removal</h2>
+                <p class="doc-text">
+                    Remove dashboard pages that were created with the page creation commands. These commands safely delete view files, routes, and sidebar links.
+                </p>
+
+                <h3 class="doc-section-subtitle" style="margin-top: 2rem;\"><code class="doc-inline-code">tyro-dashboard:remove-user-page</code></h3>
+                <p class="doc-text">Remove a user-facing dashboard page.</p>
+                <div class="doc-code-block">
+                    <pre><code class="language-bash">php artisan tyro-dashboard:remove-user-page
+
+# Direct mode
+php artisan tyro-dashboard:remove-user-page "my-reports"</code></pre>
+                </div>
+
+                <h3 class="doc-section-subtitle" style="margin-top: 2rem;\"><code class="doc-inline-code">tyro-dashboard:remove-admin-page</code></h3>
+                <p class="doc-text">Remove an admin-only dashboard page.</p>
+                <div class="doc-code-block">
+                    <pre><code class="language-bash">php artisan tyro-dashboard:remove-admin-page
+
+# Direct mode
+php artisan tyro-dashboard:remove-admin-page "system-settings"</code></pre>
+                </div>
+
+                <h3 class="doc-section-subtitle" style="margin-top: 2rem;\"><code class="doc-inline-code">tyro-dashboard:remove-common-page</code></h3>
+                <p class="doc-text">Remove a common dashboard page (removes from both sidebars).</p>
+                <div class="doc-code-block">
+                    <pre><code class="language-bash">php artisan tyro-dashboard:remove-common-page
+
+# Direct mode
+php artisan tyro-dashboard:remove-common-page "help-center"</code></pre>
+                </div>
+
+                <p class="doc-text" style="margin-top: 1.5rem;\"><strong>What removal commands do:</strong></p>
+                <ul class="doc-list">
+                    <li>Delete the Blade view file from <code class="doc-inline-code">resources/views/dashboard/</code></li>
+                    <li>Remove the route from <code class="doc-inline-code">routes/web.php</code></li>
+                    <li>Remove the sidebar link(s) from the appropriate sidebar file(s)</li>
+                    <li>Show a warning and ask for confirmation before deletion</li>
+                    <li>Display "Page not found" message if the page doesn't exist</li>
+                </ul>
+
+                <div class="doc-alert doc-alert-warning" style="margin-top: 1.5rem;">
+                    <strong>⚠️ Warning:</strong> These commands permanently delete files. Always confirm you're removing the correct page before proceeding.
+                </div>
             </section>
 
             <!-- CRUD Workflow -->
@@ -2098,6 +2267,51 @@ php artisan tyro-dashboard:create-common-page "help-center" --force</code></pre>
 
                 <div class="doc-alert doc-alert-success" style="margin-top: 1rem;">
                     <strong>Pro Tip:</strong> Use these commands to quickly scaffold dashboard sections for analytics, reports, settings, or any custom functionality your application needs.
+                </div>
+
+                <h3 class="doc-section-subtitle" style="margin-top: 3rem;">Page Removal Commands</h3>
+                <p class="doc-text">
+                    Remove dashboard pages that were created with the page creation commands. These commands safely delete view files, routes, and sidebar links.
+                </p>
+
+                <h4 class="doc-feature-title" style="margin-top: 2rem;"><code class="doc-inline-code">tyro-dashboard:remove-user-page</code></h4>
+                <p class="doc-text">Remove a user-facing dashboard page.</p>
+                <div class="doc-code-block">
+                    <pre><code class="language-bash">php artisan tyro-dashboard:remove-user-page
+
+# Direct mode
+php artisan tyro-dashboard:remove-user-page "my-reports"</code></pre>
+                </div>
+
+                <h4 class="doc-feature-title" style="margin-top: 2rem;"><code class="doc-inline-code">tyro-dashboard:remove-admin-page</code></h4>
+                <p class="doc-text">Remove an admin-only dashboard page.</p>
+                <div class="doc-code-block">
+                    <pre><code class="language-bash">php artisan tyro-dashboard:remove-admin-page
+
+# Direct mode
+php artisan tyro-dashboard:remove-admin-page "system-settings"</code></pre>
+                </div>
+
+                <h4 class="doc-feature-title" style="margin-top: 2rem;"><code class="doc-inline-code">tyro-dashboard:remove-common-page</code></h4>
+                <p class="doc-text">Remove a common dashboard page (removes from both sidebars).</p>
+                <div class="doc-code-block">
+                    <pre><code class="language-bash">php artisan tyro-dashboard:remove-common-page
+
+# Direct mode
+php artisan tyro-dashboard:remove-common-page "help-center"</code></pre>
+                </div>
+
+                <p class="doc-text" style="margin-top: 1.5rem;"><strong>What removal commands do:</strong></p>
+                <ul class="doc-list">
+                    <li>Delete the Blade view file from <code class="doc-inline-code">resources/views/dashboard/</code></li>
+                    <li>Remove the route from <code class="doc-inline-code">routes/web.php</code></li>
+                    <li>Remove the sidebar link(s) from the appropriate sidebar file(s)</li>
+                    <li>Show a warning and ask for confirmation before deletion</li>
+                    <li>Display "Page not found" message if the page doesn't exist</li>
+                </ul>
+
+                <div class="doc-alert doc-alert-warning" style="margin-top: 1.5rem;">
+                    <strong>⚠️ Warning:</strong> These commands permanently delete files. Always confirm you're removing the correct page before proceeding.
                 </div>
             </section>
 
