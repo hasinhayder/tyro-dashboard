@@ -31,13 +31,32 @@
         });
     }
 
-    // Sidebar toggle
+    // Sidebar toggle (mobile)
     function toggleSidebar() {
         const sidebar = document.getElementById('sidebar');
         const overlay = document.querySelector('.sidebar-overlay');
         sidebar.classList.toggle('active');
         overlay.classList.toggle('active');
     }
+
+    // Sidebar collapse/expand
+    function toggleSidebarCollapse() {
+        const sidebar = document.getElementById('sidebar');
+        const isCollapsed = sidebar.classList.toggle('collapsed');
+        localStorage.setItem('tyro-sidebar-collapsed', isCollapsed ? 'true' : 'false');
+    }
+
+    // Restore sidebar collapsed state on page load
+    function restoreSidebarState() {
+        const sidebar = document.getElementById('sidebar');
+        const isCollapsed = localStorage.getItem('tyro-sidebar-collapsed') === 'true';
+        if (isCollapsed && sidebar) {
+            sidebar.classList.add('collapsed');
+        }
+    }
+
+    // Apply sidebar state on load
+    restoreSidebarState();
 
     // User dropdown
     function toggleUserDropdown() {

@@ -38,12 +38,132 @@
         height: 100vh;
         overflow-y: auto;
         z-index: 100;
-        transition: transform 0.2s ease;
+        transition: width 0.3s ease, transform 0.2s ease;
+    }
+
+    /* Custom Scrollbar for Sidebar */
+    .sidebar::-webkit-scrollbar {
+        width: 8px;
+    }
+
+    .sidebar::-webkit-scrollbar-track {
+        background: transparent;
+    }
+
+    .sidebar::-webkit-scrollbar-thumb {
+        background-color: var(--border);
+        border-radius: 4px;
+    }
+
+    .sidebar::-webkit-scrollbar-thumb:hover {
+        background-color: var(--muted-foreground);
+    }
+
+    /* Firefox scrollbar */
+    .sidebar {
+        scrollbar-width: thin;
+        scrollbar-color: var(--border) transparent;
+    }
+
+    /* Collapsed Sidebar */
+    .sidebar.collapsed {
+        width: 60px;
+        overflow: hidden;
+    }
+
+    .sidebar.collapsed .sidebar-header {
+        padding: 1.25rem 0.5rem;
+    }
+
+    .sidebar.collapsed .sidebar-logo-text,
+    .sidebar.collapsed .sidebar-section-title,
+    .sidebar.collapsed .sidebar-link {
+        opacity: 0;
+        visibility: hidden;
+    }
+
+    .sidebar.collapsed .sidebar-link svg {
+        opacity: 1;
+    }
+
+    .sidebar.collapsed .sidebar-collapse-btn {
+        display: none;
+    }
+
+    .sidebar.collapsed .sidebar-expand-btn {
+        display: flex !important;
+    }
+
+    .sidebar.collapsed::-webkit-scrollbar {
+        display: none;
+    }
+
+    .sidebar.collapsed {
+        scrollbar-width: none;
     }
 
     .sidebar-header {
         padding: 1.25rem 1.25rem;
         border-bottom: 1px solid var(--border);
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .sidebar-collapse-btn {
+        background: transparent;
+        border: none;
+        color: var(--muted-foreground);
+        cursor: pointer;
+        padding: 0.375rem;
+        border-radius: 6px;
+        display: flex !important;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.15s ease;
+        flex-shrink: 0;
+        margin-left: auto;
+    }
+
+    .sidebar-collapse-btn:hover {
+        background-color: var(--sidebar-accent);
+        color: var(--sidebar-accent-foreground);
+    }
+
+    .sidebar-collapse-btn svg {
+        width: 18px;
+        height: 18px;
+    }
+
+    .sidebar-expand-btn {
+        display: none;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: transparent;
+        border: none;
+        color: var(--muted-foreground);
+        cursor: pointer;
+        padding: 0.5rem;
+        border-radius: 6px;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.15s ease;
+        z-index: 10;
+        width: 36px;
+        height: 36px;
+    }
+
+    .sidebar-expand-btn:hover {
+        background-color: var(--sidebar-accent);
+        color: var(--sidebar-accent-foreground);
+    }
+
+    .sidebar-expand-btn svg {
+        width: 20px;
+        height: 20px;
     }
 
     .sidebar-logo {
@@ -51,6 +171,8 @@
         align-items: center;
         gap: 0.625rem;
         text-decoration: none;
+        flex: 1;
+        min-width: 0;
     }
 
     .sidebar-logo-icon {
@@ -139,6 +261,11 @@
         min-height: 100vh;
         display: flex;
         flex-direction: column;
+        transition: margin-left 0.3s ease;
+    }
+
+    .sidebar.collapsed ~ .main-content {
+        margin-left: 60px;
     }
 
     /* Top Bar - shadcn style */
