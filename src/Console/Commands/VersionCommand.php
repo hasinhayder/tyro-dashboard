@@ -21,7 +21,7 @@ class VersionCommand extends Command
      */
     public function handle(): int
     {
-        $version = "1.4.2";
+        $version = "1.5.0"; //collapsible sidebar feature added in this version
         
         $this->info('');
         $this->info('  ╔════════════════════════════════════════╗');
