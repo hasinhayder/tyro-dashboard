@@ -12,7 +12,7 @@
 
 A production-ready Laravel package that delivers a complete admin & user dashboard with RBAC, user management, and **magical dynamic CRUD** — all configured through a single file.
 
-[Full Documentation](http://hasinhayder.github.io/tyro-dashboard/documentation.html) • [GitHub](https://github.com/hasinhayder/tyro-dashboard)
+[Full Documentation](http://hasinhayder.github.io/tyro-dashboard/doc.html) • [GitHub](https://github.com/hasinhayder/tyro-dashboard)
 
 </div>
 
