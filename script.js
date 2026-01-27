@@ -412,6 +412,20 @@
         });
     };
 
+    // Initialize copy buttons for code blocks
+    document.querySelectorAll('.doc-code-copy').forEach(button => {
+        button.addEventListener('click', function () {
+            const codeBlock = this.closest('.doc-code-block');
+            if (codeBlock) {
+                const codeElement = codeBlock.querySelector('code');
+                if (codeElement) {
+                    const text = codeElement.textContent;
+                    window.copyToClipboard(this, text);
+                }
+            }
+        });
+    });
+
     // ===== Smooth Scrolling =====
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         anchor.addEventListener('click', function (e) {
