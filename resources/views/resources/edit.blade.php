@@ -220,6 +220,10 @@
                         <input type="{{ $field['type'] }}" name="{{ $key }}" id="{{ $key }}" class="form-input @error($key) is-invalid @enderror" value="{{ old($key, $item->$key) }}">
                     @endif
 
+                    @if(isset($field['help_text']))
+                        <div class="form-help-text" style="color: var(--text-secondary); font-size: 0.875rem; margin-top: 0.25rem;">{{ $field['help_text'] }}</div>
+                    @endif
+
                     @error($key)
                         @if(config('tyro-dashboard.resource_ui.show_field_errors', true))
                             <div class="form-error" style="color: var(--danger); font-size: 0.875rem; margin-top: 0.25rem;">{{ $message }}</div>

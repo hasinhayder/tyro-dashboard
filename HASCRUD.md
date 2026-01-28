@@ -30,14 +30,16 @@ class Book extends Model
         'title' => [
             'type' => 'text', 
             'label' => 'Book Title', 
-            'rules' => 'required|max:255|unique:books,title', 
+            'rules' => 'required|max:255|unique:books,title',
+            'help_text' => 'Enter a unique title for the book',
             'searchable' => true, 
             'sortable' => true
         ],
         'isbn' => [
             'type' => 'text', 
             'label' => 'ISBN', 
-            'rules' => 'required|max:20|unique:books,isbn', 
+            'rules' => 'required|max:20|unique:books,isbn',
+            'help_text' => 'International Standard Book Number',
             'searchable' => true
         ],
         'description' => [
@@ -253,6 +255,7 @@ All field types from the config-based system are supported:
 - `label` - Display label for the field
 - `type` - Field type (required)
 - `rules` - Laravel validation rules
+- `help_text` - Help text displayed below the field (optional)
 - `searchable` - Make field searchable (default: false)
 - `sortable` - Make field sortable (default: false)
 - `hide_in_index` - Hide field in list view (default: false)
