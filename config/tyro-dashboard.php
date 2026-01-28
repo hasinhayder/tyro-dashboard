@@ -73,7 +73,7 @@ return [
     | Enable or disable the collapsible sidebar feature.
     |
     */
-    'collapsible_sidebar' => env('TYRO_DASHBOARD_COLLAPSIBLE_SIDEBAR', false),
+    'collapsible_sidebar' => env('TYRO_DASHBOARD_COLLAPSIBLE_SIDEBAR', true),
 
     /*
     |--------------------------------------------------------------------------
