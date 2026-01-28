@@ -45,6 +45,90 @@ trait HasCrud
             $fields[$field] = static::guessFieldConfig($field, $tableName);
         }
         
+        // Add relationship fields
+        $relationshipFields = static::detectRelationships($instance);
+        foreach ($relationshipFields as $key => $config) {
+            $fields[$key] = $config;
+        }
+        
+        return $fields;
+    }
+    
+    /**
+     * Detect relationships from model methods
+     */
+    protected static function detectRelationships($instance): array
+    {
+        $fields = [];
+        $reflection = new \ReflectionClass($instance);
+        
+        foreach ($reflection->getMethods(\ReflectionMethod::IS_PUBLIC) as $method) {
+            // Skip magic methods and constructor
+            if ($method->isStatic() || $method->isConstructor() || \Illuminate\Support\Str::startsWith($method->getName(), '__')) {
+                continue;
+            }
+            
+            // Skip if method has parameters (relationships shouldn't need params)
+            if ($method->getNumberOfParameters() > 0) {
+                continue;
+            }
+            
+            // Skip methods from Eloquent Model base class
+            if ($method->getDeclaringClass()->getName() === 'Illuminate\Database\Eloquent\Model') {
+                continue;
+            }
+            
+            // Try to call the method and check if it returns a relationship
+            try {
+                $return = $method->invoke($instance);
+                
+                if ($return instanceof \Illuminate\Database\Eloquent\Relations\Relation) {
+                    $methodName = $method->getName();
+                    $relatedModel = get_class($return->getRelated());
+                    
+                    // Get option label from related model (try common fields)
+                    $optionLabel = 'name';
+                    foreach (['name', 'title', 'label', 'email', 'code'] as $field) {
+                        if (\Illuminate\Support\Facades\Schema::hasColumn($return->getRelated()->getTable(), $field)) {
+                            $optionLabel = $field;
+                            break;
+                        }
+                    }
+                    
+                    if ($return instanceof \Illuminate\Database\Eloquent\Relations\BelongsTo) {
+                        // BelongsTo: Don't add as separate field, it's already in fillable as foreign key
+                        // The foreign key field will be auto-configured with relationship
+                        continue;
+                    } elseif ($return instanceof \Illuminate\Database\Eloquent\Relations\BelongsToMany) {
+                        // BelongsToMany: Many-to-many relationship
+                        $fields[$methodName] = [
+                            'type' => 'select',
+                            'label' => \Illuminate\Support\Str::headline($methodName),
+                            'relationship' => $methodName,
+                            'option_label' => $optionLabel,
+                            'multiple' => true,
+                            'hide_in_index' => true,
+                        ];
+                    } elseif ($return instanceof \Illuminate\Database\Eloquent\Relations\HasMany || 
+                              $return instanceof \Illuminate\Database\Eloquent\Relations\HasOne) {
+                        // HasMany/HasOne: Usually displayed on the related model's side
+                        // We can add it but hide by default
+                        $fields[$methodName] = [
+                            'type' => 'select',
+                            'label' => \Illuminate\Support\Str::headline($methodName),
+                            'relationship' => $methodName,
+                            'option_label' => $optionLabel,
+                            'multiple' => $return instanceof \Illuminate\Database\Eloquent\Relations\HasMany,
+                            'hide_in_index' => true,
+                        ];
+                    }
+                }
+            } catch (\Exception $e) {
+                // Skip methods that can't be invoked or don't return relationships
+                continue;
+            }
+        }
+        
         return $fields;
     }
     
