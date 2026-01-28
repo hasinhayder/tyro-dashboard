@@ -46,7 +46,14 @@
 
 @section('content')
 <div class="page-header">
-    <h1 class="page-title">Edit {{ Str::singular($config['title']) }}</h1>
+    <div style="display: flex; align-items: center; gap: 1rem;">
+        <a href="{{ route('tyro-dashboard.resources.index', $resource) }}" class="btn btn-ghost" title="Back to {{ $config['title'] }}">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 20px; height: 20px;">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+            </svg>
+        </a>
+        <h1 class="page-title">Edit {{ Str::singular($config['title']) }}</h1>
+    </div>
 </div>
 
 <div class="card">
