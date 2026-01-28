@@ -11,10 +11,18 @@ trait HasCrud
     {
         $instance = new static();
         
+        $defaultTitle = \Illuminate\Support\Str::title(
+            str_replace('_', ' ', \Illuminate\Support\Str::plural(\Illuminate\Support\Str::snake(class_basename(static::class))))
+        );
+        
+        $defaultTitleSingular = \Illuminate\Support\Str::title(
+            str_replace('_', ' ', \Illuminate\Support\Str::snake(class_basename(static::class)))
+        );
+        
         return [
             'model' => static::class,
-            'title' => $instance->resourceTitle ?? str_replace('_', ' ', \Illuminate\Support\Str::plural(\Illuminate\Support\Str::snake(class_basename(static::class)))),
-            'title_singular' => $instance->resourceTitleSingular ?? str_replace('_', ' ', \Illuminate\Support\Str::snake(class_basename(static::class))),
+            'title' => $instance->resourceTitle ?? $defaultTitle,
+            'title_singular' => $instance->resourceTitleSingular ?? $defaultTitleSingular,
             'fields' => $instance->resourceFields ?? [],
             'roles' => $instance->resourceRoles ?? [],
             'readonly' => $instance->resourceReadonly ?? [],
