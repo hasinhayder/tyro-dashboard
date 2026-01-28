@@ -68,7 +68,7 @@
         @if(!empty(config('tyro-dashboard.resources')))
         <div class="sidebar-section">
             <div class="sidebar-section-title">Resources</div>
-            @foreach(config('tyro-dashboard.resources') as $key => $resource)
+            @foreach($allResources ?? config('tyro-dashboard.resources', []) as $key => $resource)
                 @php
                     // Check access (logic duplicated from Controller for view)
                     $canAccess = true;

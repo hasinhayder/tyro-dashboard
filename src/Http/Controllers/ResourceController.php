@@ -6,17 +6,25 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\QueryException;
+use HasinHayder\TyroDashboard\Concerns\HasCrud;
 
 class ResourceController extends BaseController
 {
     protected function getResourceConfig($key)
     {
+        // First, check config-based resources (backward compatibility)
         $resources = config('tyro-dashboard.resources', []);
-        if (!array_key_exists($key, $resources)) {
-            abort(404, "Resource {$key} not found");
+        
+        if (array_key_exists($key, $resources)) {
+            $config = $resources[$key];
+        } else {
+            // Try to find a model with HasCrud trait
+            $config = $this->getTraitBasedResourceConfig($key);
+            
+            if (!$config) {
+                abort(404, "Resource {$key} not found");
+            }
         }
-
-        $config = $resources[$key];
 
         // Auto-generate labels if missing
         if (isset($config['fields'])) {
@@ -28,6 +36,61 @@ class ResourceController extends BaseController
         }
 
         return $config;
+    }
+
+    protected function getTraitBasedResourceConfig($key)
+    {
+        // Get all models from the application
+        $models = $this->getModelsWithTrait(HasCrud::class);
+        
+        foreach ($models as $modelClass) {
+            if (method_exists($modelClass, 'getResourceKey')) {
+                if ($modelClass::getResourceKey() === $key) {
+                    return $modelClass::getResourceConfig();
+                }
+            }
+        }
+        
+        return null;
+    }
+
+    protected function getModelsWithTrait($trait)
+    {
+        static $cachedModels = null;
+        
+        if ($cachedModels !== null) {
+            return $cachedModels;
+        }
+        
+        $models = [];
+        $modelPath = app_path('Models');
+        
+        if (!is_dir($modelPath)) {
+            return $models;
+        }
+        
+        $files = new \RecursiveIteratorIterator(
+            new \RecursiveDirectoryIterator($modelPath)
+        );
+        
+        foreach ($files as $file) {
+            if ($file->isDir() || $file->getExtension() !== 'php') {
+                continue;
+            }
+            
+            $relativePath = str_replace($modelPath . DIRECTORY_SEPARATOR, '', $file->getPathname());
+            $className = 'App\\Models\\' . str_replace(['/', '.php'], ['\\', ''], $relativePath);
+            
+            if (class_exists($className)) {
+                $reflection = new \ReflectionClass($className);
+                if ($reflection->hasMethod('getResourceConfig')) {
+                    $models[] = $className;
+                }
+            }
+        }
+        
+        $cachedModels = $models;
+        return $models;
     }
 
     protected function isReadonly($config)

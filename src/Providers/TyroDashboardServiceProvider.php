@@ -59,6 +59,72 @@ class TyroDashboardServiceProvider extends ServiceProvider
         View::composer(['tyro-dashboard::*', 'dashboard.*'], function ($view) {
             $view->with('user', auth()->user());
         });
+        
+        // Share all resources (config-based + trait-based) with sidebar view
+        View::composer('tyro-dashboard::partials.admin-sidebar', function ($view) {
+            $resources = $this->getAllResources();
+            $view->with('allResources', $resources);
+        });
+    }
+    
+    protected function getAllResources(): array
+    {
+        $resources = [];
+        
+        // Get config-based resources
+        $configResources = config('tyro-dashboard.resources', []);
+        foreach ($configResources as $key => $config) {
+            $resources[$key] = $config;
+        }
+        
+        // Get trait-based resources
+        $traitResources = $this->getTraitBasedResources();
+        foreach ($traitResources as $key => $config) {
+            // Don't override config-based resources
+            if (!isset($resources[$key])) {
+                $resources[$key] = $config;
+            }
+        }
+        
+        return $resources;
+    }
+    
+    protected function getTraitBasedResources(): array
+    {
+        $resources = [];
+        $modelPath = app_path('Models');
+        
+        if (!is_dir($modelPath)) {
+            return $resources;
+        }
+        
+        $files = new \RecursiveIteratorIterator(
+            new \RecursiveDirectoryIterator($modelPath, \RecursiveDirectoryIterator::SKIP_DOTS)
+        );
+        
+        foreach ($files as $file) {
+            if ($file->isDir() || $file->getExtension() !== 'php') {
+                continue;
+            }
+            
+            $relativePath = str_replace($modelPath . DIRECTORY_SEPARATOR, '', $file->getPathname());
+            $className = 'App\\Models\\' . str_replace(['/', '.php'], ['\\', ''], $relativePath);
+            
+            if (class_exists($className)) {
+                try {
+                    $reflection = new \ReflectionClass($className);
+                    if ($reflection->hasMethod('getResourceConfig') && $reflection->hasMethod('getResourceKey')) {
+                        $key = $className::getResourceKey();
+                        $resources[$key] = $className::getResourceConfig();
+                    }
+                } catch (\Exception $e) {
+                    // Skip models that can't be reflected
+                    continue;
+                }
+            }
+        }
+        
+        return $resources;
     }
 
     protected function registerMiddleware(): void
