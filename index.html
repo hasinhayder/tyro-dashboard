@@ -41,6 +41,7 @@
 
             <div class="navbar-links">
                 <a href="#features" class="navbar-link">Features</a>
+                <a href="#hascrud" class="navbar-link">HasCrud</a>
                 <a href="#instant-pages" class="navbar-link">Quick Pages</a>
                 <a href="#screenshots" class="navbar-link">Screenshots</a>
                 <a href="#installation" class="navbar-link">Installation</a>
@@ -392,6 +393,159 @@
         ]
     ];
 }</code></pre>
+            </div>
+        </div>
+    </section>
+
+    <!-- HasCrud Trait Section -->
+    <section id="hascrud" class="section">
+        <div class="gradient-orb gradient-orb-1" style="top: 10%; left: 10%;"></div>
+        <div class="gradient-orb gradient-orb-2" style="top: 60%; right: 10%;"></div>
+
+        <div class="section-header">
+            <span class="section-badge">
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M9 12l2 2 4-4"></path>
+                    <path d="M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"></path>
+                </svg>
+                Zero-Config CRUD
+            </span>
+            <h2 class="section-title">Instant CRUD Operations</h2>
+            <p class="section-subtitle">
+                Add the HasCrud trait to any Eloquent model and get a complete admin interface automatically. 
+                No configuration files, no boilerplate - just one trait.
+            </p>
+        </div>
+
+        <div style="max-width: 1200px; margin: 0 auto; padding: 0 20px;">
+            <!-- HasCrud Features Grid -->
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; margin-bottom: 4rem;">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="12 3 20 7.5 20 16.5 12 21 4 16.5 4 7.5 12 3"></polyline>
+                            <line x1="12" y1="12" x2="20" y2="7.5"></line>
+                            <line x1="12" y1="12" x2="12" y2="21"></line>
+                            <line x1="12" y1="12" x2="4" y2="7.5"></line>
+                        </svg>
+                    </div>
+                    <h3 class="feature-title">Auto-Generated Fields</h3>
+                    <p class="feature-description">
+                        Automatically detects database schema and generates appropriate form fields. 
+                        Enum types become dropdowns, dates become date pickers, and more.
+                    </p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M15 21H3v-2a6 6 0 0 1 6-6h6a6 6 0 0 1 6 6v2"></path>
+                            <circle cx="10" cy="7" r="4"></circle>
+                            <path d="M19 8v6"></path>
+                            <line x1="22" y1="11" x2="16" y2="11"></line>
+                        </svg>
+                    </div>
+                    <h3 class="feature-title">Relationship Detection</h3>
+                    <p class="feature-description">
+                        Automatically discovers model relationships (BelongsToMany, HasMany, etc.) 
+                        and creates proper select fields for them.
+                    </p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                            <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="feature-title">Override Single Fields</h3>
+                    <p class="feature-description">
+                        Use resourceFieldOverrides to customize specific fields while keeping 
+                        auto-generation for the rest.
+                    </p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M15 11l-4-4"></path>
+                            <path d="M16 3h5v5"></path>
+                            <path d="M4 20h16a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="feature-title">Role-Based Access</h3>
+                    <p class="feature-description">
+                        Define resourceRoles and resourceReadonly directly in your model 
+                        for fine-grained access control.
+                    </p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                            <line x1="9" y1="9" x2="15" y2="9"></line>
+                            <line x1="9" y1="15" x2="15" y2="15"></line>
+                        </svg>
+                    </div>
+                    <h3 class="feature-title">Smart Defaults</h3>
+                    <p class="feature-description">
+                        Automatic validation rules, searchable/sortable flags, and help text support 
+                        based on field names and database types.
+                    </p>
+                </div>
+            </div>
+
+            
+
+            <!-- What You Get -->
+            <div style="background: linear-gradient(135deg, var(--color-bg-secondary) 0%, var(--color-bg-tertiary) 100%); border-radius: 20px; padding: 3rem; border: 1px solid var(--color-border);">
+                <h3 style="margin-top: 0; margin-bottom: 2rem; color: var(--color-text);">What You Get Automatically</h3>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem;">
+                    <div style="display: flex; gap: 1rem; align-items: center;">
+                        <div style="background: var(--color-primary); color: white; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">✓</div>
+                        <div>
+                            <h4 style="margin: 0 0 0.25rem 0;">List View</h4>
+                            <p style="margin: 0; color: var(--color-text-secondary); font-size: 0.9rem;">Searchable, sortable tables</p>
+                        </div>
+                    </div>
+                    <div style="display: flex; gap: 1rem; align-items: center;">
+                        <div style="background: var(--color-primary); color: white; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">✓</div>
+                        <div>
+                            <h4 style="margin: 0 0 0.25rem 0;">Create Form</h4>
+                            <p style="margin: 0; color: var(--color-text-secondary); font-size: 0.9rem;">Auto-validated inputs</p>
+                        </div>
+                    </div>
+                    <div style="display: flex; gap: 1rem; align-items: center;">
+                        <div style="background: var(--color-primary); color: white; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">✓</div>
+                        <div>
+                            <h4 style="margin: 0 0 0.25rem 0;">Edit Form</h4>
+                            <p style="margin: 0; color: var(--color-text-secondary); font-size: 0.9rem;">Pre-populated with data</p>
+                        </div>
+                    </div>
+                    <div style="display: flex; gap: 1rem; align-items: center;">
+                        <div style="background: var(--color-primary); color: white; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">✓</div>
+                        <div>
+                            <h4 style="margin: 0 0 0.25rem 0;">Detail View</h4>
+                            <p style="margin: 0; color: var(--color-text-secondary); font-size: 0.9rem;">Full record display</p>
+                        </div>
+                    </div>
+                    <div style="display: flex; gap: 1rem; align-items: center;">
+                        <div style="background: var(--color-primary); color: white; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">✓</div>
+                        <div>
+                            <h4 style="margin: 0 0 0.25rem 0;">Relationships</h4>
+                            <p style="margin: 0; color: var(--color-text-secondary); font-size: 0.9rem;">Multi-select for M2M</p>
+                        </div>
+                    </div>
+                    <div style="display: flex; gap: 1rem; align-items: center;">
+                        <div style="background: var(--color-primary); color: white; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">✓</div>
+                        <div>
+                            <h4 style="margin: 0 0 0.25rem 0;">Access Control</h4>
+                            <p style="margin: 0; color: var(--color-text-secondary); font-size: 0.9rem;">Role-based visibility</p>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
