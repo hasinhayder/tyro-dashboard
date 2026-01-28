@@ -88,13 +88,13 @@
             </thead>
             <tbody>
                 @foreach($items as $item)
-                <tr>
+                <tr style="cursor: pointer;" onclick="window.location='{{ route('tyro-dashboard.resources.show', [$resource, $item->id]) }}'">
                     @foreach($config['fields'] as $key => $field)
                     @if(!($field['hide_in_index'] ?? false))
                     <td data-col="{{ $key }}">
                         @if($field['type'] === 'file')
                         @if($item->$key)
-                        <a href="{{ Storage::url($item->$key) }}" target="_blank" style="color: var(--primary); text-decoration: none;">View</a>
+                        <a href="{{ Storage::url($item->$key) }}" target="_blank" style="color: var(--primary); text-decoration: none;" onclick="event.stopPropagation()">View</a>
                         @else
                         -
                         @endif
@@ -120,7 +120,7 @@
                     </td>
                     @endif
                     @endforeach
-                    <td style="text-align: right;">
+                    <td style="text-align: right;" onclick="event.stopPropagation()">
                         <div class="table-actions" style="justify-content: flex-end;">
                             <a href="{{ route('tyro-dashboard.resources.show', [$resource, $item->id]) }}" class="btn btn-icon btn-ghost" title="View">
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
