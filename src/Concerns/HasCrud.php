@@ -22,6 +22,16 @@ trait HasCrud
         // Get fields from $resourceFields or auto-generate from $fillable
         $fields = $instance->resourceFields ?? static::generateFieldsFromFillable($instance);
         
+        // Apply field overrides if provided
+        if (isset($instance->resourceFieldOverrides) && is_array($instance->resourceFieldOverrides)) {
+            foreach ($instance->resourceFieldOverrides as $fieldName => $overrides) {
+                if (isset($fields[$fieldName])) {
+                    // Merge overrides with existing field config
+                    $fields[$fieldName] = array_merge($fields[$fieldName], $overrides);
+                }
+            }
+        }
+        
         return [
             'model' => static::class,
             'title' => $instance->resourceTitle ?? $defaultTitle,

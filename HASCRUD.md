@@ -161,6 +161,71 @@ class Book extends Model
 }
 ```
 
+## Auto-Generation from $fillable
+
+If you don't define `$resourceFields`, the system will automatically generate field configurations based on:
+1. Field names in your `$fillable` array
+2. Database schema inspection (types, constraints, enum values)
+3. Detected model relationships
+
+```php
+class Book extends Model
+{
+    use HasCrud;
+    
+    protected $fillable = [
+        'title',
+        'isbn',
+        'description',
+        'price',
+        'published_date',
+        'is_active',
+    ];
+    
+    // No $resourceFields defined - will auto-generate!
+    // The system will:
+    // - Detect field types from database
+    // - Add proper validation rules
+    // - Find relationships (books, authors, etc.)
+    // - Make searchable fields like 'title', 'name'
+}
+```
+
+## Customizing Auto-Generated Fields
+
+Want to customize just a few fields while keeping auto-generation for the rest? Use `$resourceFieldOverrides`:
+
+```php
+class Book extends Model
+{
+    use HasCrud;
+    
+    protected $fillable = [
+        'title',
+        'isbn', 
+        'description',
+        'price',
+        'is_active',
+    ];
+    
+    // Override specific fields while auto-generating the rest
+    protected $resourceFieldOverrides = [
+        'isbn' => [
+            'label' => 'ISBN Code',
+            'help_text' => 'International Standard Book Number (13 digits)',
+        ],
+        'description' => [
+            'hide_in_index' => true, // Hide from list view
+        ],
+        'price' => [
+            'label' => 'Price (USD)',
+            'help_text' => 'Enter price in US dollars',
+        ],
+    ];
+    
+    // All other fields (title, is_active) are auto-generated
+}
+
 ## Complete Example with Many-to-Many Relationship
 
 ```php
