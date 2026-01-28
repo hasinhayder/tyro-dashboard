@@ -184,7 +184,8 @@ class ResourceController extends BaseController
 
         // Load options for relationships
         foreach ($config['fields'] as $key => $field) {
-            if (($field['type'] === 'select' || $field['type'] === 'multiselect' || $field['type'] === 'radio' || $field['type'] === 'checkbox') && isset($field['relationship'])) {
+            $needsOptions = ($field['type'] === 'select' || $field['type'] === 'multiselect' || $field['type'] === 'radio' || $field['type'] === 'checkbox') && isset($field['relationship']);
+            if ($needsOptions) {
                  $modelClass = $config['model'];
                  $mainModel = new $modelClass;
                  if (method_exists($mainModel, $field['relationship'])) {
@@ -242,10 +243,16 @@ class ResourceController extends BaseController
             }
         }
 
-        // Separate relationship fields (multiselect/checkbox-group) that need syncing
+        // Separate relationship fields (multiselect/checkbox-group/select with multiple) that need syncing
         $relationshipsToSync = [];
         foreach ($config['fields'] as $field => $fieldConfig) {
-            if (($fieldConfig['type'] === 'multiselect' || ($fieldConfig['type'] === 'checkbox' && isset($fieldConfig['relationship']))) && isset($fieldConfig['relationship'])) {
+            $isMultipleRelationship = (
+                $fieldConfig['type'] === 'multiselect' || 
+                ($fieldConfig['type'] === 'checkbox' && isset($fieldConfig['relationship'])) ||
+                ($fieldConfig['type'] === 'select' && ($fieldConfig['multiple'] ?? false))
+            ) && isset($fieldConfig['relationship']);
+            
+            if ($isMultipleRelationship) {
                 if (isset($data[$field])) {
                     $relationshipsToSync[$field] = $data[$field];
                 }
@@ -351,7 +358,8 @@ class ResourceController extends BaseController
 
         // Load options for relationships
         foreach ($config['fields'] as $key => $field) {
-            if (($field['type'] === 'select' || $field['type'] === 'multiselect' || $field['type'] === 'radio' || $field['type'] === 'checkbox') && isset($field['relationship'])) {
+            $needsOptions = ($field['type'] === 'select' || $field['type'] === 'multiselect' || $field['type'] === 'radio' || $field['type'] === 'checkbox') && isset($field['relationship']);
+            if ($needsOptions) {
                  $mainModel = new $modelClass;
                  if (method_exists($mainModel, $field['relationship'])) {
                      $relatedModel = $mainModel->{$field['relationship']}()->getRelated();
@@ -359,8 +367,14 @@ class ResourceController extends BaseController
                  }
             }
             
-            // Pre-calculate selected values for multiselect/checkbox-group
-            if (($field['type'] === 'multiselect' || ($field['type'] === 'checkbox' && isset($field['relationship']))) && isset($field['relationship'])) {
+            // Pre-calculate selected values for multiselect/checkbox-group/select with multiple
+            $isMultipleRelationship = (
+                $field['type'] === 'multiselect' || 
+                ($field['type'] === 'checkbox' && isset($field['relationship'])) ||
+                ($field['type'] === 'select' && ($field['multiple'] ?? false))
+            ) && isset($field['relationship']);
+            
+            if ($isMultipleRelationship) {
                  if (method_exists($item, $field['relationship'])) {
                      $viewData['selectedValues'][$key] = $item->{$field['relationship']}->pluck('id')->toArray();
                  }
@@ -466,10 +480,16 @@ class ResourceController extends BaseController
             }
         }
 
-        // Separate relationship fields (multiselect/checkbox-group) that need syncing
+        // Separate relationship fields (multiselect/checkbox-group/select with multiple) that need syncing
         $relationshipsToSync = [];
         foreach ($config['fields'] as $field => $fieldConfig) {
-            if (($fieldConfig['type'] === 'multiselect' || ($fieldConfig['type'] === 'checkbox' && isset($fieldConfig['relationship']))) && isset($fieldConfig['relationship'])) {
+            $isMultipleRelationship = (
+                $fieldConfig['type'] === 'multiselect' || 
+                ($fieldConfig['type'] === 'checkbox' && isset($fieldConfig['relationship'])) ||
+                ($fieldConfig['type'] === 'select' && ($fieldConfig['multiple'] ?? false))
+            ) && isset($fieldConfig['relationship']);
+            
+            if ($isMultipleRelationship) {
                 if (isset($data[$field])) {
                     $relationshipsToSync[$field] = $data[$field];
                 } else {

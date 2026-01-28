@@ -40,9 +40,9 @@
                             @else
                                 -
                             @endif
-                        @elseif($field['type'] === 'multiselect' || ($field['type'] === 'checkbox' && isset($field['relationship'])))
+                        @elseif($field['type'] === 'multiselect' || ($field['type'] === 'checkbox' && isset($field['relationship'])) || ($field['type'] === 'select' && ($field['multiple'] ?? false)))
                              @if(isset($field['relationship']))
-                                 {{ $item->{$field['relationship']}->pluck($field['option_label'] ?? 'name')->implode(', ') }}
+                                 {{ $item->{$field['relationship']}->pluck($field['option_label'] ?? 'name')->implode(', ') ?: '-' }}
                              @else
                                  {{ is_array($item->$key) ? implode(', ', $item->$key) : $item->$key }}
                              @endif

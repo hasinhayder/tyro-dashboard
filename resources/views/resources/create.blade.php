@@ -77,26 +77,48 @@
                         </div>
                     
                     @elseif($field['type'] === 'select')
-                        <select name="{{ $key }}" id="{{ $key }}" class="form-select @error($key) is-invalid @enderror">
-                            <option value="">Select {{ $field['label'] }}</option>
-                            @if(isset($options[$key]))
-                                @foreach($options[$key] as $option)
-                                    <option value="{{ $option->id }}" {{ old($key) == $option->id ? 'selected' : '' }}>
-                                        {{ $option->{$field['option_label'] ?? 'name'} }}
-                                    </option>
-                                @endforeach
-                            @elseif(isset($field['options']))
-                                @foreach($field['options'] as $value => $label)
-                                    @php
-                                        $optionValue = is_int($value) ? $label : $value;
-                                        $optionLabel = $label;
-                                    @endphp
-                                    <option value="{{ $optionValue }}" {{ old($key) == $optionValue ? 'selected' : '' }}>
-                                        {{ $optionLabel }}
-                                    </option>
-                                @endforeach
-                            @endif
-                        </select>
+                        @if($field['multiple'] ?? false)
+                            <select name="{{ $key }}[]" id="{{ $key }}" class="form-select @error($key) is-invalid @enderror" multiple>
+                                @if(isset($options[$key]))
+                                    @foreach($options[$key] as $option)
+                                        <option value="{{ $option->id }}" {{ in_array($option->id, old($key, [])) ? 'selected' : '' }}>
+                                            {{ $option->{$field['option_label'] ?? 'name'} }}
+                                        </option>
+                                    @endforeach
+                                @elseif(isset($field['options']))
+                                    @foreach($field['options'] as $value => $label)
+                                        @php
+                                            $optionValue = is_int($value) ? $label : $value;
+                                            $optionLabel = $label;
+                                        @endphp
+                                        <option value="{{ $optionValue }}" {{ in_array($optionValue, old($key, [])) ? 'selected' : '' }}>
+                                            {{ $optionLabel }}
+                                        </option>
+                                    @endforeach
+                                @endif
+                            </select>
+                        @else
+                            <select name="{{ $key }}" id="{{ $key }}" class="form-select @error($key) is-invalid @enderror">
+                                <option value="">Select {{ $field['label'] }}</option>
+                                @if(isset($options[$key]))
+                                    @foreach($options[$key] as $option)
+                                        <option value="{{ $option->id }}" {{ old($key) == $option->id ? 'selected' : '' }}>
+                                            {{ $option->{$field['option_label'] ?? 'name'} }}
+                                        </option>
+                                    @endforeach
+                                @elseif(isset($field['options']))
+                                    @foreach($field['options'] as $value => $label)
+                                        @php
+                                            $optionValue = is_int($value) ? $label : $value;
+                                            $optionLabel = $label;
+                                        @endphp
+                                        <option value="{{ $optionValue }}" {{ old($key) == $optionValue ? 'selected' : '' }}>
+                                            {{ $optionLabel }}
+                                        </option>
+                                    @endforeach
+                                @endif
+                            </select>
+                        @endif
                         
                     @elseif($field['type'] === 'multiselect')
                         <select name="{{ $key }}[]" id="{{ $key }}" class="form-select @error($key) is-invalid @enderror" multiple>
