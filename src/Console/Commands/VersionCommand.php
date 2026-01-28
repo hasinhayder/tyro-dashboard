@@ -21,7 +21,7 @@ class VersionCommand extends Command
      */
     public function handle(): int
     {
-        $version = "1.5.0"; //collapsible sidebar feature added in this version
+        $version = "1.5.1"; //Fix many-to-many relationship handling for select fields with multiple attribute
         
         $this->info('');
         $this->info('  ╔════════════════════════════════════════╗');
@@ -71,3 +71,7 @@ class VersionCommand extends Command
         return 'not installed';
     }
 }
+
+
+//1.5.1 - Fix many-to-many relationship handling for select fields with multiple attribute
+//1.5.0 - collapsible sidebar feature added in this version
