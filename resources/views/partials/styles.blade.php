@@ -1101,6 +1101,134 @@
         cursor: not-allowed;
     }
 
+    /* Laravel Pagination (Tailwind markup) */
+    .pagination nav {
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+        width: 100%;
+    }
+
+    .pagination nav .sm\:hidden {
+        display: flex;
+        gap: 0.5rem;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .pagination nav .hidden {
+        display: none;
+    }
+
+    .pagination nav p {
+        font-size: 0.8125rem;
+        color: var(--muted-foreground);
+    }
+
+    .pagination nav p .font-medium {
+        color: var(--foreground);
+        font-weight: 600;
+    }
+
+    .pagination nav a,
+    .pagination nav span[aria-current="page"] > span {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 36px;
+        height: 36px;
+        padding: 0 0.75rem;
+        font-size: 0.875rem;
+        font-weight: 500;
+        border-radius: 8px;
+        border: 1px solid var(--border);
+        background-color: var(--background);
+        color: var(--foreground);
+        text-decoration: none;
+        transition: all 0.15s ease;
+        box-shadow: var(--card-shadow);
+    }
+
+    .pagination nav a:hover {
+        background-color: var(--muted);
+        color: var(--foreground);
+        border-color: color-mix(in srgb, var(--border), var(--foreground) 10%);
+    }
+
+    .pagination nav a[rel="prev"],
+    .pagination nav a[rel="next"] {
+        padding: 0 1rem;
+        gap: 0.375rem;
+    }
+
+    .pagination nav span[aria-current="page"] > span {
+        background-color: var(--foreground);
+        color: var(--background);
+        border-color: var(--foreground);
+    }
+
+    .pagination nav span[aria-disabled="true"] span,
+    .pagination nav span[aria-disabled="true"] {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+
+    .pagination nav .shadow-sm {
+        box-shadow: none;
+    }
+
+    .pagination nav .rounded-md,
+    .pagination nav .rounded-l-md,
+    .pagination nav .rounded-r-md {
+        border-radius: 8px;
+    }
+
+    .pagination nav .-ml-px {
+        margin-left: 0;
+    }
+
+    @media (min-width: 640px) {
+        .pagination nav {
+            flex-direction: row;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .pagination nav .sm\:hidden {
+            display: none;
+        }
+
+        .pagination nav .hidden {
+            display: flex;
+            flex: 1;
+            gap: 0.75rem;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .pagination nav .inline-flex {
+            border-radius: 10px;
+            border: 1px solid var(--border);
+            overflow: hidden;
+            background-color: var(--background);
+        }
+
+        .pagination nav .inline-flex > a,
+        .pagination nav .inline-flex > span > span {
+            border-radius: 0;
+            border: none;
+            box-shadow: none;
+            min-width: 38px;
+        }
+
+        .pagination nav .inline-flex > a + a,
+        .pagination nav .inline-flex > a + span,
+        .pagination nav .inline-flex > span + a,
+        .pagination nav .inline-flex > span + span {
+            border-left: 1px solid var(--border);
+        }
+    }
+
     /* Modal - shadcn style */
     .modal-overlay {
         position: fixed;
