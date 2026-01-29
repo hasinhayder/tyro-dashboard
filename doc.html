@@ -447,6 +447,38 @@ class Book extends Model
                     </table>
                 </div>
 
+                <h4 style="color: var(--color-text-secondary); margin-top: 1.5rem; margin-bottom: 0.75rem;">Performance & Caching</h4>
+                <p class="doc-text">
+                    Field auto-generation involves database schema inspection and reflection, which are expensive operations. To optimize performance, the generated fields are <strong>automatically cached for 6 hours</strong>. The cache is automatically invalidated when your <code>$fillable</code> array changes.
+                </p>
+
+                <h5 style="color: var(--color-text-secondary); margin-top: 1.25rem; margin-bottom: 0.5rem; font-size: 1rem;">Manual Cache Clearing</h5>
+                <p class="doc-text">You can manually clear the cache using the provided artisan command:</p>
+                <div class="doc-code-block">
+                    <pre><code class="language-bash"># Clear cache for all models with HasCrud trait
+php artisan tyro-dashboard:clear-cache
+
+# Clear cache for a specific model
+php artisan tyro-dashboard:clear-cache --model="App\Models\Book"</code></pre>
+                </div>
+
+                <h5 style="color: var(--color-text-secondary); margin-top: 1.25rem; margin-bottom: 0.5rem; font-size: 1rem;">Programmatic Cache Clearing</h5>
+                <p class="doc-text">You can also clear the cache programmatically:</p>
+                <div class="doc-code-block">
+                    <pre><code class="language-php">use App\Models\Book;
+
+// Clear cache for a specific model
+Book::clearFieldCache();</code></pre>
+                </div>
+
+                <p class="doc-text" style="margin-top: 1rem;"><strong>When to clear cache:</strong></p>
+                <ul class="doc-list">
+                    <li>After running migrations that change table structure</li>
+                    <li>After modifying field types or constraints in the database</li>
+                    <li>When testing field configuration changes</li>
+                    <li>After deploying schema changes to production</li>
+                </ul>
+
                 <h4 style="color: var(--color-text-secondary); margin-top: 1.5rem; margin-bottom: 0.75rem;">Backward Compatibility</h4>
                 <p class="doc-text">
                     The config-based resource configuration still works alongside HasCrud. Models using the trait will be discovered automatically and added to your admin sidebar. The fallback hierarchy is:
@@ -457,6 +489,11 @@ class Book extends Model
                     <li>Auto-generated from $fillable and database schema</li>
                 </ol>
 
+                <!-- Search Settings -->
+                <h3 id="search-config" class="doc-feature-title" style="margin-top: 2rem;">Search Settings</h3>
+                <p class="doc-text">
+                    You can configure which fields are searchable in the resource listing. This can be done globally for the resource or on a per-field basis.
+                </p>
                 <div class="doc-code-block">
                     <pre><code class="language-php">// Option 1: Global search configuration
 'search' => ['name', 'email'],

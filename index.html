@@ -371,25 +371,25 @@
                     <div style="width: 12px; height: 12px; border-radius: 50%; background: #eab308;"></div>
                     <div style="width: 12px; height: 12px; border-radius: 50%; background: #22c55e;"></div>
                 </div>
-                <pre style="margin: 0; font-family: 'Fira Code', monospace; font-size: 14px; line-height: 1.6; color: #d4d4d4; overflow-x: auto;"><code><span style="color: #e85555;">public</span> <span style="color: #e85555;">function</span> <span style="color: #3b82f6;">fields</span>()
+                <pre style="margin: 0; font-family: 'Fira Code', monospace; font-size: 14px; line-height: 1.6; overflow-x: auto;"><code style="color: #d4d4d4;"><span style="color: #569cd6;">public</span> <span style="color: #569cd6;">function</span> <span style="color: #dcdcaa;">fields</span>()
 {
-    <span style="color: #e85555;">return</span> [
-        <span style="color: #22c55e;">'name'</span> => [
-            <span style="color: #22c55e;">'type'</span> => <span style="color: #22c55e;">'text'</span>,
-            <span style="color: #22c55e;">'label'</span> => <span style="color: #22c55e;">'Product Name'</span>,
-            <span style="color: #22c55e;">'required'</span> => <span style="color: #e85555;">true</span>,
-            <span style="color: #22c55e;">'searchable'</span> => <span style="color: #e85555;">true</span>
+    <span style="color: #569cd6;">return</span> [
+        <span style="color: #ce9178;">'name'</span> => [
+            <span style="color: #ce9178;">'type'</span> => <span style="color: #ce9178;">'text'</span>,
+            <span style="color: #ce9178;">'label'</span> => <span style="color: #ce9178;">'Product Name'</span>,
+            <span style="color: #ce9178;">'required'</span> => <span style="color: #569cd6;">true</span>,
+            <span style="color: #ce9178;">'searchable'</span> => <span style="color: #569cd6;">true</span>
         ],
-        <span style="color: #22c55e;">'category'</span> => [
-            <span style="color: #22c55e;">'type'</span> => <span style="color: #22c55e;">'select'</span>,
-            <span style="color: #22c55e;">'options'</span> => [<span style="color: #22c55e;">'electronics'</span>, <span style="color: #22c55e;">'furniture'</span>]
+        <span style="color: #ce9178;">'category'</span> => [
+            <span style="color: #ce9178;">'type'</span> => <span style="color: #ce9178;">'select'</span>,
+            <span style="color: #ce9178;">'options'</span> => [<span style="color: #ce9178;">'electronics'</span>, <span style="color: #ce9178;">'furniture'</span>]
         ],
-        <span style="color: #22c55e;">'price'</span> => [
-            <span style="color: #22c55e;">'type'</span> => <span style="color: #22c55e;">'number'</span>,
-            <span style="color: #22c55e;">'prefix'</span> => <span style="color: #22c55e;">'$'</span>
+        <span style="color: #ce9178;">'price'</span> => [
+            <span style="color: #ce9178;">'type'</span> => <span style="color: #ce9178;">'number'</span>,
+            <span style="color: #ce9178;">'prefix'</span> => <span style="color: #ce9178;">'$'</span>
         ],
-        <span style="color: #22c55e;">'is_active'</span> => [
-            <span style="color: #22c55e;">'type'</span> => <span style="color: #22c55e;">'toggle'</span>
+        <span style="color: #ce9178;">'is_active'</span> => [
+            <span style="color: #ce9178;">'type'</span> => <span style="color: #ce9178;">'toggle'</span>
         ]
     ];
 }</code></pre>
@@ -495,9 +495,71 @@
                         based on field names and database types.
                     </p>
                 </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="3"></circle>
+                            <path d="M12 1v6M12 17v6M4.22 4.22l4.24 4.24M15.54 15.54l4.24 4.24M1 12h6M17 12h6M4.22 19.78l4.24-4.24M15.54 8.46l4.24-4.24"></path>
+                        </svg>
+                    </div>
+                    <h3 class="feature-title">Performance Optimized</h3>
+                    <p class="feature-description">
+                        Auto-generated fields are cached for 6 hours. Cache automatically 
+                        invalidates when your $fillable changes.
+                    </p>
+                </div>
             </div>
 
-            
+            <!-- Code Example -->
+            <div style="background: var(--color-surface); border-radius: 16px; padding: 3rem; border: 1px solid var(--color-border); margin-bottom: 3rem; margin-top: 4rem;">
+                <h3 style="margin-top: 0; margin-bottom: 2rem; color: var(--color-text);">One Trait, Complete CRUD Admin</h3>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; align-items: start;">
+                    <div>
+                        <h4 style="color: var(--color-primary); margin-bottom: 1rem;">Your Model</h4>
+                        <pre style="background: #1e1e1e; padding: 1.5rem; border-radius: 8px; overflow-x: auto;"><code style="color: #d4d4d4; font-family: 'Fira Code', monospace; font-size: 13px;"><span style="color: #569cd6;">use</span> HasinHayder\TyroDashboard\Concerns\HasCrud;
+
+<span style="color: #569cd6;">class</span> <span style="color: #4ec9b0;">Book</span> <span style="color: #569cd6;">extends</span> <span style="color: #4ec9b0;">Model</span>
+{
+    <span style="color: #569cd6;">use</span> HasCrud; <span style="color: #6a9955;">// <- This is where the magic happens</span>
+
+    <span style="color: #569cd6;">protected</span> <span style="color: #569cd6;">$fillable</span> = [
+        <span style="color: #ce9178;">'title'</span>,
+        <span style="color: #ce9178;">'isbn'</span>,
+        <span style="color: #ce9178;">'description'</span>,
+        <span style="color: #ce9178;">'price'</span>,
+        <span style="color: #ce9178;">'is_active'</span>,
+    ];
+
+    <span style="color: #569cd6;">public</span> <span style="color: #569cd6;">function</span> <span style="color: #dcdcaa;">authors</span>()
+    {
+        <span style="color: #569cd6;">return</span> <span style="color: #569cd6;">$this</span><span style="color: #d4d4d4;">-></span><span style="color: #dcdcaa;">belongsToMany</span>(
+            <span style="color: #4ec9b0;">Author</span><span style="color: #d4d4d4;">::</span><span style="color: #569cd6;">class</span>
+        );
+    }
+}</code></pre>
+                    </div>
+                    <div>
+                        <h4 style="color: var(--color-primary); margin-bottom: 1rem;">Optional Customization</h4>
+                        <pre style="background: #1e1e1e; padding: 1.5rem; border-radius: 8px; overflow-x: auto; height: 484px;"><code style="color: #d4d4d4; font-family: 'Fira Code', monospace; font-size: 13px;"><span style="color: #569cd6;">protected</span> <span style="color: #569cd6;">$resourceFieldOverrides</span> = [
+    <span style="color: #ce9178;">'isbn'</span> => [
+        <span style="color: #ce9178;">'label'</span> => <span style="color: #ce9178;">'ISBN Code'</span>,
+        <span style="color: #ce9178;">'help_text'</span> => <span style="color: #ce9178;">'International '</span> .
+                       <span style="color: #ce9178;">'Standard Book Number'</span>,
+    ],
+    <span style="color: #ce9178;">'description'</span> => [
+        <span style="color: #ce9178;">'hide_in_index'</span> => <span style="color: #569cd6;">true</span>,
+    ],
+    <span style="color: #ce9178;">'price'</span> => [
+        <span style="color: #ce9178;">'label'</span> => <span style="color: #ce9178;">'Price (USD)'</span>,
+    ],
+];
+
+<span style="color: #6a9955;">// That's it! Everything else</span>
+<span style="color: #6a9955;">// is auto-generated!</span></code></pre>
+                    </div>
+                </div>
+            </div>
 
             <!-- What You Get -->
             <div style="background: linear-gradient(135deg, var(--color-bg-secondary) 0%, var(--color-bg-tertiary) 100%); border-radius: 20px; padding: 3rem; border: 1px solid var(--color-border);">
@@ -2079,15 +2141,7 @@
 
     <!-- Scripts -->
     <script src="script.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
     <script>
-        // Initialize syntax highlighting
-        document.addEventListener('DOMContentLoaded', () => {
-            document.querySelectorAll('.step-code code').forEach((el) => {
-                hljs.highlightElement(el);
-            });
-        });
-
         // Category filter functionality
         document.addEventListener('DOMContentLoaded', () => {
             // Quick Setup Tab Functionality
