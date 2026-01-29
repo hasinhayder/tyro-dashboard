@@ -259,50 +259,6 @@ Intelligent three-tier file upload system for flexible storage management:
 2. **Resource-level** (middle) — Configure per-resource in config file  
 3. **Global-level** (fallback) — Set global defaults for all resources
 
-#### Example: Model-Level Configuration
-```php
-use HasinHayder\TyroDashboard\Concerns\HasCrud;
-
-class Book extends Model
-{
-    use HasCrud;
-    
-    protected $resourceUploadDisk = 's3';  // Store on Amazon S3
-    protected $resourceUploadDirectory = 'books';  // In 'books' directory
-    
-    protected $fillable = ['title', 'cover_image'];
-}
-```
-
-#### Example: Resource-Level Configuration
-```php
-// config/tyro-dashboard.php
-'resources' => [
-    'documents' => [
-        'model' => App\Models\Document::class,
-        'upload_disk' => 'local',  // Private storage
-        'upload_directory' => 'documents',
-        'fields' => [
-            'file' => ['type' => 'file'],
-        ],
-    ],
-]
-```
-
-#### Example: Global Configuration
-```php
-// config/tyro-dashboard.php
-'uploads' => [
-    'disk' => env('TYRO_DASHBOARD_UPLOAD_DISK', 'public'),
-    'directory' => env('TYRO_DASHBOARD_UPLOAD_DIRECTORY', 'uploads'),
-],
-```
-
-**Storage Disks**:
-- `public` — Web-accessible files (images, public documents)
-- `local` — Private files requiring authentication
-- `s3` — Amazon S3 cloud storage
-- Custom disks from `config/filesystems.php`
 
 ### Security & Authorization
 
@@ -363,22 +319,20 @@ Navigate to `/dashboard` in your browser.
 ### Add Your First Resource in 30 Seconds
 
 ```php
-// config/tyro-dashboard.php
-'resources' => [
-    'products' => [
-        'model' => App\Models\Product::class,
-        'roles' => ['admin'],
-        'fields' => [
-            'name' => ['type' => 'text', 'required' => true],
-            'price' => ['type' => 'number', 'required' => true],
-        ],
-    ],
-]
+// app/Models/Product.php
+use HasinHayder\TyroDashboard\Concerns\HasCrud;
+
+class Product extends Model
+{
+    use HasCrud;  // That's it!
+    
+    protected $fillable = ['name', 'price', 'description'];
+}
 ```
 
 Visit `/dashboard/resources/products` — **your admin interface is live.**
 
-No controllers. No views. No routes. No validation. **Just define your data model and you're done.**
+No controllers. No views. No routes. No validation. **Just add the trait and you're done.**
 
 ---
 
