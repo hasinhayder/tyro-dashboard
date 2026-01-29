@@ -21,7 +21,7 @@ class VersionCommand extends Command
      */
     public function handle(): int
     {
-        $version = "1.6.3"; //Fix role-based access control for HasCrud resources
+        $version = "1.6.4"; //Dynamic CRUD - Intelligent field type check precedence added for better compatibility
         
         $this->info('');
         $this->info('  ╔════════════════════════════════════════╗');
@@ -73,6 +73,7 @@ class VersionCommand extends Command
 }
 
 //Changelog
+//1.6.4 - Dynamic CRUD - Intelligent field type check precedence added for better compatibility
 //1.6.3 - Fix role-based access control for HasCrud resources
 //1.6.2 - File upload fields with disk and path configuration added
 //1.6.1 - Cache the field discovery for Dynamic CRUD resources and clear-cache command added
