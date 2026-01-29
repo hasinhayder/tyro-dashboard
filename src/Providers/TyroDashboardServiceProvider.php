@@ -61,14 +61,15 @@ class TyroDashboardServiceProvider extends ServiceProvider
             $view->with('user', auth()->user());
         });
         
-        // Share all resources (config-based + trait-based) with sidebar views
+        // Share filtered resources with sidebar views (based on user's role)
         View::composer(['tyro-dashboard::partials.admin-sidebar', 'tyro-dashboard::partials.user-sidebar'], function ($view) {
-            $resources = $this->getAllResources();
+            $user = auth()->user();
+            $resources = $this->getAllResources($user);
             $view->with('allResources', $resources);
         });
     }
     
-    protected function getAllResources(): array
+    protected function getAllResources($user = null): array
     {
         $resources = [];
         
@@ -87,7 +88,77 @@ class TyroDashboardServiceProvider extends ServiceProvider
             }
         }
         
+        // Filter resources based on user's role
+        if ($user) {
+            $resources = $this->filterResourcesByUserRole($resources, $user);
+        }
+        
         return $resources;
+    }
+    
+    protected function filterResourcesByUserRole(array $resources, $user): array
+    {
+        // Check if user is admin
+        $isAdmin = false;
+        if (method_exists($user, 'tyroRoleSlugs')) {
+            $adminRoles = config('tyro-dashboard.admin_roles', ['admin', 'super-admin']);
+            $userRoles = $user->tyroRoleSlugs();
+            foreach ($adminRoles as $role) {
+                if (in_array($role, $userRoles)) {
+                    $isAdmin = true;
+                    break;
+                }
+            }
+        }
+        
+        // If admin, return all resources
+        if ($isAdmin) {
+            return $resources;
+        }
+        
+        // If not admin, filter resources based on user's roles
+        $filteredResources = [];
+        
+        if (!method_exists($user, 'tyroRoleSlugs')) {
+            return $filteredResources; // No roles method, no access
+        }
+        
+        $userRoles = $user->tyroRoleSlugs();
+        
+        foreach ($resources as $key => $config) {
+            $accessRoles = $config['roles'] ?? [];
+            $readonlyRoles = $config['readonly'] ?? [];
+            
+            // If no roles defined, it's admin-only (skip for non-admin users)
+            if (empty($accessRoles) && empty($readonlyRoles)) {
+                continue;
+            }
+            
+            // Check if user has access role
+            $hasAccess = false;
+            foreach ($accessRoles as $role) {
+                if (in_array($role, $userRoles)) {
+                    $hasAccess = true;
+                    break;
+                }
+            }
+            
+            // Check if user has readonly role
+            if (!$hasAccess) {
+                foreach ($readonlyRoles as $role) {
+                    if (in_array($role, $userRoles)) {
+                        $hasAccess = true;
+                        break;
+                    }
+                }
+            }
+            
+            if ($hasAccess) {
+                $filteredResources[$key] = $config;
+            }
+        }
+        
+        return $filteredResources;
     }
     
     protected function getTraitBasedResources(): array
