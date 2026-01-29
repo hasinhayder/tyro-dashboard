@@ -19,8 +19,8 @@ trait HasCrud
             str_replace('_', ' ', \Illuminate\Support\Str::snake(class_basename(static::class)))
         );
         
-        // Get fields from $resourceFields or auto-generate from $fillable
-        $fields = $instance->resourceFields ?? static::generateFieldsFromFillable($instance);
+        // Get fields from $resourceFields or auto-generate from $fillable (with caching)
+        $fields = $instance->resourceFields ?? static::getCachedFieldsOrGenerate($instance);
         
         // Apply field overrides if provided
         if (isset($instance->resourceFieldOverrides) && is_array($instance->resourceFieldOverrides)) {
@@ -40,6 +40,74 @@ trait HasCrud
             'roles' => $instance->resourceRoles ?? [],
             'readonly' => $instance->resourceReadonly ?? [],
         ];
+    }
+    
+    /**
+     * Get cached fields or generate and cache them
+     */
+    protected static function getCachedFieldsOrGenerate($instance): array
+    {
+        $modelClass = static::class;
+        $fillable = $instance->getFillable();
+        
+        // Create a hash of fillable to detect changes
+        $fillableHash = md5(serialize($fillable));
+        
+        // Cache key includes model class and fillable hash
+        $cacheKey = 'tyro_dashboard_fields_' . md5($modelClass) . '_' . $fillableHash;
+        
+        // Try to get from cache (6 hours = 21600 seconds)
+        $cached = \Illuminate\Support\Facades\Cache::get($cacheKey);
+        
+        if ($cached !== null) {
+            return $cached;
+        }
+        
+        // Generate fields if not cached
+        $fields = static::generateFieldsFromFillable($instance);
+        
+        // Cache for 6 hours
+        \Illuminate\Support\Facades\Cache::put($cacheKey, $fields, 21600);
+        
+        // Clear old cache entries for this model (with different fillable hash)
+        static::clearOldCacheEntries($modelClass, $fillableHash);
+        
+        return $fields;
+    }
+    
+    /**
+     * Clear old cache entries for this model with different fillable hash
+     */
+    protected static function clearOldCacheEntries(string $modelClass, string $currentHash): void
+    {
+        // Store the current hash to help with cleanup
+        $hashKey = 'tyro_dashboard_hash_' . md5($modelClass);
+        $oldHash = \Illuminate\Support\Facades\Cache::get($hashKey);
+        
+        if ($oldHash && $oldHash !== $currentHash) {
+            // Clear the old cache entry
+            $oldCacheKey = 'tyro_dashboard_fields_' . md5($modelClass) . '_' . $oldHash;
+            \Illuminate\Support\Facades\Cache::forget($oldCacheKey);
+        }
+        
+        // Store the new hash
+        \Illuminate\Support\Facades\Cache::put($hashKey, $currentHash, 21600);
+    }
+    
+    /**
+     * Clear the cached fields for this model
+     */
+    public static function clearFieldCache(): void
+    {
+        $modelClass = static::class;
+        $hashKey = 'tyro_dashboard_hash_' . md5($modelClass);
+        $currentHash = \Illuminate\Support\Facades\Cache::get($hashKey);
+        
+        if ($currentHash) {
+            $cacheKey = 'tyro_dashboard_fields_' . md5($modelClass) . '_' . $currentHash;
+            \Illuminate\Support\Facades\Cache::forget($cacheKey);
+            \Illuminate\Support\Facades\Cache::forget($hashKey);
+        }
     }
     
     /**

@@ -21,7 +21,7 @@ class VersionCommand extends Command
      */
     public function handle(): int
     {
-        $version = "1.6.0"; //Instant CRUD with HasCrud trait and pagination improvements
+        $version = "1.6.1"; //Cache the field discovery for Dynamic CRUD resources and clear-cache command added
         
         $this->info('');
         $this->info('  ╔════════════════════════════════════════╗');
@@ -72,6 +72,7 @@ class VersionCommand extends Command
     }
 }
 
+//1.6.1 - Cache the field discovery for Dynamic CRUD resources and clear-cache command added
 //1.6.0 - Instant CRUD with HasCrud trait and pagination improvements
 //1.5.1 - Fix many-to-many relationship handling for select fields with multiple attribute
 //1.5.0 - collapsible sidebar feature added in this version

@@ -14,6 +14,7 @@ use HasinHayder\TyroDashboard\Console\Commands\MakeResourceCommand;
 use HasinHayder\TyroDashboard\Console\Commands\PublishCommand;
 use HasinHayder\TyroDashboard\Console\Commands\PublishStyleCommand;
 use HasinHayder\TyroDashboard\Console\Commands\VersionCommand;
+use HasinHayder\TyroDashboard\Console\Commands\ClearResourceCacheCommand;
 use HasinHayder\TyroDashboard\Http\Middleware\EnsureIsAdmin;
 use Illuminate\Routing\Router;
 use Illuminate\Support\Facades\Route;
@@ -153,6 +154,7 @@ class TyroDashboardServiceProvider extends ServiceProvider
             RemoveCommonPageCommand::class,
             RemoveUserPageCommand::class,
             VersionCommand::class,
+            ClearResourceCacheCommand::class,
         ]);
     }
 
