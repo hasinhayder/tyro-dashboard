@@ -114,6 +114,8 @@
                         </span>
                         @elseif($field['type'] === 'richtext')
                         {{ Str::limit(strip_tags($item->$key), 50) }}
+                        @elseif($field['type'] === 'markdown')
+                        {{ Str::limit(strip_tags($item->$key), 50) }}
                         @else
                         {{ Str::limit($item->$key, 50) }}
                         @endif

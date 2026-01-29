@@ -303,6 +303,10 @@ trait HasCrud
             $config['type'] = 'password';
             $config['rules'] = ($isNullable ? 'nullable|' : 'required|') . 'min:8';
             $config['hide_in_index'] = true;
+        } elseif (\Illuminate\Support\Str::contains($fieldName, ['markdown'])) {
+            $config['type'] = 'markdown';
+            $config['hide_in_index'] = true;
+            $config['rules'] = $isNullable ? 'nullable' : 'required';
         } elseif (\Illuminate\Support\Str::contains($fieldName, ['description', 'bio', 'content', 'body', 'notes', 'comment'])) {
             $config['type'] = 'textarea';
             $config['hide_in_index'] = true;
