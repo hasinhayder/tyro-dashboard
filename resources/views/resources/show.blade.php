@@ -38,6 +38,7 @@
     <div class="card-body">
         <div class="details-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1.5rem;">
             @foreach($config['fields'] as $key => $field)
+                @if(!($field['hide_in_single_view'] ?? false))
                 <div class="detail-item">
                     <div class="detail-label" style="font-weight: 500; color: var(--text-secondary); margin-bottom: 0.25rem;">{{ $field['label'] }}</div>
                     <div class="detail-value" style="font-size: 1rem; color: var(--text-primary);">
@@ -80,6 +81,7 @@
                         @endif
                     </div>
                 </div>
+                @endif
             @endforeach
         </div>
     </div>
