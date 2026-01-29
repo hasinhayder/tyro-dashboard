@@ -118,19 +118,33 @@ class ResourceController extends BaseController
 
     protected function hasAccess($config)
     {
-        // If 'roles' (access_roles) is not defined, it's visible to all (default behavior)
-        // unless we want to enforce strictness. Given the requirement "these resources will be hidden to all other roles",
-        // it implies that IF roles are defined, we check. IF NOT, we assume open.
+        $user = auth()->user();
+        
+        // Must be authenticated
+        if (!$user) {
+            return false;
+        }
+        
         $accessRoles = $config['roles'] ?? [];
         $readonlyRoles = $config['readonly'] ?? [];
         
-        if (empty($accessRoles)) {
-            // No strict access defined, so allowed.
-            return true;
+        // If no roles are defined, only admins can access (secure by default)
+        if (empty($accessRoles) && empty($readonlyRoles)) {
+            // Check if user is admin
+            if (method_exists($user, 'tyroRoleSlugs')) {
+                $adminRoles = config('tyro-dashboard.admin_roles', ['admin', 'super-admin']);
+                $userRoles = $user->tyroRoleSlugs();
+                foreach ($adminRoles as $role) {
+                    if (in_array($role, $userRoles)) {
+                        return true;
+                    }
+                }
+            }
+            return false;
         }
 
-        $user = auth()->user();
-        if (!$user || !method_exists($user, 'tyroRoleSlugs')) {
+        // If roles are defined, check if user has the required role
+        if (!method_exists($user, 'tyroRoleSlugs')) {
             return false;
         }
 

@@ -32,6 +32,10 @@ trait HasCrud
             }
         }
         
+        // Get resource-level config from tyro-dashboard config file (for upload overrides)
+        $resourceKey = static::getResourceKey();
+        $resourceConfig = config('tyro-dashboard.resources.' . $resourceKey, []);
+        
         return [
             'model' => static::class,
             'title' => $instance->resourceTitle ?? $defaultTitle,

@@ -1,4 +1,4 @@
-@extends('tyro-dashboard::layouts.admin')
+@extends('tyro-dashboard::layouts.app')
 
 @section('title', 'Edit ' . Str::singular($config['title']))
 
