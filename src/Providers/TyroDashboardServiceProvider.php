@@ -61,8 +61,8 @@ class TyroDashboardServiceProvider extends ServiceProvider
             $view->with('user', auth()->user());
         });
         
-        // Share all resources (config-based + trait-based) with sidebar view
-        View::composer('tyro-dashboard::partials.admin-sidebar', function ($view) {
+        // Share all resources (config-based + trait-based) with sidebar views
+        View::composer(['tyro-dashboard::partials.admin-sidebar', 'tyro-dashboard::partials.user-sidebar'], function ($view) {
             $resources = $this->getAllResources();
             $view->with('allResources', $resources);
         });

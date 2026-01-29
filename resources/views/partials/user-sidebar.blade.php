@@ -42,6 +42,54 @@
             </a>
         </div>
 
+        @if(!empty($allResources ?? config('tyro-dashboard.resources')))
+        <div class="sidebar-section">
+            <div class="sidebar-section-title">Resources</div>
+            @foreach($allResources ?? config('tyro-dashboard.resources', []) as $key => $resource)
+                @php
+                    // Check access (logic duplicated from Controller for view)
+                    $canAccess = true;
+                    if (isset($resource['roles']) && !empty($resource['roles'])) {
+                        $canAccess = false;
+                        $user = auth()->user();
+                        if ($user && method_exists($user, 'tyroRoleSlugs')) {
+                            $userRoles = $user->tyroRoleSlugs();
+                            // Check allowed roles
+                            foreach ($resource['roles'] as $role) {
+                                if (in_array($role, $userRoles)) {
+                                    $canAccess = true;
+                                    break;
+                                }
+                            }
+                            // Check readonly roles (if not already allowed)
+                            if (!$canAccess && isset($resource['readonly']) && !empty($resource['readonly'])) {
+                                foreach ($resource['readonly'] as $role) {
+                                    if (in_array($role, $userRoles)) {
+                                        $canAccess = true;
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                @endphp
+                
+                @if($canAccess)
+                <a href="{{ route('tyro-dashboard.resources.index', $key) }}" class="sidebar-link {{ request()->is('*resources/'.$key.'*') ? 'active' : '' }}">
+                    @if(isset($resource['icon']))
+                        {!! $resource['icon'] !!}
+                    @else
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                        </svg>
+                    @endif
+                    {{ $resource['title'] }}
+                </a>
+                @endif
+            @endforeach
+        </div>
+        @endif
+
         <div class="sidebar-section">
             <div class="sidebar-section-title">Examples</div>
             <a href="{{ route('tyro-dashboard.components') }}" class="sidebar-link {{ (request()->routeIs('tyro-dashboard.components') || request()->routeIs('tyro-dashboard.examples.components')) ? 'active' : '' }}">

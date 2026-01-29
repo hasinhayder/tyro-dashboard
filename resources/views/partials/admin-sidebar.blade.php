@@ -65,7 +65,7 @@
             </a>
         </div>
 
-        @if(!empty(config('tyro-dashboard.resources')))
+        @if(!empty($allResources ?? config('tyro-dashboard.resources')))
         <div class="sidebar-section">
             <div class="sidebar-section-title">Resources</div>
             @foreach($allResources ?? config('tyro-dashboard.resources', []) as $key => $resource)
