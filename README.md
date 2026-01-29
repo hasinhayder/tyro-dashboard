@@ -197,11 +197,13 @@ Simply add your resource definition to `config/tyro-dashboard.php`:
         'model' => App\Models\Product::class,
         'roles' => ['admin', 'manager'],
         'readonly' => ['viewer'],
+        'upload_disk' => 'public',  // Optional: per-resource storage disk
+        'upload_directory' => 'products',  // Optional: per-resource directory
         'fields' => [
             'name' => ['type' => 'text', 'required' => true, 'searchable' => true],
             'price' => ['type' => 'number', 'required' => true, 'sortable' => true],
             'category_id' => ['type' => 'select', 'relationship' => 'category'],
-            'image' => ['type' => 'file', 'storage' => 'public', 'path' => 'products'],
+            'image' => ['type' => 'file'],  // File uploads use resource/global upload config
             'is_active' => ['type' => 'checkbox', 'default' => true],
         ],
     ],
@@ -247,6 +249,60 @@ Different experiences for different user types:
 - Different information needs
 - Better UX for each user type
 - Simplified navigation for users
+
+### File Upload Configuration
+
+Intelligent three-tier file upload system for flexible storage management:
+
+#### Priority System
+1. **Model-level** (highest) — Define in model using HasCrud trait
+2. **Resource-level** (middle) — Configure per-resource in config file  
+3. **Global-level** (fallback) — Set global defaults for all resources
+
+#### Example: Model-Level Configuration
+```php
+use HasinHayder\TyroDashboard\Concerns\HasCrud;
+
+class Book extends Model
+{
+    use HasCrud;
+    
+    protected $resourceUploadDisk = 's3';  // Store on Amazon S3
+    protected $resourceUploadDirectory = 'books';  // In 'books' directory
+    
+    protected $fillable = ['title', 'cover_image'];
+}
+```
+
+#### Example: Resource-Level Configuration
+```php
+// config/tyro-dashboard.php
+'resources' => [
+    'documents' => [
+        'model' => App\Models\Document::class,
+        'upload_disk' => 'local',  // Private storage
+        'upload_directory' => 'documents',
+        'fields' => [
+            'file' => ['type' => 'file'],
+        ],
+    ],
+]
+```
+
+#### Example: Global Configuration
+```php
+// config/tyro-dashboard.php
+'uploads' => [
+    'disk' => env('TYRO_DASHBOARD_UPLOAD_DISK', 'public'),
+    'directory' => env('TYRO_DASHBOARD_UPLOAD_DIRECTORY', 'uploads'),
+],
+```
+
+**Storage Disks**:
+- `public` — Web-accessible files (images, public documents)
+- `local` — Private files requiring authentication
+- `s3` — Amazon S3 cloud storage
+- Custom disks from `config/filesystems.php`
 
 ### Security & Authorization
 
