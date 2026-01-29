@@ -30,7 +30,7 @@
         <div class="navbar-container">
             <a href="#" class="navbar-brand">
                 <span class="navbar-logo">Tyro Dashboard</span>
-                <span class="navbar-badge">v1.6.3</span>
+                <span class="navbar-badge">v1.6.5</span>
             </a>
 
             <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Toggle menu">
@@ -279,7 +279,7 @@
                         <line x1="12" y1="19" x2="20" y2="19"></line>
                     </svg>
                 </div>
-                <h3 class="feature-title">Create Pages in Seconds</h3>
+                <h3 class="feature-title">Admin Pages in Seconds</h3>
                 <p class="feature-description">
                     Generate complete admin pages with a single command. Automatic view creation, route registration, and sidebar linking. Build custom dashboards instantly.
                 </p>
@@ -340,7 +340,7 @@
                     <div class="crud-step-number" style="flex-shrink: 0; width: 40px; height: 40px; background: var(--gradient-primary); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700;">1</div>
                     <div class="crud-step-content">
                         <h3 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 0.5rem; color: var(--color-text);">Define Fields</h3>
-                        <p style="color: var(--color-text-secondary);">Simply list your fields and their types. Text, select, boolean, richtext, and more are supported out of the box.</p>
+                        <p style="color: var(--color-text-secondary);">Simply list your fields and their types. Text, select, boolean, richtext, markdown, and more are supported out of the box.</p>
                     </div>
                 </div>
                 <div class="crud-step" style="display: flex; gap: 1.5rem; margin-bottom: 2rem;">
@@ -461,8 +461,8 @@
                     </div>
                     <h3 class="feature-title">Override Single Fields</h3>
                     <p class="feature-description">
-                        Use resourceFieldOverrides to customize specific fields while keeping 
-                        auto-generation for the rest.
+                        Tweak specific fields exactly how you want them, while everything else 
+                        auto-generates. The best of both worlds.
                     </p>
                 </div>
 
@@ -476,8 +476,8 @@
                     </div>
                     <h3 class="feature-title">Role-Based Access</h3>
                     <p class="feature-description">
-                        Define resourceRoles and resourceReadonly directly in your model 
-                        for fine-grained access control.
+                        Control who can see and edit each resource. Define permissions right in your model 
+                        with simple, powerful access rules.
                     </p>
                 </div>
 
@@ -505,8 +505,38 @@
                     </div>
                     <h3 class="feature-title">Performance Optimized</h3>
                     <p class="feature-description">
-                        Auto-generated fields are cached for 6 hours. Cache automatically 
-                        invalidates when your $fillable changes.
+                        Lightning-fast auto-generation with smart caching. Your dashboard stays snappy 
+                        while staying perfectly in sync with your code.
+                    </p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                            <line x1="9" y1="9" x2="15" y2="9"></line>
+                            <line x1="9" y1="15" x2="15" y2="15"></line>
+                        </svg>
+                    </div>
+                    <h3 class="feature-title">Essential Field Support</h3>
+                    <p class="feature-description">
+                        Text, email, password, textarea, richtext, markdown, number, date, datetime, time, 
+                        boolean, select, multiselect, radio, checkbox, and file fields ready to use.
+                    </p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                            <polyline points="17 8 12 3 7 8"></polyline>
+                            <line x1="12" y1="3" x2="12" y2="15"></line>
+                        </svg>
+                    </div>
+                    <h3 class="feature-title">Smart File Upload</h3>
+                    <p class="feature-description">
+                        Configure storage your way - local, S3, or any cloud. Files clean up automatically 
+                        when records are deleted. One less thing to worry about.
                     </p>
                 </div>
             </div>
@@ -612,6 +642,20 @@
                         <div>
                             <h4 style="margin: 0 0 0.25rem 0;">File Uploads</h4>
                             <p style="margin: 0; color: var(--color-text-secondary); font-size: 0.9rem;">Configurable storage disks</p>
+                        </div>
+                    </div>
+                    <div style="display: flex; gap: 1rem; align-items: center;">
+                        <div style="background: var(--color-primary); color: white; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">✓</div>
+                        <div>
+                            <h4 style="margin: 0 0 0.25rem 0;">Rich Text & Markdown</h4>
+                            <p style="margin: 0; color: var(--color-text-secondary); font-size: 0.9rem;">Built-in editors</p>
+                        </div>
+                    </div>
+                    <div style="display: flex; gap: 1rem; align-items: center;">
+                        <div style="background: var(--color-primary); color: white; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">✓</div>
+                        <div>
+                            <h4 style="margin: 0 0 0.25rem 0;">Field Visibility</h4>
+                            <p style="margin: 0; color: var(--color-text-secondary); font-size: 0.9rem;">Hide in list/detail views</p>
                         </div>
                     </div>
                 </div>

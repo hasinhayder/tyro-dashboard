@@ -26,7 +26,7 @@
         <div class="navbar-container">
             <a href="index.html" class="navbar-brand">
                 <span class="navbar-logo">Tyro Dashboard</span>
-                <span class="navbar-badge">v1.6.3</span>
+                <span class="navbar-badge">v1.6.5</span>
             </a>
 
             <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Toggle menu">
@@ -123,6 +123,8 @@
                         <li><a href="#search-config" class="doc-nav-link">Search Settings</a></li>
                         <li><a href="#field-types" class="doc-nav-link">Field Types</a></li>
                         <li><a href="#rich-text" class="doc-nav-link">Rich Text Editor</a></li>
+                        <li><a href="#markdown-editor" class="doc-nav-link">Markdown Editor</a></li>
+                        <li><a href="#field-visibility" class="doc-nav-link">Field Visibility Options</a></li>
                         <li><a href="#readonly-resources" class="doc-nav-link">Readonly Resources</a></li>
                         <li><a href="#error-visibility" class="doc-nav-link">Error Visibility</a></li>
                     </ul>
@@ -293,8 +295,13 @@
                             </tr>
                             <tr>
                                 <td><code>richtext</code></td>
-                                <td>Rich text editor</td>
+                                <td>Rich text editor (Quill.js)</td>
                                 <td><code>height</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>markdown</code></td>
+                                <td>Markdown editor with live preview (EasyMDE)</td>
+                                <td><code>label</code>, <code>hide_in_index</code></td>
                             </tr>
                             <tr>
                                 <td><code>textarea</code></td>
@@ -334,6 +341,44 @@
         'type' => 'richtext',
         'label' => 'Biography',
         'required' => true
+    ]
+]</code></pre>
+                </div>
+
+                <!-- Markdown Editor -->
+                <h3 id="markdown-editor" class="doc-feature-title" style="margin-top: 2rem;">Markdown Editor</h3>
+                <p class="doc-text">
+                    Enable a markdown editor with live preview (EasyMDE) for any text field by setting the type to <code>markdown</code>. Features a single-pane editor with built-in preview toggle.
+                </p>
+                <div class="doc-code-block">
+                    <pre><code class="language-php">'fields' => [
+    'content' => [
+        'type' => 'markdown',
+        'label' => 'Post Content',
+        'hide_in_index' => true  // Hide from table view
+    ]
+]</code></pre>
+                </div>
+
+                <!-- Field Visibility Options -->
+                <h3 id="field-visibility" class="doc-feature-title" style="margin-top: 2rem;">Field Visibility Options</h3>
+                <p class="doc-text">
+                    Control where fields are displayed using visibility options:
+                </p>
+                <div class="doc-code-block">
+                    <pre><code class="language-php">'fields' => [
+    'description' => [
+        'type' => 'textarea',
+        'hide_in_index' => true  // Hide from list view table
+    ],
+    'internal_notes' => [
+        'type' => 'textarea',
+        'hide_in_single_view' => true  // Hide from detail view
+    ],
+    'password' => [
+        'type' => 'password',
+        'hide_in_index' => true,
+        'hide_in_single_view' => true  // Hide in both views
     ]
 ]</code></pre>
                 </div>
