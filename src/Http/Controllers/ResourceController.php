@@ -301,7 +301,9 @@ class ResourceController extends BaseController
         // Handle file uploads
         foreach ($config['fields'] as $field => $fieldConfig) {
             if ($fieldConfig['type'] === 'file' && $request->hasFile($field)) {
-                $path = $request->file($field)->store($resource, 'public');
+                $uploadDisk = $config['upload_disk'] ?? config('tyro-dashboard.uploads.disk', 'public');
+                $uploadDirectory = $config['upload_directory'] ?? config('tyro-dashboard.uploads.directory', 'uploads');
+                $path = $request->file($field)->store($uploadDirectory, $uploadDisk);
                 $data[$field] = $path;
             }
         }
@@ -521,20 +523,17 @@ class ResourceController extends BaseController
         }
 
         // Handle file uploads
+        $uploadDisk = $config['upload_disk'] ?? config('tyro-dashboard.uploads.disk', 'public');
+        $uploadDirectory = $config['upload_directory'] ?? config('tyro-dashboard.uploads.directory', 'uploads');
+        
         foreach ($config['fields'] as $field => $fieldConfig) {
             if ($fieldConfig['type'] === 'file') {
                 if ($request->hasFile($field)) {
                     // Delete old file if exists
-                    // Note: We might want to check if the old file exists on disk before deleting, but Storage::delete usually handles non-existence gracefully or we can check.
-                    // Assuming 'public' disk for now.
                     if (!empty($item->$field)) {
-                        // \Illuminate\Support\Facades\Storage::disk('public')->delete($item->$field);
-                        // Using public_path if using 'public' disk usually means storage/app/public linked to public/storage
-                        // But for simplicity let's assume standard storage structure.
-                        // Ideally we should inject Storage facade or use it.
-                        // For now let's just store new file. Old file cleanup is an optimization.
+                        \Illuminate\Support\Facades\Storage::disk($uploadDisk)->delete($item->$field);
                     }
-                    $path = $request->file($field)->store($resource, 'public');
+                    $path = $request->file($field)->store($uploadDirectory, $uploadDisk);
                     $data[$field] = $path;
                 } else {
                      // Keep old file if not uploaded

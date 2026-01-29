@@ -134,6 +134,19 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | File Upload Configuration
+    |--------------------------------------------------------------------------
+    |
+    | Configure default settings for file uploads in resources.
+    |
+    */
+    'uploads' => [
+        'disk' => env('TYRO_DASHBOARD_UPLOAD_DISK', 'public'),
+        'directory' => env('TYRO_DASHBOARD_UPLOAD_DIRECTORY', 'uploads'),
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
     | Dynamic Resources (CRUD)
     |--------------------------------------------------------------------------
     |

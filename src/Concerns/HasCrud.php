@@ -39,6 +39,8 @@ trait HasCrud
             'fields' => $fields,
             'roles' => $instance->resourceRoles ?? [],
             'readonly' => $instance->resourceReadonly ?? [],
+            'upload_disk' => $instance->resourceUploadDisk ?? $resourceConfig['upload_disk'] ?? config('tyro-dashboard.uploads.disk', 'public'),
+            'upload_directory' => $instance->resourceUploadDirectory ?? $resourceConfig['upload_directory'] ?? config('tyro-dashboard.uploads.directory', 'uploads'),
         ];
     }
     
