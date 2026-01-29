@@ -356,6 +356,10 @@ trait HasCrud
         } elseif (\Illuminate\Support\Str::contains($fieldName, ['time']) && !\Illuminate\Support\Str::contains($fieldName, ['update', 'create'])) {
             $config['type'] = 'time';
             $config['rules'] = $isNullable ? 'nullable' : 'required';
+        } elseif (\Illuminate\Support\Str::contains($fieldName, ['image', 'photo', 'picture', 'avatar', 'file', 'document', 'attachment'])) {
+            // Check file fields before numeric fields (since 'image' contains 'age')
+            $config['type'] = 'file';
+            $config['hide_in_index'] = true;
         } elseif (in_array($fieldName, ['price', 'amount', 'cost', 'salary', 'wage'])) {
             $config['type'] = 'number';
             $config['rules'] = ($isNullable ? 'nullable|' : 'required|') . 'numeric|min:0';
@@ -364,9 +368,6 @@ trait HasCrud
             $config['rules'] = ($isNullable ? 'nullable|' : 'required|') . 'integer|min:0';
         } elseif (\Illuminate\Support\Str::startsWith($fieldName, ['is_', 'has_', 'can_', 'should_', 'must_'])) {
             $config['type'] = 'boolean';
-        } elseif (\Illuminate\Support\Str::contains($fieldName, ['image', 'photo', 'picture', 'avatar', 'file', 'document', 'attachment'])) {
-            $config['type'] = 'file';
-            $config['hide_in_index'] = true;
         } elseif (\Illuminate\Support\Str::contains($fieldName, ['url', 'link', 'website'])) {
             $config['type'] = 'url';
             $rules = ($isNullable ? 'nullable|' : 'required|') . 'url';
