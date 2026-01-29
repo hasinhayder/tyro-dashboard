@@ -282,54 +282,7 @@ trait HasCrud
             return $config;
         }
         
-        // Use database column type if available
-        if ($columnType) {
-            switch ($columnType) {
-                case 'boolean':
-                    $config['type'] = 'boolean';
-                    return $config;
-                    
-                case 'integer':
-                case 'bigint':
-                case 'smallint':
-                    $config['type'] = 'number';
-                    $config['rules'] = ($isNullable ? 'nullable|' : 'required|') . 'integer';
-                    return $config;
-                    
-                case 'decimal':
-                case 'float':
-                case 'double':
-                    $config['type'] = 'number';
-                    $config['rules'] = ($isNullable ? 'nullable|' : 'required|') . 'numeric';
-                    return $config;
-                    
-                case 'text':
-                case 'longtext':
-                case 'mediumtext':
-                    $config['type'] = 'textarea';
-                    $config['hide_in_index'] = true;
-                    $config['rules'] = $isNullable ? 'nullable' : 'required';
-                    return $config;
-                    
-                case 'date':
-                    $config['type'] = 'date';
-                    $config['rules'] = $isNullable ? 'nullable|date' : 'required|date';
-                    return $config;
-                    
-                case 'datetime':
-                case 'timestamp':
-                    $config['type'] = 'datetime-local';
-                    $config['rules'] = $isNullable ? 'nullable' : 'required';
-                    return $config;
-                    
-                case 'time':
-                    $config['type'] = 'time';
-                    $config['rules'] = $isNullable ? 'nullable' : 'required';
-                    return $config;
-            }
-        }
-        
-        // Guess field type based on name patterns
+        // Guess field type based on name patterns (check these FIRST before falling back to column type)
         if (\Illuminate\Support\Str::endsWith($fieldName, '_id')) {
             // Foreign key - likely a select field
             $config['type'] = 'select';
@@ -380,13 +333,69 @@ trait HasCrud
             }
             $config['rules'] = $rules;
         } else {
-            // Default to text
-            $config['type'] = 'text';
-            $rules = $isNullable ? 'nullable' : 'required';
-            if ($maxLength) {
-                $rules .= '|max:' . $maxLength;
+            // No name pattern matched, fall back to database column type
+            if ($columnType) {
+                switch ($columnType) {
+                    case 'boolean':
+                        $config['type'] = 'boolean';
+                        break;
+                        
+                    case 'integer':
+                    case 'bigint':
+                    case 'smallint':
+                        $config['type'] = 'number';
+                        $config['rules'] = ($isNullable ? 'nullable|' : 'required|') . 'integer';
+                        break;
+                        
+                    case 'decimal':
+                    case 'float':
+                    case 'double':
+                        $config['type'] = 'number';
+                        $config['rules'] = ($isNullable ? 'nullable|' : 'required|') . 'numeric';
+                        break;
+                        
+                    case 'text':
+                    case 'longtext':
+                    case 'mediumtext':
+                        $config['type'] = 'textarea';
+                        $config['hide_in_index'] = true;
+                        $config['rules'] = $isNullable ? 'nullable' : 'required';
+                        break;
+                        
+                    case 'date':
+                        $config['type'] = 'date';
+                        $config['rules'] = $isNullable ? 'nullable|date' : 'required|date';
+                        break;
+                        
+                    case 'datetime':
+                    case 'timestamp':
+                        $config['type'] = 'datetime-local';
+                        $config['rules'] = $isNullable ? 'nullable' : 'required';
+                        break;
+                        
+                    case 'time':
+                        $config['type'] = 'time';
+                        $config['rules'] = $isNullable ? 'nullable' : 'required';
+                        break;
+                        
+                    default:
+                        // Default to text for unknown column types
+                        $config['type'] = 'text';
+                        $rules = $isNullable ? 'nullable' : 'required';
+                        if ($maxLength) {
+                            $rules .= '|max:' . $maxLength;
+                        }
+                        $config['rules'] = $rules;
+                }
+            } else {
+                // No column type available, default to text
+                $config['type'] = 'text';
+                $rules = $isNullable ? 'nullable' : 'required';
+                if ($maxLength) {
+                    $rules .= '|max:' . $maxLength;
+                }
+                $config['rules'] = $rules;
             }
-            $config['rules'] = $rules;
         }
         
         // Add searchable flag for common searchable fields
