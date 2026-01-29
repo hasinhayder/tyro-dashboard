@@ -21,7 +21,7 @@ class VersionCommand extends Command
      */
     public function handle(): int
     {
-        $version = "1.6.4"; //Dynamic CRUD - Intelligent field type check precedence added for better compatibility
+        $version = "1.6.5"; //Dynamic CRUD - Configurable file upload auto-deletion on resource delete
         
         $this->info('');
         $this->info('  ╔════════════════════════════════════════╗');
@@ -73,6 +73,7 @@ class VersionCommand extends Command
 }
 
 //Changelog
+//1.6.5 - Configurable auto-deletion of uploaded files on resource deletion
 //1.6.4 - Dynamic CRUD - Intelligent field type check precedence added for better compatibility
 //1.6.3 - Fix role-based access control for HasCrud resources
 //1.6.2 - File upload fields with disk and path configuration added

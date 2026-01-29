@@ -143,6 +143,7 @@ return [
     'uploads' => [
         'disk' => env('TYRO_DASHBOARD_UPLOAD_DISK', 'public'),
         'directory' => env('TYRO_DASHBOARD_UPLOAD_DIRECTORY', 'uploads'),
+        'auto_delete_on_resource_delete' => env('TYRO_DASHBOARD_AUTO_DELETE_UPLOADS', true),
     ],
 
     /*

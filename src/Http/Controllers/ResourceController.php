@@ -643,6 +643,22 @@ class ResourceController extends BaseController
         $modelClass = $config['model'];
         
         $item = $modelClass::findOrFail($id);
+        
+        // Auto-delete uploaded files if configured
+        if (config('tyro-dashboard.uploads.auto_delete_on_resource_delete', true)) {
+            $uploadDisk = $config['upload_disk'] ?? config('tyro-dashboard.uploads.disk', 'public');
+            
+            foreach ($config['fields'] as $field => $fieldConfig) {
+                if ($fieldConfig['type'] === 'file' && !empty($item->$field)) {
+                    try {
+                        \Illuminate\Support\Facades\Storage::disk($uploadDisk)->delete($item->$field);
+                    } catch (\Exception $e) {
+                        // Continue even if file deletion fails (file might not exist)
+                    }
+                }
+            }
+        }
+        
         $item->delete();
 
         return redirect()->route('tyro-dashboard.resources.index', $resource)
