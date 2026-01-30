@@ -97,7 +97,7 @@
             @method('PUT')
 
             @foreach($config['fields'] as $key => $field)
-            @if(($field['hide_in_form'] ?? false))
+            @if(($field['hide_in_form'] ?? false) || ($field['hide_in_edit'] ?? false))
             @continue
             @endif
 
@@ -124,7 +124,7 @@
                 <label for="{{ $key }}" class="form-label">{{ $field['label'] }}</label>
 
                 @if($field['type'] === 'textarea')
-                <textarea name="{{ $key }}" id="{{ $key }}" class="form-input @error($key) is-invalid @enderror" rows="5">{{ old($key, $item->$key) }}</textarea>
+                <textarea name="{{ $key }}" id="{{ $key }}" class="form-input @error($key) is-invalid @enderror" rows="5" placeholder="{{ $field['placeholder'] ?? '' }}">{{ old($key, $item->$key) }}</textarea>
 
                 @elseif($field['type'] === 'richtext')
                 <div class="richtext-wrapper">
@@ -133,7 +133,7 @@
                 </div>
 
                 @elseif($field['type'] === 'markdown')
-                <textarea name="{{ $key }}" id="{{ $key }}" class="@error($key) is-invalid @enderror">{{ old($key, $item->$key) }}</textarea>
+                <textarea name="{{ $key }}" id="{{ $key }}" class="@error($key) is-invalid @enderror" placeholder="{{ $field['placeholder'] ?? '' }}">{{ old($key, $item->$key) }}</textarea>
 
                 @elseif($field['type'] === 'select')
                 @if($field['multiple'] ?? false)
@@ -261,7 +261,7 @@
                 </div>
 
                 @else
-                <input type="{{ $field['type'] }}" name="{{ $key }}" id="{{ $key }}" class="form-input @error($key) is-invalid @enderror" value="{{ old($key, $item->$key) }}">
+                <input type="{{ $field['type'] }}" name="{{ $key }}" id="{{ $key }}" class="form-input @error($key) is-invalid @enderror" value="{{ old($key, $item->$key) }}" placeholder="{{ $field['placeholder'] ?? '' }}">
                 @endif
 
                 @if(isset($field['help_text']))

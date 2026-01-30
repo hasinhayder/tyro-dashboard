@@ -89,7 +89,7 @@
             @csrf
 
             @foreach($config['fields'] as $key => $field)
-            @if(($field['hide_in_form'] ?? false))
+            @if(($field['hide_in_form'] ?? false) || ($field['hide_in_create'] ?? false))
             @continue
             @endif
 
@@ -102,16 +102,16 @@
                 <label for="{{ $key }}" class="form-label">{{ $field['label'] }}</label>
 
                 @if($field['type'] === 'textarea')
-                <textarea name="{{ $key }}" id="{{ $key }}" class="form-input @error($key) is-invalid @enderror" rows="5">{{ old($key) }}</textarea>
+                <textarea name="{{ $key }}" id="{{ $key }}" class="form-input @error($key) is-invalid @enderror" rows="5" placeholder="{{ $field['placeholder'] ?? '' }}">{{ old($key, $field['default'] ?? '') }}</textarea>
 
                 @elseif($field['type'] === 'richtext')
                 <div class="richtext-wrapper">
                     <div id="editor-{{ $key }}" style="height: 200px; background: #fff;"></div>
-                    <textarea name="{{ $key }}" id="{{ $key }}" style="display:none">{{ old($key) }}</textarea>
+                    <textarea name="{{ $key }}" id="{{ $key }}" style="display:none">{{ old($key, $field['default'] ?? '') }}</textarea>
                 </div>
 
                 @elseif($field['type'] === 'markdown')
-                <textarea name="{{ $key }}" id="{{ $key }}" class="@error($key) is-invalid @enderror">{{ old($key) }}</textarea>
+                <textarea name="{{ $key }}" id="{{ $key }}" class="@error($key) is-invalid @enderror" placeholder="{{ $field['placeholder'] ?? '' }}">{{ old($key, $field['default'] ?? '') }}</textarea>
 
                 @elseif($field['type'] === 'select')
                 @if($field['multiple'] ?? false)
@@ -234,7 +234,7 @@
                 </div>
 
                 @else
-                <input type="{{ $field['type'] }}" name="{{ $key }}" id="{{ $key }}" class="form-input @error($key) is-invalid @enderror" value="{{ old($key) }}">
+                <input type="{{ $field['type'] }}" name="{{ $key }}" id="{{ $key }}" class="form-input @error($key) is-invalid @enderror" value="{{ old($key, $field['default'] ?? '') }}" placeholder="{{ $field['placeholder'] ?? '' }}">
                 @endif
 
                 @if(isset($field['help_text']))
