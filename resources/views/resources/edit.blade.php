@@ -124,7 +124,7 @@
                 <label for="{{ $key }}" class="form-label">{{ $field['label'] }}</label>
 
                 @if($field['type'] === 'textarea')
-                <textarea name="{{ $key }}" id="{{ $key }}" class="form-input @error($key) is-invalid @enderror" rows="5" placeholder="{{ $field['placeholder'] ?? '' }}">{{ old($key, $item->$key) }}</textarea>
+                <textarea name="{{ $key }}" id="{{ $key }}" class="form-input @error($key) is-invalid @enderror" rows="5" placeholder="{{ $field['placeholder'] ?? '' }}" {{ ($field['readonly'] ?? false) ? 'readonly' : '' }} @if(isset($field['attributes'])) @foreach($field['attributes'] as $attr => $value) {{ $attr }}="{{ $value }}" @endforeach @endif>{{ old($key, $item->$key) }}</textarea>
 
                 @elseif($field['type'] === 'richtext')
                 <div class="richtext-wrapper">
@@ -247,10 +247,28 @@
                 </div>
 
                 @elseif($field['type'] === 'file')
-                <input type="file" name="{{ $key }}" id="{{ $key }}" class="form-input @error($key) is-invalid @enderror">
+                @php
+                    $displayImage = $field['display_image'] ?? false;
+                    $displayImagePosition = $field['display_image_position'] ?? 'top';
+                    $isImage = !empty($item->$key) && $displayImage && preg_match('/\.(jpg|jpeg|png|gif|webp|svg)$/i', $item->$key);
+                @endphp
+                
+                @if($isImage && $displayImagePosition === 'top')
+                <div style="margin-bottom: 0.5rem;">
+                    <img src="{{ Storage::url($item->$key) }}" alt="Current image" style="width: 200px; height: auto; border: 1px solid var(--border); border-radius: 4px;">
+                </div>
+                @endif
+                
+                <input type="file" name="{{ $key }}" id="{{ $key }}" class="form-input @error($key) is-invalid @enderror" {{ ($field['readonly'] ?? false) ? 'readonly' : '' }} @if(isset($field['attributes'])) @foreach($field['attributes'] as $attr => $value) {{ $attr }}="{{ $value }}" @endforeach @endif>
                 @if(!empty($item->$key))
                 <div style="margin-top: 0.5rem;">
                     <small>Current file: <a href="{{ Storage::url($item->$key) }}" target="_blank">{{ basename($item->$key) }}</a></small>
+                </div>
+                @endif
+                
+                @if($isImage && $displayImagePosition === 'bottom')
+                <div style="margin-top: 0.5rem;">
+                    <img src="{{ Storage::url($item->$key) }}" alt="Current image" style="width: 200px; height: auto; border: 1px solid var(--border); border-radius: 4px;">
                 </div>
                 @endif
 
@@ -261,7 +279,7 @@
                 </div>
 
                 @else
-                <input type="{{ $field['type'] }}" name="{{ $key }}" id="{{ $key }}" class="form-input @error($key) is-invalid @enderror" value="{{ old($key, $item->$key) }}" placeholder="{{ $field['placeholder'] ?? '' }}">
+                <input type="{{ $field['type'] }}" name="{{ $key }}" id="{{ $key }}" class="form-input @error($key) is-invalid @enderror" value="{{ old($key, $item->$key) }}" placeholder="{{ $field['placeholder'] ?? '' }}" {{ ($field['readonly'] ?? false) ? 'readonly' : '' }} @if(isset($field['attributes'])) @foreach($field['attributes'] as $attr => $value) {{ $attr }}="{{ $value }}" @endforeach @endif>
                 @endif
 
                 @if(isset($field['help_text']))

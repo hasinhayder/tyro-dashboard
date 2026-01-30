@@ -102,7 +102,7 @@
                 <label for="{{ $key }}" class="form-label">{{ $field['label'] }}</label>
 
                 @if($field['type'] === 'textarea')
-                <textarea name="{{ $key }}" id="{{ $key }}" class="form-input @error($key) is-invalid @enderror" rows="5" placeholder="{{ $field['placeholder'] ?? '' }}">{{ old($key, $field['default'] ?? '') }}</textarea>
+                <textarea name="{{ $key }}" id="{{ $key }}" class="form-input @error($key) is-invalid @enderror" rows="5" placeholder="{{ $field['placeholder'] ?? '' }}" {{ ($field['readonly'] ?? false) ? 'readonly' : '' }} @if(isset($field['attributes'])) @foreach($field['attributes'] as $attr => $value) {{ $attr }}="{{ $value }}" @endforeach @endif>{{ old($key, $field['default'] ?? '') }}</textarea>
 
                 @elseif($field['type'] === 'richtext')
                 <div class="richtext-wrapper">
@@ -234,7 +234,7 @@
                 </div>
 
                 @else
-                <input type="{{ $field['type'] }}" name="{{ $key }}" id="{{ $key }}" class="form-input @error($key) is-invalid @enderror" value="{{ old($key, $field['default'] ?? '') }}" placeholder="{{ $field['placeholder'] ?? '' }}">
+                <input type="{{ $field['type'] }}" name="{{ $key }}" id="{{ $key }}" class="form-input @error($key) is-invalid @enderror" value="{{ old($key, $field['default'] ?? '') }}" placeholder="{{ $field['placeholder'] ?? '' }}" {{ ($field['readonly'] ?? false) ? 'readonly' : '' }} @if(isset($field['attributes'])) @foreach($field['attributes'] as $attr => $value) {{ $attr }}="{{ $value }}" @endforeach @endif>
                 @endif
 
                 @if(isset($field['help_text']))
