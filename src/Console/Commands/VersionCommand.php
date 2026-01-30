@@ -21,7 +21,7 @@ class VersionCommand extends Command
      */
     public function handle(): int
     {
-        $version = "1.6.5"; //Dynamic CRUD - Configurable file upload auto-deletion on resource delete + markdown field type field support
+        $version = "1.6.6"; //Dynamic CRUD - hide_in_create, hide_in_edit, default, placeholder, attributes, readonly and display_image and display_image_position support for CRUD fields
         
         $this->info('');
         $this->info('  ╔════════════════════════════════════════╗');
@@ -73,6 +73,7 @@ class VersionCommand extends Command
 }
 
 //Changelog
+//1.6.6 - Dynamic CRUD - hide_in_create, hide_in_edit, default, placeholder, attributes, readonly and display_image and display_image_position support for CRUD fields
 //1.6.5 - Configurable auto-deletion of uploaded files on resource deletion + markdown field type field support
 //1.6.4 - Dynamic CRUD - Intelligent field type check precedence added for better compatibility
 //1.6.3 - Fix role-based access control for HasCrud resources
