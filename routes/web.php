@@ -7,6 +7,7 @@ use HasinHayder\TyroDashboard\Http\Controllers\PrivilegeController;
 use HasinHayder\TyroDashboard\Http\Controllers\ProfileController;
 use HasinHayder\TyroDashboard\Http\Controllers\RoleController;
 use HasinHayder\TyroDashboard\Http\Controllers\UserController;
+use HasinHayder\TyroDashboard\Http\Controllers\XComponentsController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -21,21 +22,27 @@ use Illuminate\Support\Facades\Route;
 // Dashboard Home
 Route::get('/', [DashboardController::class, 'index'])->name('index');
 
-// Backwards-compatible alias for the Examples Components page
-Route::get('/components', [ComponentsController::class, 'components'])->name('components');
+// Example and Demo Routes
+if (!config('tyro-dashboard.disable_examples', false) && !app()->environment('production')) {
+    // Backwards-compatible alias for the Examples Components page
+    Route::get('/components', [ComponentsController::class, 'components'])->name('components');
 
-// Optional alias (kept for backwards compatibility if anyone bookmarked it)
-Route::get('/examples/components', [ComponentsController::class, 'components'])->name('examples.components');
+    // Optional alias (kept for backwards compatibility if anyone bookmarked it)
+    Route::get('/examples/components', [ComponentsController::class, 'components'])->name('examples.components');
 
-// Widgets (interactive examples)
-Route::get('/widgets', [WidgetsController::class, 'widgets'])->name('widgets');
-Route::get('/examples/widgets', [WidgetsController::class, 'widgets'])->name('examples.widgets');
+    // Widgets (interactive examples)
+    Route::get('/widgets', [WidgetsController::class, 'widgets'])->name('widgets');
+    Route::get('/examples/widgets', [WidgetsController::class, 'widgets'])->name('examples.widgets');
 
-// Same-origin proxies for third-party widget data (avoid browser CORS)
-Route::get('/examples/widgets/xkcd/{id?}', [WidgetsController::class, 'xkcd'])->where('id', '[0-9]+')->name('examples.widgets.xkcd');
-Route::get('/examples/widgets/stocks/{symbol}', [WidgetsController::class, 'stockQuote'])->name('examples.widgets.stocks');
-Route::get('/examples/widgets/fx/{base}', [WidgetsController::class, 'fxRates'])->name('examples.widgets.fx');
-Route::get('/examples/widgets/flights', [WidgetsController::class, 'flightStates'])->name('examples.widgets.flights');
+    // X-Components (reusable form components demo)
+    Route::get('/x-components', [XComponentsController::class, 'index'])->name('x-components');
+
+    // Same-origin proxies for third-party widget data (avoid browser CORS)
+    Route::get('/examples/widgets/xkcd/{id?}', [WidgetsController::class, 'xkcd'])->where('id', '[0-9]+')->name('examples.widgets.xkcd');
+    Route::get('/examples/widgets/stocks/{symbol}', [WidgetsController::class, 'stockQuote'])->name('examples.widgets.stocks');
+    Route::get('/examples/widgets/fx/{base}', [WidgetsController::class, 'fxRates'])->name('examples.widgets.fx');
+    Route::get('/examples/widgets/flights', [WidgetsController::class, 'flightStates'])->name('examples.widgets.flights');
+}
 
 // Profile Management (all authenticated users)
 Route::prefix('profile')->name('profile')->group(function () {

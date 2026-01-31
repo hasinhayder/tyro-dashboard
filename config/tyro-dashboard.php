@@ -63,6 +63,8 @@ return [
         'logo' => env('TYRO_DASHBOARD_LOGO', null),
         'logo_height' => env('TYRO_DASHBOARD_LOGO_HEIGHT', '32px'),
         'favicon' => env('TYRO_DASHBOARD_FAVICON', null),
+        'sidebar_bg' =>  null, // Custom background color for sidebar
+        'sidebar_text' => null, // Custom text color for sidebar
     ],
 
     /*
@@ -196,4 +198,15 @@ return [
         'show_global_errors' => env('TYRO_SHOW_GLOBAL_ERRORS', true),
         'show_field_errors' => env('TYRO_SHOW_FIELD_ERRORS', true),
     ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Disable Examples
+    |--------------------------------------------------------------------------
+    |
+    | If this is true, the "Examples" section in the sidebar will be hidden
+    | and the example routes will be disabled.
+    |
+    */
+    'disable_examples' => env('TYRO_DASHBOARD_DISABLE_EXAMPLES', false),
 ];
