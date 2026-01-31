@@ -35,7 +35,9 @@ if (!config('tyro-dashboard.disable_examples', false) && !app()->environment('pr
     Route::get('/examples/widgets', [WidgetsController::class, 'widgets'])->name('examples.widgets');
 
     // X-Components (reusable form components demo)
-    Route::get('/x-components', [XComponentsController::class, 'index'])->name('x-components');
+    if (class_exists('HasinHayder\\TyroDashboardComponents\\TyroDashboardComponentsServiceProvider')) {
+        Route::get('/x-components', [XComponentsController::class, 'index'])->name('x-components');
+    }
 
     // Same-origin proxies for third-party widget data (avoid browser CORS)
     Route::get('/examples/widgets/xkcd/{id?}', [WidgetsController::class, 'xkcd'])->where('id', '[0-9]+')->name('examples.widgets.xkcd');

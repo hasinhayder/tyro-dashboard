@@ -13,6 +13,6 @@ class XComponentsController extends Controller
      */
     public function index()
     {
-        return view('tyro-dashboard::x-components');
+        return view('tyro-dashboard-components::x-components');
     }
 }
