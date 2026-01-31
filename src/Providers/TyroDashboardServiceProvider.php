@@ -21,15 +21,12 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 
-class TyroDashboardServiceProvider extends ServiceProvider
-{
-    public function register(): void
-    {
+class TyroDashboardServiceProvider extends ServiceProvider {
+    public function register(): void {
         $this->mergeConfigFrom(__DIR__ . '/../../config/tyro-dashboard.php', 'tyro-dashboard');
     }
 
-    public function boot(): void
-    {
+    public function boot(): void {
         $this->registerPublishing();
         $this->registerRoutes();
         $this->registerViews();
@@ -38,8 +35,7 @@ class TyroDashboardServiceProvider extends ServiceProvider
         $this->registerCommands();
     }
 
-    protected function registerRoutes(): void
-    {
+    protected function registerRoutes(): void {
         Route::group([
             'prefix' => config('tyro-dashboard.routes.prefix', 'dashboard'),
             'middleware' => config('tyro-dashboard.routes.middleware', ['web', 'auth']),
@@ -49,36 +45,47 @@ class TyroDashboardServiceProvider extends ServiceProvider
         });
     }
 
-    protected function registerViews(): void
-    {
+    protected function registerViews(): void {
         $this->loadViewsFrom(__DIR__ . '/../../resources/views', 'tyro-dashboard');
     }
 
-    protected function registerViewComposers(): void
-    {
+    protected function registerViewComposers(): void {
         // Share authenticated user with all dashboard views
         View::composer(['tyro-dashboard::*', 'dashboard.*'], function ($view) {
             $view->with('user', auth()->user());
         });
-        
+
         // Share filtered resources with sidebar views (based on user's role)
         View::composer(['tyro-dashboard::partials.admin-sidebar', 'tyro-dashboard::partials.user-sidebar'], function ($view) {
             $user = auth()->user();
             $resources = $this->getAllResources($user);
             $view->with('allResources', $resources);
         });
+
+        View::composer(['tyro-dashboard::partials.admin-sidebar', 'tyro-dashboard::partials.user-sidebar'], function ($view) {
+            $data = $view->getData();
+
+            if (!isset($data['adminMenuItems'])) {
+                $view->with('adminMenuItems', config('menu.adminMenuItems', []));
+            }
+            if (!isset($data['commonMenuItems'])) {
+                $view->with('commonMenuItems', config('menu.commonMenuItems', []));
+            }
+            if (!isset($data['userMenuItems'])) {
+                $view->with('userMenuItems', config('menu.userMenuItems', []));
+            }
+        });
     }
-    
-    protected function getAllResources($user = null): array
-    {
+
+    protected function getAllResources($user = null): array {
         $resources = [];
-        
+
         // Get config-based resources
         $configResources = config('tyro-dashboard.resources', []);
         foreach ($configResources as $key => $config) {
             $resources[$key] = $config;
         }
-        
+
         // Get trait-based resources
         $traitResources = $this->getTraitBasedResources();
         foreach ($traitResources as $key => $config) {
@@ -87,17 +94,16 @@ class TyroDashboardServiceProvider extends ServiceProvider
                 $resources[$key] = $config;
             }
         }
-        
+
         // Filter resources based on user's role
         if ($user) {
             $resources = $this->filterResourcesByUserRole($resources, $user);
         }
-        
+
         return $resources;
     }
-    
-    protected function filterResourcesByUserRole(array $resources, $user): array
-    {
+
+    protected function filterResourcesByUserRole(array $resources, $user): array {
         // Check if user is admin
         $isAdmin = false;
         if (method_exists($user, 'tyroRoleSlugs')) {
@@ -110,30 +116,30 @@ class TyroDashboardServiceProvider extends ServiceProvider
                 }
             }
         }
-        
+
         // If admin, return all resources
         if ($isAdmin) {
             return $resources;
         }
-        
+
         // If not admin, filter resources based on user's roles
         $filteredResources = [];
-        
+
         if (!method_exists($user, 'tyroRoleSlugs')) {
             return $filteredResources; // No roles method, no access
         }
-        
+
         $userRoles = $user->tyroRoleSlugs();
-        
+
         foreach ($resources as $key => $config) {
             $accessRoles = $config['roles'] ?? [];
             $readonlyRoles = $config['readonly'] ?? [];
-            
+
             // If no roles defined, it's admin-only (skip for non-admin users)
             if (empty($accessRoles) && empty($readonlyRoles)) {
                 continue;
             }
-            
+
             // Check if user has access role
             $hasAccess = false;
             foreach ($accessRoles as $role) {
@@ -142,7 +148,7 @@ class TyroDashboardServiceProvider extends ServiceProvider
                     break;
                 }
             }
-            
+
             // Check if user has readonly role
             if (!$hasAccess) {
                 foreach ($readonlyRoles as $role) {
@@ -152,36 +158,35 @@ class TyroDashboardServiceProvider extends ServiceProvider
                     }
                 }
             }
-            
+
             if ($hasAccess) {
                 $filteredResources[$key] = $config;
             }
         }
-        
+
         return $filteredResources;
     }
-    
-    protected function getTraitBasedResources(): array
-    {
+
+    protected function getTraitBasedResources(): array {
         $resources = [];
         $modelPath = app_path('Models');
-        
+
         if (!is_dir($modelPath)) {
             return $resources;
         }
-        
+
         $files = new \RecursiveIteratorIterator(
             new \RecursiveDirectoryIterator($modelPath, \RecursiveDirectoryIterator::SKIP_DOTS)
         );
-        
+
         foreach ($files as $file) {
             if ($file->isDir() || $file->getExtension() !== 'php') {
                 continue;
             }
-            
+
             $relativePath = str_replace($modelPath . DIRECTORY_SEPARATOR, '', $file->getPathname());
             $className = 'App\\Models\\' . str_replace(['/', '.php'], ['\\', ''], $relativePath);
-            
+
             if (class_exists($className)) {
                 try {
                     $reflection = new \ReflectionClass($className);
@@ -195,19 +200,17 @@ class TyroDashboardServiceProvider extends ServiceProvider
                 }
             }
         }
-        
+
         return $resources;
     }
 
-    protected function registerMiddleware(): void
-    {
+    protected function registerMiddleware(): void {
         /** @var Router $router */
         $router = $this->app['router'];
         $router->aliasMiddleware('tyro-dashboard.admin', EnsureIsAdmin::class);
     }
 
-    protected function registerCommands(): void
-    {
+    protected function registerCommands(): void {
         if (!$this->app->runningInConsole()) {
             return;
         }
@@ -229,8 +232,7 @@ class TyroDashboardServiceProvider extends ServiceProvider
         ]);
     }
 
-    protected function registerPublishing(): void
-    {
+    protected function registerPublishing(): void {
         if (!$this->app->runningInConsole()) {
             return;
         }

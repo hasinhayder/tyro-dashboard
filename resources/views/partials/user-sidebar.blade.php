@@ -40,6 +40,36 @@
                 </svg>
                 My Profile
             </a>
+
+            @if(!empty($commonMenuItems))
+                @foreach($commonMenuItems as $item)
+                    <a href="{{ route($item['route'] ?? '#') }}" class="sidebar-link {{ request()->routeIs($item['route'] ?? '') ? 'active' : '' }}">
+                        @if(isset($item['icon']))
+                            {!! $item['icon'] !!}
+                        @else
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                            </svg>
+                        @endif
+                        {{ $item['title'] ?? 'Menu Item' }}
+                    </a>
+                @endforeach
+            @endif
+
+            @if(!empty($userMenuItems))
+                @foreach($userMenuItems as $item)
+                    <a href="{{ route($item['route'] ?? '#') }}" class="sidebar-link {{ request()->routeIs($item['route'] ?? '') ? 'active' : '' }}">
+                        @if(isset($item['icon']))
+                            {!! $item['icon'] !!}
+                        @else
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                            </svg>
+                        @endif
+                        {{ $item['title'] ?? 'Menu Item' }}
+                    </a>
+                @endforeach
+            @endif
         </div>
 
         @php
