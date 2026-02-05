@@ -52,12 +52,11 @@
             <table class="table">
                 <thead>
                     <tr>
-                        <th style="width: 20%;">User</th>
-                        <th style="width: 15%;">Email</th>
-                        <th style="width: 25%;">Invitation Hash</th>
-                        <th style="width: 10%; text-align: center;">Referrals</th>
-                        <th style="width: 15%;">Created</th>
-                        <th style="width: 15%; text-align: right;">Actions</th>
+                        <th style="width: 25%;">User</th>
+                        <th style="width: 20%;">Email</th>
+                        <th style="width: 15%; text-align: center;">Referrals</th>
+                        <th style="width: 20%;">Created</th>
+                        <th style="width: 20%; text-align: right;">Actions</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -74,9 +73,6 @@
                             </div>
                         </td>
                         <td>{{ $link->user->email ?? 'N/A' }}</td>
-                        <td>
-                            <code style="font-size: 0.75rem; padding: 0.25rem 0.5rem; background: var(--muted); border-radius: 0.25rem;">{{ $link->hash }}</code>
-                        </td>
                         <td style="text-align: center;">
                             <span class="badge badge-primary">{{ $link->referrals->count() }}</span>
                         </td>

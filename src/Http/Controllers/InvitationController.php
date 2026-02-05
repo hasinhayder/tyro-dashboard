@@ -150,7 +150,7 @@ class InvitationController extends BaseController
             ->with('referrals.referredUser')
             ->first();
 
-        $referrals = [];
+        $referrals = collect([]);
         if ($invitationLink) {
             $referrals = $invitationLink->referrals()
                 ->with('referredUser')
