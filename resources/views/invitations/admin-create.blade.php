@@ -66,32 +66,32 @@
                 <h3 class="card-title">About Invitation Links</h3>
             </div>
             <div class="card-body">
-                <div class="info-list">
-                    <div class="info-item">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <div class="info-list" style="display: flex; flex-direction: column; gap: 1.5rem;">
+                    <div style="display: flex; gap: 1rem; align-items: flex-start;">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 24px; height: 24px; flex-shrink: 0; color: var(--primary); margin-top: 0.125rem;">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                         </svg>
                         <div>
-                            <strong>One Link Per User</strong>
-                            <p>Each user can have only one invitation link. If a user already has a link, you cannot create another one.</p>
+                            <strong style="font-size: 0.9375rem; display: block; margin-bottom: 0.25rem;">One Link Per User</strong>
+                            <p style="font-size: 0.875rem; color: var(--muted-foreground); margin: 0;">Each user can have only one invitation link. If a user already has a link, you cannot create another one.</p>
                         </div>
                     </div>
-                    <div class="info-item">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <div style="display: flex; gap: 1rem; align-items: flex-start;">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 24px; height: 24px; flex-shrink: 0; color: var(--primary); margin-top: 0.125rem;">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                         </svg>
                         <div>
-                            <strong>Automatic Tracking</strong>
-                            <p>All signups through this invitation link will be automatically tracked.</p>
+                            <strong style="font-size: 0.9375rem; display: block; margin-bottom: 0.25rem;">Automatic Tracking</strong>
+                            <p style="font-size: 0.875rem; color: var(--muted-foreground); margin: 0;">All signups through this invitation link will be automatically tracked.</p>
                         </div>
                     </div>
-                    <div class="info-item">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <div style="display: flex; gap: 1rem; align-items: flex-start;">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 24px; height: 24px; flex-shrink: 0; color: var(--primary); margin-top: 0.125rem;">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
                         </svg>
                         <div>
-                            <strong>Unique Hash</strong>
-                            <p>Each invitation link has a unique 32-character hash that cannot be changed.</p>
+                            <strong style="font-size: 0.9375rem; display: block; margin-bottom: 0.25rem;">Unique Hash</strong>
+                            <p style="font-size: 0.875rem; color: var(--muted-foreground); margin: 0;">Each invitation link has a unique 32-character hash that cannot be changed.</p>
                         </div>
                     </div>
                 </div>
