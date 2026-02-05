@@ -93,6 +93,7 @@ return [
         'privilege_management' => true,
         'settings_management' => true,
         'profile_management' => true,
+        'invitation_system' => env('TYRO_DASHBOARD_ENABLE_INVITATION', true),
         'activity_log' => false, // Future feature
     ],
 

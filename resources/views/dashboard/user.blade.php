@@ -43,6 +43,26 @@
         </div>
         @endif
 
+        @if(config('tyro-dashboard.features.invitation_system', true))
+            @if(isset($stats['has_invitation_link']) && $stats['has_invitation_link'])
+            <div style="margin-bottom: 1.5rem; padding: 1rem; background: var(--muted); border-radius: 0.5rem;">
+                <div style="display: flex; align-items: center; justify-content: space-between;">
+                    <div>
+                        <strong style="font-size: 0.9375rem;">My Referrals</strong>
+                        <p style="font-size: 0.875rem; color: var(--muted-foreground); margin-top: 0.25rem;">You've referred {{ $stats['my_referrals'] ?? 0 }} user(s)</p>
+                    </div>
+                    <a href="{{ route('tyro-dashboard.invitations.index') }}" class="btn btn-sm btn-secondary">View Details</a>
+                </div>
+            </div>
+            @else
+            <div style="margin-bottom: 1.5rem; padding: 1rem; background: var(--muted); border-radius: 0.5rem;">
+                <strong style="font-size: 0.9375rem;">Invitation Link</strong>
+                <p style="font-size: 0.875rem; color: var(--muted-foreground); margin-top: 0.25rem;">Create your invitation link to start referring users.</p>
+                <a href="{{ route('tyro-dashboard.invitations.index') }}" class="btn btn-sm btn-primary" style="margin-top: 0.5rem;">Create Invitation Link</a>
+            </div>
+            @endif
+        @endif
+
         <a href="{{ route('tyro-dashboard.profile') }}" class="btn btn-primary">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />

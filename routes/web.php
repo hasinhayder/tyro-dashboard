@@ -8,6 +8,7 @@ use HasinHayder\TyroDashboard\Http\Controllers\ProfileController;
 use HasinHayder\TyroDashboard\Http\Controllers\RoleController;
 use HasinHayder\TyroDashboard\Http\Controllers\UserController;
 use HasinHayder\TyroDashboard\Http\Controllers\XComponentsController;
+use HasinHayder\TyroDashboard\Http\Controllers\InvitationController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -54,6 +55,14 @@ Route::prefix('profile')->name('profile')->group(function () {
     Route::delete('/2fa/reset', [ProfileController::class, 'reset2FA'])->name('.2fa.reset');
 });
 
+// Invitation/Referral System (all authenticated users)
+if (config('tyro-dashboard.features.invitation_system', true)) {
+    Route::prefix('invitations')->name('invitations.')->group(function () {
+        Route::get('/', [InvitationController::class, 'userIndex'])->name('index');
+        Route::post('/create', [InvitationController::class, 'userCreate'])->name('create');
+    });
+}
+
 // Admin-only routes
 Route::middleware('tyro-dashboard.admin')->group(function () {
     // User Management
@@ -92,6 +101,16 @@ Route::middleware('tyro-dashboard.admin')->group(function () {
         Route::delete('/{id}', [PrivilegeController::class, 'destroy'])->name('destroy');
         Route::delete('/{id}/roles/{roleId}', [PrivilegeController::class, 'removeRole'])->name('remove-role');
     });
+
+    // Invitation Management (Admin)
+    if (config('tyro-dashboard.features.invitation_system', true)) {
+        Route::prefix('invitations/admin')->name('invitations.admin.')->group(function () {
+            Route::get('/', [InvitationController::class, 'adminIndex'])->name('index');
+            Route::get('/create', [InvitationController::class, 'adminCreate'])->name('create');
+            Route::post('/', [InvitationController::class, 'adminStore'])->name('store');
+            Route::delete('/{id}', [InvitationController::class, 'adminDestroy'])->name('destroy');
+        });
+    }
 });
 
 // Dynamic Resources (outside admin middleware - handles its own access control)

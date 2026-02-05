@@ -4,6 +4,8 @@ namespace HasinHayder\TyroDashboard\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
+use HasinHayder\TyroLogin\Models\InvitationLink;
+use HasinHayder\TyroLogin\Models\InvitationReferral;
 
 class DashboardController extends BaseController
 {
@@ -61,6 +63,15 @@ class DashboardController extends BaseController
                     $stats['total_privileges'] = 0;
                 }
                 
+                // Invitation stats (only if enabled)
+                if (config('tyro-dashboard.features.invitation_system', true) && class_exists('\HasinHayder\TyroLogin\Models\InvitationLink')) {
+                    $stats['total_invitations'] = InvitationLink::count();
+                    $stats['total_referrals'] = InvitationReferral::count();
+                } else {
+                    $stats['total_invitations'] = 0;
+                    $stats['total_referrals'] = 0;
+                }
+                
             } catch (\Exception $e) {
                 // If any error occurs, provide default stats
                 $stats = [
@@ -77,6 +88,22 @@ class DashboardController extends BaseController
             return view('tyro-dashboard::dashboard.admin', $this->getViewData([
                 'stats' => $stats,
             ]));
+        }
+
+        // Get stats for regular users
+        try {
+            if (config('tyro-dashboard.features.invitation_system', true) && class_exists('\HasinHayder\TyroLogin\Models\InvitationLink')) {
+                $user = auth()->user();
+                $invitationLink = InvitationLink::where('user_id', $user->id)->first();
+                $stats['my_referrals'] = $invitationLink ? $invitationLink->referrals()->count() : 0;
+                $stats['has_invitation_link'] = $invitationLink !== null;
+            } else {
+                $stats['my_referrals'] = 0;
+                $stats['has_invitation_link'] = false;
+            }
+        } catch (\Exception $e) {
+            $stats['my_referrals'] = 0;
+            $stats['has_invitation_link'] = false;
         }
 
         // Return user dashboard view for non-admin users
