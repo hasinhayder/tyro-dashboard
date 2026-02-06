@@ -165,15 +165,15 @@
             if (type === 'alert' || type === 'success' || type === 'info') {
                 cancelBtn.style.display = 'none';
                 confirmBtn.textContent = options.confirmText || 'OK';
-                confirmBtn.className = 'btn btn-success';
+                confirmBtn.className = 'btn btn-modal-confirm';
             } else if (type === 'danger') {
                 cancelBtn.style.display = 'inline-flex';
                 confirmBtn.textContent = options.confirmText || 'Delete';
-                confirmBtn.className = 'btn btn-danger';
+                confirmBtn.className = 'btn btn-modal-danger';
             } else {
                 cancelBtn.style.display = 'inline-flex';
                 confirmBtn.textContent = options.confirmText || 'Confirm';
-                confirmBtn.className = 'btn btn-primary';
+                confirmBtn.className = 'btn btn-modal-confirm';
             }
 
             // Handle prompt input

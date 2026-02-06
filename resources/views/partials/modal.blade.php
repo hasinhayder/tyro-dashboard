@@ -1,29 +1,29 @@
 <!-- Global Modal Component -->
 <div id="globalModal" class="modal-overlay">
     <div class="modal-container">
-        <div class="modal-header">
-            <h3 id="globalModalTitle" class="modal-title"></h3>
-            <button type="button" class="modal-close" onclick="closeGlobalModal()">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-                </svg>
-            </button>
-        </div>
-        <div class="modal-body">
-            <div class="modal-body-inner">
-                <div id="globalModalIcon" class="modal-icon"></div>
-                <div class="modal-content">
-                    <p id="globalModalMessage" class="modal-message"></p>
-                    <div id="globalModalPromptInput" class="modal-prompt-input" style="display: none;">
-                        <input type="text" id="promptInput" class="form-input" placeholder="">
+        <div class="modal-content-wrapper">
+            <div class="modal-body">
+                <div class="modal-body-inner">
+                    <div id="globalModalIcon" class="modal-icon"></div>
+                    <div class="modal-text-content">
+                        <h2 id="globalModalTitle" class="modal-title"></h2>
+                        <p id="globalModalMessage" class="modal-message"></p>
+                        <div id="globalModalPromptInput" class="modal-prompt-input" style="display: none;">
+                            <input type="text" id="promptInput" class="form-input" placeholder="">
+                        </div>
                     </div>
                 </div>
             </div>
+            <div class="modal-footer">
+                <button type="button" id="globalModalCancel" class="btn btn-modal-cancel" onclick="closeGlobalModal()">Cancel</button>
+                <button type="button" id="globalModalConfirm" class="btn btn-modal-confirm"></button>
+            </div>
         </div>
-        <div class="modal-footer">
-            <button type="button" id="globalModalCancel" class="btn btn-secondary" onclick="closeGlobalModal()">Cancel</button>
-            <button type="button" id="globalModalConfirm" class="btn btn-primary"></button>
-        </div>
+        <button type="button" class="modal-close" onclick="closeGlobalModal()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+        </button>
     </div>
 </div>
 
@@ -36,7 +36,7 @@
         right: 0;
         bottom: 0;
         background-color: rgba(0, 0, 0, 0.5);
-        backdrop-filter: blur(4px);
+        backdrop-filter: blur(2px);
         display: flex;
         align-items: center;
         justify-content: center;
@@ -54,123 +54,72 @@
     /* Modal Container */
     .modal-container {
         background: var(--card);
-        border-radius: 1rem;
-        box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-        max-width: 480px;
+        border-radius: 0.5rem;
+        border: 1px solid var(--border);
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        max-width: 420px;
         width: 90%;
-        margin: 1rem;
         transform: scale(0.95) translateY(10px);
         transition: transform 0.2s ease;
         overflow: hidden;
+        position: relative;
     }
 
     .modal-overlay.active .modal-container {
         transform: scale(1) translateY(0);
     }
 
-    /* Modal Header */
-    .modal-header {
+    .modal-content-wrapper {
         display: flex;
-        align-items: center;
-        justify-content: space-between;
-        padding: 1.5rem 1.5rem 1rem;
-        border-bottom: 1px solid var(--border);
-    }
-
-    .modal-title {
-        font-size: 1.125rem;
-        font-weight: 600;
-        color: var(--foreground);
-        margin: 0;
-    }
-
-    .modal-close {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        width: 32px;
-        height: 32px;
-        border-radius: 0.5rem;
-        border: none;
-        background: transparent;
-        color: var(--muted-foreground);
-        cursor: pointer;
-        transition: background-color 0.15s ease, color 0.15s ease;
-    }
-
-    .modal-close:hover {
-        background-color: var(--muted);
-        color: var(--foreground);
-    }
-
-    .modal-close svg {
-        width: 20px;
-        height: 20px;
+        flex-direction: column;
     }
 
     /* Modal Body */
     .modal-body {
-        padding: 2rem 1.5rem;
+        padding: 1.5rem;
     }
 
     .modal-body-inner {
         display: flex;
-        gap: 1.5rem;
-        align-items: center;
+        gap: 1rem;
+        align-items: flex-start;
     }
 
     .modal-icon {
         flex-shrink: 0;
-        width: 56px;
-        height: 56px;
+        width: 40px;
+        height: 40px;
         border-radius: 50%;
         display: flex;
         align-items: center;
         justify-content: center;
-        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        background-color: var(--muted);
+        color: var(--foreground);
     }
 
     .modal-icon svg {
-        width: 28px;
-        height: 28px;
-        stroke-width: 2.5;
+        width: 20px;
+        height: 20px;
+        stroke-width: 2;
     }
 
-    .modal-content {
+    .modal-text-content {
         flex: 1;
-        text-align: left;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
     }
 
-    /* Icon Variants */
-    .modal-icon.confirm {
-        background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
-        color: white;
-    }
-
-    .modal-icon.success {
-        background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
-        color: white;
-    }
-
-    .modal-icon.danger {
-        background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
-        color: white;
-    }
-
-    .modal-icon.info {
-        background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
-        color: white;
+    .modal-title {
+        font-size: 1rem;
+        font-weight: 600;
+        color: var(--foreground);
+        margin: 0 0 0.25rem 0;
+        line-height: 1.4;
     }
 
     .modal-message {
-        color: var(--foreground);
-        font-size: 0.9375rem;
-        line-height: 1.6;
+        font-size: 0.875rem;
+        color: var(--muted-foreground);
+        line-height: 1.5;
         margin: 0;
-        padding: 0;
     }
 
     .modal-prompt-input {
@@ -179,6 +128,7 @@
 
     .modal-prompt-input .form-input {
         width: 100%;
+        font-size: 0.875rem;
     }
 
     /* Modal Footer */
@@ -187,82 +137,88 @@
         align-items: center;
         justify-content: flex-end;
         gap: 0.75rem;
-        padding: 1.25rem 1.5rem;
-        border-top: 1px solid var(--border);
-        background: color-mix(in srgb, var(--muted) 50%, transparent);
+        padding: 1rem 1.5rem 1.5rem;
+        background: transparent;
     }
 
-    .modal-footer .btn {
-        min-width: 100px;
-        font-weight: 500;
-        transition: all 0.15s ease;
-        border: 1px solid transparent;
-    }
-
-    .modal-footer .btn-secondary {
+    .btn-modal-cancel {
         background-color: transparent;
-        color: var(--muted-foreground);
+        color: var(--foreground);
+        border: 1px solid var(--border);
+        padding: 0.5rem 1rem;
+        font-size: 0.875rem;
+        font-weight: 500;
+        border-radius: 0.375rem;
+        cursor: pointer;
+        transition: all 0.15s ease;
+    }
+
+    .btn-modal-cancel:hover {
+        background-color: var(--muted);
         border-color: var(--border);
     }
 
-    .modal-footer .btn-secondary:hover {
+    .btn-modal-confirm {
+        background-color: var(--foreground);
+        color: var(--background);
+        border: 1px solid var(--foreground);
+        padding: 0.5rem 1rem;
+        font-size: 0.875rem;
+        font-weight: 500;
+        border-radius: 0.375rem;
+        cursor: pointer;
+        transition: all 0.15s ease;
+    }
+
+    .btn-modal-confirm:hover {
+        background-color: var(--foreground);
+        opacity: 0.9;
+        border-color: var(--foreground);
+    }
+
+    .btn-modal-confirm:active {
+        opacity: 0.95;
+    }
+
+    .btn-modal-danger {
+        background-color: #ef4444;
+        color: white;
+        border: 1px solid #ef4444;
+    }
+
+    .btn-modal-danger:hover {
+        background-color: #dc2626;
+        border-color: #dc2626;
+        opacity: 1;
+    }
+
+    /* Modal Close Button */
+    .modal-close {
+        position: absolute;
+        top: 1rem;
+        right: 1rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 28px;
+        height: 28px;
+        border-radius: 0.375rem;
+        border: none;
+        background: transparent;
+        color: var(--muted-foreground);
+        cursor: pointer;
+        transition: all 0.15s ease;
+        padding: 0;
+    }
+
+    .modal-close:hover {
         background-color: var(--muted);
         color: var(--foreground);
-        border-color: var(--border);
-        transform: translateY(-1px);
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     }
 
-    .modal-footer .btn-secondary:active {
-        transform: translateY(0);
-    }
-
-    .modal-footer .btn-primary {
-        background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
-        color: white;
-        border-color: transparent;
-    }
-
-    .modal-footer .btn-primary:hover {
-        background: linear-gradient(135deg, #4f46e5 0%, #4338ca 100%);
-        transform: translateY(-1px);
-        box-shadow: 0 4px 6px -1px rgba(99, 102, 241, 0.3), 0 2px 4px -1px rgba(99, 102, 241, 0.2);
-    }
-
-    .modal-footer .btn-primary:active {
-        transform: translateY(0);
-    }
-
-    .modal-footer .btn-success {
-        background: linear-gradient(135deg, #1f2937 0%, #111827 100%);
-        color: white;
-        border-color: transparent;
-    }
-
-    .modal-footer .btn-success:hover {
-        background: linear-gradient(135deg, #111827 0%, #000000 100%);
-        transform: translateY(-1px);
-        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.2);
-    }
-
-    .modal-footer .btn-success:active {
-        transform: translateY(0);
-    }
-
-    .modal-footer .btn-danger {
-        background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
-        color: white;
-        border-color: transparent;
-    }
-
-    .modal-footer .btn-danger:hover {
-        background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
-        transform: translateY(-1px);
-        box-shadow: 0 4px 6px -1px rgba(239, 68, 68, 0.3), 0 2px 4px -1px rgba(239, 68, 68, 0.2);
-    }
-
-    .modal-footer .btn-danger:active {
-        transform: translateY(0);
+    .modal-close svg {
+        width: 18px;
+        height: 18px;
     }
 
     /* Responsive */
@@ -272,34 +228,21 @@
             margin: 0.5rem;
         }
 
-        .modal-header {
-            padding: 1rem;
-        }
-
         .modal-body {
-            padding: 1.5rem 1rem;
+            padding: 1.25rem;
         }
 
         .modal-body-inner {
-            flex-direction: column;
-            align-items: center;
-            gap: 1rem;
-        }
-
-        .modal-content {
-            text-align: center;
-        }
-
-        .modal-message {
-            margin: 0;
+            gap: 0.75rem;
         }
 
         .modal-footer {
-            padding: 1rem;
+            padding: 1rem 1.25rem 1.25rem;
             flex-direction: column-reverse;
         }
 
-        .modal-footer .btn {
+        .btn-modal-cancel,
+        .btn-modal-confirm {
             width: 100%;
         }
     }
