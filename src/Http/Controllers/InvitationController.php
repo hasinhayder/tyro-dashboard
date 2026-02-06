@@ -12,18 +12,25 @@ use HasinHayder\TyroLogin\Helpers\InvitationHelper;
 class InvitationController extends BaseController
 {
     /**
-     * Check if invitation system is enabled and tables exist.
+     * Check if invitation system is enabled.
      */
     protected function ensureInvitationSystemEnabled()
     {
         if (!config('tyro-dashboard.features.invitation_system', true)) {
             abort(404, 'Invitation system is disabled.');
         }
+    }
 
-        // Check if required tables exist
+    /**
+     * Check if invitation tables exist in database.
+     */
+    protected function ensureInvitationTablesExist()
+    {
         if (!Schema::hasTable('invitation_links') || !Schema::hasTable('invitation_referrals')) {
-            abort(503, view('tyro-dashboard::errors.missing-invitation-tables'));
+            return view('tyro-dashboard::errors.missing-invitation-tables', $this->getViewData());
         }
+        
+        return null;
     }
 
     /**
@@ -32,6 +39,10 @@ class InvitationController extends BaseController
     public function adminIndex(Request $request)
     {
         $this->ensureInvitationSystemEnabled();
+        
+        if ($view = $this->ensureInvitationTablesExist()) {
+            return $view;
+        }
         
         if (!$this->isAdmin()) {
             abort(403, 'Unauthorized');
@@ -68,6 +79,10 @@ class InvitationController extends BaseController
     {
         $this->ensureInvitationSystemEnabled();
         
+        if ($view = $this->ensureInvitationTablesExist()) {
+            return $view;
+        }
+        
         if (!$this->isAdmin()) {
             abort(403, 'Unauthorized');
         }
@@ -86,6 +101,10 @@ class InvitationController extends BaseController
     public function adminStore(Request $request)
     {
         $this->ensureInvitationSystemEnabled();
+        
+        if ($view = $this->ensureInvitationTablesExist()) {
+            return $view;
+        }
         
         if (!$this->isAdmin()) {
             abort(403, 'Unauthorized');
@@ -125,6 +144,10 @@ class InvitationController extends BaseController
     {
         $this->ensureInvitationSystemEnabled();
         
+        if ($view = $this->ensureInvitationTablesExist()) {
+            return $view;
+        }
+        
         if (!$this->isAdmin()) {
             abort(403, 'Unauthorized');
         }
@@ -151,6 +174,10 @@ class InvitationController extends BaseController
     {
         $this->ensureInvitationSystemEnabled();
         
+        if ($view = $this->ensureInvitationTablesExist()) {
+            return $view;
+        }
+        
         $user = auth()->user();
         $invitationLink = InvitationLink::where('user_id', $user->id)
             ->with('referrals.referredUser')
@@ -176,6 +203,10 @@ class InvitationController extends BaseController
     public function userCreate()
     {
         $this->ensureInvitationSystemEnabled();
+        
+        if ($view = $this->ensureInvitationTablesExist()) {
+            return $view;
+        }
         
         $user = auth()->user();
 
