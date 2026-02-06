@@ -31,6 +31,7 @@ A production-ready Laravel package that delivers a complete admin & user dashboa
   - [Separate Dashboards](#separate-dashboards)
   - [Security & Authorization](#security--authorization)
 - [Installation](#installation)
+- [Invitation & Referral System](#invitationreferral-system)
 - [Use Cases](#use-cases)
 - [Full Documentation](#full-documentation)
 - [License](#license)
@@ -333,6 +334,31 @@ class Product extends Model
 Visit `/dashboard/resources/products` — **your admin interface is live.**
 
 No controllers. No views. No routes. No validation. **Just add the trait and you're done.**
+
+---
+
+## Invitation/Referral System
+
+Built-in referral program to drive organic user growth:
+
+- **Admin Dashboard** — Manage all invitation links, view referral statistics, create links for users
+- **User Dashboard** — Generate personal invitation link and track referrals
+- **Automatic Tracking** — Signups through invitation links are automatically tracked
+- **Fully Configurable** — Enable/disable with `TYRO_DASHBOARD_ENABLE_INVITATION` environment variable (enabled by default)
+
+#### Updating From Previous Versions
+
+If you're updating to a version that includes the invitation system, you **must run migrations** to create the required database tables:
+
+```bash
+# Option 1: Run all pending migrations
+php artisan migrate
+
+# Option 2: Run only Tyro Login migrations
+php artisan migrate --path=vendor/hasinhayder/tyro-login/database/migrations
+```
+
+This creates the `invitation_links` and `invitation_referrals` tables needed for the referral system to function.
 
 ---
 
