@@ -23,11 +23,19 @@ class InvitationController extends BaseController
 
     /**
      * Check if invitation tables exist in database.
+     * 
+     * @param bool $isAdmin Whether the check is for admin context
+     * @return \Illuminate\View\View|null
      */
-    protected function ensureInvitationTablesExist()
+    protected function ensureInvitationTablesExist($isAdmin = false)
     {
         if (!Schema::hasTable('invitation_links') || !Schema::hasTable('invitation_referrals')) {
-            return view('tyro-dashboard::errors.missing-invitation-tables', $this->getViewData());
+            // Show migration instructions for admins, maintenance message for users
+            $viewName = $isAdmin 
+                ? 'tyro-dashboard::errors.missing-invitation-tables' 
+                : 'tyro-dashboard::errors.invitation-maintenance';
+            
+            return view($viewName, $this->getViewData());
         }
         
         return null;
@@ -40,7 +48,7 @@ class InvitationController extends BaseController
     {
         $this->ensureInvitationSystemEnabled();
         
-        if ($view = $this->ensureInvitationTablesExist()) {
+        if ($view = $this->ensureInvitationTablesExist(true)) {
             return $view;
         }
         
@@ -79,7 +87,7 @@ class InvitationController extends BaseController
     {
         $this->ensureInvitationSystemEnabled();
         
-        if ($view = $this->ensureInvitationTablesExist()) {
+        if ($view = $this->ensureInvitationTablesExist(true)) {
             return $view;
         }
         
@@ -102,7 +110,7 @@ class InvitationController extends BaseController
     {
         $this->ensureInvitationSystemEnabled();
         
-        if ($view = $this->ensureInvitationTablesExist()) {
+        if ($view = $this->ensureInvitationTablesExist(true)) {
             return $view;
         }
         
@@ -144,7 +152,7 @@ class InvitationController extends BaseController
     {
         $this->ensureInvitationSystemEnabled();
         
-        if ($view = $this->ensureInvitationTablesExist()) {
+        if ($view = $this->ensureInvitationTablesExist(true)) {
             return $view;
         }
         
@@ -174,7 +182,7 @@ class InvitationController extends BaseController
     {
         $this->ensureInvitationSystemEnabled();
         
-        if ($view = $this->ensureInvitationTablesExist()) {
+        if ($view = $this->ensureInvitationTablesExist(false)) {
             return $view;
         }
         
@@ -204,7 +212,7 @@ class InvitationController extends BaseController
     {
         $this->ensureInvitationSystemEnabled();
         
-        if ($view = $this->ensureInvitationTablesExist()) {
+        if ($view = $this->ensureInvitationTablesExist(false)) {
             return $view;
         }
         

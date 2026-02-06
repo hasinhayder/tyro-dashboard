@@ -4,6 +4,7 @@ namespace HasinHayder\TyroDashboard\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Schema;
 use HasinHayder\TyroLogin\Models\InvitationLink;
 use HasinHayder\TyroLogin\Models\InvitationReferral;
 
@@ -63,10 +64,18 @@ class DashboardController extends BaseController
                     $stats['total_privileges'] = 0;
                 }
                 
-                // Invitation stats (only if enabled)
-                if (config('tyro-dashboard.features.invitation_system', true) && class_exists('\HasinHayder\TyroLogin\Models\InvitationLink')) {
-                    $stats['total_invitations'] = InvitationLink::count();
-                    $stats['total_referrals'] = InvitationReferral::count();
+                // Invitation stats (only if enabled and tables exist)
+                if (config('tyro-dashboard.features.invitation_system', true) 
+                    && class_exists('\HasinHayder\TyroLogin\Models\InvitationLink')
+                    && Schema::hasTable('invitation_links') 
+                    && Schema::hasTable('invitation_referrals')) {
+                    try {
+                        $stats['total_invitations'] = InvitationLink::count();
+                        $stats['total_referrals'] = InvitationReferral::count();
+                    } catch (\Exception $e) {
+                        $stats['total_invitations'] = 0;
+                        $stats['total_referrals'] = 0;
+                    }
                 } else {
                     $stats['total_invitations'] = 0;
                     $stats['total_referrals'] = 0;
@@ -92,7 +101,10 @@ class DashboardController extends BaseController
 
         // Get stats for regular users
         try {
-            if (config('tyro-dashboard.features.invitation_system', true) && class_exists('\HasinHayder\TyroLogin\Models\InvitationLink')) {
+            if (config('tyro-dashboard.features.invitation_system', true) 
+                && class_exists('\HasinHayder\TyroLogin\Models\InvitationLink')
+                && Schema::hasTable('invitation_links') 
+                && Schema::hasTable('invitation_referrals')) {
                 $user = auth()->user();
                 $invitationLink = InvitationLink::where('user_id', $user->id)->first();
                 $stats['my_referrals'] = $invitationLink ? $invitationLink->referrals()->count() : 0;
