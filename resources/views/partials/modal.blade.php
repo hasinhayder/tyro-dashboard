@@ -137,7 +137,7 @@
         align-items: center;
         justify-content: flex-end;
         gap: 0.75rem;
-        padding: 1rem 1.5rem 1.5rem;
+        padding: 1rem 1.5rem 1rem;
         background: transparent;
     }
 
@@ -237,7 +237,7 @@
         }
 
         .modal-footer {
-            padding: 1rem 1.25rem 1.25rem;
+            padding: 1rem 1.25rem 1rem;
             flex-direction: column-reverse;
         }
 
