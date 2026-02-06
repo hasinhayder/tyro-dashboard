@@ -114,9 +114,9 @@
                                 </svg>
                             </a>
                             @if(method_exists($listUser, 'isSuspended') && $listUser->isSuspended())
-                                <form action="{{ route('tyro-dashboard.users.unsuspend', $listUser->id) }}" method="POST" style="display: inline;">
+                                <form action="{{ route('tyro-dashboard.users.unsuspend', $listUser->id) }}" method="POST" style="display: inline;" id="unsuspend-form-{{ $listUser->id }}">
                                     @csrf
-                                    <button type="submit" class="action-btn" title="Unsuspend" onclick="return confirm('Are you sure you want to unsuspend this user?')">
+                                    <button type="button" class="action-btn" title="Unsuspend" onclick="event.preventDefault(); showConfirm('Unsuspend User', 'Are you sure you want to unsuspend this user?').then(confirmed => { if(confirmed) document.getElementById('unsuspend-form-{{ $listUser->id }}').submit(); })">
                                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                             <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                                         </svg>
@@ -130,10 +130,10 @@
                                 </button>
                             @endif
                             @if($listUser->id !== $user->id)
-                                <form action="{{ route('tyro-dashboard.users.destroy', $listUser->id) }}" method="POST" style="display: inline;">
+                                <form action="{{ route('tyro-dashboard.users.destroy', $listUser->id) }}" method="POST" style="display: inline;" id="delete-user-form-{{ $listUser->id }}">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="action-btn action-btn-danger" title="Delete" onclick="return confirm('Are you sure you want to delete this user? This action cannot be undone.')">
+                                    <button type="button" class="action-btn action-btn-danger" title="Delete" onclick="event.preventDefault(); showDanger('Delete User', 'Are you sure you want to delete this user? This action cannot be undone.').then(confirmed => { if(confirmed) document.getElementById('delete-user-form-{{ $listUser->id }}').submit(); })">
                                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                             <path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                                         </svg>

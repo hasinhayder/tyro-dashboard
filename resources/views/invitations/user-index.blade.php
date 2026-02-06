@@ -148,7 +148,7 @@ function copyInvitationLink() {
     const input = document.getElementById('invitation-url');
     input.select();
     navigator.clipboard.writeText(input.value).then(() => {
-        alert('Invitation link copied to clipboard!');
+        showSuccess('Invitation link copied to clipboard!');
     }).catch(err => {
         console.error('Failed to copy:', err);
     });

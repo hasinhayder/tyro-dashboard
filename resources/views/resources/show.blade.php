@@ -24,10 +24,10 @@
         <div>
             @if(!($isReadonly ?? false))
             <a href="{{ route('tyro-dashboard.resources.edit', [$resource, $item->id]) }}" class="btn btn-primary">Edit</a>
-            <form action="{{ route('tyro-dashboard.resources.destroy', [$resource, $item->id]) }}" method="POST" onsubmit="return confirm('Are you sure?')" style="display: inline;">
+            <form action="{{ route('tyro-dashboard.resources.destroy', [$resource, $item->id]) }}" method="POST" style="display: inline;" id="delete-resource-form">
                 @csrf
                 @method('DELETE')
-                <button type="submit" class="btn btn-danger">Delete</button>
+                <button type="button" class="btn btn-danger" onclick="event.preventDefault(); showDanger('Delete Item', 'Are you sure you want to delete this item?').then(confirmed => { if(confirmed) document.getElementById('delete-resource-form').submit(); })">Delete</button>
             </form>
             @endif
         </div>

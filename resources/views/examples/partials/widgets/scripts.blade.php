@@ -259,13 +259,15 @@
         }
 
         function promptUnsplashKey() {
-            var unsplash = prompt('Unsplash Access Key (optional):', getStoredKey(TD_IMG_KEYS.unsplash));
-            if (unsplash !== null) setStoredKey(TD_IMG_KEYS.unsplash, unsplash);
+            showPrompt('Unsplash Access Key', 'Enter your Unsplash Access Key (optional):', getStoredKey(TD_IMG_KEYS.unsplash), 'Enter access key').then(result => {
+                if (result !== null && result !== false) setStoredKey(TD_IMG_KEYS.unsplash, result);
+            });
         }
 
         function promptPixabayKey() {
-            var pixabay = prompt('Pixabay API Key (optional):', getStoredKey(TD_IMG_KEYS.pixabay));
-            if (pixabay !== null) setStoredKey(TD_IMG_KEYS.pixabay, pixabay);
+            showPrompt('Pixabay API Key', 'Enter your Pixabay API Key (optional):', getStoredKey(TD_IMG_KEYS.pixabay), 'Enter API key').then(result => {
+                if (result !== null && result !== false) setStoredKey(TD_IMG_KEYS.pixabay, result);
+            });
         }
 
         function clearImages() {
@@ -580,7 +582,7 @@
 
                 if (sets.length === 0) {
                     out.value = '';
-                    alert('Select at least one character type.');
+                    showAlert('Please select at least one character type.', 'Selection Required');
                     return;
                 }
 
@@ -643,12 +645,12 @@
                 var content = String(contentEl ? contentEl.value : '').trim();
                 if (!content) {
                     setEmpty();
-                    alert('Enter some content to encode.');
+                    showAlert('Please enter some content to encode.', 'Content Required');
                     return;
                 }
 
                 if (!window.QRCode) {
-                    alert('QR library failed to load.');
+                    showAlert('QR library failed to load. Please refresh the page.', 'Error');
                     return;
                 }
 
@@ -688,7 +690,7 @@
                     download.disabled = false;
                 } catch (e) {
                     setEmpty();
-                    alert('Could not generate QR for this content: ' + (e.message || e));
+                    showAlert('Could not generate QR for this content: ' + (e.message || e), 'QR Generation Error');
                 }
             }
 
@@ -722,7 +724,7 @@
                     a.click();
                     document.body.removeChild(a);
                 } catch (e) {
-                    alert('Download failed.');
+                    showAlert('Download failed. Please try again.', 'Download Error');
                 }
             });
         }

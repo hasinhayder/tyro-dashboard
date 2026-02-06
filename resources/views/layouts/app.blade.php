@@ -44,6 +44,9 @@
     <!-- Mobile Sidebar Overlay -->
     <div class="sidebar-overlay" onclick="toggleSidebar()"></div>
 
+    <!-- Global Modal -->
+    @include('tyro-dashboard::partials.modal')
+
     @include('tyro-dashboard::partials.scripts')
     @stack('scripts')
 </body>

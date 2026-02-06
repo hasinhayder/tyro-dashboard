@@ -138,10 +138,10 @@
                         @endif
                     </div>
                     @if($editUser->two_factor_secret)
-                        <form action="{{ route('tyro-dashboard.users.2fa.reset', $editUser->id) }}" method="POST">
+                        <form action="{{ route('tyro-dashboard.users.2fa.reset', $editUser->id) }}" method="POST" id="reset-2fa-form">
                             @csrf
                             @method('DELETE')
-                            <button type="submit" class="btn btn-sm btn-outline-warning" style="width: 100%;" onclick="return confirm('Are you sure you want to reset 2FA for this user?')">
+                            <button type="button" class="btn btn-sm btn-outline-warning" style="width: 100%;" onclick="event.preventDefault(); showConfirm('Reset 2FA', 'Are you sure you want to reset 2FA for this user?').then(confirmed => { if(confirmed) document.getElementById('reset-2fa-form').submit(); })">
                                 Reset 2FA
                             </button>
                         </form>
@@ -181,10 +181,10 @@
                 <p style="font-size: 0.875rem; color: var(--muted-foreground); margin-bottom: 1rem;">
                     Once you delete a user, there is no going back. Please be certain.
                 </p>
-                <form action="{{ route('tyro-dashboard.users.destroy', $editUser->id) }}" method="POST">
+                <form action="{{ route('tyro-dashboard.users.destroy', $editUser->id) }}" method="POST" id="delete-user-form">
                     @csrf
                     @method('DELETE')
-                    <button type="submit" class="btn btn-danger" style="width: 100%;" onclick="return confirm('Are you sure you want to delete this user? This action cannot be undone.')">
+                    <button type="button" class="btn btn-danger" style="width: 100%;" onclick="event.preventDefault(); showDanger('Delete User', 'Are you sure you want to delete this user? This action cannot be undone.').then(confirmed => { if(confirmed) document.getElementById('delete-user-form').submit(); })">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                         </svg>

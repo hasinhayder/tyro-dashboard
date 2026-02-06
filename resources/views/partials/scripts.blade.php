@@ -114,7 +114,141 @@
 
     // Confirm delete
     function confirmDelete(message = 'Are you sure you want to delete this item?') {
-        return confirm(message);
+        return showConfirm('Confirm Delete', message);
+    }
+
+    // Global Modal System
+    let globalModalResolver = null;
+
+    function showModal(title, message, type = 'confirm', options = {}) {
+        return new Promise((resolve) => {
+            globalModalResolver = resolve;
+            
+            const modal = document.getElementById('globalModal');
+            const titleEl = document.getElementById('globalModalTitle');
+            const messageEl = document.getElementById('globalModalMessage');
+            const iconEl = document.getElementById('globalModalIcon');
+            const confirmBtn = document.getElementById('globalModalConfirm');
+            const cancelBtn = document.getElementById('globalModalCancel');
+            const promptInputContainer = document.getElementById('globalModalPromptInput');
+            const promptInput = document.getElementById('promptInput');
+
+            // Set title and message
+            titleEl.textContent = title;
+            messageEl.textContent = message;
+
+            // Set icon based on type
+            iconEl.className = 'modal-icon ' + (options.variant || type);
+            let iconSvg = '';
+            
+            switch(type) {
+                case 'confirm':
+                    iconSvg = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>';
+                    break;
+                case 'alert':
+                case 'success':
+                    iconSvg = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>';
+                    break;
+                case 'danger':
+                    iconSvg = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>';
+                    break;
+                case 'info':
+                    iconSvg = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>';
+                    break;
+                case 'prompt':
+                    iconSvg = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg>';
+                    break;
+            }
+            iconEl.innerHTML = iconSvg;
+
+            // Configure buttons based on type
+            if (type === 'alert' || type === 'success' || type === 'info') {
+                cancelBtn.style.display = 'none';
+                confirmBtn.textContent = options.confirmText || 'OK';
+                confirmBtn.className = 'btn btn-success';
+            } else if (type === 'danger') {
+                cancelBtn.style.display = 'inline-flex';
+                confirmBtn.textContent = options.confirmText || 'Delete';
+                confirmBtn.className = 'btn btn-danger';
+            } else {
+                cancelBtn.style.display = 'inline-flex';
+                confirmBtn.textContent = options.confirmText || 'Confirm';
+                confirmBtn.className = 'btn btn-primary';
+            }
+
+            // Handle prompt input
+            if (type === 'prompt') {
+                promptInputContainer.style.display = 'block';
+                promptInput.value = options.defaultValue || '';
+                promptInput.placeholder = options.placeholder || '';
+                setTimeout(() => promptInput.focus(), 100);
+            } else {
+                promptInputContainer.style.display = 'none';
+            }
+
+            // Show modal
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+
+            // Handle confirm button
+            confirmBtn.onclick = () => {
+                if (type === 'prompt') {
+                    resolve(promptInput.value);
+                } else {
+                    resolve(true);
+                }
+                closeGlobalModal();
+            };
+
+            // Handle enter key for prompt
+            if (type === 'prompt') {
+                promptInput.onkeydown = (e) => {
+                    if (e.key === 'Enter') {
+                        resolve(promptInput.value);
+                        closeGlobalModal();
+                    } else if (e.key === 'Escape') {
+                        resolve(null);
+                        closeGlobalModal();
+                    }
+                };
+            }
+        });
+    }
+
+    function closeGlobalModal() {
+        const modal = document.getElementById('globalModal');
+        modal.classList.remove('active');
+        document.body.style.overflow = '';
+        
+        if (globalModalResolver) {
+            globalModalResolver(false);
+            globalModalResolver = null;
+        }
+    }
+
+    // Convenience functions
+    function showConfirm(title, message, options = {}) {
+        return showModal(title, message, 'confirm', options);
+    }
+
+    function showAlert(message, title = 'Success', options = {}) {
+        return showModal(title, message, 'alert', { variant: 'success', ...options });
+    }
+
+    function showSuccess(message, title = 'Success') {
+        return showModal(title, message, 'success', { variant: 'success' });
+    }
+
+    function showDanger(title, message, options = {}) {
+        return showModal(title, message, 'danger', { variant: 'danger', confirmText: 'Delete', ...options });
+    }
+
+    function showInfo(message, title = 'Information') {
+        return showModal(title, message, 'info', { variant: 'info' });
+    }
+
+    function showPrompt(title, message, defaultValue = '', placeholder = '') {
+        return showModal(title, message, 'prompt', { defaultValue, placeholder, variant: 'info' });
     }
 
     // Modal functions

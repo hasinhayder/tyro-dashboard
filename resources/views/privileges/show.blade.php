@@ -96,10 +96,10 @@
                                             <path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
                                         </svg>
                                     </a>
-                                    <form action="{{ route('tyro-dashboard.privileges.remove-role', ['id' => $privilege->id, 'roleId' => $role->id]) }}" method="POST">
+                                    <form action="{{ route('tyro-dashboard.privileges.remove-role', ['id' => $privilege->id, 'roleId' => $role->id]) }}" method="POST" id="remove-role-form-{{ $role->id }}">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="action-btn action-btn-danger" title="Remove from Role" onclick="return confirm('Are you sure you want to remove this privilege from the {{ $role->name }} role?')">
+                                        <button type="button" class="action-btn action-btn-danger" title="Remove from Role" onclick="event.preventDefault(); showDanger('Remove Privilege', 'Are you sure you want to remove this privilege from the {{ $role->name }} role?').then(confirmed => { if(confirmed) document.getElementById('remove-role-form-{{ $role->id }}').submit(); })">
                                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                                 <path stroke-linecap="round" stroke-linejoin="round" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636" />
                                             </svg>

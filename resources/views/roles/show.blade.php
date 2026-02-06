@@ -113,10 +113,10 @@
                                             <path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                                         </svg>
                                     </a>
-                                    <form action="{{ route('tyro-dashboard.roles.remove-user', ['id' => $role->id, 'userId' => $roleUser->id]) }}" method="POST">
+                                    <form action="{{ route('tyro-dashboard.roles.remove-user', ['id' => $role->id, 'userId' => $roleUser->id]) }}" method="POST" id="remove-user-form-{{ $roleUser->id }}">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="action-btn action-btn-danger" title="Remove from Role" onclick="return confirm('Are you sure you want to remove this user from the {{ $role->name }} role?')">
+                                        <button type="button" class="action-btn action-btn-danger" title="Remove from Role" onclick="event.preventDefault(); showDanger('Remove User from Role', 'Are you sure you want to remove this user from the {{ $role->name }} role?').then(confirmed => { if(confirmed) document.getElementById('remove-user-form-{{ $roleUser->id }}').submit(); })">
                                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                                 <path stroke-linecap="round" stroke-linejoin="round" d="M13 7a4 4 0 11-8 0 4 4 0 018 0zM9 14a6 6 0 00-6 6v1h12v-1a6 6 0 00-6-6zM21 12h-6" />
                                             </svg>

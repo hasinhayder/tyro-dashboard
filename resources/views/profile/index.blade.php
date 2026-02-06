@@ -108,10 +108,10 @@
                 <p style="margin-bottom: 1rem; color: var(--muted-foreground);">
                     Two-factor authentication is currently <strong>enabled</strong> for your account.
                 </p>
-                <form action="{{ route('tyro-dashboard.profile.2fa.reset') }}" method="POST">
+                <form action="{{ route('tyro-dashboard.profile.2fa.reset') }}" method="POST" id="reset-profile-2fa-form">
                     @csrf
                     @method('DELETE')
-                    <button type="submit" class="btn btn-warning" onclick="return confirm('Are you sure you want to reset your 2FA? You will need to set it up again.')">
+                    <button type="button" class="btn btn-warning" onclick="event.preventDefault(); showConfirm('Reset 2FA', 'Are you sure you want to reset your 2FA? You will need to set it up again.').then(confirmed => { if(confirmed) document.getElementById('reset-profile-2fa-form').submit(); })">
                         Reset 2FA Configuration
                     </button>
                 </form>
