@@ -4,6 +4,7 @@ namespace HasinHayder\TyroDashboard\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Schema;
 use HasinHayder\TyroLogin\Models\InvitationLink;
 use HasinHayder\TyroLogin\Models\InvitationReferral;
 use HasinHayder\TyroLogin\Helpers\InvitationHelper;
@@ -11,12 +12,17 @@ use HasinHayder\TyroLogin\Helpers\InvitationHelper;
 class InvitationController extends BaseController
 {
     /**
-     * Check if invitation system is enabled.
+     * Check if invitation system is enabled and tables exist.
      */
     protected function ensureInvitationSystemEnabled()
     {
         if (!config('tyro-dashboard.features.invitation_system', true)) {
             abort(404, 'Invitation system is disabled.');
+        }
+
+        // Check if required tables exist
+        if (!Schema::hasTable('invitation_links') || !Schema::hasTable('invitation_referrals')) {
+            abort(503, view('tyro-dashboard::errors.missing-invitation-tables'));
         }
     }
 
