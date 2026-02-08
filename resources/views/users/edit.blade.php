@@ -110,6 +110,20 @@
                     <div>
                         <div style="font-weight: 600; color: var(--foreground);">{{ $editUser->name }}</div>
                         <div style="font-size: 0.875rem; color: var(--muted-foreground);">Member since {{ $editUser->created_at->format('M d, Y') }}</div>
+                        @if($editUser->profile_photo_path)
+                        <div style="margin-top: 0.5rem;">
+                            <form id="delete-user-photo-form" action="{{ route('tyro-dashboard.users.photo.delete', $editUser->id) }}" method="POST" style="display: inline;">
+                                @csrf
+                                @method('DELETE')
+                                <button type="button" class="btn btn-sm btn-ghost" style="color: var(--danger); padding: 0.25rem 0.5rem;" onclick="showDanger('Remove Photo', 'Are you sure you want to remove this user\'s profile photo?').then(confirmed => { if(confirmed) document.getElementById('delete-user-photo-form').submit(); })">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 14px; height: 14px; margin-right: 4px;">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                    </svg>
+                                    Remove Photo
+                                </button>
+                            </form>
+                        </div>
+                        @endif
                     </div>
                 </div>
 
@@ -234,6 +248,10 @@
 </div>
 
 @push('scripts')
+<form id="delete-user-photo-form" action="{{ route('tyro-dashboard.users.photo.delete', $editUser->id) }}" method="POST" style="display: none;">
+    @csrf
+    @method('DELETE')
+</form>
 <script>
     function openSuspendModal() {
         openModal('suspendModal');

@@ -103,4 +103,26 @@ class ProfileController extends BaseController
 
         return back()->with('success', 'Profile photo removed.');
     }
+
+    /**
+     * Delete another user's profile photo (Admin).
+     */
+    public function deleteUserPhoto(Request $request, $id)
+    {
+        $userModel = config('tyro-dashboard.user_model', 'App\Models\User');
+        $user = $userModel::findOrFail($id);
+        
+        if (method_exists($user, 'deleteProfilePhoto')) {
+            $user->deleteProfilePhoto();
+        } else {
+            // Fallback if trait is missing for some reason
+            if ($user->profile_photo_path) {
+                Storage::disk(config('tyro-dashboard.profile_photo.disk', 'public'))->delete($user->profile_photo_path);
+                $user->profile_photo_path = null;
+                $user->save();
+            }
+        }
+
+        return back()->with('success', "{$user->name}'s profile photo removed.");
+    }
 }

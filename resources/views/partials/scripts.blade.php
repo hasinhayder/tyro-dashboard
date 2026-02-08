@@ -192,10 +192,13 @@
 
             // Handle confirm button
             confirmBtn.onclick = () => {
+                const resolver = globalModalResolver;
+                globalModalResolver = null;
+
                 if (type === 'prompt') {
-                    resolve(promptInput.value);
+                    resolver(promptInput.value);
                 } else {
-                    resolve(true);
+                    resolver(true);
                 }
                 closeGlobalModal();
             };
@@ -221,8 +224,9 @@
         document.body.style.overflow = '';
         
         if (globalModalResolver) {
-            globalModalResolver(false);
+            const resolver = globalModalResolver;
             globalModalResolver = null;
+            resolver(false);
         }
     }
 
