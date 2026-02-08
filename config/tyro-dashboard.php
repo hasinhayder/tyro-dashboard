@@ -165,6 +165,10 @@ return [
         'disk' => env('TYRO_DASHBOARD_PROFILE_PHOTO_DISK', 'public'),
         'directory' => env('TYRO_DASHBOARD_PROFILE_PHOTO_DIRECTORY', 'profile_images'),
         'max_size' => env('TYRO_DASHBOARD_PROFILE_PHOTO_MAX_SIZE', 10240), // in KB (default 10MB)
+        'width' => env('TYRO_DASHBOARD_PROFILE_PHOTO_WIDTH', 400),
+        'height' => env('TYRO_DASHBOARD_PROFILE_PHOTO_HEIGHT', 400),
+        'quality' => env('TYRO_DASHBOARD_PROFILE_PHOTO_QUALITY', 90),
+        'crop_position' => env('TYRO_DASHBOARD_PROFILE_PHOTO_CROP', 'center'), // top, center, bottom
         'allowed_types' => ['jpg', 'jpeg', 'png', 'gif', 'webp'],
         'auto_delete_on_user_delete' => true,
     ],
