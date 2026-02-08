@@ -64,8 +64,12 @@
                     <tr>
                         <td>
                             <div class="user-cell">
-                                <div class="user-cell-avatar">
-                                    {{ strtoupper(substr($link->user->name ?? 'U', 0, 1)) }}
+                                <div class="user-cell-avatar" style="{{ ($link->user->profile_photo_path || $link->user->use_gravatar) ? 'background: none; padding: 0;' : '' }}">
+                                    @if($link->user->profile_photo_path || ($link->user->use_gravatar && $link->user->email))
+                                        <img src="{{ $link->user->profile_photo_url }}" alt="{{ $link->user->name }}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">
+                                    @else
+                                        {{ strtoupper(substr($link->user->name ?? 'U', 0, 1)) }}
+                                    @endif
                                 </div>
                                 <div class="user-cell-info">
                                     <div class="user-cell-name">{{ $link->user->name ?? 'Unknown' }}</div>

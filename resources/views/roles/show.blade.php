@@ -97,8 +97,12 @@
                         <tr>
                             <td>
                                 <a href="{{ route('tyro-dashboard.users.edit', $roleUser->id) }}" class="user-cell" style="text-decoration: none;">
-                                    <div class="user-cell-avatar">
-                                        {{ strtoupper(substr($roleUser->name, 0, 1)) }}
+                                    <div class="user-cell-avatar" style="{{ ($roleUser->profile_photo_path || $roleUser->use_gravatar) ? 'background: none; padding: 0;' : '' }}">
+                                        @if($roleUser->profile_photo_path || ($roleUser->use_gravatar && $roleUser->email))
+                                            <img src="{{ $roleUser->profile_photo_url }}" alt="{{ $roleUser->name }}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">
+                                        @else
+                                            {{ strtoupper(substr($roleUser->name, 0, 1)) }}
+                                        @endif
                                     </div>
                                     <div class="user-cell-info">
                                         <div class="user-cell-name" style="font-size: 0.9375rem;">{{ $roleUser->name }}</div>

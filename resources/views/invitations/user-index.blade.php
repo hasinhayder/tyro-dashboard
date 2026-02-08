@@ -108,9 +108,13 @@
                             <tr>
                                 <td>
                                     <div class="user-cell">
-                                        <div class="user-cell-avatar">
-                                            {{ strtoupper(substr($referral->referredUser->name ?? 'U', 0, 1)) }}
-                                        </div>
+                                            <div class="user-cell-avatar" style="{{ ($referral->referredUser->profile_photo_path || $referral->referredUser->use_gravatar) ? 'background: none; padding: 0;' : '' }}">
+                                                @if($referral->referredUser->profile_photo_path || ($referral->referredUser->use_gravatar && $referral->referredUser->email))
+                                                    <img src="{{ $referral->referredUser->profile_photo_url }}" alt="{{ $referral->referredUser->name }}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">
+                                                @else
+                                                    {{ strtoupper(substr($referral->referredUser->name ?? 'U', 0, 1)) }}
+                                                @endif
+                                            </div>
                                         <div class="user-cell-info">
                                             <div class="user-cell-name">{{ $referral->referredUser->name ?? 'Unknown' }}</div>
                                         </div>
