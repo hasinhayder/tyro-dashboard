@@ -95,6 +95,8 @@ return [
         'profile_management' => true,
         'invitation_system' => env('TYRO_DASHBOARD_ENABLE_INVITATION', true),
         'activity_log' => false, // Future feature
+        'profile_photo_upload' => env('TYRO_DASHBOARD_ENABLE_PROFILE_PHOTO', false),
+        'gravatar' => env('TYRO_DASHBOARD_ENABLE_GRAVATAR', false),
     ],
 
     /*
@@ -149,6 +151,22 @@ return [
         'disk' => env('TYRO_DASHBOARD_UPLOAD_DISK', 'public'),
         'directory' => env('TYRO_DASHBOARD_UPLOAD_DIRECTORY', 'uploads'),
         'auto_delete_on_resource_delete' => env('TYRO_DASHBOARD_AUTO_DELETE_UPLOADS', true),
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Profile Photo Configuration
+    |--------------------------------------------------------------------------
+    |
+    | Configure settings for user profile photos and gravatar support.
+    |
+    */
+    'profile_photo' => [
+        'disk' => env('TYRO_DASHBOARD_PROFILE_PHOTO_DISK', 'public'),
+        'directory' => env('TYRO_DASHBOARD_PROFILE_PHOTO_DIRECTORY', 'profile_images'),
+        'max_size' => env('TYRO_DASHBOARD_PROFILE_PHOTO_MAX_SIZE', 10240), // in KB (default 10MB)
+        'allowed_types' => ['jpg', 'jpeg', 'png', 'gif', 'webp'],
+        'auto_delete_on_user_delete' => true,
     ],
 
     /*

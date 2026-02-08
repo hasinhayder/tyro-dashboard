@@ -5,6 +5,8 @@ namespace HasinHayder\TyroDashboard\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules\Password;
+use Illuminate\Support\Facades\Storage;
+use HasinHayder\TyroDashboard\Traits\HasProfilePhoto;
 
 class ProfileController extends BaseController
 {
@@ -26,7 +28,20 @@ class ProfileController extends BaseController
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email,' . $user->id],
+            'photo' => ['nullable', 'image', 'max:'.config('tyro-dashboard.profile_photo.max_size', 10240)],
+            'use_gravatar' => ['boolean'],
         ]);
+
+        if (isset($validated['photo'])) {
+            $user->updateProfilePhoto($validated['photo']);
+        }
+
+        if (array_key_exists('use_gravatar', $validated)) {
+            $user->use_gravatar = $validated['use_gravatar'];
+        } else {
+             // Handle unchecked checkbox (it won't be in request)
+             $user->use_gravatar = false;
+        }
 
         $user->fill($validated);
 
@@ -76,5 +91,16 @@ class ProfileController extends BaseController
         return redirect()
             ->route('tyro-dashboard.profile')
             ->with('success', 'Two-factor authentication has been reset.');
+    }
+
+    /**
+     * Delete profile photo.
+     */
+    public function deletePhoto(Request $request)
+    {
+        $user = $request->user();
+        $user->deleteProfilePhoto();
+
+        return back()->with('success', 'Profile photo removed.');
     }
 }

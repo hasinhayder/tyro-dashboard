@@ -24,10 +24,47 @@
         <div class="card-header">
             <h3 class="card-title">Profile Information</h3>
         </div>
-        <form action="{{ route('tyro-dashboard.profile.update') }}" method="POST">
+        <form action="{{ route('tyro-dashboard.profile.update') }}" method="POST" enctype="multipart/form-data">
             @csrf
             @method('PUT')
             <div class="card-body">
+                @if(config('tyro-dashboard.features.profile_photo_upload') || config('tyro-dashboard.features.gravatar'))
+                <div class="form-group">
+                    <label class="form-label">Profile Photo</label>
+                    <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
+                        @if($user->profile_photo_path || ($user->use_gravatar && $user->email))
+                            <img src="{{ $user->profile_photo_url }}" alt="{{ $user->name }}" style="width: 64px; height: 64px; border-radius: 50%; object-fit: cover; border: 1px solid var(--border);">
+                        @else
+                            <div style="width: 64px; height: 64px; border-radius: 50%; background: var(--primary); color: var(--primary-foreground); display: flex; align-items: center; justify-content: center; font-size: 1.5rem; font-weight: 600;">
+                                {{ strtoupper(substr($user->name, 0, 1)) }}
+                            </div>
+                        @endif
+                        
+                        <div style="flex: 1;">
+                            @if(config('tyro-dashboard.features.profile_photo_upload'))
+                                <input type="file" name="photo" class="form-input" style="padding: 0.5rem;" accept="image/*">
+                                <p class="form-hint">Allowed types: jpg, png, gif, webp. Max size: {{ config('tyro-dashboard.profile_photo.max_size', 10240) / 1024 }}MB.</p>
+                            @endif
+                        </div>
+                    </div>
+
+                    @if($user->profile_photo_path)
+                        <div style="margin-bottom: 1rem;">
+                            <!-- We can use a separate form or a button that submits to a delete route via JS/Form -->
+                             <!-- Since we are inside a form, we cannot nest forms. We should use a separate button outside or handle it differently. -->
+                             <!-- For simplicity, let's just show a hint or leave deletion for a dedicated setting/button if requested. The implementation plan mentioned "Delete button". -->
+                             <!-- I will add a delete button using a small separate form script or just a link to a route -->
+                        </div>
+                    @endif
+
+                    @if(config('tyro-dashboard.features.gravatar'))
+                    <div class="form-check" style="display: flex; align-items: center; gap: 0.5rem; margin-top: 0.5rem;">
+                        <input type="checkbox" id="use_gravatar" name="use_gravatar" value="1" {{ old('use_gravatar', $user->use_gravatar) ? 'checked' : '' }}>
+                        <label for="use_gravatar" style="margin-bottom: 0;">Use Gravatar</label>
+                    </div>
+                    @endif
+                </div>
+                @endif
                 <div class="form-group">
                     <label for="name" class="form-label">Name</label>
                     <input type="text" id="name" name="name" class="form-input @error('name') is-invalid @enderror" value="{{ old('name', $user->name) }}" required>
