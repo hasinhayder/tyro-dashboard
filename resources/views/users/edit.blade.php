@@ -100,8 +100,8 @@
             </div>
             <div class="card-body">
                 <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
-                    <div class="user-cell-avatar" style="width: 64px; height: 64px; font-size: 1.5rem; {{ ($editUser->profile_photo_path || $editUser->use_gravatar) ? 'background: none; padding: 0;' : '' }}">
-                        @if($editUser->profile_photo_path || ($editUser->use_gravatar && $editUser->email))
+                    <div class="user-cell-avatar" style="width: 64px; height: 64px; font-size: 1.5rem; {{ ((method_exists($editUser, 'hasProfilePhotoColumn') && $editUser->hasProfilePhotoColumn() && $editUser->profile_photo_path) || (method_exists($editUser, 'hasGravatarColumn') && $editUser->hasGravatarColumn() && $editUser->use_gravatar)) ? 'background: none; padding: 0;' : '' }}">
+                        @if((method_exists($editUser, 'hasProfilePhotoColumn') && $editUser->hasProfilePhotoColumn() && $editUser->profile_photo_path) || (method_exists($editUser, 'hasGravatarColumn') && $editUser->hasGravatarColumn() && $editUser->use_gravatar && $editUser->email))
                             <img src="{{ $editUser->profile_photo_url }}" alt="{{ $editUser->name }}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">
                         @else
                             {{ strtoupper(substr($editUser->name, 0, 1)) }}
@@ -110,7 +110,7 @@
                     <div>
                         <div style="font-weight: 600; color: var(--foreground);">{{ $editUser->name }}</div>
                         <div style="font-size: 0.875rem; color: var(--muted-foreground);">Member since {{ $editUser->created_at->format('M d, Y') }}</div>
-                        @if($editUser->profile_photo_path)
+                        @if(method_exists($editUser, 'hasProfilePhotoColumn') && $editUser->hasProfilePhotoColumn() && $editUser->profile_photo_path)
                         <div style="margin-top: 0.5rem;">
                             <form id="delete-user-photo-form" action="{{ route('tyro-dashboard.users.photo.delete', $editUser->id) }}" method="POST" style="display: inline;">
                                 @csrf

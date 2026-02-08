@@ -3,6 +3,8 @@
 namespace HasinHayder\TyroDashboard\Console\Commands;
 
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Str;
 
 class InstallCommand extends Command
 {
@@ -32,15 +34,16 @@ class InstallCommand extends Command
 
         // Check dependencies
         $this->info('Checking dependencies...');
-        
-        if (!$this->checkTyroInstalled()) {
+
+        if (! $this->checkTyroInstalled()) {
             $this->error('   ✗ hasinhayder/tyro package is not installed');
             $this->error('   Please install it first: composer require hasinhayder/tyro');
+
             return self::FAILURE;
         }
         $this->info('   ✓ hasinhayder/tyro is installed');
 
-        if (!$this->checkTyroLoginInstalled()) {
+        if (! $this->checkTyroLoginInstalled()) {
             $this->warn('   ⚠ hasinhayder/tyro-login package is not installed');
             $this->warn('   Some features may be limited. Install with: composer require hasinhayder/tyro-login');
         } else {
@@ -51,7 +54,7 @@ class InstallCommand extends Command
 
         // Run tyro:install without seeding
         $this->info('Setting up Tyro framework...');
-        if (!$this->runTyroInstall()) {
+        if (! $this->runTyroInstall()) {
             return self::FAILURE;
         }
         $this->info('   ✓ Tyro framework setup complete');
@@ -69,7 +72,7 @@ class InstallCommand extends Command
         // Ask about views publishing
         $this->info('');
         $this->info('View Publishing Options:');
-        
+
         if ($this->confirm('Would you like to publish all dashboard views?', false)) {
             $this->info('Publishing all views...');
             $this->callSilently('vendor:publish', [
@@ -87,7 +90,7 @@ class InstallCommand extends Command
                 ]);
                 $this->info('   ✓ Admin views published to resources/views/vendor/tyro-dashboard/');
             }
-            
+
             // Ask about user views only
             if ($this->confirm('Would you like to publish user views only?', false)) {
                 $this->info('Publishing user views...');
@@ -140,6 +143,10 @@ class InstallCommand extends Command
         $this->info('  - tyro:list-users          : List all users');
         $this->info('');
 
+        // Prepare User Model
+        $this->info('Preparing User model...');
+        $this->prepareUserModel();
+
         return self::SUCCESS;
     }
 
@@ -165,8 +172,8 @@ class InstallCommand extends Command
     protected function checkUserModelHasTrait(): bool
     {
         $userModel = config('tyro-dashboard.user_model', config('tyro.models.user', 'App\\Models\\User'));
-        
-        if (!class_exists($userModel)) {
+
+        if (! class_exists($userModel)) {
             return false;
         }
 
@@ -199,9 +206,63 @@ class InstallCommand extends Command
 
             return true;
         } catch (\Exception $e) {
-            $this->error('Failed to run installation commands: ' . $e->getMessage());
+            $this->error('Failed to run installation commands: '.$e->getMessage());
+
             return false;
         }
     }
 
+    /**
+     * Prepare the User model with necessary traits.
+     */
+    protected function prepareUserModel(): void
+    {
+        $path = app_path('Models/User.php');
+
+        if (! File::exists($path)) {
+            $this->warn('   ⚠ User model not found at app/Models/User.php. Skipping trait addition.');
+
+            return;
+        }
+
+        $contents = File::get($path);
+        $original = $contents;
+
+        // Add Import
+        $import = 'use HasinHayder\TyroDashboard\Traits\HasProfilePhoto;';
+        if (! Str::contains($contents, $import)) {
+            if (Str::contains($contents, 'use HasinHayder\TyroLogin\Traits\HasTwoFactorAuth;')) {
+                $contents = str_replace(
+                    'use HasinHayder\TyroLogin\Traits\HasTwoFactorAuth;',
+                    "use HasinHayder\TyroLogin\Traits\HasTwoFactorAuth;\n{$import}",
+                    $contents
+                );
+            } elseif (Str::contains($contents, 'use HasinHayder\Tyro\Concerns\HasTyroRoles;')) {
+                $contents = str_replace(
+                    'use HasinHayder\Tyro\Concerns\HasTyroRoles;',
+                    "use HasinHayder\Tyro\Concerns\HasTyroRoles;\n{$import}",
+                    $contents
+                );
+            }
+        }
+
+        // Add Trait Usage
+        if (! Str::contains($contents, 'use HasProfilePhoto;')) {
+            // Find the line that has 'use' and one of our landmark traits
+            if (preg_match('/use\s+.*(?:HasTwoFactorAuth|HasTyroRoles).*;/', $contents, $matches)) {
+                $currentTraits = $matches[0];
+                if (! Str::contains($currentTraits, 'HasProfilePhoto')) {
+                    $newTraits = str_replace(';', ', HasProfilePhoto;', $currentTraits);
+                    $contents = str_replace($currentTraits, $newTraits, $contents);
+                }
+            }
+        }
+
+        if ($contents !== $original) {
+            File::put($path, $contents);
+            $this->info('   ✓ HasProfilePhoto trait added to User model');
+        } else {
+            $this->info('   ✓ User model already has HasProfilePhoto trait');
+        }
+    }
 }

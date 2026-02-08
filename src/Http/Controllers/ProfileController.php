@@ -4,9 +4,8 @@ namespace HasinHayder\TyroDashboard\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Validation\Rules\Password;
 use Illuminate\Support\Facades\Storage;
-use HasinHayder\TyroDashboard\Traits\HasProfilePhoto;
+use Illuminate\Validation\Rules\Password;
 
 class ProfileController extends BaseController
 {
@@ -27,23 +26,25 @@ class ProfileController extends BaseController
 
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email,' . $user->id],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email,'.$user->id],
             'photo' => ['nullable', 'image', 'max:'.config('tyro-dashboard.profile_photo.max_size', 10240)],
             'use_gravatar' => ['boolean'],
         ]);
 
-        if (isset($validated['photo'])) {
+        if (isset($validated['photo']) && method_exists($user, 'hasProfilePhotoColumn') && $user->hasProfilePhotoColumn()) {
             $user->updateProfilePhoto($validated['photo']);
         }
 
-        if (array_key_exists('use_gravatar', $validated)) {
-            $user->use_gravatar = $validated['use_gravatar'];
-        } else {
-             // Handle unchecked checkbox (it won't be in request)
-             $user->use_gravatar = false;
+        if (method_exists($user, 'hasGravatarColumn') && $user->hasGravatarColumn()) {
+            if (array_key_exists('use_gravatar', $validated)) {
+                $user->use_gravatar = $validated['use_gravatar'];
+            } else {
+                // Handle unchecked checkbox (it won't be in request)
+                $user->use_gravatar = false;
+            }
         }
 
-        $user->fill($validated);
+        $user->fill(collect($validated)->except(['photo', 'use_gravatar'])->toArray());
 
         if ($user->isDirty('email')) {
             $user->email_verified_at = null;
@@ -111,7 +112,7 @@ class ProfileController extends BaseController
     {
         $userModel = config('tyro-dashboard.user_model', 'App\Models\User');
         $user = $userModel::findOrFail($id);
-        
+
         if (method_exists($user, 'deleteProfilePhoto')) {
             $user->deleteProfilePhoto();
         } else {

@@ -42,9 +42,10 @@ trait HasProfilePhoto
         if (extension_loaded('gd') && $resizedContent = $this->resizeImage($photo, $width, $height, $quality)) {
             $filename = $photo->hashName();
             $directory = config('tyro-dashboard.profile_photo.directory', 'profile-photos');
-            $path = $directory . '/' . $filename;
-            
+            $path = $directory.'/'.$filename;
+
             Storage::disk($this->profilePhotoDisk())->put($path, $resizedContent, 'public');
+
             return $path;
         }
 
@@ -66,7 +67,7 @@ trait HasProfilePhoto
     protected function resizeImage($photo, $width, $height, $quality)
     {
         $imageInfo = getimagesize($photo->getRealPath());
-        if (!$imageInfo) {
+        if (! $imageInfo) {
             return null;
         }
 
@@ -75,12 +76,12 @@ trait HasProfilePhoto
         switch ($imageType) {
             case IMAGETYPE_JPEG:
                 $sourceImage = imagecreatefromjpeg($photo->getRealPath());
-                
+
                 // Fix orientation if EXIF is available
                 if (function_exists('exif_read_data')) {
                     try {
                         $exif = @exif_read_data($photo->getRealPath());
-                        if ($exif && !empty($exif['Orientation'])) {
+                        if ($exif && ! empty($exif['Orientation'])) {
                             switch ($exif['Orientation']) {
                                 case 3:
                                     $sourceImage = imagerotate($sourceImage, 180, 0);
@@ -116,7 +117,7 @@ trait HasProfilePhoto
                 return null;
         }
 
-        if (!$sourceImage) {
+        if (! $sourceImage) {
             return null;
         }
 
@@ -248,7 +249,7 @@ trait HasProfilePhoto
 
         return 'https://ui-avatars.com/api/?name='.urlencode($name).'&color=7F9CF5&background=EBF4FF';
     }
-    
+
     /**
      * Get the Gravatar URL for the user.
      *
@@ -257,7 +258,28 @@ trait HasProfilePhoto
     public function getGravatarUrlAttribute()
     {
         $hash = md5(strtolower(trim($this->email)));
+
         return "https://www.gravatar.com/avatar/{$hash}?s=200&d=mp";
+    }
+
+    /**
+     * Determine if the user model has the profile photo path column.
+     *
+     * @return bool
+     */
+    public function hasProfilePhotoColumn()
+    {
+        return \Illuminate\Support\Facades\Schema::hasColumn($this->getTable(), 'profile_photo_path');
+    }
+
+    /**
+     * Determine if the user model has the use gravatar column.
+     *
+     * @return bool
+     */
+    public function hasGravatarColumn()
+    {
+        return \Illuminate\Support\Facades\Schema::hasColumn($this->getTable(), 'use_gravatar');
     }
 
     /**

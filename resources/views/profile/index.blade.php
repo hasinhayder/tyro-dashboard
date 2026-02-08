@@ -28,11 +28,11 @@
             @csrf
             @method('PUT')
             <div class="card-body">
-                @if(config('tyro-dashboard.features.profile_photo_upload') || config('tyro-dashboard.features.gravatar'))
+                @if((config('tyro-dashboard.features.profile_photo_upload') && method_exists($user, 'hasProfilePhotoColumn') && $user->hasProfilePhotoColumn()) || (config('tyro-dashboard.features.gravatar') && method_exists($user, 'hasGravatarColumn') && $user->hasGravatarColumn()))
                 <div class="form-group">
                     <label class="form-label">Profile Photo</label>
                     <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
-                        @if($user->profile_photo_path || ($user->use_gravatar && $user->email))
+                        @if((method_exists($user, 'hasProfilePhotoColumn') && $user->hasProfilePhotoColumn() && $user->profile_photo_path) || (method_exists($user, 'hasGravatarColumn') && $user->hasGravatarColumn() && $user->use_gravatar && $user->email))
                             <img src="{{ $user->profile_photo_url }}" alt="{{ $user->name }}" style="width: 64px; height: 64px; border-radius: 50%; object-fit: cover; border: 1px solid var(--border);">
                         @else
                             <div style="width: 64px; height: 64px; border-radius: 50%; background: var(--primary); color: var(--primary-foreground); display: flex; align-items: center; justify-content: center; font-size: 1.5rem; font-weight: 600;">
@@ -41,14 +41,14 @@
                         @endif
                         
                         <div style="flex: 1;">
-                            @if(config('tyro-dashboard.features.profile_photo_upload'))
+                            @if(config('tyro-dashboard.features.profile_photo_upload') && method_exists($user, 'hasProfilePhotoColumn') && $user->hasProfilePhotoColumn())
                                 <input type="file" name="photo" class="form-input" style="padding: 0.5rem;" accept="image/*">
                                 <p class="form-hint">Allowed types: jpg, png, gif, webp. Max size: {{ config('tyro-dashboard.profile_photo.max_size', 10240) / 1024 }}MB.</p>
                             @endif
                         </div>
                     </div>
 
-                    @if($user->profile_photo_path)
+                    @if(method_exists($user, 'hasProfilePhotoColumn') && $user->hasProfilePhotoColumn() && $user->profile_photo_path)
                         <div style="margin-bottom: 1rem;">
                             <button type="button" class="btn btn-sm btn-ghost" style="color: var(--danger); padding: 0.25rem 0.5rem;" onclick="showDanger('Remove Photo', 'Are you sure you want to remove your profile photo?').then(confirmed => { if(confirmed) document.getElementById('delete-photo-form').submit(); })">
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 14px; height: 14px; margin-right: 4px;">
@@ -59,7 +59,7 @@
                         </div>
                     @endif
 
-                    @if(config('tyro-dashboard.features.gravatar'))
+                    @if(config('tyro-dashboard.features.gravatar') && method_exists($user, 'hasGravatarColumn') && $user->hasGravatarColumn())
                     <div class="form-check" style="display: flex; align-items: center; gap: 0.5rem; margin-top: 0.5rem;">
                         <input type="checkbox" id="use_gravatar" name="use_gravatar" value="1" {{ old('use_gravatar', $user->use_gravatar) ? 'checked' : '' }}>
                         <label for="use_gravatar" style="margin-bottom: 0;">Use Gravatar</label>
