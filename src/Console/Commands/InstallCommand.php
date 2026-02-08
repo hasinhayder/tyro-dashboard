@@ -3,8 +3,6 @@
 namespace HasinHayder\TyroDashboard\Console\Commands;
 
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\File;
-use Illuminate\Support\Str;
 
 class InstallCommand extends Command
 {
@@ -143,10 +141,6 @@ class InstallCommand extends Command
         $this->info('  - tyro:list-users          : List all users');
         $this->info('');
 
-        // Prepare User Model
-        $this->info('Preparing User model...');
-        $this->prepareUserModel();
-
         return self::SUCCESS;
     }
 
@@ -209,60 +203,6 @@ class InstallCommand extends Command
             $this->error('Failed to run installation commands: '.$e->getMessage());
 
             return false;
-        }
-    }
-
-    /**
-     * Prepare the User model with necessary traits.
-     */
-    protected function prepareUserModel(): void
-    {
-        $path = app_path('Models/User.php');
-
-        if (! File::exists($path)) {
-            $this->warn('   ⚠ User model not found at app/Models/User.php. Skipping trait addition.');
-
-            return;
-        }
-
-        $contents = File::get($path);
-        $original = $contents;
-
-        // Add Import
-        $import = 'use HasinHayder\TyroDashboard\Traits\HasProfilePhoto;';
-        if (! Str::contains($contents, $import)) {
-            if (Str::contains($contents, 'use HasinHayder\TyroLogin\Traits\HasTwoFactorAuth;')) {
-                $contents = str_replace(
-                    'use HasinHayder\TyroLogin\Traits\HasTwoFactorAuth;',
-                    "use HasinHayder\TyroLogin\Traits\HasTwoFactorAuth;\n{$import}",
-                    $contents
-                );
-            } elseif (Str::contains($contents, 'use HasinHayder\Tyro\Concerns\HasTyroRoles;')) {
-                $contents = str_replace(
-                    'use HasinHayder\Tyro\Concerns\HasTyroRoles;',
-                    "use HasinHayder\Tyro\Concerns\HasTyroRoles;\n{$import}",
-                    $contents
-                );
-            }
-        }
-
-        // Add Trait Usage
-        if (! Str::contains($contents, 'use HasProfilePhoto;')) {
-            // Find the line that has 'use' and one of our landmark traits
-            if (preg_match('/use\s+.*(?:HasTwoFactorAuth|HasTyroRoles).*;/', $contents, $matches)) {
-                $currentTraits = $matches[0];
-                if (! Str::contains($currentTraits, 'HasProfilePhoto')) {
-                    $newTraits = str_replace(';', ', HasProfilePhoto;', $currentTraits);
-                    $contents = str_replace($currentTraits, $newTraits, $contents);
-                }
-            }
-        }
-
-        if ($contents !== $original) {
-            File::put($path, $contents);
-            $this->info('   ✓ HasProfilePhoto trait added to User model');
-        } else {
-            $this->info('   ✓ User model already has HasProfilePhoto trait');
         }
     }
 }

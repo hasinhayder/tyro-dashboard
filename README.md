@@ -362,6 +362,36 @@ This creates the `invitation_links` and `invitation_referrals` tables needed for
 
 ---
 
+## Profile Photo & Gravatar Support
+
+Each user can now have a custom profile photo or use Gravatar by default.
+
+### Setup Instructions
+
+1. **Run Migrations** — Add the necessary columns to your users table:
+   ```bash
+   php artisan migrate
+   ```
+
+2. **Update User Model** — Add the `HasProfilePhoto` trait to your `User` model:
+   ```php
+   use HasinHayder\TyroDashboard\Traits\HasProfilePhoto;
+
+   class User extends Authenticatable
+   {
+       use HasProfilePhoto;
+       // ...
+   }
+   ```
+
+3. **Storage Link** — Ensure your public storage is linked:
+   ```bash
+   php artisan storage:link
+   ```
+
+
+---
+
 ## Use Cases
 
 ### E-Commerce Admin Panel
