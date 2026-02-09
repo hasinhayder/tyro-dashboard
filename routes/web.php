@@ -64,6 +64,9 @@ if (config('tyro-dashboard.features.invitation_system', true)) {
     });
 }
 
+// Leave impersonation (accessible to anyone currently impersonating)
+Route::post('/leave-impersonation', [UserController::class, 'leaveImpersonation'])->name('leave-impersonation');
+
 // Admin-only routes
 Route::middleware('tyro-dashboard.admin')->group(function () {
     // User Management
@@ -76,6 +79,7 @@ Route::middleware('tyro-dashboard.admin')->group(function () {
         Route::delete('/{id}/2fa', [UserController::class, 'reset2FA'])->name('2fa.reset');
         Route::post('/{id}/suspend', [UserController::class, 'suspend'])->name('suspend');
         Route::post('/{id}/unsuspend', [UserController::class, 'unsuspend'])->name('unsuspend');
+        Route::post('/{id}/login-as', [UserController::class, 'loginAs'])->name('login-as');
         Route::delete('/{id}/photo', [ProfileController::class, 'deleteUserPhoto'])->name('photo.delete');
         Route::delete('/{id}', [UserController::class, 'destroy'])->name('destroy');
     });
