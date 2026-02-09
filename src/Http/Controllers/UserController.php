@@ -231,4 +231,62 @@ class UserController extends BaseController
             ->route('tyro-dashboard.users.edit', $user->id)
             ->with('success', 'Two-factor authentication has been reset for this user.');
     }
+
+    /**
+     * Impersonate the specified user.
+     */
+    public function loginAs($id)
+    {
+        // Only admins can impersonate
+        if (!$this->isAdmin()) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        $userModel = $this->getUserModel();
+        $targetUser = $userModel::findOrFail($id);
+
+        // Prevent impersonating yourself
+        if ($targetUser->id === auth()->id()) {
+            return redirect()
+                ->route('tyro-dashboard.users.index')
+                ->with('error', 'You cannot impersonate yourself.');
+        }
+
+        // Store original user ID in session
+        session(['impersonator_id' => auth()->id()]);
+
+        // Log in as the target user
+        auth()->login($targetUser);
+
+        return redirect()
+            ->route('tyro-dashboard.index')
+            ->with('success', "You are now logged in as {$targetUser->name}.");
+    }
+
+    /**
+     * Leave impersonation and return to original admin account.
+     */
+    public function leaveImpersonation()
+    {
+        $impersonatorId = session('impersonator_id');
+
+        if (!$impersonatorId) {
+            return redirect()
+                ->route('tyro-dashboard.index')
+                ->with('error', 'You are not impersonating anyone.');
+        }
+
+        $userModel = $this->getUserModel();
+        $originalUser = $userModel::findOrFail($impersonatorId);
+
+        // Remove impersonator ID from session
+        session()->forget('impersonator_id');
+
+        // Log back in as original user
+        auth()->login($originalUser);
+
+        return redirect()
+            ->route('tyro-dashboard.users.index')
+            ->with('success', 'You have stopped impersonating and returned to your account.');
+    }
 }

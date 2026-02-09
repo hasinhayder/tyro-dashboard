@@ -16,6 +16,7 @@ use HasinHayder\TyroDashboard\Console\Commands\PublishStyleCommand;
 use HasinHayder\TyroDashboard\Console\Commands\VersionCommand;
 use HasinHayder\TyroDashboard\Console\Commands\ClearResourceCacheCommand;
 use HasinHayder\TyroDashboard\Http\Middleware\EnsureIsAdmin;
+use HasinHayder\TyroDashboard\Http\Middleware\HandleImpersonation;
 use Illuminate\Routing\Router;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\View;
@@ -209,6 +210,9 @@ class TyroDashboardServiceProvider extends ServiceProvider {
         /** @var Router $router */
         $router = $this->app['router'];
         $router->aliasMiddleware('tyro-dashboard.admin', EnsureIsAdmin::class);
+        
+        // Add impersonation handler to web middleware group
+        $router->pushMiddlewareToGroup('web', HandleImpersonation::class);
     }
 
     protected function registerCommands(): void {

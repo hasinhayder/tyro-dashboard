@@ -31,6 +31,9 @@
             <!-- Top Bar -->
             @include('tyro-dashboard::partials.topbar')
 
+            <!-- Impersonation Banner -->
+            @include('tyro-dashboard::partials.impersonation-banner')
+
             <!-- Page Content -->
             <main class="page-content">
                 <!-- Flash Messages -->
