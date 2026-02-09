@@ -29,6 +29,7 @@ A production-ready Laravel package that delivers a complete admin & user dashboa
   - [Role & Privilege Management](#role--privilege-management)
   - [Dynamic Resource CRUD](#dynamic-resource-crud)
   - [Separate Dashboards](#separate-dashboards)
+  - [Impersonation & User Debugging](#impersonation--user-debugging)
   - [Security & Authorization](#security--authorization)
 - [Installation](#installation)
 - [Invitation & Referral System](#invitationreferral-system)
@@ -52,6 +53,7 @@ Tyro Dashboard is a comprehensive Laravel package that eliminates the need to bu
 - **Role-Based Access Control** — Granular privileges with visual management
 - **Dynamic Resource CRUD** — Describe your model, get a full admin interface
 - **Separate Dashboards** — Admin and user experiences out of the box
+- **User Impersonation** — Debug user issues by securely logging in as them
 - **Beautiful UI** — Modern, responsive, built with shadcn components
 - **Highly Configurable** — Publishable views, extensible controllers
 - **Security First** — Built-in authorization, protected resources, audit-ready
@@ -250,6 +252,49 @@ Different experiences for different user types:
 - Different information needs
 - Better UX for each user type
 - Simplified navigation for users
+
+### Impersonation & User Debugging
+
+Securely log in as another user to diagnose issues, verify functionality, and provide support without needing their password.
+
+#### Key Features
+
+- **Seamless User Switching** — Admins can temporarily log in as any user from the user management interface
+- **Non-Invasive** — The impersonated user's session is not affected; admins have their own separate session
+- **Quick Access** — Impersonate directly from the user list or user detail page
+- **Easy Exit** — Return to admin account with a single click
+
+#### Use Cases
+
+**Troubleshooting**: 
+- User reports a bug? Log in as them to reproduce the issue in their exact environment
+- Verify permissions are working correctly for specific roles
+- Check if a feature is visible to users with certain privileges
+
+**Customer Support**: 
+- Help users navigate the platform by seeing what they see
+- Verify account settings and permissions
+- Check if user-facing features are working as expected
+
+**Feature Verification**: 
+- Test new features from different user perspectives
+- Verify role-based visibility of content
+- Validate permission-based feature access
+
+#### Security
+
+- Only users with admin privileges can impersonate other users
+- The impersonated user is not logged out; admins operate in a separate session
+- Impersonation respects all existing security controls (2FA, email verification, etc.)
+
+#### How to Use
+
+1. Navigate to **User Management** in the admin dashboard
+2. Find the user you want to debug
+3. Click the **"Impersonate"** button from the user row or detail page
+4. You'll be logged in as that user while maintaining your admin session
+5. Browse the application as the user would see it
+6. Click **"Exit Impersonation"** to return to your admin account
 
 ### File Upload Configuration
 
