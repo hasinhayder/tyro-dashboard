@@ -21,7 +21,7 @@ class VersionCommand extends Command
      */
     public function handle(): int
     {
-        $version = "1.8.1"; //Profile Photo Feature
+        $version = "1.10.0"; //User impersonation feature 
         
         $this->info('');
         $this->info('  ╔════════════════════════════════════════╗');
@@ -73,6 +73,7 @@ class VersionCommand extends Command
 }
 
 //Changelog
+//1.10.0 - User impersonation feature added with impersonate and leaveImpersonation methods in UserController + middleware and blade directive for showing impersonation banner + optional route for leaving impersonation
 //1.9.0 - Profile photo feature. Now users can upload profile photos or use Gravatar if enabled. User avatar is displayed in the dashboard user list and can be managed in the profile page. Configuration options added for enabling/disabling profile photos and gravatar support, max upload size and cropping position. This is a major step towards more personalized user experience in the dashboard.
 //1.8.0 - feat: modal dialog support added with showConfirm, showAlert and showDanger JS functions + used in various places for better UX
 //1.8.0 - feat: invitation and referral system added with invitation_links and invitation_referrals tables + invitation management UI in dashboard
