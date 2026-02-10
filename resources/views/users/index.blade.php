@@ -118,9 +118,9 @@
                                 </svg>
                             </a>
                             @if($listUser->id !== $user->id)
-                                <form action="{{ route('tyro-dashboard.users.login-as', $listUser->id) }}" method="POST" style="display: inline;">
+                                <form action="{{ route('tyro-dashboard.users.login-as', $listUser->id) }}" method="POST" style="display: inline;" id="login-as-form-{{ $listUser->id }}">
                                     @csrf
-                                    <button type="submit" class="action-btn" title="Login As" onclick="return confirm('Are you sure you want to log in as {{ addslashes($listUser->name) }}?')">
+                                    <button type="button" class="action-btn" title="Login As" onclick="event.preventDefault(); showConfirm('Login As User', 'Are you sure you want to log in as {{ addslashes($listUser->name) }}?').then(confirmed => { if(confirmed) document.getElementById('login-as-form-{{ $listUser->id }}').submit(); })">
                                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                             <path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                                         </svg>
