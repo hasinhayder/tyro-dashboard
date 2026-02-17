@@ -102,6 +102,26 @@
             </a>
             @endif
 
+            @php
+                $showAuditLogsMenu = false;
+                if (config('tyro-dashboard.features.audit_logs', true) && config('tyro.audit.enabled', true) && class_exists('\HasinHayder\Tyro\Models\AuditLog')) {
+                    try {
+                        $showAuditLogsMenu = \Illuminate\Support\Facades\Schema::hasTable(config('tyro.tables.audit_logs', 'tyro_audit_logs'));
+                    } catch (\Throwable $e) {
+                        $showAuditLogsMenu = false;
+                    }
+                }
+            @endphp
+
+            @if($showAuditLogsMenu)
+            <a href="{{ route('tyro-dashboard.audits.index') }}" class="sidebar-link {{ request()->routeIs('tyro-dashboard.audits.*') ? 'active' : '' }}">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                </svg>
+                Audit Logs
+            </a>
+            @endif
+
             @if(!empty($adminMenuItems))
                 @foreach($adminMenuItems as $item)
                     <a href="{{ route($item['route'] ?? '#') }}" class="sidebar-link {{ request()->routeIs($item['route'] ?? '') ? 'active' : '' }}">

@@ -2,6 +2,7 @@
 
 namespace HasinHayder\TyroDashboard\Http\Controllers;
 
+use HasinHayder\Tyro\Support\TyroAudit;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
@@ -23,6 +24,7 @@ class ProfileController extends BaseController
     public function update(Request $request)
     {
         $user = $request->user();
+        $oldEmail = $user->email;
 
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:255'],
@@ -51,6 +53,10 @@ class ProfileController extends BaseController
         }
 
         $user->save();
+
+        if ($oldEmail !== $user->email) {
+            $this->auditSafely('user.email_changed', $user, ['email' => $oldEmail], ['email' => $user->email]);
+        }
 
         return redirect()
             ->route('tyro-dashboard.profile')
@@ -125,5 +131,17 @@ class ProfileController extends BaseController
         }
 
         return back()->with('success', "{$user->name}'s profile photo removed.");
+    }
+
+    /**
+     * Write an audit entry without breaking profile actions.
+     */
+    protected function auditSafely(string $event, $auditable = null, ?array $oldValues = null, ?array $newValues = null): void
+    {
+        try {
+            TyroAudit::log($event, $auditable, $oldValues, $newValues);
+        } catch (\Throwable $e) {
+            // Intentionally ignore audit failures for dashboard stability.
+        }
     }
 }

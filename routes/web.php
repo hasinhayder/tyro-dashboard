@@ -9,6 +9,7 @@ use HasinHayder\TyroDashboard\Http\Controllers\RoleController;
 use HasinHayder\TyroDashboard\Http\Controllers\UserController;
 use HasinHayder\TyroDashboard\Http\Controllers\XComponentsController;
 use HasinHayder\TyroDashboard\Http\Controllers\InvitationController;
+use HasinHayder\TyroDashboard\Http\Controllers\AuditController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -74,6 +75,9 @@ Route::middleware('tyro-dashboard.admin')->group(function () {
         Route::get('/', [UserController::class, 'index'])->name('index');
         Route::get('/create', [UserController::class, 'create'])->name('create');
         Route::post('/', [UserController::class, 'store'])->name('store');
+        Route::get('/{id}', function ($id) {
+            return redirect()->route('tyro-dashboard.users.edit', $id);
+        })->name('show');
         Route::get('/{id}/edit', [UserController::class, 'edit'])->name('edit');
         Route::put('/{id}', [UserController::class, 'update'])->name('update');
         Route::delete('/{id}/2fa', [UserController::class, 'reset2FA'])->name('2fa.reset');
@@ -117,6 +121,14 @@ Route::middleware('tyro-dashboard.admin')->group(function () {
             Route::delete('/{id}', [InvitationController::class, 'adminDestroy'])->name('destroy');
         });
     }
+
+    // Audit Logs (Admin)
+    Route::prefix('audits')->name('audits.')->group(function () {
+        Route::get('/', [AuditController::class, 'index'])->name('index');
+        Route::post('/bulk-delete', [AuditController::class, 'bulkDestroy'])->name('bulk-destroy');
+        Route::delete('/flush', [AuditController::class, 'flush'])->name('flush');
+        Route::delete('/{id}', [AuditController::class, 'destroy'])->name('destroy');
+    });
 });
 
 // Dynamic Resources (outside admin middleware - handles its own access control)

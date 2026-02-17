@@ -5,6 +5,7 @@ namespace HasinHayder\TyroDashboard\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Schema;
+use HasinHayder\Tyro\Support\TyroAudit;
 use HasinHayder\TyroLogin\Models\InvitationLink;
 use HasinHayder\TyroLogin\Models\InvitationReferral;
 use HasinHayder\TyroLogin\Helpers\InvitationHelper;
@@ -136,9 +137,15 @@ class InvitationController extends BaseController
         // Create new invitation link
         $hash = Str::random(32);
         
-        InvitationLink::create([
+        $invitationLink = InvitationLink::create([
             'user_id' => $user->id,
             'hash' => $hash,
+        ]);
+
+        $this->auditSafely('invitation.created', $invitationLink, null, [
+            'id' => $invitationLink->id,
+            'user_id' => $user->id,
+            'hash' => $invitationLink->hash,
         ]);
 
         return redirect()->route('tyro-dashboard.invitations.admin.index')
@@ -163,8 +170,16 @@ class InvitationController extends BaseController
         $link = InvitationLink::findOrFail($id);
         $referralCount = $link->referrals()->count();
         $userName = $link->user ? $link->user->name : 'Unknown User';
+        $oldValues = [
+            'id' => $link->id,
+            'user_id' => $link->user_id,
+            'hash' => $link->hash,
+            'referrals_count' => $referralCount,
+        ];
 
         $link->delete();
+
+        $this->auditSafely('invitation.deleted', null, $oldValues, null);
 
         $message = "Invitation link for {$userName} has been deleted.";
         if ($referralCount > 0) {
@@ -229,12 +244,30 @@ class InvitationController extends BaseController
         // Create new invitation link
         $hash = Str::random(32);
         
-        InvitationLink::create([
+        $invitationLink = InvitationLink::create([
             'user_id' => $user->id,
             'hash' => $hash,
         ]);
 
+        $this->auditSafely('invitation.created', $invitationLink, null, [
+            'id' => $invitationLink->id,
+            'user_id' => $user->id,
+            'hash' => $invitationLink->hash,
+        ]);
+
         return redirect()->route('tyro-dashboard.invitations.index')
             ->with('success', 'Your invitation link has been created successfully!');
+    }
+
+    /**
+     * Write an audit entry without breaking invitation management actions.
+     */
+    protected function auditSafely(string $event, $auditable = null, ?array $oldValues = null, ?array $newValues = null): void
+    {
+        try {
+            TyroAudit::log($event, $auditable, $oldValues, $newValues);
+        } catch (\Throwable $e) {
+            // Intentionally ignore audit failures for dashboard stability.
+        }
     }
 }

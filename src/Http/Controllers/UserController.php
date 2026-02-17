@@ -4,8 +4,10 @@ namespace HasinHayder\TyroDashboard\Http\Controllers;
 
 use HasinHayder\Tyro\Models\Role;
 use HasinHayder\Tyro\Support\PasswordRules;
+use HasinHayder\Tyro\Support\TyroAudit;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Collection;
 
 class UserController extends BaseController
 {
@@ -86,6 +88,10 @@ class UserController extends BaseController
 
         if (!empty($validated['roles'])) {
             $user->roles()->sync($validated['roles']);
+
+            $assignedRoleIds = array_map('intval', $validated['roles']);
+            $assignedRoles = Role::query()->whereIn('id', $assignedRoleIds)->get(['id', 'slug']);
+            $this->auditRoleAssignments($user, $assignedRoles, true);
         }
 
         return redirect()
@@ -115,6 +121,9 @@ class UserController extends BaseController
     {
         $userModel = $this->getUserModel();
         $user = $userModel::findOrFail($id);
+        $oldName = $user->name;
+        $oldEmail = $user->email;
+        $oldRoleIds = $user->roles()->pluck('roles.id')->map(fn ($item) => (int) $item)->values()->all();
 
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:255'],
@@ -133,8 +142,26 @@ class UserController extends BaseController
 
         $user->save();
 
+        if ($oldEmail !== $user->email) {
+            $this->auditSafely('user.email_changed', $user, ['email' => $oldEmail], ['email' => $user->email]);
+        }
+
         if (isset($validated['roles'])) {
             $user->roles()->sync($validated['roles']);
+
+            $newRoleIds = array_map('intval', $validated['roles']);
+            $attachedRoleIds = array_values(array_diff($newRoleIds, $oldRoleIds));
+            $detachedRoleIds = array_values(array_diff($oldRoleIds, $newRoleIds));
+
+            if (!empty($attachedRoleIds)) {
+                $attachedRoles = Role::query()->whereIn('id', $attachedRoleIds)->get(['id', 'slug']);
+                $this->auditRoleAssignments($user, $attachedRoles, true);
+            }
+
+            if (!empty($detachedRoleIds)) {
+                $detachedRoles = Role::query()->whereIn('id', $detachedRoleIds)->get(['id', 'slug']);
+                $this->auditRoleAssignments($user, $detachedRoles, false);
+            }
         }
 
         return redirect()
@@ -288,5 +315,32 @@ class UserController extends BaseController
         return redirect()
             ->route('tyro-dashboard.users.index')
             ->with('success', 'You have stopped impersonating and returned to your account.');
+    }
+
+    /**
+     * Write one audit entry per role assignment/removal for a user.
+     */
+    protected function auditRoleAssignments($user, Collection $roles, bool $assigned): void
+    {
+        $event = $assigned ? 'role.assigned' : 'role.removed';
+
+        foreach ($roles as $role) {
+            $this->auditSafely($event, $user, null, [
+                'role_id' => $role->id,
+                'role_slug' => $role->slug,
+            ]);
+        }
+    }
+
+    /**
+     * Write an audit entry without breaking user management actions.
+     */
+    protected function auditSafely(string $event, $auditable = null, ?array $oldValues = null, ?array $newValues = null): void
+    {
+        try {
+            TyroAudit::log($event, $auditable, $oldValues, $newValues);
+        } catch (\Throwable $e) {
+            // Intentionally ignore audit failures for dashboard stability.
+        }
     }
 }
