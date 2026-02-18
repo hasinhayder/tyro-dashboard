@@ -30,6 +30,7 @@ A production-ready Laravel package that delivers a complete admin & user dashboa
   - [Dynamic Resource CRUD](#dynamic-resource-crud)
   - [Separate Dashboards](#separate-dashboards)
   - [Impersonation & User Debugging](#impersonation--user-debugging)
+  - [Audit Trail & Compliance](#audit-trail--compliance)
   - [Security & Authorization](#security--authorization)
 - [Installation](#installation)
 - [Invitation & Referral System](#invitationreferral-system)
@@ -54,6 +55,7 @@ Tyro Dashboard is a comprehensive Laravel package that eliminates the need to bu
 - **Dynamic Resource CRUD** — Describe your model, get a full admin interface
 - **Separate Dashboards** — Admin and user experiences out of the box
 - **User Impersonation** — Debug user issues by securely logging in as them
+- **Audit Trail & Compliance** — Track all admin activities with searchable logs
 - **Beautiful UI** — Modern, responsive, built with shadcn components
 - **Highly Configurable** — Publishable views, extensible controllers
 - **Security First** — Built-in authorization, protected resources, audit-ready
@@ -229,7 +231,7 @@ Instantly you get:
 
 For comprehensive field types, advanced configuration, real-world examples, and best practices:
 
-**[View Complete Documentation](http://hasinhayder.github.io/tyro-dashboard/documentation.html)**
+**[View Complete Documentation](http://hasinhayder.github.io/tyro-dashboard/doc.html)**
 
 ### Separate Dashboards
 
@@ -295,6 +297,46 @@ Securely log in as another user to diagnose issues, verify functionality, and pr
 4. You'll be logged in as that user while maintaining your admin session
 5. Browse the application as the user would see it
 6. Click **"Exit Impersonation"** to return to your admin account
+
+### Audit Trail & Compliance
+
+Comprehensive audit logging for complete transparency and compliance tracking:
+
+#### What's Tracked
+
+- **System Events** — Role and privilege changes, user lifecycle events (creation, suspension, deletion)
+- **Administrative Actions** — All admin dashboard activities with who, what, and when
+- **User & Security Events** — Password changes, 2FA updates, permission modifications
+- **Resource Changes** — All CRUD operations on tracked resources with before/after states
+
+#### Features
+
+- **Searchable Logs** — Find events by actor, event type, or target resource
+- **Advanced Filtering** — Filter by event type, user, date range, and more
+- **Full Details** — View complete event data including changes made and affected records
+- **Privacy Protection** — Sensitive data handling for compliance requirements
+- **Admin Control** — Selective flushing of audit records when needed
+
+#### Use Cases
+
+**Security & Compliance**:
+- Demonstrate regulatory compliance (SOC 2, GDPR, HIPAA audit requirements)
+- Investigate security incidents with complete activity trails
+- Monitor for unauthorized access attempts or suspicious activity
+
+**Operational Insights**:
+- Track who made what changes and when
+- Debug issues by reviewing related events
+- Verify administrative actions for accountability
+
+**User Support**:
+- Review user activity to assist with support requests
+- Verify account changes and permission updates
+- Timeline reconstruction for troubleshooting
+
+#### Access
+
+Navigate to **Audit Logs** in the admin dashboard to access the audit trail interface. Only users with admin privileges can view and manage audit logs.
 
 ### File Upload Configuration
 
@@ -469,7 +511,7 @@ Each user can now have a custom profile photo or use Gravatar by default.
 
 For detailed configuration, customization guides, API reference, best practices, and troubleshooting:
 
-**[View Complete Documentation](http://hasinhayder.github.io/tyro-dashboard/documentation.html)**
+**[View Complete Documentation](http://hasinhayder.github.io/tyro-dashboard/doc.html)**
 
 Inside you'll find:
 - Detailed configuration options
@@ -510,6 +552,6 @@ open http://localhost:8000/dashboard
 
 **Made with love by [Hasin Hayder](https://github.com/hasinhayder)**
 
-[GitHub](https://github.com/hasinhayder/tyro-dashboard) • [Documentation](http://hasinhayder.github.io/tyro-dashboard/documentation.html) • [Issues](https://github.com/hasinhayder/tyro-dashboard/issues) • [Discussions](https://github.com/hasinhayder/tyro-dashboard/discussions)
+[GitHub](https://github.com/hasinhayder/tyro-dashboard) • [Documentation](http://hasinhayder.github.io/tyro-dashboard/doc.html) • [Issues](https://github.com/hasinhayder/tyro-dashboard/issues) • [Discussions](https://github.com/hasinhayder/tyro-dashboard/discussions)
 
 </div>
