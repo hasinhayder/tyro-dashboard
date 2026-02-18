@@ -220,8 +220,10 @@ class ResourceController extends BaseController
 
         // Sort
         $sortField = request('sort_by', 'created_at');
-        $sortDirection = request('sort_dir', 'desc');
-        
+        $sortDirection = in_array(strtolower(request('sort_dir', 'desc')), ['asc', 'desc'])
+            ? strtolower(request('sort_dir', 'desc'))
+            : 'desc';
+
         // Check if sort field exists in model table or config to avoid SQL injection/errors
         // Simple check: if it's in fields config and sortable
         if (isset($config['fields'][$sortField]) && ($config['fields'][$sortField]['sortable'] ?? false)) {
@@ -402,11 +404,22 @@ class ResourceController extends BaseController
         $modelClass = $config['model'];
         
         $item = $modelClass::findOrFail($id);
+
+        // Sanitize richtext fields server-side before passing to view to prevent stored XSS.
+        $sanitizedRichtext = [];
+        foreach ($config['fields'] as $key => $field) {
+            if (($field['type'] ?? '') === 'richtext' && isset($item->$key)) {
+                $sanitizedRichtext[$key] = function_exists('clean')
+                    ? clean($item->$key)
+                    : strip_tags($item->$key, '<p><br><b><strong><i><em><u><s><ul><ol><li><a><h1><h2><h3><h4><h5><h6><blockquote><pre><code><hr><img><table><thead><tbody><tr><th><td><span><div>');
+            }
+        }
         
         return view('tyro-dashboard::resources.show', $this->getViewData([
             'resource' => $resource,
             'config' => $config,
             'item' => $item,
+            'sanitizedRichtext' => $sanitizedRichtext,
             'isReadonly' => $this->isReadonly($config)
         ]));
     }

@@ -65,15 +65,16 @@
                         @elseif($field['type'] === 'textarea')
                             <div style="white-space: pre-wrap;">{{ $item->$key }}</div>
                         @elseif($field['type'] === 'richtext')
-                            <div class="richtext-content">{!! $item->$key !!}</div>
+                            <div class="richtext-content">{!! $sanitizedRichtext[$key] ?? e($item->$key) !!}</div>
                         
                         @elseif($field['type'] === 'markdown')
                             <div class="markdown-content" id="markdown-{{ $key }}"></div>
                             <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+                            <script src="https://cdn.jsdelivr.net/npm/dompurify/dist/purify.min.js"></script>
                             <script>
                                 document.addEventListener('DOMContentLoaded', function() {
                                     var content = @json($item->$key ?? '');
-                                    document.getElementById('markdown-{{ $key }}').innerHTML = marked.parse(content);
+                                    document.getElementById('markdown-{{ $key }}').innerHTML = DOMPurify.sanitize(marked.parse(content));
                                 });
                             </script>
                         @else
