@@ -10,3 +10,5 @@ composer.lock
 *.swo
 .DS_Store
 Thumbs.db
+plans
+scrap
