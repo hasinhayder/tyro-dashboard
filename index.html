@@ -1712,111 +1712,121 @@
     </section>
 
     <!-- Audit Trail Section -->
-    <section id="audit-trail" class="section">
+    <section id="audit-trail" class="section" style="background: var(--color-bg); overflow: hidden;">
         <div class="section-container" style="max-width: 1200px; margin: 0 auto; padding: 0 20px;">
-            <div style="display: grid; grid-template-columns: 1fr 1.1fr; gap: 5rem; align-items: start;">
+            <div style="display: grid; grid-template-columns: 1fr 1.2fr; gap: 5rem; align-items: center;">
                 <div class="section-content">
-                    <span class="section-badge" style="background: #fee2e2; color: #dc2626;">
+                    <span class="section-badge" style="background: #fee2e2; color: #dc2626; border: 1px solid #fecaca;">
                         <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
                         </svg>
-                        Security & Compliance
+                        Forensic Grade Audit Trail
                     </span>
-                    <h2 class="section-title">Every Action. Every Change. Total Accountability.</h2>
-                    <p class="section-subtitle" style="font-size: 1.25rem; line-height: 1.6; margin-bottom: 2rem;">
-                        Ever wondered <span style="color: var(--color-primary); font-weight: 700;">who changed that role</span> at 3 AM? Or <span style="color: var(--color-primary); font-weight: 700;">what the old price was</span> before a mistake happened? 
+                    <h2 class="section-title">The "Black Box" Recorder for Your Laravel App</h2>
+                    <p class="section-subtitle" style="font-size: 1.2rem; color: var(--color-text); font-weight: 500; line-height: 1.6; margin-bottom: 1.5rem;">
+                        Stop guessing. Start knowing.
                     </p>
                     <p class="section-subtitle">
-                        Tyro Audit Trail is your application's "Black Box" recorder. It doesn't just log that something happened; it captures the <strong>exact state</strong> before and after every single change.
+                        Tyro Audit Trail doesn't just "log events" - it captures <strong>forensic proof</strong>. Whether it's a suspicious email change at midnight or a system-level role suspension, you have a permanent, unalterable record of <em>who, what, when, and from where.</em>
                     </p>
                     
-                    <div style="margin-top: 3rem; display: grid; grid-template-columns: 1fr; gap: 2rem;">
-                        <div style="display: flex; gap: 1.25rem;">
-                            <div style="background: #eff6ff; color: #2563eb; width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                    <!-- <div style="margin-top: 3rem; display: grid; grid-template-columns: 1fr; gap: 1.5rem;">
+                        <div style="display: flex; gap: 1rem; align-items: center; background: var(--color-bg-secondary); padding: 1rem; border-radius: 12px; border: 1px solid var(--color-border);">
+                            <div style="color: #22c55e;">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
                             </div>
-                            <div>
-                                <h4 style="font-size: 1.125rem; font-weight: 700; margin-bottom: 0.25rem;">Forensic Root-Cause Analysis</h4>
-                                <p style="color: var(--color-text-secondary); font-size: 0.95rem;">Trace production bugs back to specific data modifications. See exactly what changed, when, and by whom.</p>
-                            </div>
+                            <span style="font-weight: 600; font-size: 0.95rem;">Side-by-Side Data Diffs</span>
                         </div>
-
-                        <div style="display: flex; gap: 1.25rem;">
-                            <div style="background: #f0fdf4; color: #16a34a; width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path><path d="m9 12 2 2 4-4"></path></svg>
+                        <div style="display: flex; gap: 1rem; align-items: center; background: var(--color-bg-secondary); padding: 1rem; border-radius: 12px; border: 1px solid var(--color-border);">
+                            <div style="color: #22c55e;">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
                             </div>
-                            <div>
-                                <h4 style="font-size: 1.125rem; font-weight: 700; margin-bottom: 0.25rem;">GDPR & SOC2 Ready</h4>
-                                <p style="color: var(--color-text-secondary); font-size: 0.95rem;">Meet strict compliance requirements for data access and modification logging out of the box.</p>
-                            </div>
+                            <span style="font-weight: 600; font-size: 0.95rem;">IP & Browser Fingerprinting</span>
                         </div>
-
-                        <div style="display: flex; gap: 1.25rem;">
-                            <div style="background: #fff7ed; color: #ea580c; width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+                        <div style="display: flex; gap: 1rem; align-items: center; background: var(--color-bg-secondary); padding: 1rem; border-radius: 12px; border: 1px solid var(--color-border);">
+                            <div style="color: #22c55e;">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
                             </div>
-                            <div>
-                                <h4 style="font-size: 1.125rem; font-weight: 700; margin-bottom: 0.25rem;">Team Accountability</h4>
-                                <p style="color: var(--color-text-secondary); font-size: 0.95rem;">Foster responsibility in multi-admin environments where every action is transparently attributed.</p>
-                            </div>
+                            <span style="font-weight: 600; font-size: 0.95rem;">GDPR / SOC2 Audit Compliance</span>
                         </div>
+                    </div> -->
+                    
+                    <div class="section-actions" style="margin-top: 2.5rem;">
+                        <a href="doc.html#audit-trail" class="btn btn-primary">
+                            Explore Audit Engine
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                        </a>
                     </div>
                 </div>
 
-                <div style="background: #1e293b; border-radius: 24px; overflow: hidden; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); border: 1px solid #334155;">
-                    <div style="background: #0f172a; padding: 1.25rem 2rem; border-bottom: 1px solid #334155; display: flex; align-items: center; justify-content: space-between;">
-                        <div style="display: flex; align-items: center; gap: 1rem;">
+                <div style="position: relative;">
+                    <!-- Visual Log List -->
+                    <div style="background: #0f172a; border-radius: 20px; padding: 1.5rem; border: 1px solid #334155; box-shadow: 0 30px 60px -12px rgba(0,0,0,0.5); font-family: 'Fira Code', monospace;">
+                        <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 1.5rem; padding-bottom: 1rem; border-bottom: 1px solid #1e293b;">
                             <div style="width: 10px; height: 10px; background: #ef4444; border-radius: 50%;"></div>
-                            <span style="color: #94a3b8; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em;">Audit Detail View</span>
-                        </div>
-                        <span style="color: #64748b; font-size: 0.75rem; font-family: monospace;">ID: #AUD-8829-X</span>
-                    </div>
-                    
-                    <div style="padding: 2rem;">
-                        <div style="display: flex; gap: 1rem; margin-bottom: 2rem; align-items: center;">
-                            <div style="width: 40px; height: 40px; background: #3b82f6; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: 700;">JD</div>
-                            <div>
-                                <div style="color: #f8fafc; font-size: 0.9rem; font-weight: 600;">John Doe (Admin)</div>
-                                <div style="color: #94a3b8; font-size: 0.75rem;">IP: 192.168.1.42 • Oct 12, 14:22:05</div>
-                            </div>
-                            <div style="margin-left: auto; background: rgba(34, 197, 94, 0.1); color: #4ade80; padding: 4px 10px; border-radius: 6px; font-size: 0.7rem; font-weight: 700; border: 1px solid rgba(34, 197, 94, 0.2);">UPDATE</div>
-                        </div>
-
-                        <div style="background: #0f172a; border-radius: 12px; border: 1px solid #334155; overflow: hidden;">
-                            <table style="width: 100%; border-collapse: collapse; font-family: 'Fira Code', monospace; font-size: 0.8rem;">
-                                <thead>
-                                    <tr style="background: #1e293b;">
-                                        <th style="padding: 0.75rem 1rem; text-align: left; color: #94a3b8; border-bottom: 1px solid #334155;">Field</th>
-                                        <th style="padding: 0.75rem 1rem; text-align: left; color: #94a3b8; border-bottom: 1px solid #334155;">Old Value</th>
-                                        <th style="padding: 0.75rem 1rem; text-align: left; color: #94a3b8; border-bottom: 1px solid #334155;">New Value</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td style="padding: 0.75rem 1rem; color: #e2e8f0; border-bottom: 1px solid #334155;">role_id</td>
-                                        <td style="padding: 0.75rem 1rem; color: #94a3b8; border-bottom: 1px solid #334155;">2 <span style="color: #64748b;">(Editor)</span></td>
-                                        <td style="padding: 0.75rem 1rem; color: #fbbf24; border-bottom: 1px solid #334155;">1 <span style="color: #fbbf24; font-weight: 600;">(Admin)</span></td>
-                                    </tr>
-                                    <tr>
-                                        <td style="padding: 0.75rem 1rem; color: #e2e8f0; border-bottom: 1px solid #334155;">status</td>
-                                        <td style="padding: 0.75rem 1rem; color: #94a3b8; border-bottom: 1px solid #334155;">"pending"</td>
-                                        <td style="padding: 0.75rem 1rem; color: #4ade80; border-bottom: 1px solid #334155;">"active"</td>
-                                    </tr>
-                                    <tr>
-                                        <td style="padding: 0.75rem 1rem; color: #e2e8f0;">is_verified</td>
-                                        <td style="padding: 0.75rem 1rem; color: #94a3b8;">false</td>
-                                        <td style="padding: 0.75rem 1rem; color: #4ade80;">true</td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                            <div style="width: 10px; height: 10px; background: #fbbf24; border-radius: 50%;"></div>
+                            <div style="width: 10px; height: 10px; background: #22c55e; border-radius: 50%;"></div>
+                            <span style="color: #64748b; font-size: 0.7rem; margin-left: 1rem;">tyro:audit-list --live</span>
                         </div>
                         
-                        <div style="margin-top: 1.5rem; display: flex; align-items: center; justify-content: space-between;">
-                            <div style="color: #64748b; font-size: 0.7rem;">Browser: Chrome (Mac OS)</div>
-                            <div style="color: #3b82f6; font-size: 0.8rem; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 0.25rem;">
-                                View Full Event
-                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                        <div style="font-size: 0.75rem; color: #94a3b8; display: grid; gap: 1rem;">
+                            <div style="display: flex; gap: 1rem; opacity: 0.9;">
+                                <span style="color: #64748b;">18:14</span>
+                                <span style="color: #3b82f6;">[User:11]</span>
+                                <span style="color: #fbbf24;">user.email_changed</span>
+                                <span style="color: #e2e8f0;">johny@... -> jonny@...</span>
                             </div>
+                            <div style="display: flex; gap: 1rem; opacity: 0.7;">
+                                <span style="color: #64748b;">17:27</span>
+                                <span style="color: #3b82f6;">[User:1]</span>
+                                <span style="color: #fbbf24;">role.updated</span>
+                                <span style="color: #e2e8f0;">Updated role "Content Editor"</span>
+                            </div>
+                            <div style="display: flex; gap: 1rem; opacity: 0.5;">
+                                <span style="color: #64748b;">16:49</span>
+                                <span style="color: #ec4899;">[System]</span>
+                                <span style="color: #ef4444;">user.suspended</span>
+                                <span style="color: #e2e8f0;">Suspended user #3 (Abuse)</span>
+                            </div>
+                            <div style="display: flex; gap: 1rem; opacity: 0.3;">
+                                <span style="color: #64748b;">16:41</span>
+                                <span style="color: #ec4899;">[System]</span>
+                                <span style="color: #fbbf24;">privilege.attached</span>
+                                <span style="color: #e2e8f0;">chef.serve attached to #15</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Highlighted Detail Panel -->
+                    <div style="position: absolute; top: 40%; left: 10%; right: -5%; background: rgba(30, 41, 59, 0.95); backdrop-filter: blur(12px); border-radius: 16px; border: 1px solid #3b82f6; box-shadow: 0 20px 50px rgba(0,0,0,0.4); padding: 1.5rem; z-index: 2; transform: rotate(-1deg);">
+                        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.25rem;">
+                            <div style="display: flex; align-items: center; gap: 0.75rem;">
+                                <div style="width: 32px; height: 32px; background: #3b82f6; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: 700; font-size: 0.8rem;">U11</div>
+                                <span style="color: white; font-weight: 600; font-size: 0.85rem;">Event #13: Email Changed</span>
+                            </div>
+                            <span style="background: rgba(59, 130, 246, 0.2); color: #60a5fa; padding: 2px 8px; border-radius: 4px; font-size: 0.65rem; font-weight: 700; font-family: monospace;">127.0.0.1</span>
+                        </div>
+                        
+                        <div style="background: #0f172a; border-radius: 8px; padding: 1rem; font-family: 'Fira Code', monospace; font-size: 0.75rem; display: grid; gap: 0.75rem;">
+                            <div style="display: grid; grid-template-columns: 80px 1fr; border-bottom: 1px solid #1e293b; padding-bottom: 0.5rem;">
+                                <span style="color: #64748b;">FIELD</span>
+                                <span style="color: #94a3b8;">email</span>
+                            </div>
+                            <div style="display: grid; grid-template-columns: 80px 1fr;">
+                                <span style="color: #ef4444;">BEFORE</span>
+                                <span style="color: #f8fafc;">"johny@example.com"</span>
+                            </div>
+                            <div style="display: grid; grid-template-columns: 80px 1fr;">
+                                <span style="color: #22c55e;">AFTER</span>
+                                <span style="color: #f8fafc;">"jonny@example.com"</span>
+                            </div>
+                        </div>
+                        
+                        <div style="margin-top: 1rem; text-align: right;">
+                            <span style="color: #3b82f6; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; cursor: pointer; display: inline-flex; align-items: center; gap: 0.25rem;">
+                                Verified Trace
+                                <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                            </span>
                         </div>
                     </div>
                 </div>
