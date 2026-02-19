@@ -1590,19 +1590,27 @@
                 </div>
             </div>
             <div class="section-content" style="direction: ltr;">
-                <div style="background: var(--color-surface); border: 1px solid var(--color-border); border-radius: 12px; padding: 1.5rem;">
-                    <div style="background: #f59e0b20; border: 1px solid #f59e0b40; border-radius: 8px; padding: 1rem; margin-bottom: 1.5rem; display: flex; align-items: flex-start; gap: 0.75rem;">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0; margin-top: 2px;"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
-                        <p style="margin: 0; font-size: 0.9rem; color: var(--color-text);">You are currently impersonating <strong>John Doe</strong>. <a href="#" style="color: var(--color-primary);">Leave impersonation →</a></p>
+                <h3 style="font-size: 1.1rem; font-weight: 600; color: var(--color-text); margin-bottom: 1.25rem;">Why User Impersonation Matters</h3>
+                <p style="color: var(--color-text-secondary); font-size: 0.95rem; line-height: 1.75; margin-bottom: 1.5rem;">
+                    When a user reports a bug or a confusing experience, the fastest way to resolve it is to see exactly what they see — without asking them to share their credentials or walk you through screenshots. Impersonation closes that gap instantly.
+                </p>
+                <div style="display: flex; flex-direction: column; gap: 1rem;">
+                    <div style="background: var(--color-surface); border: 1px solid var(--color-border); border-radius: 10px; padding: 1rem 1.25rem;">
+                        <strong style="color: var(--color-text); font-size: 0.95rem;">Support & Debugging</strong>
+                        <p style="margin: 0.35rem 0 0; color: var(--color-text-secondary); font-size: 0.9rem; line-height: 1.65;">Reproduce a user-reported issue in their exact account context — no guesswork, no back-and-forth emails.</p>
                     </div>
-                    <h4 style="margin-bottom: 0.75rem; color: var(--color-text); font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.05em; opacity: 0.6;">How to use</h4>
-                    <ol style="padding-left: 1.25rem; color: var(--color-text-secondary); font-size: 0.95rem; line-height: 1.8;">
-                        <li>Go to <strong>Users List</strong> in the admin panel</li>
-                        <li>Click the <strong>Impersonate</strong> action for any user</li>
-                        <li>Confirm the modal dialog</li>
-                        <li>You are now browsing as that user</li>
-                        <li>Click the banner link to return to your admin session</li>
-                    </ol>
+                    <div style="background: var(--color-surface); border: 1px solid var(--color-border); border-radius: 10px; padding: 1rem 1.25rem;">
+                        <strong style="color: var(--color-text); font-size: 0.95rem;">Onboarding Assistance</strong>
+                        <p style="margin: 0.35rem 0 0; color: var(--color-text-secondary); font-size: 0.9rem; line-height: 1.65;">Help a new user set up their profile or configure their account by jumping into their session and completing the steps on their behalf.</p>
+                    </div>
+                    <div style="background: var(--color-surface); border: 1px solid var(--color-border); border-radius: 10px; padding: 1rem 1.25rem;">
+                        <strong style="color: var(--color-text); font-size: 0.95rem;">QA & Role Testing</strong>
+                        <p style="margin: 0.35rem 0 0; color: var(--color-text-secondary); font-size: 0.9rem; line-height: 1.65;">Verify how a specific user's permission set or role affects the UI and available actions without needing separate test accounts.</p>
+                    </div>
+                    <div style="background: var(--color-surface); border: 1px solid var(--color-border); border-radius: 10px; padding: 1rem 1.25rem;">
+                        <strong style="color: var(--color-text); font-size: 0.95rem;">Compliance-Safe</strong>
+                        <p style="margin: 0.35rem 0 0; color: var(--color-text-secondary); font-size: 0.9rem; line-height: 1.65;">No passwords are ever exchanged. The session is tracked transparently, and the admin returns to their own session with one click.</p>
+                    </div>
                 </div>
             </div>
         </div>
@@ -1661,19 +1669,27 @@
                 </div>
             </div>
             <div class="section-content">
-                <div style="background: var(--color-surface); border: 1px solid var(--color-border); border-radius: 12px; padding: 1.5rem;">
-                    <h4 style="margin-bottom: 1rem; color: var(--color-text); font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.05em; opacity: 0.6;">Enable in .env</h4>
-                    <div class="step-code" style="background: var(--color-bg-secondary); border-radius: 8px; padding: 1rem; font-family: monospace; font-size: 0.875rem; margin-bottom: 1.5rem;">
-                        <code style="color: var(--color-text-secondary);">TYRO_DASHBOARD_ENABLE_INVITATION=true</code>
+                <h3 style="font-size: 1.1rem; font-weight: 600; color: var(--color-text); margin-bottom: 1.25rem;">Why Every SaaS Needs an Invitation System</h3>
+                <p style="color: var(--color-text-secondary); font-size: 0.95rem; line-height: 1.75; margin-bottom: 1.5rem;">
+                    Word-of-mouth is the most trusted growth channel. A built-in invitation and referral system lets you harness it without writing a single line of tracking logic — it all works out of the box.
+                </p>
+                <div style="display: flex; flex-direction: column; gap: 1rem;">
+                    <div style="background: var(--color-bg-secondary); border: 1px solid var(--color-border); border-radius: 10px; padding: 1rem 1.25rem;">
+                        <strong style="color: var(--color-text); font-size: 0.95rem;">Controlled Growth</strong>
+                        <p style="margin: 0.35rem 0 0; color: var(--color-text-secondary); font-size: 0.9rem; line-height: 1.65;">Admins can create time-limited or quota-limited invitation links, keeping signups exclusive and preventing abuse during beta or early-access phases.</p>
                     </div>
-                    <h4 style="margin-bottom: 1rem; color: var(--color-text); font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.05em; opacity: 0.6;">What's included</h4>
-                    <ul style="padding-left: 1.25rem; color: var(--color-text-secondary); font-size: 0.95rem; line-height: 2;">
-                        <li>Admin invitation link management UI</li>
-                        <li>User referral history dashboard page</li>
-                        <li><code>invitation_links</code> migration</li>
-                        <li><code>invitation_referrals</code> migration</li>
-                        <li>Tyro Login integration support</li>
-                    </ul>
+                    <div style="background: var(--color-bg-secondary); border: 1px solid var(--color-border); border-radius: 10px; padding: 1rem 1.25rem;">
+                        <strong style="color: var(--color-text); font-size: 0.95rem;">Community Building</strong>
+                        <p style="margin: 0.35rem 0 0; color: var(--color-text-secondary); font-size: 0.9rem; line-height: 1.65;">Let existing users invite their network, growing your platform organically through trusted connections instead of cold acquisition.</p>
+                    </div>
+                    <div style="background: var(--color-bg-secondary); border: 1px solid var(--color-border); border-radius: 10px; padding: 1rem 1.25rem;">
+                        <strong style="color: var(--color-text); font-size: 0.95rem;">Full Referral Reporting</strong>
+                        <p style="margin: 0.35rem 0 0; color: var(--color-text-secondary); font-size: 0.9rem; line-height: 1.65;">Users get a dedicated referral dashboard showing exactly who accepted their invitation, when they joined, and the status of each referral — complete transparency, zero extra code.</p>
+                    </div>
+                    <div style="background: var(--color-bg-secondary); border: 1px solid var(--color-border); border-radius: 10px; padding: 1rem 1.25rem;">
+                        <strong style="color: var(--color-text); font-size: 0.95rem;">Incentive Programs</strong>
+                        <p style="margin: 0.35rem 0 0; color: var(--color-text-secondary); font-size: 0.9rem; line-height: 1.65;">With referral data already tracked and surfaced, building reward systems — credits, discounts, or badges — on top becomes straightforward.</p>
+                    </div>
                 </div>
             </div>
         </div>
@@ -1732,38 +1748,27 @@
                 </div>
             </div>
             <div class="section-content" style="direction: ltr;">
-                <div style="background: var(--color-surface); border: 1px solid var(--color-border); border-radius: 12px; padding: 1.5rem;">
-                    <h4 style="margin-bottom: 1rem; color: var(--color-text); font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.05em; opacity: 0.6;">Audit Log Entry</h4>
-                    <table style="width: 100%; border-collapse: collapse; font-size: 0.875rem;">
-                        <thead>
-                            <tr style="border-bottom: 1px solid var(--color-border);">
-                                <th style="text-align: left; padding: 0.5rem; color: var(--color-text-secondary); font-weight: 500;">Field</th>
-                                <th style="text-align: left; padding: 0.5rem; color: var(--color-text-secondary); font-weight: 500;">Value</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr style="border-bottom: 1px solid var(--color-border);">
-                                <td style="padding: 0.5rem; color: var(--color-text-secondary);">Event</td>
-                                <td style="padding: 0.5rem;"><code style="background: var(--color-bg-secondary); padding: 2px 6px; border-radius: 4px;">updated</code></td>
-                            </tr>
-                            <tr style="border-bottom: 1px solid var(--color-border);">
-                                <td style="padding: 0.5rem; color: var(--color-text-secondary);">Model</td>
-                                <td style="padding: 0.5rem;"><code style="background: var(--color-bg-secondary); padding: 2px 6px; border-radius: 4px;">User</code></td>
-                            </tr>
-                            <tr style="border-bottom: 1px solid var(--color-border);">
-                                <td style="padding: 0.5rem; color: var(--color-text-secondary);">User</td>
-                                <td style="padding: 0.5rem; color: var(--color-text);">admin@example.com</td>
-                            </tr>
-                            <tr style="border-bottom: 1px solid var(--color-border);">
-                                <td style="padding: 0.5rem; color: var(--color-text-secondary);">Old Value</td>
-                                <td style="padding: 0.5rem; color: #ef4444; font-family: monospace;">role: user</td>
-                            </tr>
-                            <tr>
-                                <td style="padding: 0.5rem; color: var(--color-text-secondary);">New Value</td>
-                                <td style="padding: 0.5rem; color: #22c55e; font-family: monospace;">role: admin</td>
-                            </tr>
-                        </tbody>
-                    </table>
+                <h3 style="font-size: 1.1rem; font-weight: 600; color: var(--color-text); margin-bottom: 1.25rem;">Why Audit Trail is a Superpower</h3>
+                <p style="color: var(--color-text-secondary); font-size: 0.95rem; line-height: 1.75; margin-bottom: 1.5rem;">
+                    In any serious application, knowing <em>what changed, when, and by whom</em> is not optional — it's essential. Tyro's Audit Trail gives you a forensic record of every action without any additional infrastructure.
+                </p>
+                <div style="display: flex; flex-direction: column; gap: 1rem;">
+                    <div style="background: var(--color-surface); border: 1px solid var(--color-border); border-radius: 10px; padding: 1rem 1.25rem;">
+                        <strong style="color: var(--color-text); font-size: 0.95rem;">Security & Intrusion Detection</strong>
+                        <p style="margin: 0.35rem 0 0; color: var(--color-text-secondary); font-size: 0.9rem; line-height: 1.65;">Spot suspicious activity immediately — see which admin changed a user's role, who deleted a record, or when credentials were modified.</p>
+                    </div>
+                    <div style="background: var(--color-surface); border: 1px solid var(--color-border); border-radius: 10px; padding: 1rem 1.25rem;">
+                        <strong style="color: var(--color-text); font-size: 0.95rem;">Compliance & Regulatory Requirements</strong>
+                        <p style="margin: 0.35rem 0 0; color: var(--color-text-secondary); font-size: 0.9rem; line-height: 1.65;">GDPR, HIPAA, SOC 2, and similar frameworks require evidence that data access and changes are logged. Audit Trail provides that evidence out of the box.</p>
+                    </div>
+                    <div style="background: var(--color-surface); border: 1px solid var(--color-border); border-radius: 10px; padding: 1rem 1.25rem;">
+                        <strong style="color: var(--color-text); font-size: 0.95rem;">Debugging & Root Cause Analysis</strong>
+                        <p style="margin: 0.35rem 0 0; color: var(--color-text-secondary); font-size: 0.9rem; line-height: 1.65;">When something goes wrong in production, the audit log is your time machine — trace exactly which change caused the issue and who made it.</p>
+                    </div>
+                    <div style="background: var(--color-surface); border: 1px solid var(--color-border); border-radius: 10px; padding: 1rem 1.25rem;">
+                        <strong style="color: var(--color-text); font-size: 0.95rem;">Accountability in Multi-Admin Teams</strong>
+                        <p style="margin: 0.35rem 0 0; color: var(--color-text-secondary); font-size: 0.9rem; line-height: 1.65;">When multiple admins manage the same platform, every action is attributed to a specific user — fostering transparency and responsible data stewardship.</p>
+                    </div>
                 </div>
             </div>
         </div>
