@@ -26,7 +26,7 @@
         <div class="navbar-container">
             <a href="index.html" class="navbar-brand">
                 <span class="navbar-logo">Tyro Dashboard</span>
-                <span class="navbar-badge">v1.6.6</span>
+                <span class="navbar-badge">v1.12.0</span>
             </a>
 
             <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Toggle menu">
@@ -111,6 +111,11 @@
                         <li><a href="#privilege-management" class="doc-nav-link">Privilege Management</a></li>
                         <li><a href="#settings-management" class="doc-nav-link">Settings Management</a></li>
                         <li><a href="#profile-management" class="doc-nav-link">Profile Management</a></li>
+                        <li><a href="#profile-photos" class="doc-nav-link">Profile Photos &amp; Gravatar</a></li>
+                        <li><a href="#impersonation" class="doc-nav-link">User Impersonation</a></li>
+                        <li><a href="#invitation-system" class="doc-nav-link">Invitation System</a></li>
+                        <li><a href="#audit-trail" class="doc-nav-link">Audit Trail</a></li>
+                        <li><a href="#modal-dialogs" class="doc-nav-link">Modal Dialogs</a></li>
                         <li><a href="#page-creation" class="doc-nav-link">Page Creation</a></li>
                         <li><a href="#page-removal" class="doc-nav-link">Page Removal</a></li>
                         <li><a href="#crud-workflow" class="doc-nav-link">CRUD Workflow</a></li>
@@ -137,6 +142,8 @@
                     <ul class="doc-nav-list">
                         <li><a href="#publishing" class="doc-nav-link">Publishing Assets</a></li>
                         <li><a href="#theme-customization" class="doc-nav-link">Theme Customization</a></li>
+                        <li><a href="#sidebar-customization" class="doc-nav-link">Sidebar Customization</a></li>
+                        <li><a href="#custom-menu-items" class="doc-nav-link">Custom Menu Items</a></li>
                         <li><a href="#env-variables" class="doc-nav-link">Environment Variables</a></li>
                         <li><a href="#artisan-commands" class="doc-nav-link">Artisan Commands</a></li>
                     </ul>
@@ -229,6 +236,30 @@
                     <div class="doc-feature-item">
                         <h3 class="doc-feature-title">Role-Based Access</h3>
                         <p class="doc-feature-desc">Admin-only features are protected by configurable role-based access control.</p>
+                    </div>
+                    <div class="doc-feature-item">
+                        <h3 class="doc-feature-title">Profile Photos & Gravatar</h3>
+                        <p class="doc-feature-desc">Upload profile photos or use Gravatar. Avatars appear throughout the dashboard with the <code>HasProfilePhoto</code> trait.</p>
+                    </div>
+                    <div class="doc-feature-item">
+                        <h3 class="doc-feature-title">User Impersonation</h3>
+                        <p class="doc-feature-desc">Admins can impersonate any user to debug issues. Secured by middleware with a persistent banner and one-click exit.</p>
+                    </div>
+                    <div class="doc-feature-item">
+                        <h3 class="doc-feature-title">Invitation & Referral System</h3>
+                        <p class="doc-feature-desc">Built-in invitation links and referral tracking. Admin and user management UIs included with zero-config database setup.</p>
+                    </div>
+                    <div class="doc-feature-item">
+                        <h3 class="doc-feature-title">Detailed Audit Trail</h3>
+                        <p class="doc-feature-desc">Full audit trail admin pages with filters, search, and pagination. Drill down into change details for every recorded action.</p>
+                    </div>
+                    <div class="doc-feature-item">
+                        <h3 class="doc-feature-title">Modal Dialogs</h3>
+                        <p class="doc-feature-desc">Native modal dialogs via <code>showConfirm()</code>, <code>showAlert()</code>, and <code>showDanger()</code> JS helpers — no extra dependencies.</p>
+                    </div>
+                    <div class="doc-feature-item">
+                        <h3 class="doc-feature-title">Sidebar Customization</h3>
+                        <p class="doc-feature-desc">Customize sidebar colors with env vars and define custom menu items with icons via <code>config/menu.php</code>.</p>
                     </div>
                 </div>
             </section>
@@ -1132,14 +1163,270 @@ TYRO_DASHBOARD_LOGO="/images/logo.svg"</code></pre>
                 </table>
             </section>
 
+            <!-- Profile Photos & Gravatar -->
+            <section id="profile-photos" class="doc-section">
+                <h2 class="doc-section-title">Profile Photos & Gravatar</h2>
+                <p class="doc-text">Tyro Dashboard supports user profile photos out of the box. Users can upload a custom photo or fall back to their Gravatar avatar. Avatars are shown throughout the dashboard, including the user management list.</p>
+
+                <h3 class="doc-section-subtitle">Setup</h3>
+                <p class="doc-text">Add the <code class="doc-inline-code">HasProfilePhoto</code> trait to your <code class="doc-inline-code">User</code> model:</p>
+                <div class="doc-code-block">
+                    <pre><code class="language-php">use Hasinhayder\TyroDashboard\Traits\HasProfilePhoto;
+
+class User extends Authenticatable
+{
+    use HasProfilePhoto;
+    // ...
+}</code></pre>
+                </div>
+
+                <h3 class="doc-section-subtitle">Configuration</h3>
+                <table class="doc-table">
+                    <thead>
+                        <tr>
+                            <th>Variable</th>
+                            <th>Description</th>
+                            <th>Default</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code class="doc-inline-code">TYRO_DASHBOARD_ENABLE_GRAVATAR</code></td>
+                            <td>Enable Gravatar fallback when no photo is uploaded</td>
+                            <td><code class="doc-inline-code">true</code></td>
+                        </tr>
+                        <tr>
+                            <td><code class="doc-inline-code">TYRO_DASHBOARD_PHOTO_MAX_SIZE</code></td>
+                            <td>Maximum upload size in kilobytes</td>
+                            <td><code class="doc-inline-code">2048</code></td>
+                        </tr>
+                        <tr>
+                            <td><code class="doc-inline-code">TYRO_DASHBOARD_PHOTO_CROP_POSITION</code></td>
+                            <td>Crop anchor position for thumbnails</td>
+                            <td><code class="doc-inline-code">center</code></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="doc-alert doc-alert-info" style="margin-top: 1.5rem;">
+                    <strong>Migration:</strong> Run <code class="doc-inline-code">php artisan migrate</code> after adding the trait. The required <code class="doc-inline-code">profile_photo_path</code> column is included in the package migrations.
+                </div>
+            </section>
+
+            <!-- User Impersonation -->
+            <section id="impersonation" class="doc-section">
+                <h2 class="doc-section-title">User Impersonation</h2>
+                <p class="doc-text">Administrators can impersonate any regular user account to debug problems or provide hands-on support. The original admin session is preserved and easily restored.</p>
+
+                <h3 class="doc-section-subtitle">How It Works</h3>
+                <ol class="doc-list">
+                    <li>Navigate to the <strong>Users</strong> admin page.</li>
+                    <li>Click the <strong>Impersonate</strong> action button for the target user. A modal dialog will ask for confirmation.</li>
+                    <li>After confirming, you are now browsing as that user.</li>
+                    <li>A persistent <strong>impersonation banner</strong> is rendered at the top of the page via the <code class="doc-inline-code">@tyroImpersonationBanner</code> Blade directive.</li>
+                    <li>Click <em>Leave Impersonation</em> in the banner to return to your admin session.</li>
+                </ol>
+
+                <h3 class="doc-section-subtitle">Blade Directive</h3>
+                <p class="doc-text">Add the impersonation banner to your layout file (it renders nothing when not in an impersonation session):</p>
+                <div class="doc-code-block">
+                    <pre><code class="language-php">@tyroImpersonationBanner</code></pre>
+                </div>
+
+                <h3 class="doc-section-subtitle">Security</h3>
+                <ul class="doc-list">
+                    <li>Only users with a role listed in <code class="doc-inline-code">admin_roles</code> config can initiate impersonation.</li>
+                    <li>A dedicated middleware (<code class="doc-inline-code">TyroImpersonation</code>) protects the leave-impersonation route.</li>
+                    <li>Impersonation state is stored securely in the server-side session.</li>
+                </ul>
+
+                <h3 class="doc-section-subtitle">Routes</h3>
+                <table class="doc-table">
+                    <thead>
+                        <tr>
+                            <th>Route</th>
+                            <th>Description</th>
+                            <th>Access</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code class="doc-inline-code">POST /dashboard/users/{id}/impersonate</code></td>
+                            <td>Start impersonating a user</td>
+                            <td><span class="route-badge route-badge-admin">Admin Only</span></td>
+                        </tr>
+                        <tr>
+                            <td><code class="doc-inline-code">GET /dashboard/leave-impersonation</code></td>
+                            <td>End impersonation session</td>
+                            <td><span class="route-badge route-badge-all">All Authenticated</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <!-- Invitation & Referral System -->
+            <section id="invitation-system" class="doc-section">
+                <h2 class="doc-section-title">Invitation & Referral System</h2>
+                <p class="doc-text">Tyro Dashboard includes a complete invitation and referral system. Admins manage invitation links; users see who they have referred. Everything is tracked automatically.</p>
+
+                <h3 class="doc-section-subtitle">Enable the Feature</h3>
+                <div class="doc-code-block">
+                    <div class="doc-code-header">
+                        <span class="doc-code-title">.env</span>
+                        <button class="doc-code-copy" type="button">Copy</button>
+                    </div>
+                    <pre><code class="language-bash">TYRO_DASHBOARD_ENABLE_INVITATION=true</code></pre>
+                </div>
+
+                <h3 class="doc-section-subtitle">Database Migrations</h3>
+                <p class="doc-text">Two migrations are included and run automatically during <code class="doc-inline-code">php artisan tyro-dashboard:install</code>:</p>
+                <ul class="doc-list">
+                    <li><code class="doc-inline-code">invitation_links</code> — Stores invitation links created by admins</li>
+                    <li><code class="doc-inline-code">invitation_referrals</code> — Records which users signed up via an invitation</li>
+                </ul>
+
+                <h3 class="doc-section-subtitle">Admin Capabilities</h3>
+                <ul class="doc-list">
+                    <li>Create and revoke invitation links with optional expiry dates</li>
+                    <li>View all invitation links and their usage statistics</li>
+                    <li>See the complete referral history</li>
+                </ul>
+
+                <h3 class="doc-section-subtitle">User Capabilities</h3>
+                <ul class="doc-list">
+                    <li>View their own referral history on their dashboard</li>
+                    <li>See how many users they have referred</li>
+                </ul>
+
+                <h3 class="doc-section-subtitle">Routes</h3>
+                <table class="doc-table">
+                    <thead>
+                        <tr>
+                            <th>Route</th>
+                            <th>Description</th>
+                            <th>Access</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code class="doc-inline-code">/dashboard/invitations</code></td>
+                            <td>Admin invitation link management</td>
+                            <td><span class="route-badge route-badge-admin">Admin Only</span></td>
+                        </tr>
+                        <tr>
+                            <td><code class="doc-inline-code">/dashboard/referrals</code></td>
+                            <td>User referral history</td>
+                            <td><span class="route-badge route-badge-all">All Authenticated</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <!-- Audit Trail -->
+            <section id="audit-trail" class="doc-section">
+                <h2 class="doc-section-title">Audit Trail</h2>
+                <p class="doc-text">Tyro Dashboard provides detailed admin pages for browsing the audit trail recorded by the Tyro RBAC package's <code class="doc-inline-code">HasAuditTrail</code> trait. Every model change is logged and can be reviewed with powerful filters.</p>
+
+                <h3 class="doc-section-subtitle">Features</h3>
+                <ul class="doc-list">
+                    <li><strong>Filterable:</strong> Filter by event type (created, updated, deleted), model type, user, or date range</li>
+                    <li><strong>Searchable:</strong> Full-text search across audit log entries</li>
+                    <li><strong>Paginated:</strong> Large audit logs are paginated for fast loading</li>
+                    <li><strong>Detail View:</strong> Click any entry to see the exact old and new values for every changed field</li>
+                </ul>
+
+                <h3 class="doc-section-subtitle">Prerequisite</h3>
+                <p class="doc-text">Your models must use the <code class="doc-inline-code">HasAuditTrail</code> trait from the Tyro RBAC package to generate audit records:</p>
+                <div class="doc-code-block">
+                    <pre><code class="language-php">use Hasinhayder\Tyro\Traits\HasAuditTrail;
+
+class Post extends Model
+{
+    use HasAuditTrail;
+    // ...
+}</code></pre>
+                </div>
+
+                <h3 class="doc-section-subtitle">Routes</h3>
+                <table class="doc-table">
+                    <thead>
+                        <tr>
+                            <th>Route</th>
+                            <th>Description</th>
+                            <th>Access</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code class="doc-inline-code">/dashboard/audit-trail</code></td>
+                            <td>Paginated audit log with filters and search</td>
+                            <td><span class="route-badge route-badge-admin">Admin Only</span></td>
+                        </tr>
+                        <tr>
+                            <td><code class="doc-inline-code">/dashboard/audit-trail/{id}</code></td>
+                            <td>Detail view for a single audit entry</td>
+                            <td><span class="route-badge route-badge-admin">Admin Only</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <!-- Modal Dialogs -->
+            <section id="modal-dialogs" class="doc-section">
+                <h2 class="doc-section-title">Modal Dialogs</h2>
+                <p class="doc-text">Tyro Dashboard ships with a built-in modal dialog system that replaces browser <code class="doc-inline-code">confirm()</code> popups with beautiful, accessible modals. Three helper functions are available globally in all dashboard views.</p>
+
+                <h3 class="doc-section-subtitle">Available Functions</h3>
+                <table class="doc-table">
+                    <thead>
+                        <tr>
+                            <th>Function</th>
+                            <th>Use Case</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code class="doc-inline-code">showConfirm(title, message, callback)</code></td>
+                            <td>Standard confirmation dialog with OK / Cancel</td>
+                        </tr>
+                        <tr>
+                            <td><code class="doc-inline-code">showAlert(title, message)</code></td>
+                            <td>Informational alert with a single OK button</td>
+                        </tr>
+                        <tr>
+                            <td><code class="doc-inline-code">showDanger(title, message, callback)</code></td>
+                            <td>Destructive action confirmation (red styling)</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h3 class="doc-section-subtitle">Usage Example</h3>
+                <div class="doc-code-block">
+                    <pre><code class="language-javascript">// Basic confirmation before form submit
+showConfirm('Delete Record', 'Are you sure you want to delete this item?', function() {
+    document.getElementById('delete-form').submit();
+});
+
+// Danger dialog for destructive actions
+showDanger('Suspend User', 'This will revoke all access for this user.', function() {
+    window.location.href = '/dashboard/users/42/suspend';
+});
+
+// Simple alert
+showAlert('Success', 'The record has been saved successfully.');</code></pre>
+                </div>
+
+                <div class="doc-alert doc-alert-info">
+                    <strong>No Dependencies:</strong> The modal system is built into Tyro Dashboard — no third-party libraries are required. It works in all dashboard views out of the box.
+                </div>
+            </section>
+
             <!-- Page Creation -->
             <section id="page-creation" class="doc-section">
                 <h2 class="doc-section-title">Page Creation</h2>
                 <p class="doc-text">
                     Tyro Dashboard includes powerful artisan commands to scaffold complete dashboard pages in seconds. These commands automatically handle everything from view creation to route registration and sidebar navigation.
                 </p>
-
-                <div class="doc-alert doc-alert-success" style="margin-top: 1.5rem;">
                     <strong>Quick Pages:</strong> Create fully functional dashboard pages with a single command. Perfect for building analytics dashboards, reports, settings pages, or any custom functionality.
                 </div>
 
@@ -2268,6 +2555,108 @@ php artisan tyro-dashboard:publish-style</code></pre>
                 </script>
             </section>
 
+            <!-- Sidebar Customization -->
+            <section id="sidebar-customization" class="doc-section">
+                <h2 class="doc-section-title">Sidebar Customization</h2>
+                <p class="doc-text">Tyro Dashboard allows you to quickly change the sidebar's visual appearance using environment variables — no CSS overrides needed.</p>
+
+                <h3 class="doc-section-subtitle">Sidebar Colors</h3>
+                <table class="doc-table">
+                    <thead>
+                        <tr>
+                            <th>Variable</th>
+                            <th>Description</th>
+                            <th>Example Value</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code class="doc-inline-code">TYRO_DASHBOARD_SIDEBAR_BG</code></td>
+                            <td>Sidebar background color</td>
+                            <td><code class="doc-inline-code">#1e293b</code></td>
+                        </tr>
+                        <tr>
+                            <td><code class="doc-inline-code">TYRO_DASHBOARD_SIDEBAR_TEXT</code></td>
+                            <td>Sidebar text / icon color</td>
+                            <td><code class="doc-inline-code">#f8fafc</code></td>
+                        </tr>
+                        <tr>
+                            <td><code class="doc-inline-code">TYRO_DASHBOARD_DISABLE_EXAMPLES</code></td>
+                            <td>Hide the example menu items from the sidebar</td>
+                            <td><code class="doc-inline-code">true</code></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="doc-code-block" style="margin-top: 1.5rem;">
+                    <div class="doc-code-header">
+                        <span class="doc-code-title">.env</span>
+                        <button class="doc-code-copy" type="button">Copy</button>
+                    </div>
+                    <pre><code class="language-bash">TYRO_DASHBOARD_SIDEBAR_BG=#1e293b
+TYRO_DASHBOARD_SIDEBAR_TEXT=#f8fafc
+TYRO_DASHBOARD_DISABLE_EXAMPLES=true</code></pre>
+                </div>
+            </section>
+
+            <!-- Custom Menu Items -->
+            <section id="custom-menu-items" class="doc-section">
+                <h2 class="doc-section-title">Custom Menu Items</h2>
+                <p class="doc-text">Define custom sidebar menu items for admin, common, and user sidebars by publishing and editing <code class="doc-inline-code">config/menu.php</code>. Each item supports a title, URL, and optional inline SVG icon.</p>
+
+                <h3 class="doc-section-subtitle">Publish Menu Config</h3>
+                <div class="doc-code-block">
+                    <div class="doc-code-header">
+                        <span class="doc-code-title">Terminal</span>
+                        <button class="doc-code-copy" type="button">Copy</button>
+                    </div>
+                    <pre><code class="language-bash">php artisan vendor:publish --tag=tyro-dashboard-config</code></pre>
+                </div>
+
+                <h3 class="doc-section-subtitle">Menu Configuration</h3>
+                <p class="doc-text">Edit <code class="doc-inline-code">config/menu.php</code> to add items to the three available menus:</p>
+                <div class="doc-code-block">
+                    <div class="doc-code-header">
+                        <span class="doc-code-title">config/menu.php</span>
+                        <button class="doc-code-copy" type="button">Copy</button>
+                    </div>
+                    <pre><code class="language-php">&lt;?php
+
+return [
+    // Shown only to admin users
+    'adminMenuItems' => [
+        [
+            'title' => 'Reports',
+            'url'   => '/dashboard/reports',
+            'icon'  => '&lt;svg ...&gt;...&lt;/svg&gt;',
+        ],
+    ],
+
+    // Shown to both admins and regular users
+    'commonMenuItems' => [
+        [
+            'title' => 'Help Center',
+            'url'   => '/dashboard/help',
+            'icon'  => '&lt;svg ...&gt;...&lt;/svg&gt;',
+        ],
+    ],
+
+    // Shown only to regular (non-admin) users
+    'userMenuItems' => [
+        [
+            'title' => 'My Reports',
+            'url'   => '/dashboard/my-reports',
+            'icon'  => '&lt;svg ...&gt;...&lt;/svg&gt;',
+        ],
+    ],
+];</code></pre>
+                </div>
+
+                <div class="doc-alert doc-alert-info" style="margin-top: 1.5rem;">
+                    <strong>Tip:</strong> Combine custom menu items with the artisan page creation commands (<code class="doc-inline-code">tyro-dashboard:create-admin-page</code> etc.) for a fully automated workflow — the page creation commands automatically add the sidebar link for you.
+                </div>
+            </section>
+
             <!-- Environment Variables -->
             <section id="env-variables" class="doc-section">
                 <h2 class="doc-section-title">Environment Variables</h2>
@@ -2296,6 +2685,46 @@ php artisan tyro-dashboard:publish-style</code></pre>
                             <td><code class="doc-inline-code">TYRO_DASHBOARD_LOGO</code></td>
                             <td>URL to custom logo</td>
                             <td><code class="doc-inline-code">null</code></td>
+                        </tr>
+                        <tr>
+                            <td><code class="doc-inline-code">TYRO_DASHBOARD_SIDEBAR_BG</code></td>
+                            <td>Sidebar background color (any valid CSS color)</td>
+                            <td><code class="doc-inline-code">null</code></td>
+                        </tr>
+                        <tr>
+                            <td><code class="doc-inline-code">TYRO_DASHBOARD_SIDEBAR_TEXT</code></td>
+                            <td>Sidebar text and icon color</td>
+                            <td><code class="doc-inline-code">null</code></td>
+                        </tr>
+                        <tr>
+                            <td><code class="doc-inline-code">TYRO_DASHBOARD_DISABLE_EXAMPLES</code></td>
+                            <td>Hide example sidebar menu items</td>
+                            <td><code class="doc-inline-code">false</code></td>
+                        </tr>
+                        <tr>
+                            <td><code class="doc-inline-code">TYRO_DASHBOARD_ENABLE_INVITATION</code></td>
+                            <td>Enable the invitation and referral system</td>
+                            <td><code class="doc-inline-code">false</code></td>
+                        </tr>
+                        <tr>
+                            <td><code class="doc-inline-code">TYRO_DASHBOARD_ENABLE_GRAVATAR</code></td>
+                            <td>Enable Gravatar fallback for profile photos</td>
+                            <td><code class="doc-inline-code">true</code></td>
+                        </tr>
+                        <tr>
+                            <td><code class="doc-inline-code">TYRO_DASHBOARD_PHOTO_MAX_SIZE</code></td>
+                            <td>Maximum profile photo upload size in KB</td>
+                            <td><code class="doc-inline-code">2048</code></td>
+                        </tr>
+                        <tr>
+                            <td><code class="doc-inline-code">TYRO_DASHBOARD_PHOTO_CROP_POSITION</code></td>
+                            <td>Thumbnail crop anchor position</td>
+                            <td><code class="doc-inline-code">center</code></td>
+                        </tr>
+                        <tr>
+                            <td><code class="doc-inline-code">TYRO_DASHBOARD_COLLAPSIBLE_SIDEBAR</code></td>
+                            <td>Enable collapsible sidebar behavior</td>
+                            <td><code class="doc-inline-code">true</code></td>
                         </tr>
                     </tbody>
                 </table>
@@ -2633,6 +3062,36 @@ php artisan tyro-dashboard:remove-common-page "help-center"</code></pre>
                             <td>Tyro Login settings</td>
                             <td><span class="route-badge route-badge-admin">Admin Only</span></td>
                         </tr>
+                        <tr>
+                            <td><code class="doc-inline-code">POST /dashboard/users/{id}/impersonate</code></td>
+                            <td>Start impersonating a user</td>
+                            <td><span class="route-badge route-badge-admin">Admin Only</span></td>
+                        </tr>
+                        <tr>
+                            <td><code class="doc-inline-code">/dashboard/leave-impersonation</code></td>
+                            <td>End current impersonation session</td>
+                            <td><span class="route-badge route-badge-all">All Authenticated</span></td>
+                        </tr>
+                        <tr>
+                            <td><code class="doc-inline-code">/dashboard/invitations</code></td>
+                            <td>Admin invitation link management</td>
+                            <td><span class="route-badge route-badge-admin">Admin Only</span></td>
+                        </tr>
+                        <tr>
+                            <td><code class="doc-inline-code">/dashboard/referrals</code></td>
+                            <td>User referral history</td>
+                            <td><span class="route-badge route-badge-all">All Authenticated</span></td>
+                        </tr>
+                        <tr>
+                            <td><code class="doc-inline-code">/dashboard/audit-trail</code></td>
+                            <td>Audit trail list with filters and search</td>
+                            <td><span class="route-badge route-badge-admin">Admin Only</span></td>
+                        </tr>
+                        <tr>
+                            <td><code class="doc-inline-code">/dashboard/audit-trail/{id}</code></td>
+                            <td>Audit trail entry detail view</td>
+                            <td><span class="route-badge route-badge-admin">Admin Only</span></td>
+                        </tr>
                     </tbody>
                 </table>
             </section>
@@ -2824,10 +3283,17 @@ php artisan tyro-dashboard:remove-common-page "help-center"</code></pre>
                 { id: 'privilege-management', title: 'Privilege Management', description: 'Fine-grained access control', icon: '🛡️' },
                 { id: 'settings-management', title: 'Settings Management', description: 'Configure Tyro packages', icon: '⚙️' },
                 { id: 'profile-management', title: 'Profile Management', description: 'User profile settings', icon: '👤' },
+                { id: 'profile-photos', title: 'Profile Photos & Gravatar', description: 'Upload photos or use Gravatar with HasProfilePhoto trait', icon: '🖼️' },
+                { id: 'impersonation', title: 'User Impersonation', description: 'Admins can impersonate users for debugging and support', icon: '🎭' },
+                { id: 'invitation-system', title: 'Invitation & Referral System', description: 'Built-in invitation links and referral tracking', icon: '📨' },
+                { id: 'audit-trail', title: 'Audit Trail', description: 'Detailed audit log with filters, search, and pagination', icon: '📋' },
+                { id: 'modal-dialogs', title: 'Modal Dialogs', description: 'showConfirm, showAlert, showDanger JS helpers', icon: '💬' },
 
                 // Customization
                 { id: 'publishing', title: 'Publishing Assets', description: 'Publish views and config', icon: '📦' },
                 { id: 'theme-customization', title: 'Theme Customization', description: 'shadcn theme colors and tweakcn', icon: '🎨' },
+                { id: 'sidebar-customization', title: 'Sidebar Customization', description: 'Customize sidebar colors via env variables', icon: '🎨' },
+                { id: 'custom-menu-items', title: 'Custom Menu Items', description: 'Define custom sidebar menu items in config/menu.php', icon: '📌' },
                 { id: 'env-variables', title: 'Environment Variables', description: 'Configuration options', icon: '⚙️' },
                 { id: 'artisan-commands', title: 'Artisan Commands', description: 'Available CLI commands', icon: '⌨️' },
 
