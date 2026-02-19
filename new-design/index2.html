@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Tyro Dashboard — Technical Admin Experience for Laravel</title>
+	<meta name="description" content="Tyro Dashboard helps Laravel teams ship secure admin panels faster with CRUD, RBAC, and audit trails built in.">
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@700;800;900&display=swap" rel="stylesheet">
+	<link rel="stylesheet" href="./styles2.css">
+</head>
+
+<body>
+	<nav class="navbar">
+		<div class="navbar-container">
+			<a href="#" class="navbar-brand">
+				<span class="navbar-logo">Tyro Dashboard</span>
+				<span class="navbar-badge">v1.12.0</span>
+			</a>
+			<button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Toggle menu">
+				<span></span><span></span><span></span>
+			</button>
+			<div class="navbar-links" id="navbarLinks">
+				<a href="#features" class="navbar-link">Capabilities</a>
+				<a href="../doc.html" class="navbar-link">Docs</a>
+				<a href="https://github.com/hasinhayder/tyro-dashboard" class="navbar-cta" target="_blank" rel="noopener">GitHub</a>
+			</div>
+		</div>
+	</nav>
+
+	<button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+		<svg class="sun-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+		<svg class="moon-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+	</button>
+
+	<div class="spotlight" id="spotlight"></div>
+
+	<section class="hero-18">
+		<div class="hero-18-pattern"></div>
+		<div class="hero-18-node" style="top: 36%; left: 23%;"></div>
+		<div class="hero-18-node" style="bottom: 28%; right: 22%; animation-delay: 1s;"></div>
+
+		<div class="hero-18-container">
+			<h1 class="hero-18-title">
+				Build Admin Systems <br>that stay
+				<span class="accent">clean at scale.</span>
+			</h1>
+			<p class="hero-18-description">
+				Tyro Dashboard is the operating layer for Laravel back offices—ship CRUD, roles, permissions,
+				and audit visibility without spending sprint cycles on admin plumbing.
+			</p>
+
+			<div class="hero-actions">
+				<a href="../index.html#installation" class="hero-18-btn">
+					Start Integration
+					<span class="cta-arrow">↗</span>
+				</a>
+				<div class="install-chip">use HasCrud;</div>
+			</div>
+
+			<div class="hero-18-powering">
+				<h3 class="powering-title">Powering Laravel Teams Worldwide</h3>
+				<div class="powering-grid">
+					<div class="powering-item">
+						<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"></path><path d="M2 17l10 5 10-5"></path><path d="M2 12l10 5 10-5"></path></svg>
+						Laravel 12+
+					</div>
+					<div class="powering-item">
+						<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+						shadcn/ui Ready
+					</div>
+					<div class="powering-item">
+						<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.24 12.24a6 6 0 0 0-8.49-8.49L5 10.5V19h8.5z"></path><line x1="16" y1="8" x2="2" y2="22"></line><line x1="17.5" y1="15" x2="9" y2="15"></line></svg>
+						Tailwind-first
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<section id="features" class="feature-manifest">
+		<div class="manifest-container">
+			<div class="manifest-grid">
+				<div class="manifest-item"><div class="manifest-num">01</div><div class="manifest-content"><h3>Magical CRUD</h3><p>Define fields once and generate full index, create, edit, and show flows automatically.</p></div></div>
+				<div class="manifest-item"><div class="manifest-num">02</div><div class="manifest-content"><h3>User Management</h3><p>Manage users, status, profile fields, and security data from one coherent interface.</p></div></div>
+				<div class="manifest-item"><div class="manifest-num">03</div><div class="manifest-content"><h3>Role Hierarchy</h3><p>Design role relationships with a structure that scales from startup teams to enterprises.</p></div></div>
+				<div class="manifest-item"><div class="manifest-num">04</div><div class="manifest-content"><h3>Audit Trail</h3><p>Track critical actions with timeline clarity to support operations, debugging, and compliance.</p></div></div>
+				<div class="manifest-item"><div class="manifest-num">05</div><div class="manifest-content"><h3>Impersonation</h3><p>Troubleshoot user issues safely by viewing the app through the exact user context.</p></div></div>
+				<div class="manifest-item"><div class="manifest-num">06</div><div class="manifest-content"><h3>Instant Pages</h3><p>Generate pages through artisan commands and move from idea to shipped panel fast.</p></div></div>
+				<div class="manifest-item"><div class="manifest-num">07</div><div class="manifest-content"><h3>Settings UI</h3><p>Expose package and app settings through dashboard controls instead of raw config edits.</p></div></div>
+				<div class="manifest-item"><div class="manifest-num">08</div><div class="manifest-content"><h3>Dark Mode</h3><p>Deliver a polished dark experience out of the box with persistent user preference.</p></div></div>
+				<div class="manifest-item"><div class="manifest-num">09</div><div class="manifest-content"><h3>Responsive UI</h3><p>Operate confidently on desktop, tablet, and mobile with layouts built for real usage.</p></div></div>
+				<div class="manifest-item"><div class="manifest-num">10</div><div class="manifest-content"><h3>Theme Alignment</h3><p>Match your product design language quickly with shadcn-inspired customization controls.</p></div></div>
+				<div class="manifest-item"><div class="manifest-num">11</div><div class="manifest-content"><h3>Field Logic</h3><p>Control labels, visibility, defaults, and behavior for every field without boilerplate.</p></div></div>
+				<div class="manifest-item"><div class="manifest-num">12</div><div class="manifest-content"><h3>Dual Dashboards</h3><p>Serve admins and end users with separate experiences while sharing one core architecture.</p></div></div>
+				<div class="manifest-item"><div class="manifest-num">13</div><div class="manifest-content"><h3>Referral Engine</h3><p>Enable invitations and growth loops through built-in referral and onboarding mechanics.</p></div></div>
+				<div class="manifest-item"><div class="manifest-num">14</div><div class="manifest-content"><h3>Privilege Engine</h3><p>Discover and map route-level capabilities into manageable privilege definitions.</p></div></div>
+				<div class="manifest-item"><div class="manifest-num">15</div><div class="manifest-content"><h3>Profile Photos</h3><p>Support uploads and Gravatar fallback with practical defaults for profile identity.</p></div></div>
+				<div class="manifest-item"><div class="manifest-num">16</div><div class="manifest-content"><h3>Sidebar Colors</h3><p>Adjust dashboard look-and-feel using environment-driven color configuration.</p></div></div>
+				<div class="manifest-item"><div class="manifest-num">17</div><div class="manifest-content"><h3>Admin Protect</h3><p>Apply middleware-based guardrails to keep sensitive routes and actions protected.</p></div></div>
+			</div>
+		</div>
+	</section>
+
+	<script src="./script2.js"></script>
+</body>
+
+</html>
