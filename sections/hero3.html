@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tyro Dashboard - Hero Option 3</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../styles.css">
+    <style>
+        .hero-feature {
+            min-height: 100vh;
+            padding: calc(80px + var(--spacing-4xl)) var(--spacing-xl) var(--spacing-4xl);
+            background: linear-gradient(135deg, var(--color-bg) 0%, var(--color-bg-secondary) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-feature-container {
+            max-width: 1200px;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            z-index: 10;
+        }
+
+        .hero-feature-title {
+            font-family: var(--font-display);
+            font-size: clamp(2.5rem, 6vw, 4rem);
+            font-weight: 900;
+            line-height: 1.1;
+            text-align: center;
+            margin-bottom: var(--spacing-xl);
+            max-width: 800px;
+        }
+
+        .hero-feature-grid {
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
+            gap: var(--spacing-3xl);
+            align-items: center;
+            width: 100%;
+            margin-top: var(--spacing-2xl);
+        }
+
+        .feature-column {
+            display: flex;
+            flex-direction: column;
+            gap: var(--spacing-xl);
+        }
+
+        .hero-floating-card {
+            background: var(--color-bg);
+            border: 1px solid var(--color-border);
+            padding: var(--spacing-lg);
+            border-radius: var(--radius-xl);
+            box-shadow: 0 10px 30px var(--color-shadow);
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .hero-floating-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px var(--color-shadow);
+            border-color: var(--color-primary);
+        }
+
+        .hero-floating-card h4 {
+            font-family: var(--font-display);
+            font-size: 1.125rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .hero-floating-card p {
+            font-size: 0.875rem;
+            color: var(--color-text-secondary);
+            line-height: 1.5;
+        }
+
+        .hero-feature-main-img {
+            max-width: 600px;
+            width: 100%;
+            position: relative;
+        }
+
+        .hero-feature-main-img img {
+            width: 100%;
+            height: auto;
+            border-radius: var(--radius-xl);
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.2);
+            border: 1px solid var(--color-border);
+        }
+
+        .hero-feature-cta {
+            margin-top: var(--spacing-3xl);
+            display: flex;
+            gap: var(--spacing-md);
+        }
+
+        @media (max-width: 1024px) {
+            .hero-feature-grid {
+                grid-template-columns: 1fr;
+                justify-items: center;
+            }
+            
+            .feature-column {
+                flex-direction: row;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .hero-floating-card {
+                max-width: 280px;
+            }
+            
+            .feature-column-left { order: 2; }
+            .hero-feature-main-img { order: 1; }
+            .feature-column-right { order: 3; }
+        }
+
+        @media (max-width: 768px) {
+            .hero-floating-card {
+                max-width: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="navbar-container">
+            <a href="../index.html" class="navbar-brand">
+                <span class="navbar-logo">Tyro Dashboard</span>
+                <span class="navbar-badge">v1.12.0</span>
+            </a>
+
+            <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Toggle menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+
+            <div class="navbar-links">
+                <a href="../index.html#features" class="navbar-link">Features</a>
+                <a href="../index.html#crud-showcase" class="navbar-link">Instant CRUD</a>
+                <a href="../index.html#screenshots" class="navbar-link">Screenshots</a>
+                <a href="../doc.html" class="navbar-link">Documentation</a>
+                <a href="https://github.com/hasinhayder/tyro-dashboard" class="navbar-cta" target="_blank" rel="noopener">
+                    GitHub
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Theme Toggle -->
+    <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+        <svg class="sun-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+        <svg class="moon-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+    </button>
+
+    <!-- Hero Section Option 3 -->
+    <section class="hero-feature">
+        <div class="hero-feature-container">
+            <h1 class="hero-feature-title">
+                One Dashboard to <span class="hero-title-gradient">Rule Them All.</span>
+            </h1>
+            
+            <div class="hero-feature-grid">
+                <div class="feature-column feature-column-left">
+                    <div class="hero-floating-card">
+                        <h4>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>
+                            Instant CRUD
+                        </h4>
+                        <p>Generate complete admin interfaces for any model with just one trait.</p>
+                    </div>
+                    <div class="hero-floating-card">
+                        <h4>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+                            Advanced RBAC
+                        </h4>
+                        <p>Fine-grained roles and privileges management out of the box.</p>
+                    </div>
+                </div>
+                
+                <div class="hero-feature-main-img">
+                    <img src="../images/6-tyro-dashboard-role-detail-light.png" alt="Dashboard Main" class="theme-toggle-img" data-light="../images/6-tyro-dashboard-role-detail-light.png" data-dark="../images/6-tyro-dashboard-role-detail-dark.png">
+                </div>
+                
+                <div class="feature-column feature-column-right">
+                    <div class="hero-floating-card">
+                        <h4>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+                            Audit Trail
+                        </h4>
+                        <p>Track every single action in your system with forensic precision.</p>
+                    </div>
+                    <div class="hero-floating-card">
+                        <h4>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+                            Modern Design
+                        </h4>
+                        <p>Built with shadcn/ui principles for a stunning, adaptive dark mode experience.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="hero-feature-cta">
+                <a href="../index.html#installation" class="btn btn-primary">Download Tyro Dashboard</a>
+                <a href="../doc.html" class="btn btn-secondary">Documentation</a>
+            </div>
+        </div>
+    </section>
+
+    <script src="../script.js"></script>
+    <script>
+        // Sync theme images
+        const observer = new MutationObserver((mutations) => {
+            mutations.forEach((mutation) => {
+                if (mutation.type === 'attributes' && mutation.attributeName === 'data-theme') {
+                    const theme = document.documentElement.getAttribute('data-theme');
+                    const images = document.querySelectorAll('.theme-toggle-img');
+                    images.forEach(img => {
+                        img.src = theme === 'dark' ? img.dataset.dark : img.dataset.light;
+                    });
+                }
+            });
+        });
+        observer.observe(document.documentElement, { attributes: true });
+        
+        // Initial sync
+        const currentTheme = document.documentElement.getAttribute('data-theme');
+        if (currentTheme === 'dark') {
+            document.querySelectorAll('.theme-toggle-img').forEach(img => {
+                img.src = img.dataset.dark;
+            });
+        }
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tyro Dashboard - Hero Option 8</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../styles.css">
+    <style>
+        :root {
+            --hero-8-accent: #8b8df8;
+            --hero-8-glow: rgba(139, 141, 248, 0.15);
+        }
+
+        [data-theme="dark"] {
+            --hero-8-glow: rgba(139, 141, 248, 0.1);
+        }
+
+        .hero-8 {
+            min-height: 100vh;
+            background: var(--color-bg);
+            display: flex;
+            align-items: center;
+            padding: 120px 0 80px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-8-container {
+            max-width: 1300px;
+            margin: 0 auto;
+            padding: 0 40px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+            width: 100%;
+        }
+
+        .hero-8-content {
+            position: relative;
+            z-index: 10;
+        }
+
+        .hero-8-title {
+            font-family: var(--font-display);
+            font-size: clamp(3.5rem, 6vw, 5.5rem);
+            font-weight: 800;
+            line-height: 1.05;
+            letter-spacing: -0.03em;
+            margin-bottom: 2rem;
+            color: var(--color-text);
+        }
+
+        .hero-8-description {
+            font-size: 1.125rem;
+            color: var(--color-text-secondary);
+            line-height: 1.7;
+            max-width: 500px;
+            margin-bottom: 2.5rem;
+        }
+
+        .hero-8-actions {
+            display: flex;
+            gap: 1.5rem;
+            margin-bottom: 5rem;
+        }
+
+        .btn-8-primary {
+            background: var(--hero-8-accent);
+            color: white;
+            padding: 16px 36px;
+            border-radius: 30px;
+            font-weight: 700;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 25px rgba(139, 141, 248, 0.3);
+        }
+
+        .btn-8-secondary {
+            background: transparent;
+            color: var(--color-text);
+            padding: 16px 36px;
+            border-radius: 30px;
+            font-weight: 700;
+            text-decoration: none;
+            border: 1px solid var(--color-border);
+            transition: all 0.3s ease;
+        }
+
+        .btn-8-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 30px rgba(139, 141, 248, 0.4);
+        }
+
+        .btn-8-secondary:hover {
+            background: var(--color-bg-secondary);
+            border-color: var(--color-text);
+        }
+
+        /* Stats Section */
+        .hero-8-stats {
+            display: flex;
+            gap: 4rem;
+        }
+
+        .stat-item h3 {
+            font-family: var(--font-display);
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--color-text);
+            margin-bottom: 0.25rem;
+        }
+
+        .stat-item p {
+            font-size: 0.875rem;
+            color: var(--color-text-tertiary);
+            font-weight: 500;
+            text-transform: lowercase;
+        }
+
+        /* Right Side / Image Area */
+        .hero-8-visual {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .hero-8-glow-bg {
+            position: absolute;
+            width: 120%;
+            height: 120%;
+            background: radial-gradient(circle, var(--hero-8-glow) 0%, transparent 70%);
+            z-index: 1;
+        }
+
+        .hero-8-main-img {
+            width: 100%;
+            height: auto;
+            border-radius: 24px;
+            position: relative;
+            z-index: 2;
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.15);
+            transition: transform 0.5s ease;
+        }
+
+        [data-theme="dark"] .hero-8-main-img {
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.4);
+        }
+
+        /* Floating Tags */
+        .floating-tag {
+            position: absolute;
+            background: var(--color-bg);
+            border: 1px solid var(--color-border);
+            padding: 10px 20px;
+            border-radius: 40px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            z-index: 10;
+            box-shadow: 0 10px 25px var(--color-shadow);
+            animation: float-tag 4s ease-in-out infinite;
+        }
+
+        .floating-tag-1 { top: 15%; right: -5%; animation-delay: 0s; }
+        .floating-tag-2 { top: 45%; right: -15%; animation-delay: 1s; }
+        .floating-tag-3 { bottom: 15%; right: -5%; animation-delay: 2s; }
+
+        .tag-icon {
+            width: 32px;
+            height: 32px;
+            background: #e0fcf4;
+            color: #22c55e;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .floating-tag span {
+            font-size: 0.9375rem;
+            font-weight: 700;
+            color: var(--color-text);
+        }
+
+        @keyframes float-tag {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+
+        @media (max-width: 1100px) {
+            .hero-8-container {
+                grid-template-columns: 1fr;
+                text-align: center;
+                gap: 80px;
+            }
+            .hero-8-content {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+            }
+            .hero-8-actions {
+                justify-content: center;
+            }
+            .hero-8-stats {
+                justify-content: center;
+                margin-bottom: 40px;
+            }
+            .floating-tag-2 { right: 0; }
+        }
+
+        @media (max-width: 600px) {
+            .hero-8-stats {
+                flex-direction: column;
+                gap: 2rem;
+            }
+            .floating-tag {
+                display: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="navbar-container">
+            <a href="../index.html" class="navbar-brand">
+                <span class="navbar-logo">Tyro Dashboard</span>
+                <span class="navbar-badge">v1.12.0</span>
+            </a>
+
+            <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Toggle menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+
+            <div class="navbar-links">
+                <a href="../index.html#features" class="navbar-link">Features</a>
+                <a href="../index.html#crud-showcase" class="navbar-link">Instant CRUD</a>
+                <a href="../doc.html" class="navbar-link">Documentation</a>
+                <a href="https://github.com/hasinhayder/tyro-dashboard" class="btn-8-primary" style="padding: 10px 24px; font-size: 0.875rem;">
+                    Get Started
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Theme Toggle -->
+    <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+        <svg class="sun-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+        <svg class="moon-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+    </button>
+
+    <!-- Hero Section Option 8 -->
+    <section class="hero-8">
+        <div class="hero-8-container">
+            <div class="hero-8-content">
+                <h1 class="hero-8-title">
+                    Build Faster,<br>
+                    Scale Better<br>
+                    with Tyro
+                </h1>
+                <p class="hero-8-description">
+                    A visionary admin dashboard for Laravel 12, crafting captivating interfaces through modern design. Adept at turning your application data into extraordinary reality.
+                </p>
+                
+                <div class="hero-8-actions">
+                    <a href="../index.html#installation" class="btn-8-primary">Install Tyro</a>
+                    <a href="../doc.html" class="btn-8-secondary">Start Project</a>
+                </div>
+
+                <div class="hero-8-stats">
+                    <div class="stat-item">
+                        <h3 data-counter="100">100+</h3>
+                        <p>Hours<br>Saved</p>
+                    </div>
+                    <div class="stat-item">
+                        <h3 data-counter="50">50+</h3>
+                        <p>Core<br>Features</p>
+                    </div>
+                    <div class="stat-item">
+                        <h3 data-counter="99">99%</h3>
+                        <p>Happy<br>Developers</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="hero-8-visual">
+                <div class="hero-8-glow-bg"></div>
+                <img src="../images/1-tyro-dashboard-landing-light.png" alt="Dashboard Main" class="hero-8-main-img theme-toggle-img" data-light="../images/1-tyro-dashboard-landing-light.png" data-dark="../images/1-tyro-dashboard-landing-dark.png">
+                
+                <!-- Floating Tags -->
+                <div class="floating-tag floating-tag-1">
+                    <div class="tag-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>
+                    </div>
+                    <span>Instant CRUD</span>
+                </div>
+                <div class="floating-tag floating-tag-2">
+                    <div class="tag-icon" style="background: #eff6ff; color: #3b82f6;">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+                    </div>
+                    <span>Advanced RBAC</span>
+                </div>
+                <div class="floating-tag floating-tag-3">
+                    <div class="tag-icon" style="background: #fff7ed; color: #f97316;">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                    </div>
+                    <span>Audit Engine</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script src="../script.js"></script>
+    <script>
+        // Sync theme images
+        const observer = new MutationObserver((mutations) => {
+            mutations.forEach((mutation) => {
+                if (mutation.type === 'attributes' && mutation.attributeName === 'data-theme') {
+                    const theme = document.documentElement.getAttribute('data-theme');
+                    const images = document.querySelectorAll('.theme-toggle-img');
+                    images.forEach(img => {
+                        img.src = theme === 'dark' ? img.dataset.dark : img.dataset.light;
+                    });
+                }
+            });
+        });
+        observer.observe(document.documentElement, { attributes: true });
+        
+        // Initial sync
+        const currentTheme = document.documentElement.getAttribute('data-theme');
+        if (currentTheme === 'dark') {
+            document.querySelectorAll('.theme-toggle-img').forEach(img => {
+                img.src = img.dataset.dark;
+            });
+        }
+    </script>
+</body>
+
+</html>

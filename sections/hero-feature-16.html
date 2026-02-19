@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tyro Dashboard - 17 Features Spotlight Matrix</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../styles.css">
+    <style>
+        :root {
+            --hero-16-orange: #ff5f1f;
+            --hero-16-dark: #111111;
+        }
+
+        body {
+            background: var(--color-bg);
+            cursor: default;
+        }
+
+        /* Hero Section (Inherited from 13) */
+        .hero-16 {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 140px 20px 60px;
+            position: relative;
+            overflow: hidden;
+            text-align: center;
+        }
+
+        .hero-16-pattern {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-image: 
+                linear-gradient(var(--color-border) 1px, transparent 1px),
+                linear-gradient(90deg, var(--color-border) 1px, transparent 1px);
+            background-size: 100px 100px;
+            opacity: 0.4;
+            -webkit-mask-image: radial-gradient(circle at center, black 20%, transparent 80%);
+            mask-image: radial-gradient(circle at center, black 20%, transparent 80%);
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .hero-16-node {
+            position: absolute;
+            width: 8px; height: 8px;
+            background: var(--hero-16-orange);
+            border-radius: 50%;
+            opacity: 0.2;
+            z-index: 1;
+            animation: pulse-node 4s infinite ease-in-out;
+        }
+
+        @keyframes pulse-node {
+            0%, 100% { transform: scale(1); opacity: 0.1; }
+            50% { transform: scale(2); opacity: 0.3; }
+        }
+
+        .navbar-logo {
+            color: var(--color-text) !important;
+            background: none !important;
+            -webkit-text-fill-color: initial !important;
+        }
+
+        .navbar-link:hover {
+            color: var(--hero-16-orange) !important;
+        }
+
+        .hero-16-container {
+            max-width: 1100px;
+            position: relative;
+            z-index: 10;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .hero-16-title {
+            font-family: var(--font-display);
+            font-size: clamp(3.5rem, 10vw, 7.5rem);
+            font-weight: 900;
+            line-height: 0.85;
+            letter-spacing: -0.06em;
+            color: var(--color-text);
+            margin-bottom: 1.5rem;
+        }
+
+        .hero-16-title .accent {
+            color: var(--hero-16-orange);
+            display: block;
+        }
+
+        .hero-16-description {
+            font-size: 1.25rem;
+            color: var(--color-text-secondary);
+            max-width: 700px;
+            margin: 0 auto 3.5rem;
+            line-height: 1.6;
+            font-weight: 500;
+        }
+
+        .hero-16-btn {
+            background: var(--hero-16-dark);
+            color: var(--color-bg);
+            padding: 20px 50px;
+            border-radius: 16px;
+            font-size: 1.25rem;
+            font-weight: 800;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            transition: all 0.3s ease;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        [data-theme="dark"] .hero-16-btn { background: white; color: #111; }
+
+        /* Spotlight Matrix Section */
+        .feature-matrix {
+            padding: 160px 0;
+            background: var(--color-bg);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .matrix-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 40px;
+            position: relative;
+            z-index: 10;
+        }
+
+        .matrix-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1px;
+            background: var(--color-border);
+            border: 1px solid var(--color-border);
+        }
+
+        .matrix-item {
+            background: var(--color-bg);
+            padding: 60px 40px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            position: relative;
+            overflow: hidden;
+            transition: background 0.3s ease;
+        }
+
+        .matrix-item:hover {
+            background: rgba(255, 95, 31, 0.02);
+        }
+
+        .matrix-index {
+            font-family: var(--font-display);
+            font-size: 0.85rem;
+            font-weight: 900;
+            color: var(--hero-16-orange);
+            opacity: 0.5;
+            letter-spacing: 0.2em;
+        }
+
+        .matrix-item h3 {
+            font-family: var(--font-display);
+            font-size: 1.75rem;
+            font-weight: 800;
+            color: var(--color-text);
+            line-height: 1.1;
+            transition: transform 0.3s ease;
+        }
+
+        .matrix-item:hover h3 {
+            transform: translateX(10px);
+            color: var(--hero-16-orange);
+        }
+
+        /* Powering Grid */
+        .hero-16-powering {
+            width: 100%;
+            max-width: 1300px;
+            margin-top: auto;
+            padding-top: 40px;
+            border-top: 1px solid var(--color-border);
+            z-index: 10;
+        }
+
+        .powering-grid {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 4rem;
+            flex-wrap: wrap;
+        }
+
+        .powering-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: #475569;
+            font-size: 1.5rem;
+            font-weight: 700;
+            opacity: 0.8;
+        }
+
+        [data-theme="dark"] .powering-item { color: #cbd5e1; }
+
+        /* Cursor Spotlight Effect */
+        .spotlight {
+            position: fixed;
+            top: 0; left: 0;
+            width: 600px; height: 600px;
+            background: radial-gradient(circle, rgba(255, 95, 31, 0.08) 0%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 5;
+            transform: translate(-50%, -50%);
+            display: none;
+        }
+
+        @media (max-width: 1024px) {
+            .matrix-grid { grid-template-columns: repeat(2, 1fr); }
+            .hero-16-title { font-size: 4.5rem; }
+        }
+
+        @media (max-width: 768px) {
+            .matrix-grid { grid-template-columns: 1fr; }
+            .matrix-item { padding: 40px 20px; }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="navbar-container">
+            <a href="../index.html" class="navbar-brand">
+                <span class="navbar-logo">Tyro Dashboard</span>
+                <span class="navbar-badge" style="background: var(--hero-16-orange);">v1.12.0</span>
+            </a>
+            <button class="mobile-menu-btn" id="mobileMenuBtn">
+                <span></span><span></span><span></span>
+            </button>
+            <div class="navbar-links">
+                <a href="#features" class="navbar-link">Capabilities</a>
+                <a href="../doc.html" class="navbar-link">Docs</a>
+                <a href="https://github.com/hasinhayder/tyro-dashboard" class="navbar-cta" style="background: var(--hero-16-orange);">GitHub</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Theme Toggle -->
+    <button class="theme-toggle" id="themeToggle">
+        <svg class="sun-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+        <svg class="moon-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+    </button>
+
+    <!-- Cursor Spotlight -->
+    <div class="spotlight" id="spotlight"></div>
+
+    <!-- Hero Section -->
+    <section class="hero-16">
+        <div class="hero-16-pattern"></div>
+        <div class="hero-16-node" style="top: 20%; left: 15%;"></div>
+        <div class="hero-16-node" style="top: 40%; right: 10%; animation-delay: 1s;"></div>
+        <div class="hero-16-node" style="bottom: 30%; left: 5%; animation-delay: 2s;"></div>
+
+        <div class="hero-16-container">
+            <h1 class="hero-16-title">
+                Ship Panels <br>that feel
+                <span class="accent">effortless.</span>
+            </h1>
+            <p class="hero-16-description">
+                The production-ready Laravel dashboard that delivers magical dynamic CRUD, forensic audit trails, and enterprise-grade RBAC—all configured through a single file.
+            </p>
+            <div style="display: flex; flex-direction: column; align-items: center; gap: 24px; margin-bottom: 60px;">
+                <a href="../index.html#installation" class="hero-16-btn">Get Started Free</a>
+                <div style="background: var(--color-bg-secondary); border: 1px dashed var(--hero-16-orange); padding: 8px 20px; border-radius: 30px; font-family: var(--font-mono); font-size: 0.9rem; color: var(--hero-16-orange); font-weight: 600;">
+                    use HasCrud;
+                </div>
+            </div>
+            <div class="hero-16-powering">
+                <div class="powering-grid">
+                    <div class="powering-item"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"></path><path d="M2 17l10 5 10-5"></path><path d="M2 12l10 5 10-5"></path></svg>Laravel 12</div>
+                    <div class="powering-item"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>Shadcn/UI</div>
+                    <div class="powering-item"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.24 12.24a6 6 0 0 0-8.49-8.49L5 10.5V19h8.5z"></path><line x1="16" y1="8" x2="2" y2="22"></line><line x1="17.5" y1="15" x2="9" y2="15"></line></svg>Tailwind</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Spotlight Matrix Feature Section -->
+    <section id="features" class="feature-matrix">
+        <div class="matrix-container">
+            <div class="matrix-grid">
+                <!-- 17 Features -->
+                <div class="matrix-item"><div class="matrix-index">01</div><h3>Magical CRUD</h3></div>
+                <div class="matrix-item"><div class="matrix-index">02</div><h3>Role Management</h3></div>
+                <div class="matrix-item"><div class="matrix-index">03</div><h3>Privilege Control</h3></div>
+                <div class="matrix-item"><div class="matrix-index">04</div><h3>Settings UI</h3></div>
+                <div class="matrix-item"><div class="matrix-index">05</div><h3>Profile Management</h3></div>
+                <div class="matrix-item"><div class="matrix-index">06</div><h3>Dark Mode</h3></div>
+                <div class="matrix-item"><div class="matrix-index">07</div><h3>Responsive Design</h3></div>
+                <div class="matrix-item"><div class="matrix-index">08</div><h3>Admin-Only Access</h3></div>
+                <div class="matrix-item"><div class="matrix-index">09</div><h3>Instant Pages</h3></div>
+                <div class="matrix-item"><div class="matrix-index">10</div><h3>Shadcn Themes</h3></div>
+                <div class="matrix-item"><div class="matrix-index">11</div><h3>Field Logic</h3></div>
+                <div class="matrix-item"><div class="matrix-index">12</div><h3>Gravatar Support</h3></div>
+                <div class="matrix-item"><div class="matrix-index">13</div><h3>User Impersonation</h3></div>
+                <div class="matrix-item"><div class="matrix-index">14</div><h3>Referral System</h3></div>
+                <div class="matrix-item"><div class="matrix-index">15</div><h3>Sidebar Colors</h3></div>
+                <div class="matrix-item"><div class="matrix-index">16</div><h3>Native Modals</h3></div>
+                <div class="matrix-item"><div class="matrix-index">17</div><h3>Audit Trail</h3></div>
+            </div>
+        </div>
+    </section>
+
+    <script src="../script.js"></script>
+    <script>
+        // Spotlight Effect
+        const spotlight = document.getElementById('spotlight');
+        document.addEventListener('mousemove', (e) => {
+            spotlight.style.display = 'block';
+            spotlight.style.left = e.clientX + 'px';
+            spotlight.style.top = e.clientY + 'px';
+        });
+
+        const observer = new MutationObserver((mutations) => {
+            mutations.forEach((mutation) => {
+                if (mutation.type === 'attributes' && mutation.attributeName === 'data-theme') {
+                    // Update if needed
+                }
+            });
+        });
+        observer.observe(document.documentElement, { attributes: true });
+    </script>
+</body>
+
+</html>

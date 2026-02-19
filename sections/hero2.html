@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tyro Dashboard - Hero Option 2</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../styles.css">
+    <style>
+        .hero-centered {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: calc(80px + var(--spacing-4xl)) var(--spacing-xl) var(--spacing-4xl);
+            background: var(--color-bg);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-centered::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 100vh;
+            background: radial-gradient(circle at 50% 50%, var(--color-primary-light) 0%, transparent 70%);
+            opacity: 0.1;
+            z-index: 0;
+        }
+
+        .hero-centered-content {
+            max-width: 1000px;
+            position: relative;
+            z-index: 10;
+        }
+
+        .hero-centered-badge {
+            display: inline-block;
+            background: var(--color-text);
+            color: var(--color-bg);
+            padding: 6px 16px;
+            border-radius: var(--radius-full);
+            font-weight: 800;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            margin-bottom: var(--spacing-lg);
+        }
+
+        .hero-centered-title {
+            font-family: var(--font-display);
+            font-size: clamp(3.5rem, 10vw, 7.5rem);
+            font-weight: 900;
+            line-height: 0.85;
+            letter-spacing: -0.05em;
+            margin-bottom: var(--spacing-xl);
+            text-transform: uppercase;
+        }
+
+        .hero-centered-subtitle {
+            font-size: 1.5rem;
+            color: var(--color-text-secondary);
+            max-width: 700px;
+            margin: 0 auto var(--spacing-3xl);
+            font-weight: 500;
+        }
+
+        .hero-centered-mockup {
+            margin-top: var(--spacing-4xl);
+            position: relative;
+            max-width: 1100px;
+            width: 100%;
+        }
+
+        .hero-centered-mockup img {
+            width: 100%;
+            height: auto;
+            border-radius: var(--radius-xl);
+            box-shadow: 0 50px 100px rgba(0, 0, 0, 0.4);
+            border: 1px solid var(--color-border);
+            transform: perspective(2000px) rotateX(15deg);
+            transition: transform 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
+
+        [data-theme="dark"] .hero-centered-mockup img {
+            box-shadow: 0 50px 100px rgba(0, 0, 0, 0.7);
+        }
+
+        .hero-centered-mockup:hover img {
+            transform: perspective(2000px) rotateX(5deg) translateY(-20px);
+        }
+
+        .hero-centered-actions {
+            display: flex;
+            gap: var(--spacing-md);
+            justify-content: center;
+        }
+
+        @media (max-width: 768px) {
+            .hero-centered-title {
+                font-size: 4rem;
+            }
+            
+            .hero-centered-mockup img {
+                transform: none;
+            }
+            
+            .hero-centered-mockup:hover img {
+                transform: translateY(-10px);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="navbar-container">
+            <a href="../index.html" class="navbar-brand">
+                <span class="navbar-logo">Tyro Dashboard</span>
+                <span class="navbar-badge">v1.12.0</span>
+            </a>
+
+            <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Toggle menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+
+            <div class="navbar-links">
+                <a href="../index.html#features" class="navbar-link">Features</a>
+                <a href="../index.html#crud-showcase" class="navbar-link">Instant CRUD</a>
+                <a href="../index.html#screenshots" class="navbar-link">Screenshots</a>
+                <a href="../doc.html" class="navbar-link">Documentation</a>
+                <a href="https://github.com/hasinhayder/tyro-dashboard" class="navbar-cta" target="_blank" rel="noopener">
+                    GitHub
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Theme Toggle -->
+    <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+        <svg class="sun-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+        <svg class="moon-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+    </button>
+
+    <!-- Hero Section Option 2 -->
+    <section class="hero-centered">
+        <div class="hero-centered-content">
+            <div class="hero-centered-badge">Limited Time Free Open Source</div>
+            <h1 class="hero-centered-title">
+                The <span class="hero-title-gradient">Ultimate</span><br>
+                Admin Panel.
+            </h1>
+            <p class="hero-centered-subtitle">
+                The most beautiful, feature-rich admin dashboard for Laravel developers who value their time and aesthetics.
+            </p>
+            <div class="hero-centered-actions">
+                <a href="../index.html#installation" class="btn btn-primary">Install Tyro Now</a>
+                <a href="../index.html#screenshots" class="btn btn-secondary">View Showcase</a>
+            </div>
+        </div>
+
+        <div class="hero-centered-mockup">
+            <img src="../images/3-tyro-dashboard-users-light.png" alt="Dashboard Preview" class="theme-toggle-img" data-light="../images/3-tyro-dashboard-users-light.png" data-dark="../images/3-tyro-dashboard-users-dark.png">
+        </div>
+    </section>
+
+    <script src="../script.js"></script>
+    <script>
+        // Sync theme images
+        const observer = new MutationObserver((mutations) => {
+            mutations.forEach((mutation) => {
+                if (mutation.type === 'attributes' && mutation.attributeName === 'data-theme') {
+                    const theme = document.documentElement.getAttribute('data-theme');
+                    const images = document.querySelectorAll('.theme-toggle-img');
+                    images.forEach(img => {
+                        img.src = theme === 'dark' ? img.dataset.dark : img.dataset.light;
+                    });
+                }
+            });
+        });
+        observer.observe(document.documentElement, { attributes: true });
+        
+        // Initial sync
+        const currentTheme = document.documentElement.getAttribute('data-theme');
+        if (currentTheme === 'dark') {
+            document.querySelectorAll('.theme-toggle-img').forEach(img => {
+                img.src = img.dataset.dark;
+            });
+        }
+    </script>
+</body>
+
+</html>

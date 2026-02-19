@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tyro Dashboard - The Effortless Laravel Admin</title>
+    <meta name="description" content="Build powerful, secure admin panels in minutes. Tyro Dashboard for Laravel 12 brings instant CRUD, RBAC, and Audit Trails with zero boilerplate.">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@700;800;900&display=swap" rel="stylesheet">
+
+    <!-- Base Styles -->
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+
+    <style>
+        /* High-Impact Theme Overrides */
+        :root {
+            --accent-orange: #ff5f1f;
+            --accent-orange-dark: #e64a19;
+            --accent-dark: #111111;
+            --accent-yellow: #ffce00;
+            --accent-green: #22c55e;
+            --accent-blue: #3b82f6;
+            
+            /* Typography */
+            --font-display: "Space Grotesk", sans-serif;
+            --font-sans: "Inter", sans-serif;
+
+            /* Global Color Overrides to remove 'bad blue' */
+            --color-primary: var(--accent-orange);
+            --color-primary-dark: var(--accent-orange-dark);
+            --gradient-text: linear-gradient(135deg, var(--color-text) 0%, var(--accent-orange) 100%);
+            --gradient-primary: linear-gradient(135deg, var(--accent-orange) 0%, #ff8a50 100%);
+        }
+
+        [data-theme="dark"] {
+            --color-primary: var(--accent-orange);
+            --gradient-text: linear-gradient(135deg, #ffffff 0%, var(--accent-orange) 100%);
+        }
+
+        /* Navbar Overrides */
+        .navbar-logo {
+            background: var(--gradient-text) !important;
+            -webkit-background-clip: text !important;
+            -webkit-text-fill-color: transparent !important;
+            font-family: var(--font-display) !important;
+            font-weight: 900 !important;
+        }
+
+        .navbar-link:hover {
+            color: var(--accent-orange) !important;
+        }
+
+        /* Powering Section (Footer Area) */
+        .powering-section {
+            padding: 80px 20px;
+            background: var(--color-bg);
+            border-top: 1px solid var(--color-border);
+            text-align: center;
+        }
+
+        .powering-title {
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            letter-spacing: 0.2em;
+            color: #94a3b8;
+            font-weight: 600;
+            margin-bottom: 3rem;
+        }
+
+        .powering-grid {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 4rem;
+            flex-wrap: wrap;
+        }
+
+        .powering-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: #475569;
+            font-size: 1.75rem;
+            font-weight: 700;
+            opacity: 0.9;
+            transition: opacity 0.3s ease;
+        }
+
+        [data-theme="dark"] .powering-item {
+            color: #cbd5e1;
+        }
+
+        .powering-item:hover {
+            opacity: 1;
+            color: var(--accent-orange);
+        }
+
+        .powering-item svg {
+            width: 32px;
+            height: 32px;
+        }
+
+        /* Rest of the styles... */
+        h1, h2, h3, h4, .section-title, .hero-title {
+            font-family: var(--font-display) !important;
+            letter-spacing: -0.03em;
+        }
+
+        .section-title {
+            font-size: clamp(2.5rem, 5vw, 3.5rem);
+            line-height: 1.1;
+        }
+
+        /* Hero 9 Specific Styles */
+        .hero-9 {
+            min-height: 100vh;
+            background: var(--color-bg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 140px 20px 100px;
+            position: relative;
+            overflow: hidden;
+            text-align: center;
+        }
+
+        .hero-9-container {
+            max-width: 1000px;
+            position: relative;
+            z-index: 10;
+        }
+
+        .hero-9-title {
+            font-size: clamp(3.5rem, 12vw, 8rem);
+            font-weight: 900;
+            line-height: 0.85;
+            letter-spacing: -0.06em;
+            color: var(--color-text);
+            margin-bottom: 1.5rem;
+            position: relative;
+        }
+
+        .hero-9-title .accent {
+            color: var(--accent-orange);
+            display: block;
+            margin-top: 0.2em;
+        }
+
+        .hero-9-description {
+            font-size: 1.25rem;
+            color: var(--color-text-secondary);
+            max-width: 600px;
+            margin: 0 auto 3rem;
+            line-height: 1.6;
+            font-weight: 500;
+        }
+
+        /* Floating Elements */
+        .floating-element {
+            position: absolute;
+            z-index: 5;
+            pointer-events: none;
+            filter: drop-shadow(0 20px 40px rgba(0,0,0,0.15));
+            animation: float-slow 6s ease-in-out infinite;
+        }
+
+        @keyframes float-slow {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            33% { transform: translate(10px, -20px) rotate(5deg); }
+            66% { transform: translate(-10px, 10px) rotate(-5deg); }
+        }
+
+        .el-toggle { top: 20%; right: 10%; animation-delay: 0s; }
+        .el-lock { bottom: 25%; right: 5%; animation-delay: 1s; }
+        .el-bolt { bottom: 30%; left: 15%; animation-delay: 2s; }
+        .el-card-1 { top: 25%; left: 5%; transform: rotate(-15deg); animation-delay: 0.5s; }
+        .el-card-2 { top: 45%; left: 12%; transform: rotate(-5deg); animation-delay: 1.5s; }
+        .el-cursor { top: 55%; left: 25%; animation-delay: 0.2s; }
+
+        .hero-9-cta-btn {
+            background: var(--color-text); /* Use text color for contrast */
+            color: var(--color-bg);
+            padding: 20px 60px;
+            border-radius: 12px;
+            font-size: 1.25rem;
+            font-weight: 700;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 15px;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+        }
+
+        .hero-9-cta-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 30px 60px rgba(0,0,0,0.3);
+        }
+
+        .cta-arrow {
+            width: 30px;
+            height: 30px;
+            background: var(--accent-orange);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 6px;
+            transform: rotate(-15deg);
+            color: white;
+        }
+
+        .svg-card {
+            width: 140px;
+            height: 90px;
+            background: white;
+            border-radius: 12px;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            border: 1px solid rgba(0,0,0,0.05);
+        }
+
+        /* Updated Navbar Button */
+        .navbar-cta {
+            background: var(--accent-orange) !important;
+            color: white !important;
+            box-shadow: 0 4px 15px rgba(255, 95, 31, 0.3);
+        }
+        .navbar-cta:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 95, 31, 0.4);
+        }
+
+        /* Updated Feature Cards to Match */
+        .feature-card {
+            border: 2px solid transparent;
+            background: var(--color-bg);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+        }
+        .feature-card:hover {
+            border-color: var(--accent-orange);
+            transform: translateY(-5px);
+        }
+        .feature-icon {
+            background: rgba(255, 95, 31, 0.1);
+            color: var(--accent-orange);
+        }
+        .feature-card:hover .feature-icon {
+            background: var(--accent-orange);
+            color: white;
+        }
+
+        /* Updated Section Badges */
+        .section-badge {
+            background: rgba(255, 95, 31, 0.1);
+            color: var(--accent-orange);
+            border: 1px solid rgba(255, 95, 31, 0.2);
+        }
+
+        /* Updated Buttons Generic */
+        .btn-primary {
+            background: var(--accent-orange);
+            color: white;
+            box-shadow: 0 4px 15px rgba(255, 95, 31, 0.3);
+        }
+        .btn-primary:hover {
+            background: #e64a19;
+            box-shadow: 0 6px 20px rgba(255, 95, 31, 0.4);
+        }
+
+        @media (max-width: 768px) {
+            .hero-9-title { font-size: 4rem; }
+            .floating-element { display: none; }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="navbar-container">
+            <a href="#" class="navbar-brand">
+                <span class="navbar-logo">Tyro Dashboard</span>
+                <span class="navbar-badge" style="background: var(--accent-orange);">v1.12.0</span>
+            </a>
+
+            <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Toggle menu">
+                <span></span><span></span><span></span>
+            </button>
+
+            <div class="navbar-links">
+                <a href="#features" class="navbar-link">Features</a>
+                <a href="#crud-showcase" class="navbar-link">Instant CRUD</a>
+                <a href="#screenshots" class="navbar-link">Screenshots</a>
+                <a href="doc.html" class="navbar-link">Docs</a>
+                <a href="#installation" class="navbar-cta">
+                    Get Started
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Theme Toggle -->
+    <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+        <svg class="sun-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+        <svg class="moon-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+    </button>
+
+    <!-- Hero Section (High Impact) -->
+    <section class="hero-9">
+        <!-- Floating Elements -->
+        <div class="floating-element el-card-1">
+            <div class="svg-card" style="background: var(--accent-yellow); color: #8b5e00;">
+                <div style="font-weight: 800; font-size: 0.8rem;">CRUD</div>
+                <div style="font-size: 1.2rem; font-weight: 900;">Instant</div>
+            </div>
+        </div>
+        <div class="floating-element el-card-2">
+            <div class="svg-card" style="background: var(--accent-green); color: white;">
+                <div style="font-weight: 800; font-size: 0.8rem;">RBAC</div>
+                <div style="font-size: 1.2rem; font-weight: 900;">Secure</div>
+            </div>
+        </div>
+        
+        <div class="floating-element el-toggle">
+            <svg width="80" height="44" viewBox="0 0 80 44" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect width="80" height="44" rx="22" fill="var(--accent-green)"/>
+                <circle cx="58" cy="22" r="16" fill="white"/>
+            </svg>
+        </div>
+
+        <div class="floating-element el-lock">
+            <div style="background: var(--accent-blue); width: 70px; height: 70px; border-radius: 18px; display: flex; align-items: center; justify-content: center; color: white;">
+                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+            </div>
+        </div>
+
+        <div class="floating-element el-bolt">
+            <div style="background: var(--accent-orange); width: 60px; height: 60px; border-radius: 15px; display: flex; align-items: center; justify-content: center; color: white; transform: rotate(-10deg);">
+                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+            </div>
+        </div>
+
+        <div class="floating-element el-cursor">
+            <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M14 10L32 24L23 26L21 35L14 10Z" fill="var(--color-text)" stroke="var(--color-bg)" stroke-width="3" stroke-linejoin="round"/>
+            </svg>
+        </div>
+
+        <div class="hero-9-container">
+            <h1 class="hero-9-title">
+                Panels <br>that feel
+                <span class="accent">effortless</span>
+            </h1>
+            <p class="hero-9-description">
+                Stop wrestling with boilerplate. Tyro Dashboard gives you a production-ready Laravel admin panel with CRUD, RBAC, and Audit Logs—in seconds.
+            </p>
+            
+            <div style="display: flex; flex-direction: column; align-items: center; gap: 20px;">
+                <a href="#installation" class="hero-9-cta-btn">
+                    Start Building
+                    <div class="cta-arrow">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg>
+                    </div>
+                </a>
+                
+                <div class="install-command" style="margin: 0; transform: scale(0.9); box-shadow: 0 10px 30px rgba(0,0,0,0.1);">
+                    <code style="color: var(--accent-orange);">composer require hasinhayder/tyro-dashboard</code>
+                    <button class="copy-btn" onclick="copyToClipboard(this, 'composer require hasinhayder/tyro-dashboard')" style="background: var(--accent-orange);">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Grid (Redesigned) -->
+    <section id="features" class="section section-alt">
+        <div class="section-header">
+            <span class="section-badge">Everything Included</span>
+            <h2 class="section-title">Built for Modern Development</h2>
+            <p class="section-subtitle">No bloat. Just the essential tools you need to manage your application effectively.</p>
+        </div>
+
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+                </div>
+                <h3 class="feature-title">User Management</h3>
+                <p class="feature-description">Complete CRUD, profile editing, and suspension controls ready to go.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path><path d="m9 12 2 2 4-4"></path></svg>
+                </div>
+                <h3 class="feature-title">Role Hierarchy</h3>
+                <p class="feature-description">Create roles, assign permissions, and visualize access with a clear matrix.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                </div>
+                <h3 class="feature-title">Automatic RBAC</h3>
+                <p class="feature-description">Route discovery automatically generates permissions for your application.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 17 10 11 4 5"></polyline><line x1="12" y1="19" x2="20" y2="19"></line></svg>
+                </div>
+                <h3 class="feature-title">Instant Pages</h3>
+                <p class="feature-description">Generate full admin pages with a single CLI command: <code>tyro:create-page</code>.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                </div>
+                <h3 class="feature-title">Audit Trail</h3>
+                <p class="feature-description">Forensic-grade logging tracks every action, change, and user event.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="1"></circle><circle cx="19" cy="12" r="1"></circle><circle cx="5" cy="12" r="1"></circle><path d="M12 5v14"></path><path d="M5 19l5-14"></path><path d="M19 19l-5-14"></path></svg>
+                </div>
+                <h3 class="feature-title">Themeable</h3>
+                <p class="feature-description">Built with Shadcn/UI standards. Customize colors and dark mode instantly.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- CRUD Showcase (Reimagined) -->
+    <section id="crud-showcase" class="section">
+        <div class="section-container" style="max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; padding: 0 20px;">
+            <div>
+                <span class="section-badge">Zero Boilerplate</span>
+                <h2 class="section-title">The "Magic" Trait</h2>
+                <p class="section-subtitle" style="text-align: left; margin-bottom: 2rem;">
+                    Just add <code>HasCrud</code> to your model. We handle the controller, routing, validation, views, and forms automatically.
+                </p>
+                <div style="display: flex; gap: 15px; flex-direction: column;">
+                    <div style="display: flex; gap: 15px; align-items: center;">
+                        <div style="width: 40px; height: 40px; background: #dcfce7; color: #22c55e; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-weight: bold;">1</div>
+                        <p style="margin: 0; font-weight: 500;">Add Trait to Model</p>
+                    </div>
+                    <div style="display: flex; gap: 15px; align-items: center;">
+                        <div style="width: 40px; height: 40px; background: #dbeafe; color: #3b82f6; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-weight: bold;">2</div>
+                        <p style="margin: 0; font-weight: 500;">Define Fillables</p>
+                    </div>
+                    <div style="display: flex; gap: 15px; align-items: center;">
+                        <div style="width: 40px; height: 40px; background: #ffedd5; color: #f97316; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-weight: bold;">3</div>
+                        <p style="margin: 0; font-weight: 500;">Done. Admin Panel Ready.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div style="position: relative;">
+                <div style="position: absolute; top: -20px; right: -20px; width: 80px; height: 80px; background: var(--accent-orange); border-radius: 50%; opacity: 0.1; filter: blur(20px);"></div>
+                <div class="crud-code-window" style="background: #1e1e1e; border-radius: 16px; padding: 2rem; border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 30px 60px rgba(0,0,0,0.3); transform: rotate(2deg);">
+                    <div style="display: flex; gap: 8px; margin-bottom: 1.5rem;">
+                        <div style="width: 12px; height: 12px; border-radius: 50%; background: #ff5f57;"></div>
+                        <div style="width: 12px; height: 12px; border-radius: 50%; background: #febc2e;"></div>
+                        <div style="width: 12px; height: 12px; border-radius: 50%; background: #28c840;"></div>
+                    </div>
+                    <pre style="margin: 0; font-family: 'Fira Code', monospace; font-size: 14px; line-height: 1.6; color: #d4d4d4;"><span style="color: #c678dd;">class</span> <span style="color: #e5c07b;">Product</span> <span style="color: #c678dd;">extends</span> <span style="color: #e5c07b;">Model</span>
+{
+    <span style="color: #c678dd;">use</span> <span style="color: #e5c07b;">HasCrud</span>; <span style="color: #7f848e;">// ⚡ The magic happens here</span>
+
+    <span style="color: #c678dd;">protected</span> <span style="color: #e06c75;">$fillable</span> = [
+        <span style="color: #98c379;">'name'</span>,
+        <span style="color: #98c379;">'price'</span>,
+        <span style="color: #98c379;">'stock_status'</span>,
+        <span style="color: #98c379;">'image'</span>
+    ];
+}</pre>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Screenshots Gallery -->
+    <section id="screenshots" class="section section-alt">
+        <div class="section-header">
+            <span class="section-badge">Gallery</span>
+            <h2 class="section-title">Pixel Perfect Interface</h2>
+            <p class="section-subtitle">A tour of the dashboard screens available immediately after installation.</p>
+        </div>
+
+        <div class="screenshots-grid">
+            <div class="screenshot-card" data-category="dashboard">
+                <div class="card-image">
+                    <a href="images/1-tyro-dashboard-landing-light.png" data-lightbox="images/1-tyro-dashboard-landing-light.png" data-caption="Dashboard Landing" class="card-image-link">
+                        <img src="images/1-tyro-dashboard-landing-light.png" alt="Dashboard Landing" data-light="images/1-tyro-dashboard-landing-light.png" data-dark="images/1-tyro-dashboard-landing-dark.png" class="theme-toggle-img">
+                    </a>
+                </div>
+                <div class="screenshot-label">Dashboard Overview</div>
+            </div>
+            <div class="screenshot-card" data-category="users">
+                <div class="card-image">
+                    <a href="images/3-tyro-dashboard-users-light.png" data-lightbox="images/3-tyro-dashboard-users-light.png" data-caption="User Management" class="card-image-link">
+                        <img src="images/3-tyro-dashboard-users-light.png" alt="User Management" data-light="images/3-tyro-dashboard-users-light.png" data-dark="images/3-tyro-dashboard-users-dark.png" class="theme-toggle-img">
+                    </a>
+                </div>
+                <div class="screenshot-label">User Management</div>
+            </div>
+            <div class="screenshot-card" data-category="roles">
+                <div class="card-image">
+                    <a href="images/6-tyro-dashboard-role-detail-light.png" data-lightbox="images/6-tyro-dashboard-role-detail-light.png" data-caption="Role Detail" class="card-image-link">
+                        <img src="images/6-tyro-dashboard-role-detail-light.png" alt="Role Detail" data-light="images/6-tyro-dashboard-role-detail-light.png" data-dark="images/6-tyro-dashboard-role-detail-dark.png" class="theme-toggle-img">
+                    </a>
+                </div>
+                <div class="screenshot-label">Role Configuration</div>
+            </div>
+        </div>
+        
+        <div style="text-align: center; margin-top: 3rem;">
+            <a href="doc.html" class="btn btn-secondary" style="border-radius: 30px; padding: 12px 30px;">View All Screens</a>
+        </div>
+    </section>
+
+    <!-- Installation / CTA -->
+    <section id="installation" class="section" style="padding-top: 100px; padding-bottom: 140px;">
+        <div style="max-width: 800px; margin: 0 auto; text-align: center;">
+            <h2 class="section-title" style="font-size: 3rem; margin-bottom: 1.5rem;">Ready to ship?</h2>
+            <p class="section-subtitle" style="margin-bottom: 3rem;">
+                Join hundreds of developers saving hours on every project. Open source and free.
+            </p>
+            
+            <div class="install-command" style="background: var(--color-bg-secondary); padding: 1.5rem; border-radius: 16px; border: 2px solid var(--color-border); display: flex; align-items: center; justify-content: space-between; max-width: 600px; margin: 0 auto; box-shadow: 0 20px 40px rgba(0,0,0,0.05);">
+                <code style="color: var(--accent-orange); font-size: 1.1rem; font-family: monospace;">composer require hasinhayder/tyro-dashboard</code>
+                <button class="copy-btn" onclick="copyToClipboard(this, 'composer require hasinhayder/tyro-dashboard')" style="background: var(--color-text); color: var(--color-bg); border: none; padding: 10px 20px; border-radius: 8px; font-weight: bold; cursor: pointer;">
+                    Copy
+                </button>
+            </div>
+            
+            <div style="margin-top: 3rem; display: flex; gap: 20px; justify-content: center;">
+                <a href="doc.html" class="btn btn-secondary" style="border-radius: 12px; font-weight: 700;">Read Documentation</a>
+                <a href="https://github.com/hasinhayder/tyro-dashboard" class="btn btn-primary" style="border-radius: 12px; font-weight: 700; background: var(--color-text); color: var(--color-bg); box-shadow: none;">Star on GitHub</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Powering Section (Reference Image Inspired) -->
+    <section class="powering-section">
+        <div class="container">
+            <h3 class="powering-title">Powering Laravel Applications Everywhere</h3>
+            <div class="powering-grid">
+                <div class="powering-item">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"></path><path d="M2 17l10 5 10-5"></path><path d="M2 12l10 5 10-5"></path></svg>
+                    Laravel 12
+                </div>
+                <div class="powering-item">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+                    Shadcn/UI
+                </div>
+                <div class="powering-item">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.24 12.24a6 6 0 0 0-8.49-8.49L5 10.5V19h8.5z"></path><line x1="16" y1="8" x2="2" y2="22"></line><line x1="17.5" y1="15" x2="9" y2="15"></line></svg>
+                    Tailwind
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container" style="text-align: center; opacity: 0.6;">
+            <p>&copy; 2024 Tyro Dashboard. Built with ❤️ for the Laravel Community.</p>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="script.js"></script>
+    <script>
+        // Sync theme images from attributes
+        const observer = new MutationObserver((mutations) => {
+            mutations.forEach((mutation) => {
+                if (mutation.type === 'attributes' && mutation.attributeName === 'data-theme') {
+                    const theme = document.documentElement.getAttribute('data-theme');
+                    const images = document.querySelectorAll('.theme-toggle-img');
+                    images.forEach(img => {
+                        img.src = theme === 'dark' ? img.dataset.dark : img.dataset.light;
+                    });
+                }
+            });
+        });
+        observer.observe(document.documentElement, { attributes: true });
+        
+        // Initial sync
+        const currentTheme = document.documentElement.getAttribute('data-theme');
+        if (currentTheme === 'dark') {
+            document.querySelectorAll('.theme-toggle-img').forEach(img => {
+                img.src = img.dataset.dark;
+            });
+        }
+    </script>
+</body>
+</html>

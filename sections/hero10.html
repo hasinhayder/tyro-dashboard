@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tyro Dashboard - Hero Option 10</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../styles.css">
+    <style>
+        :root {
+            --hero-10-accent: #6366f1;
+            --hero-10-orange: #fb923c;
+        }
+
+        .hero-10 {
+            min-height: 100vh;
+            background: var(--color-bg);
+            padding: 120px 0 100px;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+        }
+
+        /* Abstract Background Decor */
+        .hero-10-bg-shape {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            opacity: 0.05;
+            pointer-events: none;
+        }
+
+        .hero-10-grid {
+            position: absolute;
+            top: 10%;
+            left: 5%;
+            width: 400px;
+            height: 400px;
+            background-image: 
+                linear-gradient(var(--color-border) 1px, transparent 1px),
+                linear-gradient(90deg, var(--color-border) 1px, transparent 1px);
+            background-size: 40px 40px;
+            z-index: 1;
+            mask-image: radial-gradient(circle, black, transparent 80%);
+        }
+
+        .hero-10-container {
+            max-width: 1300px;
+            margin: 0 auto;
+            padding: 0 40px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            position: relative;
+            z-index: 10;
+            width: 100%;
+        }
+
+        /* Left Side */
+        .hero-10-left {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .hero-10-main-card {
+            background: var(--color-bg);
+            border: 1px solid var(--color-border);
+            border-radius: 20px;
+            width: 380px;
+            padding: 0;
+            overflow: hidden;
+            box-shadow: 0 30px 60px var(--color-shadow);
+            margin-bottom: 60px;
+            transform: rotate(-2deg);
+        }
+
+        .hero-10-card-header {
+            background: var(--hero-10-accent);
+            color: white;
+            padding: 12px 20px;
+            font-size: 0.8rem;
+            font-weight: 700;
+        }
+
+        .hero-10-card-body {
+            padding: 20px;
+        }
+
+        .hero-10-user-info {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .hero-10-avatar {
+            width: 48px;
+            height: 48px;
+            background: var(--color-bg-secondary);
+            border-radius: 50%;
+            overflow: hidden;
+        }
+
+        .hero-10-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .hero-10-timeline {
+            display: flex;
+            justify-content: space-between;
+            position: relative;
+            margin-top: 30px;
+            padding-top: 15px;
+        }
+
+        .hero-10-timeline::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--color-bg-tertiary);
+            border-radius: 2px;
+        }
+
+        .hero-10-timeline-active {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 60%;
+            height: 4px;
+            background: var(--hero-10-accent);
+            border-radius: 2px;
+        }
+
+        .hero-10-timeline-node {
+            font-size: 0.7rem;
+            font-weight: 700;
+            color: var(--color-text-tertiary);
+            text-align: center;
+        }
+
+        .hero-10-timeline-node.active {
+            color: var(--color-text);
+        }
+
+        /* Right Side */
+        .hero-10-right {
+            text-align: left;
+        }
+
+        .hero-10-title {
+            font-family: var(--font-display);
+            font-size: clamp(3rem, 6vw, 5rem);
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 2.5rem;
+            color: var(--color-text);
+        }
+
+        .hero-10-reviews {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 40px;
+        }
+
+        .hero-10-avatars-group {
+            display: flex;
+            margin-left: 10px;
+        }
+
+        .hero-10-avatars-group div {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            border: 2px solid var(--color-bg);
+            margin-left: -10px;
+            background: var(--color-bg-tertiary);
+        }
+
+        /* Bottom Row elements */
+        .hero-10-bottom {
+            margin-top: 40px;
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            width: 100%;
+        }
+
+        .hero-10-desc-block {
+            max-width: 400px;
+        }
+
+        .hero-10-desc-block p {
+            color: var(--color-text-secondary);
+            font-size: 1.1rem;
+            line-height: 1.6;
+            margin-bottom: 2rem;
+        }
+
+        .hero-10-btns {
+            display: flex;
+            gap: 15px;
+        }
+
+        .hero-10-floating-elements {
+            display: flex;
+            gap: 20px;
+            align-items: flex-start;
+        }
+
+        .hero-10-mini-card {
+            background: var(--color-bg);
+            border: 1px solid var(--color-border);
+            border-radius: 16px;
+            padding: 15px;
+            box-shadow: 0 20px 40px var(--color-shadow);
+            font-size: 0.85rem;
+        }
+
+        .hero-10-payment-card {
+            width: 300px;
+        }
+
+        .payment-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+            border-bottom: 1px solid var(--color-border);
+        }
+
+        .payment-row:last-child { border: none; }
+
+        .btn-10-dark {
+            background: #111;
+            color: white;
+            border-radius: 30px;
+            padding: 14px 30px;
+            font-weight: 700;
+            text-decoration: none;
+        }
+
+        .btn-10-outline {
+            background: transparent;
+            color: var(--color-text);
+            border: 1px solid var(--color-border);
+            border-radius: 30px;
+            padding: 14px 30px;
+            font-weight: 700;
+            text-decoration: none;
+        }
+
+        [data-theme="dark"] .btn-10-dark {
+            background: white;
+            color: #111;
+        }
+
+        @media (max-width: 1024px) {
+            .hero-10-container { grid-template-columns: 1fr; }
+            .hero-10-bottom { flex-direction: column; align-items: flex-start; gap: 40px; }
+            .hero-10-floating-elements { width: 100%; overflow-x: auto; padding-bottom: 20px; }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="navbar-container">
+            <a href="../index.html" class="navbar-brand">
+                <span class="navbar-logo">Tyro Dashboard</span>
+                <span class="navbar-badge">v1.12.0</span>
+            </a>
+
+            <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Toggle menu">
+                <span></span><span></span><span></span>
+            </button>
+
+            <div class="navbar-links">
+                <a href="../index.html#features" class="navbar-link">Features</a>
+                <a href="../index.html#crud-showcase" class="navbar-link">CRUD</a>
+                <a href="../doc.html" class="navbar-link">Docs</a>
+                <a href="../index.html#installation" class="btn-10-dark" style="padding: 8px 20px; font-size: 0.85rem;">
+                    Sign In
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Theme Toggle -->
+    <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+        <svg class="sun-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+        <svg class="moon-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+    </button>
+
+    <section class="hero-10">
+        <div class="hero-10-grid"></div>
+        <div class="hero-10-container">
+            <!-- Top Section -->
+            <div class="hero-10-left">
+                <div class="hero-10-main-card">
+                    <div class="hero-10-card-header">Role Configuration</div>
+                    <div class="hero-10-card-body">
+                        <div class="hero-10-user-info">
+                            <div class="hero-10-avatar">
+                                <img src="https://i.pravatar.cc/100?u=olivia" alt="Olivia">
+                            </div>
+                            <div>
+                                <div style="font-weight: 800;">Olivia Wouters</div>
+                                <div style="font-size: 0.75rem; color: var(--color-text-tertiary);">Senior Developer</div>
+                            </div>
+                        </div>
+                        <div class="hero-10-timeline">
+                            <div class="hero-10-timeline-active"></div>
+                            <div class="hero-10-timeline-node active">Created<br><span style="font-size: 0.6rem;">Jul 13</span></div>
+                            <div class="hero-10-timeline-node active">Assigned<br><span style="font-size: 0.6rem;">Jul 14</span></div>
+                            <div class="hero-10-timeline-node">Verified<br><span style="font-size: 0.6rem;">-</span></div>
+                            <div class="hero-10-timeline-node">Active<br><span style="font-size: 0.6rem;">-</span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="hero-10-right">
+                <h1 class="hero-10-title">
+                    Agile management for today's world of scale
+                </h1>
+                <div class="hero-10-reviews">
+                    <div class="hero-10-avatars-group">
+                        <div><img src="https://i.pravatar.cc/100?u=1" style="width:100%; border-radius:50%;"></div>
+                        <div><img src="https://i.pravatar.cc/100?u=2" style="width:100%; border-radius:50%;"></div>
+                        <div><img src="https://i.pravatar.cc/100?u=3" style="width:100%; border-radius:50%;"></div>
+                    </div>
+                    <div style="font-weight: 700;">
+                        <span style="color: #fbbf24;">★★★★★</span> 4.9
+                        <div style="font-size: 0.75rem; color: var(--color-text-tertiary); font-weight: 500;">from 100+ developers</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bottom Section -->
+            <div class="hero-10-desc-block">
+                <p>An all-encompassing Laravel admin solution to help modern businesses grow with automated CRUD, RBAC, and Audit Trails.</p>
+                <div class="hero-10-btns">
+                    <a href="../index.html#installation" class="btn-10-dark">Get Started</a>
+                    <a href="../doc.html" class="btn-10-outline">View Docs</a>
+                </div>
+            </div>
+
+            <div class="hero-10-floating-elements">
+                <div class="hero-10-mini-card" style="width: 200px;">
+                    <div style="display: flex; gap: 10px; align-items: center; margin-bottom: 10px;">
+                        <div style="width: 30px; height: 30px; background: #dcfce7; border-radius: 50%; color: #22c55e; display: flex; align-items: center; justify-content: center;">✓</div>
+                        <div>
+                            <div style="font-weight: 800;">164 Users</div>
+                            <div style="font-size: 0.65rem; color: #22c55e;">+10 active now</div>
+                        </div>
+                    </div>
+                    <div style="font-size: 0.75rem; color: var(--color-text-secondary);">
+                        <strong>Audit Trail:</strong> User #42 changed password.
+                    </div>
+                </div>
+
+                <div class="hero-10-mini-card hero-10-payment-card">
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 15px;">
+                        <div style="font-weight: 800;">Recent Activity</div>
+                        <div style="color: var(--hero-10-accent); font-size: 0.7rem; font-weight: 700;">VIEW ALL</div>
+                    </div>
+                    <div class="payment-row">
+                        <div style="font-size: 0.75rem;"><strong>Olivia W.</strong> Updated Profile</div>
+                        <div style="color: #22c55e; font-weight: 700;">✓</div>
+                    </div>
+                    <div class="payment-row">
+                        <div style="font-size: 0.75rem;"><strong>Patricia C.</strong> Created Role</div>
+                        <div style="color: #22c55e; font-weight: 700;">✓</div>
+                    </div>
+                    <div style="margin-top: 15px;">
+                        <a href="#" style="display: block; background: var(--hero-10-accent); color: white; text-align: center; padding: 8px; border-radius: 8px; text-decoration: none; font-weight: 700; font-size: 0.75rem;">Manage All Users</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script src="../script.js"></script>
+    <script>
+        // Sync theme logic
+        const observer = new MutationObserver((mutations) => {
+            mutations.forEach((mutation) => {
+                if (mutation.type === 'attributes' && mutation.attributeName === 'data-theme') {
+                    // Update any dynamic elements if needed
+                }
+            });
+        });
+        observer.observe(document.documentElement, { attributes: true });
+    </script>
+</body>
+
+</html>
