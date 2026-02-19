@@ -449,6 +449,78 @@ body {
 	}
 }
 
+/* ─── Tech Stack & Trust ─── */
+.trust-row {
+    padding: 80px 20px 60px;
+    background: var(--color-bg);
+    position: relative;
+    z-index: 10;
+    text-align: center;
+}
+
+.trust-container {
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+.trust-label {
+    font-size: 0.75rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    color: var(--color-text-secondary);
+    margin-bottom: 40px;
+    opacity: 0.6;
+}
+
+.tech-stack {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 60px;
+    flex-wrap: wrap;
+    margin-bottom: 40px;
+}
+
+.tech-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: var(--color-text-secondary);
+    font-weight: 600;
+    font-size: 0.95rem;
+    transition: color 0.3s ease, transform 0.3s ease;
+    opacity: 0.7;
+}
+
+.tech-item svg {
+    width: 28px;
+    height: 28px;
+    opacity: 0.8;
+}
+
+.tech-item:hover {
+    color: var(--color-text);
+    opacity: 1;
+    transform: translateY(-2px);
+}
+
+.trust-teams {
+    font-size: 0.9rem;
+    color: var(--color-text-secondary);
+    font-weight: 500;
+    opacity: 0.5;
+}
+
+@media (max-width: 900px) {
+    .tech-stack {
+        gap: 32px;
+    }
+    .trust-row {
+        padding: 60px 20px;
+    }
+}
+
 @media (max-width: 900px) {
     .mobile-menu-btn {
         display: inline-block;
@@ -507,6 +579,33 @@ body {
 .manifest-container {
     max-width: 1300px;
     margin: 0 auto;
+}
+
+.manifest-header {
+    text-align: center;
+    max-width: 800px;
+    margin: 0 auto 100px;
+}
+
+.manifest-title {
+    font-family: var(--font-display);
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    font-weight: 900;
+    line-height: 1.1;
+    letter-spacing: -0.04em;
+    color: var(--color-text);
+    margin-bottom: 24px;
+}
+
+.manifest-title .accent {
+    color: var(--hero-18-orange);
+}
+
+.manifest-subtitle {
+    font-size: 1.25rem;
+    line-height: 1.6;
+    color: var(--color-text-secondary);
+    opacity: 0.8;
 }
 
 .manifest-grid {
