@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tyro Dashboard - 17 Features Technical Manifest</title>
+    <title>Tyro Dashboard - 17 Features Spotlight Matrix</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@700;800;900&display=swap" rel="stylesheet">
@@ -135,7 +135,7 @@
             color: white;
         }
 
-        /* Powering Grid - Re-styled from Reference Image */
+        /* Powering Grid */
         .hero-18-powering {
             width: 100%;
             max-width: 1300px;
@@ -183,83 +183,87 @@
 
         .powering-item svg { width: 32px; height: 32px; }
 
-        /* Technical Manifest Feature Section */
-        .feature-manifest {
-            padding: 160px 20px;
+        /* Spotlight Matrix Section */
+        .feature-matrix {
+            padding: 160px 0;
             background: var(--color-bg);
             border-top: 1px solid var(--color-border);
+            position: relative;
+            overflow: hidden;
         }
 
-        .manifest-container {
-            max-width: 1300px;
+        .matrix-container {
+            max-width: 1400px;
             margin: 0 auto;
+            padding: 0 40px;
+            position: relative;
+            z-index: 10;
         }
 
-        .manifest-grid {
+        .matrix-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 80px 40px;
+            gap: 1px;
+            background: var(--color-border);
+            border: 1px solid var(--color-border);
         }
 
-        .manifest-item {
+        .matrix-item {
+            background: var(--color-bg);
+            padding: 60px 40px;
             display: flex;
-            gap: 24px;
-            align-items: flex-start;
+            flex-direction: column;
+            gap: 20px;
             position: relative;
-            transition: all 0.3s ease;
-            min-height: 100px;
+            overflow: hidden;
+            transition: background 0.3s ease;
+            min-height: 220px;
         }
 
-        .manifest-num {
+        .matrix-item:hover {
+            background: rgba(255, 95, 31, 0.02);
+        }
+
+        .matrix-index {
             font-family: var(--font-display);
-            font-size: 1.5rem;
-            font-weight: 300;
+            font-size: 0.85rem;
+            font-weight: 900;
             color: var(--hero-18-orange);
-            opacity: 0.4;
-            line-height: 1;
-            padding-top: 4px;
-            transition: all 0.3s ease;
+            opacity: 0.5;
+            letter-spacing: 0.2em;
         }
 
-        .manifest-content h3 {
+        .matrix-item h3 {
             font-family: var(--font-display);
             font-size: 1.75rem;
             font-weight: 800;
             color: var(--color-text);
             line-height: 1.1;
-            margin-bottom: 12px;
-            text-transform: lowercase;
             transition: all 0.3s ease;
         }
 
-        .manifest-content p {
-            font-size: 0.9rem;
+        .matrix-item p {
+            font-size: 0.95rem;
             color: var(--color-text-secondary);
-            line-height: 1.5;
-            max-width: 280px;
+            line-height: 1.6;
             opacity: 0;
             transform: translateY(10px);
             transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             pointer-events: none;
         }
 
-        .manifest-item:hover .manifest-num {
-            opacity: 1;
-            transform: scale(1.2);
-        }
-
-        .manifest-item:hover h3 {
+        .matrix-item:hover h3 {
             color: var(--hero-18-orange);
-            transform: translateX(5px);
+            transform: translateY(-5px);
         }
 
-        .manifest-item:hover p {
+        .matrix-item:hover p {
             opacity: 1;
             transform: translateY(0);
             pointer-events: auto;
         }
 
-        /* Cursor Spotlight */
+        /* Cursor Spotlight Effect */
         .spotlight {
             position: fixed;
             top: 0; left: 0;
@@ -272,15 +276,17 @@
             display: none;
         }
 
-        @media (max-width: 1100px) {
-            .manifest-grid { grid-template-columns: repeat(2, 1fr); }
+        @media (max-width: 1024px) {
+            .matrix-grid { grid-template-columns: repeat(2, 1fr); }
+            .hero-18-title { font-size: 4.5rem; }
             .powering-grid { gap: 2rem; }
             .powering-item { font-size: 1.25rem; }
         }
 
         @media (max-width: 768px) {
-            .manifest-grid { grid-template-columns: 1fr; }
-            .hero-18-title { font-size: 3.5rem; }
+            .matrix-grid { grid-template-columns: 1fr; }
+            .matrix-item { padding: 40px 20px; min-height: auto; }
+            .matrix-item p { opacity: 1; transform: none; }
         }
     </style>
 </head>
@@ -316,8 +322,7 @@
     <!-- Hero Section -->
     <section class="hero-18">
         <div class="hero-18-pattern"></div>
-        
-        <div class="hero-18-node" style="top: 40%; left: 25%;"></div>
+        <div class="hero-18-node" style="top: 20%; left: 15%;"></div>
         <div class="hero-18-node" style="bottom: 30%; right: 25%; animation-delay: 1s;"></div>
 
         <div class="hero-18-container">
@@ -340,7 +345,7 @@
                 </div>
             </div>
 
-            <!-- Powering Section Inside Hero Footer Area (Styled like Reference) -->
+            <!-- Powering Section Inside Hero Footer Area -->
             <div class="hero-18-powering">
                 <h3 class="powering-title">Powering Laravel Applications Everywhere</h3>
                 <div class="powering-grid">
@@ -361,78 +366,95 @@
         </div>
     </section>
 
-    <!-- Technical Manifest Feature Section -->
-    <section id="features" class="feature-manifest">
-        <div class="manifest-container">
-            <div class="manifest-grid">
+    <!-- Spotlight Matrix Feature Section (Interactive Reveal) -->
+    <section id="features" class="feature-matrix">
+        <div class="matrix-container">
+            <div class="matrix-grid">
                 <!-- 17 Features -->
-                <div class="manifest-item">
-                    <div class="manifest-num">01</div>
-                    <div class="manifest-content"><h3>Magical CRUD</h3><p>Describe your model through configuration and get a full admin interface automatically.</p></div>
+                <div class="matrix-item">
+                    <div class="matrix-index">01</div>
+                    <h3>Magical CRUD</h3>
+                    <p>Describe your model through configuration and get a full admin interface automatically.</p>
                 </div>
-                <div class="manifest-item">
-                    <div class="manifest-num">02</div>
-                    <div class="manifest-content"><h3>User Management</h3><p>Full CRUD operations, 2FA, and suspension controls immediately after installation.</p></div>
+                <div class="matrix-item">
+                    <div class="matrix-index">02</div>
+                    <h3>User Management</h3>
+                    <p>Full CRUD operations, 2FA, and suspension controls immediately after installation.</p>
                 </div>
-                <div class="manifest-item">
-                    <div class="manifest-num">03</div>
-                    <div class="manifest-content"><h3>Role Hierarchy</h3><p>Enterprise-grade permission system with visual relationship management matrix.</p></div>
+                <div class="matrix-item">
+                    <div class="matrix-index">03</div>
+                    <h3>Role Hierarchy</h3>
+                    <p>Enterprise-grade permission system with visual relationship management matrix.</p>
                 </div>
-                <div class="manifest-item">
-                    <div class="manifest-num">04</div>
-                    <div class="manifest-content"><h3>Audit Trail</h3><p>Forensic logging of every system interaction for complete transparency and compliance.</p></div>
+                <div class="matrix-item">
+                    <div class="matrix-index">04</div>
+                    <h3>Audit Trail</h3>
+                    <p>Forensic logging of every system interaction for complete transparency and compliance.</p>
                 </div>
-                <div class="manifest-item">
-                    <div class="manifest-num">05</div>
-                    <div class="manifest-content"><h3>Impersonation</h3><p>Debug user issues securely by stepping into their shoes without needing a password.</p></div>
+                <div class="matrix-item">
+                    <div class="matrix-index">05</div>
+                    <h3>Impersonation</h3>
+                    <p>Debug user issues securely by stepping into their shoes without needing a password.</p>
                 </div>
-                <div class="manifest-item">
-                    <div class="manifest-num">06</div>
-                    <div class="manifest-content"><h3>Instant Pages</h3><p>Generate full dashboard pages with one command: tyro:create-page.</p></div>
+                <div class="matrix-item">
+                    <div class="matrix-index">06</div>
+                    <h3>Instant Pages</h3>
+                    <p>Generate full dashboard pages with one command: tyro:create-page.</p>
                 </div>
-                <div class="manifest-item">
-                    <div class="manifest-num">07</div>
-                    <div class="manifest-content"><h3>Settings UI</h3><p>Configure packages through a beautiful UI instead of digging through config files.</p></div>
+                <div class="matrix-item">
+                    <div class="matrix-index">07</div>
+                    <h3>Settings UI</h3>
+                    <p>Configure packages through a beautiful UI instead of digging through config files.</p>
                 </div>
-                <div class="manifest-item">
-                    <div class="manifest-num">08</div>
-                    <div class="manifest-content"><h3>Dark Mode</h3><p>Built-in adaptive theme support that looks stunning in any lighting condition.</p></div>
+                <div class="matrix-item">
+                    <div class="matrix-index">08</div>
+                    <h3>Dark Mode</h3>
+                    <p>Built-in adaptive theme support that looks stunning in any lighting condition.</p>
                 </div>
-                <div class="manifest-item">
-                    <div class="manifest-num">09</div>
-                    <div class="manifest-content"><h3>Responsive UI</h3><p>Engineered to work perfectly on mobile phones, tablets, and large monitors.</p></div>
+                <div class="matrix-item">
+                    <div class="matrix-index">09</div>
+                    <h3>Responsive UI</h3>
+                    <p>Engineered to work perfectly on mobile phones, tablets, and large monitors.</p>
                 </div>
-                <div class="manifest-item">
-                    <div class="manifest-num">10</div>
-                    <div class="manifest-content"><h3>Shadcn Themes</h3><p>Full compatibility with Shadcn/UI standards for effortless color customization.</p></div>
+                <div class="matrix-item">
+                    <div class="matrix-index">10</div>
+                    <h3>Shadcn Themes</h3>
+                    <p>Full compatibility with Shadcn/UI standards for effortless color customization.</p>
                 </div>
-                <div class="manifest-item">
-                    <div class="manifest-num">11</div>
-                    <div class="manifest-content"><h3>Field Logic</h3><p>Advanced control over field visibility, behavior, and custom HTML attributes.</p></div>
+                <div class="matrix-item">
+                    <div class="matrix-index">11</div>
+                    <h3>Field Logic</h3>
+                    <p>Advanced control over field visibility, behavior, and custom HTML attributes.</p>
                 </div>
-                <div class="manifest-item">
-                    <div class="manifest-num">12</div>
-                    <div class="manifest-content"><h3>Dual Dashboards</h3><p>Separate, personalized experiences for Admins and regular Users out of the box.</p></div>
+                <div class="matrix-item">
+                    <div class="matrix-index">12</div>
+                    <h3>Gravatar Support</h3>
+                    <p>Integrated support for custom photo uploads and Gravatar fallbacks.</p>
                 </div>
-                <div class="manifest-item">
-                    <div class="manifest-num">13</div>
-                    <div class="manifest-content"><h3>Referral Engine</h3><p>Built-in invitation system with automated tracking to drive organic growth.</p></div>
+                <div class="matrix-item">
+                    <div class="matrix-index">13</div>
+                    <h3>Separate Dashboards</h3>
+                    <p>Separate, personalized experiences for Admins and regular Users out of the box.</p>
                 </div>
-                <div class="manifest-item">
-                    <div class="manifest-num">14</div>
-                    <div class="manifest-content"><h3>Privilege Engine</h3><p>Auto-discovery of routes to build your permission set without manual effort.</p></div>
+                <div class="matrix-item">
+                    <div class="matrix-index">14</div>
+                    <h3>Referral Engine</h3>
+                    <p>Built-in invitation system with automated tracking to drive organic growth.</p>
                 </div>
-                <div class="manifest-item">
-                    <div class="manifest-num">15</div>
-                    <div class="manifest-content"><h3>Profile Photos</h3><p>Integrated support for custom photo uploads and Gravatar fallbacks.</p></div>
+                <div class="matrix-item">
+                    <div class="matrix-index">15</div>
+                    <h3>Privilege Engine</h3>
+                    <p>Auto-discovery of routes to build your permission set without manual effort.</p>
                 </div>
-                <div class="manifest-item">
-                    <div class="manifest-num">16</div>
-                    <div class="manifest-content"><h3>Sidebar Colors</h3><p>Easily customize your sidebar background and text via environment variables.</p></div>
+                <div class="matrix-item">
+                    <div class="matrix-index">16</div>
+                    <h3>Sidebar Colors</h3>
+                    <p>Easily customize your sidebar background and text via environment variables.</p>
                 </div>
-                <div class="manifest-item">
-                    <div class="manifest-num">17</div>
-                    <div class="manifest-content"><h3>Admin Protect</h3><p>Middleware-sealed routes ensure sensitive features are only accessible to admins.</p></div>
+                <div class="matrix-item">
+                    <div class="matrix-index">17</div>
+                    <h3>Admin Protect</h3>
+                    <p>Middleware-sealed routes ensure sensitive features are only accessible to admins.</p>
                 </div>
             </div>
         </div>

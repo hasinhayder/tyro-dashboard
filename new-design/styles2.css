@@ -570,15 +570,21 @@ body {
     }
 }
 
-.feature-manifest {
-    padding: 160px 20px;
+/* Spotlight Matrix Section */
+.feature-matrix {
+    padding: 160px 0;
     background: var(--color-bg);
+    position: relative;
+    overflow: hidden;
     border-top: 1px solid var(--color-border);
 }
 
-.manifest-container {
-    max-width: 1300px;
+.matrix-container {
+    max-width: 1440px;
     margin: 0 auto;
+    padding: 0 40px;
+    position: relative;
+    z-index: 10;
 }
 
 .manifest-header {
@@ -608,173 +614,85 @@ body {
     opacity: 0.8;
 }
 
-.manifest-grid {
-    column-count: 3;
-    column-gap: 24px;
-    margin-top: 64px;
-}
-
-@media (max-width: 1100px) {
-    .manifest-grid {
-        column-count: 2;
-    }
-}
-
-@media (max-width: 768px) {
-    .manifest-grid {
-        column-count: 1;
-    }
-}
-
-.manifest-item {
-    break-inside: avoid;
-    margin-bottom: 24px;
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-    padding: 32px;
-    background: var(--color-bg-secondary);
+.matrix-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--color-border);
     border: 1px solid var(--color-border);
-    border-radius: 24px;
-    cursor: pointer;
-    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-    position: relative;
-    overflow: hidden;
 }
 
-/* Color Blocks Palette */
-.manifest-item.color-blue { background: rgba(59, 130, 246, 0.05); border-color: rgba(59, 130, 246, 0.1); }
-.manifest-item.color-emerald { background: rgba(16, 185, 129, 0.05); border-color: rgba(16, 185, 129, 0.1); }
-.manifest-item.color-amber { background: rgba(245, 158, 11, 0.05); border-color: rgba(245, 158, 11, 0.1); }
-.manifest-item.color-rose { background: rgba(244, 63, 94, 0.05); border-color: rgba(244, 63, 94, 0.1); }
-.manifest-item.color-indigo { background: rgba(99, 102, 241, 0.05); border-color: rgba(99, 102, 241, 0.1); }
-.manifest-item.color-cyan { background: rgba(6, 182, 212, 0.05); border-color: rgba(6, 182, 212, 0.1); }
-
-/* Remove previous icon alignment that conflict with column layout */
-.manifest-item > .manifest-icon {
-    position: absolute;
-    top: 24px;
-    right: 24px;
-}
-
-.manifest-item:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 20px 40px -10px rgba(0,0,0,0.1);
-}
-
-.manifest-item.color-blue:hover { border-color: #3b82f6; }
-.manifest-item.color-emerald:hover { border-color: #10b981; }
-.manifest-item.color-amber:hover { border-color: #f59e0b; }
-.manifest-item.color-rose:hover { border-color: #f43f5e; }
-.manifest-item.color-indigo:hover { border-color: #6366f1; }
-.manifest-item.color-cyan:hover { border-color: #06b6d2; }
-
-.manifest-item.active {
-    transform: none;
-    box-shadow: 0 20px 60px -10px rgba(0,0,0,0.15);
-}
-
-.manifest-details {
-    max-height: 0;
-    overflow: hidden;
-    transition: max-height 0.6s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s ease, margin 0.3s ease;
-    opacity: 0;
-    margin-top: 0;
+.matrix-item {
+    background: var(--color-bg);
+    padding: 60px 40px;
     display: flex;
     flex-direction: column;
     gap: 20px;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    text-decoration: none;
+    border: 1px solid transparent;
 }
 
-.manifest-item.active .manifest-details {
-    max-height: 800px;
-    opacity: 1;
-    margin-top: 24px;
-    padding-top: 24px;
-    border-top: 1px solid rgba(255, 255, 255, 0.05);
+.matrix-item:hover {
+    background: var(--color-bg-secondary);
+    transform: translateY(-8px);
+    border-color: var(--hero-18-orange);
+    box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.1);
+    z-index: 11;
 }
 
-.detail-block {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-}
-
-.detail-block .detail-label {
-    font-size: 0.65rem;
-    font-weight: 800;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    opacity: 0.6;
-}
-
-.color-blue .detail-label { color: #3b82f6; }
-.color-emerald .detail-label { color: #10b981; }
-.color-amber .detail-label { color: #f59e0b; }
-.color-rose .detail-label { color: #f43f5e; }
-.color-indigo .detail-label { color: #6366f1; }
-.color-cyan .detail-label { color: #06b6d2; }
-
-.manifest-item .manifest-content {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-}
-
-.manifest-content .header-row {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-}
-
-.manifest-content h3 {
-    margin: 0;
+.matrix-index {
     font-family: var(--font-display);
-    font-size: 1.15rem;
-    font-weight: 800;
-    color: var(--color-text);
-    line-height: 1.2;
+    font-size: 0.85rem;
+    font-weight: 900;
+    color: var(--hero-18-orange);
+    opacity: 0.5;
+    letter-spacing: 0.2em;
     transition: all 0.3s ease;
 }
 
-.manifest-content p {
+.matrix-item:hover .matrix-index {
+    opacity: 1;
+    transform: scale(1.1);
+}
+
+.matrix-item h3 {
+    font-family: var(--font-display);
+    font-size: 1.75rem;
+    font-weight: 800;
+    color: var(--color-text);
+    line-height: 1.1;
+    transition: color 0.3s ease;
+    margin: 0;
+}
+
+.matrix-item p {
     margin: 0;
     font-size: 0.95rem;
     color: var(--color-text-secondary);
-    line-height: 1.55;
-    opacity: 0.9;
-    transform: none;
-    transition: none;
-    pointer-events: auto;
-}
-
-.manifest-item:hover h3 {
-    color: var(--hero-18-orange);
-}
-
-.manifest-icon {
-    position: absolute;
-    top: 32px;
-    right: 32px;
-    color: var(--color-text-secondary);
-    opacity: 0.3;
-    transition: transform 0.3s ease, opacity 0.3s ease;
-}
-
-
-
-.manifest-num {
-    font-family: var(--font-display);
-    font-size: 1.25rem;
-    font-weight: 800;
-    color: var(--hero-18-orange);
-    opacity: 0.3;
-    line-height: 1.2;
+    line-height: 1.6;
+    opacity: 0.8;
     transition: all 0.3s ease;
 }
 
-.manifest-item:hover .manifest-num,
-.manifest-item.active .manifest-num {
+.matrix-item:hover h3 {
+    color: var(--hero-18-orange);
+}
+
+.matrix-item:hover p {
     opacity: 1;
+    color: var(--color-text);
+}
+
+@media (max-width: 1024px) {
+    .matrix-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 768px) {
+    .matrix-grid { grid-template-columns: 1fr; }
+    .matrix-item { padding: 40px 20px; }
 }
 
 
