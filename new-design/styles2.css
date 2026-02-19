@@ -186,25 +186,35 @@ body {
 
 .hero-18-node {
     position: absolute;
-    width: 8px;
-    height: 8px;
+    width: 6px;
+    height: 6px;
     background: var(--hero-18-orange);
     border-radius: 50%;
-    opacity: 0.2;
+    opacity: 0.1;
     z-index: 1;
-    animation: pulse-node 4s infinite ease-in-out;
+    animation: pulse-node 6s infinite ease-in-out;
+}
+
+.hero-18-node:nth-child(2n) {
+	background: #60a5fa;
+	animation-delay: 2s;
+}
+
+.hero-18-node:nth-child(3n) {
+	background: #a78bfa;
+	animation-delay: 4s;
 }
 
 @keyframes pulse-node {
-    0%,
-    100% {
+    0%, 100% {
         transform: scale(1);
         opacity: 0.1;
+		filter: blur(0px);
     }
-
     50% {
-        transform: scale(2);
-        opacity: 0.3;
+        transform: scale(2.5);
+        opacity: 0.4;
+		filter: blur(2px);
     }
 }
 
@@ -229,8 +239,24 @@ body {
 }
 
 .hero-18-title .accent {
-    color: var(--hero-18-orange);
+    background: linear-gradient(
+		to right, 
+		var(--hero-18-orange), 
+		#fbbf24, 
+		#ef4444, 
+		var(--hero-18-orange)
+	);
+	background-size: 300% auto;
+	-webkit-background-clip: text;
+	background-clip: text;
+	-webkit-text-fill-color: transparent;
+	animation: gradient-flow 8s linear infinite;
     display: block;
+}
+
+@keyframes gradient-flow {
+	0% { background-position: 0% center; }
+	100% { background-position: 300% center; }
 }
 
 .hero-18-description {
@@ -261,12 +287,34 @@ body {
     display: inline-flex;
     align-items: center;
     gap: 12px;
+	position: relative;
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+	transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+	border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.hero-18-btn::after {
+	content: '';
+	position: absolute;
+	inset: 0;
+	border-radius: 16px;
+	box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.1);
+	pointer-events: none;
+}
+
+.hero-18-btn:hover {
+	transform: translateY(-4px);
+	box-shadow: 0 30px 60px rgba(0, 0, 0, 0.3);
+	background: #000;
 }
 
 [data-theme="dark"] .hero-18-btn {
     background: #f8fafc;
     color: #0f172a;
+}
+
+[data-theme="dark"] .hero-18-btn:hover {
+	background: #fff;
 }
 
 .cta-arrow {
@@ -813,6 +861,64 @@ body {
     font-size: 0.8rem;
     font-weight: 600;
     color: var(--color-text-secondary);
+}
+
+/* ─── Floating UI Cards ─── */
+.floating-card {
+	position: absolute;
+	padding: 16px 20px;
+	border-radius: 16px;
+	background: rgba(255, 255, 255, 0.05);
+	backdrop-filter: blur(16px);
+	border: 1px solid rgba(255, 255, 255, 0.1);
+	display: flex;
+	align-items: center;
+	gap: 14px;
+	z-index: 5;
+	pointer-events: none;
+	animation: float 6s infinite ease-in-out;
+	box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.1);
+}
+
+[data-theme="dark"] .floating-card {
+	background: rgba(13, 17, 23, 0.4);
+	border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.floating-card-icon {
+	width: 38px;
+	height: 38px;
+	border-radius: 10px;
+	background: rgba(255, 255, 255, 0.1);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	color: var(--hero-18-orange);
+}
+
+.floating-card-info h5 {
+	margin: 0;
+	font-size: 0.85rem;
+	font-weight: 800;
+	color: var(--color-text);
+}
+
+.floating-card-info p {
+	margin: 0;
+	font-size: 0.75rem;
+	color: var(--color-text-secondary);
+	opacity: 0.8;
+}
+
+@keyframes float {
+	0%, 100% { transform: translateY(0); }
+	50% { transform: translateY(-20px); }
+}
+
+@media (max-width: 1200px) {
+	.floating-card {
+		display: none;
+	}
 }
 
 /* ─── Installation ─── */
