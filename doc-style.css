@@ -47,6 +47,7 @@
 /* Layout */
 .doc-layout {
     display: flex;
+    align-items: flex-start;
     min-height: 100vh;
     padding-top: 80px;
 }
@@ -161,7 +162,10 @@
     font-family: var(--font-display);
     font-size: clamp(2rem, 5vw, 3rem);
     font-weight: 800;
-    color: var(--color-text);
+    background: var(--gradient-text);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
     margin-bottom: var(--spacing-md);
 }
 
