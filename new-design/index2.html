@@ -326,7 +326,266 @@
 		</div>
 	</section>
 
-	<section id="screenshots" class="section-block" style="background: var(--color-bg-secondary);">
+	<section class="section-block" style="background: var(--color-bg-secondary);">
+		<div class="section-block-inner">
+			<span class="section-eyebrow">Zero-Config CRUD</span>
+			<h2 class="section-heading">Instant CRUD Operations</h2>
+			<p class="section-lead">Automatically detect your database schema and auto-generate forms, relations, and fields with zero boilerplate.</p>
+
+			<div class="matrix-grid" style="margin-top: 3rem;">
+				<div class="matrix-item">
+					<div class="matrix-index">01</div>
+					<h3>Auto-Generated Fields</h3>
+					<p>Detects database schema and generates appropriate form fields. Enum types become dropdowns, dates become date pickers.</p>
+				</div>
+				<div class="matrix-item">
+					<div class="matrix-index">02</div>
+					<h3>Relationship Detection</h3>
+					<p>Automatically discovers model relationships (BelongsToMany, HasMany, etc.) and creates proper select fields for them.</p>
+				</div>
+				<div class="matrix-item">
+					<div class="matrix-index">03</div>
+					<h3>Override Single Fields</h3>
+					<p>Tweak specific fields exactly how you want them, while everything else auto-generates.</p>
+				</div>
+				<div class="matrix-item">
+					<div class="matrix-index">04</div>
+					<h3>Smart File Upload</h3>
+					<p>Configure storage your way - local or S3. Files clean up automatically when records are deleted.</p>
+				</div>
+			</div>
+            
+			<h3 style="margin-top: 4rem; font-size: 1.5rem; text-align: center; margin-bottom: 2rem;">What You Get Automatically</h3>
+			<div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 1rem;">
+				<div class="powering-item" style="background: var(--color-surface); padding: 0.5rem 1rem; border-radius: 8px; border: 1px solid var(--color-border); font-weight: 500;">✓ Searchable List View</div>
+				<div class="powering-item" style="background: var(--color-surface); padding: 0.5rem 1rem; border-radius: 8px; border: 1px solid var(--color-border); font-weight: 500;">✓ Auto-validated Create Form</div>
+				<div class="powering-item" style="background: var(--color-surface); padding: 0.5rem 1rem; border-radius: 8px; border: 1px solid var(--color-border); font-weight: 500;">✓ Pre-populated Edit Form</div>
+				<div class="powering-item" style="background: var(--color-surface); padding: 0.5rem 1rem; border-radius: 8px; border: 1px solid var(--color-border); font-weight: 500;">✓ Full Detail View</div>
+				<div class="powering-item" style="background: var(--color-surface); padding: 0.5rem 1rem; border-radius: 8px; border: 1px solid var(--color-border); font-weight: 500;">✓ Discovered Relationships</div>
+				<div class="powering-item" style="background: var(--color-surface); padding: 0.5rem 1rem; border-radius: 8px; border: 1px solid var(--color-border); font-weight: 500;">✓ Role-based Access Control</div>
+				<div class="powering-item" style="background: var(--color-surface); padding: 0.5rem 1rem; border-radius: 8px; border: 1px solid var(--color-border); font-weight: 500;">✓ Configurable File Uploads</div>
+				<div class="powering-item" style="background: var(--color-surface); padding: 0.5rem 1rem; border-radius: 8px; border: 1px solid var(--color-border); font-weight: 500;">✓ Rich Text & Markdown</div>
+				<div class="powering-item" style="background: var(--color-surface); padding: 0.5rem 1rem; border-radius: 8px; border: 1px solid var(--color-border); font-weight: 500;">✓ Granular Field Visibility</div>
+				<div class="powering-item" style="background: var(--color-surface); padding: 0.5rem 1rem; border-radius: 8px; border: 1px solid var(--color-border); font-weight: 500;">✓ Image Previews</div>
+			</div>
+		</div>
+	</section>
+
+	<section class="section-block">
+		<div class="section-block-inner">
+			<span class="section-eyebrow">Advanced Control</span>
+			<h2 class="section-heading">Complete Field Control</h2>
+			<p class="section-lead">Shape your forms exactly to your business logic. Declarative control over behavior, visibility, and presentation without the messy boilerplate.</p>
+			
+			<div class="scaffold-benefits" style="margin-top: 3rem;">
+				<div class="scaffold-benefit">
+					<div class="benefit-icon">
+						<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+					</div>
+					<h4>Contextual Visibility</h4>
+					<p>Selectively hide fields from list views, create forms, or detail views instantly. Keep interfaces clean.</p>
+				</div>
+				<div class="scaffold-benefit">
+					<div class="benefit-icon">
+						<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg>
+					</div>
+					<h4>Smart Data Behavior</h4>
+					<p>Define default values, placeholders, calculations, and read-only states right from your model definitions.</p>
+				</div>
+				<div class="scaffold-benefit">
+					<div class="benefit-icon">
+						<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
+					</div>
+					<h4>Native Media Previews</h4>
+					<p>Built-in visual previews for image uploads with customizable positioning and automatic cleanups.</p>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<section class="section-block" style="background: var(--color-bg-secondary);">
+		<div class="section-block-inner">
+			<span class="section-eyebrow">Access & Management</span>
+			<h2 class="section-heading">Complete User Control & Fine-Grained Permissions</h2>
+			<p class="section-lead">Filter, search, and perform bulk actions from a centralized dashboard. Assign custom permissions to dynamic roles with pinpoint precision.</p>
+			
+			<div class="matrix-grid" style="margin-top: 3rem;">
+				<div class="matrix-item">
+					<div class="matrix-index">01</div>
+					<h3>Advanced User Filtering</h3>
+					<p>Filter users by role, active status, or verification state instantly. Suspend bad actors with a single click.</p>
+				</div>
+				<div class="matrix-item">
+					<div class="matrix-index">02</div>
+					<h3>Bulk Actions at Scale</h3>
+					<p>Select multiple users to delete, suspend, or upgrade roles across thousands of records simultaneously.</p>
+				</div>
+				<div class="matrix-item">
+					<div class="matrix-index">03</div>
+					<h3>Automated Route Discovery</h3>
+					<p>Scan your application routes to automatically generate corresponding system privileges without manual data entry.</p>
+				</div>
+				<div class="matrix-item">
+					<div class="matrix-index">04</div>
+					<h3>Logical Privilege Grouping</h3>
+					<p>Group privileges logically by resource, module, or package to make role assignment visually digestible.</p>
+				</div>
+			</div>
+
+			<div style="margin-top: 4rem; text-align: center;">
+				<h3 style="font-size: 1.5rem; font-weight: 700;">CRUD in Minutes, Not Hours</h3>
+				<p style="color: var(--color-text-secondary); max-width: 600px; margin: 1rem auto;">Apply the <code>HasCrud</code> trait to your models, and your fully-functional dashboard is live before your coffee goes cold. No repetitive boilerplate, no messy controllers.</p>
+			</div>
+		</div>
+	</section>
+
+	<section class="section-block">
+		<div class="section-block-inner">
+			<span class="section-eyebrow">Quick Scaffolding</span>
+			<h2 class="section-heading">Instant Admin Pages</h2>
+			<p class="section-lead">Generate completely wired-up dashboard pages (Views, Routes, Sidebar items) from a single command.</p>
+
+			<div class="scaffold-benefits" style="margin-top: 3rem;">
+				<div class="scaffold-benefit">
+					<div class="benefit-icon">
+						<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+					</div>
+					<h4>Admin Pages</h4>
+					<p>Protected sections reserved exclusively for team configuration and system reporting.</p>
+				</div>
+				<div class="scaffold-benefit">
+					<div class="benefit-icon">
+						<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
+					</div>
+					<h4>User Pages</h4>
+					<p>Client-facing portal segments, locked behind standard authentication middleware.</p>
+				</div>
+				<div class="scaffold-benefit">
+					<div class="benefit-icon">
+						<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect></svg>
+					</div>
+					<h4>Common Pages</h4>
+					<p>Shared pages mapped elegantly to both Admin and User sidebars from a single source of truth.</p>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<section id="impersonation" class="section-block" style="background: var(--color-bg-secondary);">
+		<div class="section-block-inner">
+			<span class="section-eyebrow">Impersonation</span>
+			<h2 class="section-heading">Step Into Their Shoes</h2>
+			<p class="section-lead">Admins can seamlessly drop into any user's session to provide hands-on support without ever requesting or sharing passwords.</p>
+			
+			<div class="matrix-grid" style="margin-top: 3rem;">
+				<div class="matrix-item">
+					<div class="matrix-index">01</div>
+					<h3>One-Click Access</h3>
+					<p>Initiate a secure session directly from the user management dashboard instantly.</p>
+				</div>
+				<div class="matrix-item">
+					<div class="matrix-index">02</div>
+					<h3>Persistent Banner</h3>
+					<p>A visual notification bar ensures you remain fully aware of your active impersonation status.</p>
+				</div>
+				<div class="matrix-item">
+					<div class="matrix-index">03</div>
+					<h3>Hardened Security</h3>
+					<p>Protected by specialized impersonation middleware that restricts recursive exploits.</p>
+				</div>
+				<div class="matrix-item">
+					<div class="matrix-index">04</div>
+					<h3>Instant Quick-Exit</h3>
+					<p>One click securely drops the user token and cleanly returns you to your admin control panel.</p>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<section id="invitation-system" class="section-block">
+		<div class="section-block-inner">
+			<span class="section-eyebrow">Growth Engine</span>
+			<h2 class="section-heading">Drive Organic Growth</h2>
+			<p class="section-lead">Harness the power of word-of-mouth with a pre-built invitation and referral tracking system.</p>
+			
+			<div class="scaffold-benefits" style="margin-top: 3rem;">
+				<div class="scaffold-benefit">
+					<div class="benefit-icon">
+						<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>
+					</div>
+					<h4>Smart Invitation Links</h4>
+					<p>Create quota-limited or time-sensitive links to maintain exclusivity and track early traction.</p>
+				</div>
+				<div class="scaffold-benefit">
+					<div class="benefit-icon">
+						<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
+					</div>
+					<h4>Automated Tracking</h4>
+					<p>Every signup is inherently linked to their inviter. Establish community hierarchies instantly.</p>
+				</div>
+				<div class="scaffold-benefit">
+					<div class="benefit-icon">
+						<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path></svg>
+					</div>
+					<h4>Referral Dashboards</h4>
+					<p>Provide end-users with personalized views showing their successful invites, fueling gamification.</p>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<section id="audit-trail" class="section-block" style="background: #0f172a; color: white;">
+		<div class="section-block-inner">
+			<span class="section-eyebrow" style="color: #ef4444;">Forensic Grade Audit Trail</span>
+			<h2 class="section-heading" style="color: white;">The "Black Box" Recorder <br>for Your Laravel App</h2>
+			<p class="section-lead" style="color: #94a3b8;">Stop guessing. Start knowing. Capture an unalterable forensic record of every action across your system.</p>
+			
+			<div class="crud-split" style="margin-top: 3rem;">
+				<div class="crud-steps">
+					<div class="crud-step-row">
+						<div class="crud-step-num" style="border-color: #3b82f6; color: #3b82f6;">01</div>
+						<div class="crud-step-text">
+							<h3 style="color: white;">Side-by-Side Content Diffs</h3>
+							<p style="color: #cbd5e1;">View exact before/after changes for any modified record instantly without writing custom logs.</p>
+						</div>
+					</div>
+					<div class="crud-step-row">
+						<div class="crud-step-num" style="border-color: #22c55e; color: #22c55e;">02</div>
+						<div class="crud-step-text">
+							<h3 style="color: white;">Contextual Fingerprints</h3>
+							<p style="color: #cbd5e1;">Log identical device properties, IP addresses, timestamps, and active user correlations.</p>
+						</div>
+					</div>
+					<div class="crud-step-row">
+						<div class="crud-step-num" style="border-color: #ef4444; color: #ef4444;">03</div>
+						<div class="crud-step-text">
+							<h3 style="color: white;">Filter & Investigate</h3>
+							<p style="color: #cbd5e1;">Filter forensic records by action source, actor, or timeline to satisfy compliance or detect abuse.</p>
+						</div>
+					</div>
+				</div>
+
+				<div class="crud-code-block" style="border: 1px solid #334155; background: #1e293b;">
+					<div class="crud-code-bar">
+						<span style="background: #ef4444;"></span><span style="background: #fbbf24;"></span><span style="background: #22c55e;"></span>
+					</div>
+					<pre class="code-content" style="color: #e2e8f0; font-size: 0.85rem;"><code><span style="color: #64748b;">[18:14:02]</span> <span style="color: #3b82f6;">App\Models\User#11</span> updated
+<span style="color: #94a3b8;">Actor:</span> <span style="color: #fbbf24;">Admin User (#1)</span>
+<span style="color: #94a3b8;">IP:</span> 192.168.1.100
+
+<span style="color: #ef4444;">- email: "johny@example.com"</span>
+<span style="color: #22c55e;">+ email: "jonny@example.com"</span>
+
+<span style="color: #ef4444;">- role_id: 2 (Editor)</span>
+<span style="color: #22c55e;">+ role_id: 1 (Admin)</span>
+
+<span style="color: #64748b;">// Immutable record saved to Black Box.</span></code></pre>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<section id="screenshots" class="section-block">
 		<div class="section-block-inner">
 			<span class="section-eyebrow">Interface</span>
 			<h2 class="section-heading">Crafted for Clarity</h2>
