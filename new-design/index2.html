@@ -42,13 +42,35 @@
 	<section class="hero-18">
 		<div class="hero-18-pattern"></div>
 		
-		<!-- Particles -->
+		<!-- Particles & Pulse Rings -->
 		<div class="hero-18-node" style="top: 20%; left: 10%;"></div>
+		<div class="pulse-ring" style="top: 20%; left: 10%; animation-delay: 0s;"></div>
+		
 		<div class="hero-18-node" style="top: 45%; left: 15%; animation-delay: 2s;"></div>
+		
 		<div class="hero-18-node" style="top: 75%; left: 12%; animation-delay: 4s;"></div>
+		<div class="pulse-ring" style="top: 75%; left: 12%; animation-delay: 1.5s;"></div>
+		
 		<div class="hero-18-node" style="top: 25%; right: 15%; animation-delay: 1s;"></div>
+		
 		<div class="hero-18-node" style="top: 55%; right: 10%; animation-delay: 3s;"></div>
+		<div class="pulse-ring" style="top: 55%; right: 10%; animation-delay: 3s;"></div>
+		
 		<div class="hero-18-node" style="top: 80%; right: 18%; animation-delay: 5s;"></div>
+
+		<!-- Floating Technical Artifacts -->
+		<div class="floating-code" style="top: 15%; left: 25%; animation-delay: 0.5s;">use HasCrud;</div>
+		<div class="floating-code" style="bottom: 35%; right: 25%; animation-delay: 4s;">Roles & Privileges</div>
+		<!-- <div class="floating-code" style="top: 40%; right: 30%; animation-delay: 2.5s;">php artisan tyro-dashboard:install</div> -->
+		<!-- <div class="floating-code" style="bottom: 15%; left: 30%; animation-delay: 1.2s;">audit_trails</div> -->
+
+		<!-- Technical SVG Artifacts -->
+		<div class="artifact-svg" style="top: 35%; left: 5%; opacity: 0.05;">
+			<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"></ellipse><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"></path><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"></path></svg>
+		</div>
+		<div class="artifact-svg" style="bottom: 40%; right: 15%; opacity: 0.05; animation-delay: 2s;">
+			<svg xmlns="http://www.w3.org/2000/svg" width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+		</div>
 
 		<!-- Floating UI Cards -->
 		<div class="floating-card" style="top: 22%; left: 8%; animation-delay: 0s;">
@@ -56,8 +78,8 @@
 				<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
 			</div>
 			<div class="floating-card-info">
-				<h5>User Profiles</h5>
-				<p>Active Management</p>
+				<h5>Identity Hub</h5>
+				<p>Centralized User Governance</p>
 			</div>
 		</div>
 
@@ -66,8 +88,8 @@
 				<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path><path d="m9 12 2 2 4-4"></path></svg>
 			</div>
 			<div class="floating-card-info">
-				<h5>Role Hierarchy</h5>
-				<p>Privilege Scalability</p>
+				<h5>Security Shield</h5>
+				<p>Hardened RBAC Engine</p>
 			</div>
 		</div>
 
@@ -76,8 +98,8 @@
 				<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
 			</div>
 			<div class="floating-card-info">
-				<h5>Audit Trails</h5>
-				<p>Forensic Visibility</p>
+				<h5>Black Box</h5>
+				<p>Forensic Activity Logs</p>
 			</div>
 		</div>
 
@@ -94,7 +116,7 @@
 					Start Integration
 					<span class="cta-arrow">↗</span>
 				</a>
-				<div class="install-chip">use HasCrud;</div>
+				<div class="install-chip">composer require hasinhayder/tyro-dashboard</div>
 			</div>
 
 			<div class="hero-18-powering">
@@ -232,11 +254,11 @@
 					</div>
 				</div>
 
-				<div class="crud-code-block" style="border: 1px solid #334155; background: #1e293b;">
+				<div class="crud-code-block" style="border: 1px solid #334155; background: #1e293b; ">
 					<div class="crud-code-bar">
 						<span style="background: #ef4444;"></span><span style="background: #fbbf24;"></span><span style="background: #22c55e;"></span>
 					</div>
-					<pre class="code-content" style="font-family: var(--font-mono); line-height: 1.6; font-size: 0.85rem; color: #e2e8f0;"><code><span style="color: #ff7b72;">namespace</span> <span style="color: #a5d6ff;">App\Models</span>;
+					<pre class="code-content" style="overflow:hidden;font-family: var(--font-mono); line-height: 1.6; font-size: 0.85rem; color: #e2e8f0;"><code><span style="color: #ff7b72;">namespace</span> <span style="color: #a5d6ff;">App\Models</span>;
 
 <span style="color: #ff7b72;">use</span> <span style="color: #a5d6ff;">HasinHayder\TyroDashboard\Concerns\HasCrud</span>;
 <span style="color: #ff7b72;">use</span> <span style="color: #a5d6ff;">Illuminate\Database\Eloquent\Model</span>;

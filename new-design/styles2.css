@@ -182,6 +182,24 @@ body {
     mask-image: radial-gradient(circle at center, black 20%, transparent 80%);
     z-index: 1;
     pointer-events: none;
+    overflow: hidden;
+}
+
+.hero-18-pattern::after {
+    content: '';
+    position: absolute;
+    top: -100px;
+    left: 0;
+    right: 0;
+    height: 100px;
+    background: linear-gradient(to bottom, transparent, var(--hero-18-orange), transparent);
+    opacity: 0.1;
+    animation: data-flow 15s infinite linear;
+}
+
+@keyframes data-flow {
+    0% { transform: translateY(-100%); }
+    100% { transform: translateY(1000%); }
 }
 
 .hero-18-node {
@@ -400,12 +418,13 @@ body {
 	backdrop-filter: blur(16px);
 	border: 1px solid rgba(255, 255, 255, 0.1);
 	display: flex;
-	align-items: center;
+	align-items: start;
 	gap: 14px;
 	z-index: 5;
 	pointer-events: none;
 	animation: float 6s infinite ease-in-out;
 	box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.1);
+	text-align: left;
 }
 
 [data-theme="dark"] .floating-card {
@@ -443,8 +462,67 @@ body {
 	50% { transform: translateY(-20px); }
 }
 
+/* ─── Hero Artifacts ─── */
+.floating-code {
+    position: absolute;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--hero-18-orange);
+    opacity: 0.12;
+    background: rgba(255, 95, 31, 0.05);
+    padding: 6px 12px;
+    border-radius: 6px;
+    pointer-events: none;
+    z-index: 1;
+    white-space: nowrap;
+    animation: float-code 10s infinite ease-in-out;
+}
+
+[data-theme="dark"] .floating-code {
+    background: rgba(255, 95, 31, 0.1);
+    opacity: 0.2;
+}
+
+.pulse-ring {
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    border: 1px solid var(--hero-18-orange);
+    border-radius: 50%;
+    opacity: 0;
+    pointer-events: none;
+    z-index: 1;
+    animation: pulse-ring 4s infinite;
+}
+
+.artifact-svg {
+    position: absolute;
+    color: var(--hero-18-orange);
+    opacity: 0.1;
+    pointer-events: none;
+    z-index: 1;
+    animation: float-rotate 12s infinite ease-in-out;
+}
+
+@keyframes float-code {
+    0%, 100% { transform: translate(0, 0) rotate(0deg); opacity: 0.12; }
+    50% { transform: translate(15px, -25px) rotate(2deg); opacity: 0.25; }
+    25%, 75% { opacity: 0.1; }
+    26%, 76% { opacity: 0.4; }
+}
+
+@keyframes float-rotate {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    50% { transform: translateY(-30px) rotate(15deg); }
+}
+
+@keyframes pulse-ring {
+    0% { transform: scale(0.5); opacity: 0.8; }
+    100% { transform: scale(3.5); opacity: 0; }
+}
+
 @media (max-width: 1200px) {
-	.floating-card {
+	.floating-card, .floating-code, .pulse-ring, .artifact-svg {
 		display: none;
 	}
 }
