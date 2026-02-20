@@ -815,18 +815,18 @@
 			</div>
 		</div>
 	</section>
-	<section id="installation" class="section-block">
+	<section id="installation" class="section-block" style="background: var(--color-bg-secondary); overflow: hidden;">
 		<div class="section-block-inner">
 			<span class="section-eyebrow">Setup</span>
 			<h2 class="section-heading">Live in <br><span class="accent">180 Seconds.</span></h2>
 			<p class="section-lead">Reclaim your engineering cycles. Tyro Dashboard installs in a heartbeat and works wherever Laravel does.</p>
 
-			<div class="install-steps">
-				<div class="install-step">
-					<div class="install-step-dot">01</div>
-					<div class="install-step-body">
-						<h3>The One-Liner</h3>
-						<p>Drop Tyro into any Laravel project with a single command. We handle the heavy lifting while you keep shipping.</p>
+			<div style="display: grid; grid-template-columns: 1fr; gap: 4rem; align-items: stretch; margin-top: 4rem; @media (min-width: 960px) { grid-template-columns: 1fr 1fr; }">
+				<div class="install-modern-steps" style="display: flex; flex-direction: column; gap: 2rem;">
+					<div class="install-step-card" style="background: var(--color-bg); border-radius: 16px; border: 1px solid var(--color-border); padding: 1.5rem; position: relative; box-shadow: 0 10px 30px -10px rgba(0,0,0,0.05);">
+						<div class="install-step-badge" style="position: absolute; top: -16px; left: -16px; width: 36px; height: 36px; background: var(--color-primary); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 1rem; box-shadow: 0 4px 10px rgba(0,0,0,0.1); border: 4px solid var(--color-bg-secondary);">1</div>
+						<h3 style="font-size: 1.25rem; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem; color: var(--color-heading);"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--color-primary);"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg> Install Package</h3>
+						<p style="color: var(--color-text-secondary); margin-bottom: 1rem;">Pull in the core dashboard engine via Composer. It's lightweight and built specifically for Laravel applications.</p>
 						<div class="code-pill">
 							<code>composer require hasinhayder/tyro-dashboard</code>
 							<button class="code-pill-copy" onclick="copyToClipboard(this, 'composer require hasinhayder/tyro-dashboard')">
@@ -834,12 +834,11 @@
 							</button>
 						</div>
 					</div>
-				</div>
-				<div class="install-step">
-					<div class="install-step-dot">02</div>
-					<div class="install-step-body">
-						<h3>Magic Scaffolding</h3>
-						<p>Our interactive wizard takes the pain out of setup—configuring your super-admin and core views in heartbeat.</p>
+
+					<div class="install-step-card" style="background: var(--color-bg); border-radius: 16px; border: 1px solid var(--color-border); padding: 1.5rem; position: relative; box-shadow: 0 10px 30px -10px rgba(0,0,0,0.05);">
+						<div class="install-step-badge" style="position: absolute; top: -16px; left: -16px; width: 36px; height: 36px; background: var(--color-primary); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 1rem; box-shadow: 0 4px 10px rgba(0,0,0,0.1); border: 4px solid var(--color-bg-secondary);">2</div>
+						<h3 style="font-size: 1.25rem; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem; color: var(--color-heading);"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--color-primary);"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg> Run Setup Wizard</h3>
+						<p style="color: var(--color-text-secondary); margin-bottom: 1rem;">Our interactive installer scaffolds your views, publishes assets, and creates your initial super-admin credentials.</p>
 						<div class="code-pill">
 							<code>php artisan tyro-dashboard:install</code>
 							<button class="code-pill-copy" onclick="copyToClipboard(this, 'php artisan tyro-dashboard:install')">
@@ -847,12 +846,35 @@
 							</button>
 						</div>
 					</div>
+
+					<div class="install-step-card" style="background: linear-gradient(135deg, rgba(34, 197, 94, 0.1) 0%, rgba(16, 185, 129, 0.1) 100%); border-radius: 16px; border: 1px solid rgba(34, 197, 94, 0.3); padding: 1.5rem; position: relative;">
+						<div class="install-step-badge" style="position: absolute; top: -16px; left: -16px; width: 36px; height: 36px; background: #22c55e; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 1rem; box-shadow: 0 4px 10px rgba(34, 197, 94, 0.2); border: 4px solid var(--color-bg-secondary);">3</div>
+						<h3 style="font-size: 1.25rem; margin-bottom: 0.5rem; color: #166534; display: flex; align-items: center; gap: 0.5rem;"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg> You're Ready!</h3>
+						<p style="color: #166534; opacity: 0.9; margin-bottom: 0;">Navigate to <code>/dashboard</code> in your browser. Start building your next great app instead of another admin panel.</p>
+					</div>
 				</div>
-				<div class="install-step">
-					<div class="install-step-dot">03</div>
-					<div class="install-step-body">
-						<h3>Admin Nirvana</h3>
-						<p>Head to <code>/dashboard</code>. Your new technical back office is live—fully responsive, secure, and ready to scale.</p>
+
+				<div class="ide-window terminal-scaffold" style="height: 100%; min-height: 400px; max-height: 460px; display: flex; flex-direction: column;">
+					<div class="ide-header">
+						<div class="ide-dots"><span></span><span></span><span></span></div>
+						<div class="ide-tab">zsh</div>
+					</div>
+					<div class="ide-content scaffold-command-content" style="font-size: 0.85rem; line-height: 1.7; flex: 1; overflow-y: auto;">
+						<code><span style="color: #4ade80;">$</span> composer require hasinhayder/tyro-dashboard</code><br>
+						<span style="color: #94a3b8;">Using version ^1.12 for hasinhayder/tyro-dashboard</span><br>
+						<span style="color: #94a3b8;">./composer.json has been updated</span><br>
+						<span style="color: #94a3b8;">Running composer update hasinhayder/tyro-dashboard</span><br>
+						<span style="color: #4ade80;">Package operations: 1 install, 0 updates, 0 removals</span><br><br>
+
+						<code><span style="color: #4ade80;">$</span> php artisan tyro-dashboard:install</code><br>
+						<span style="color: #fbbf24; font-weight: bold;">Tyro Dashboard Installation</span><br>
+						<span style="color: #94a3b8;"> Publishing Core Assets...</span> <span style="color: #4ade80;">DONE</span><br>
+						<span style="color: #94a3b8;"> Preparing Database...</span> <span style="color: #4ade80;">DONE</span><br>
+						<br>
+						<span style="color: #fbbf24;">? Email for Super Admin:</span> <span style="color: #f8fafc;">admin@example.com</span><br>
+						<span style="color: #fbbf24;">? Password:</span> <span style="color: #f8fafc;">********</span><br>
+						<br>
+						<span style="color: #4ade80; font-weight: bold;">✨ Tyro Dashboard installed successfully!</span><br>
 					</div>
 				</div>
 			</div>
