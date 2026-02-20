@@ -1770,4 +1770,34 @@ body {
         flex-direction: column;
         align-items: center;
     }
+}/* ─── Responsive Grid Overrides ─── */
+.col-span-2 {
+    grid-column: span 2;
+}
+
+@media (max-width: 960px) {
+    .grid-md-2 {
+        grid-template-columns: 1fr;
+    }
+}
+@media (min-width: 961px) {
+    .grid-md-2 {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+.responsive-list-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+}
+
+@media (max-width: 768px) {
+    .col-span-2 {
+        grid-column: span 1;
+    }
+    
+    .responsive-list-grid {
+        grid-template-columns: 1fr;
+    }
 }
