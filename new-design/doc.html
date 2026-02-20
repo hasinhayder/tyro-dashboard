@@ -109,7 +109,6 @@
                         <li><a href="#user-management" class="doc-nav-link">User Management</a></li>
                         <li><a href="#role-management" class="doc-nav-link">Role Management</a></li>
                         <li><a href="#privilege-management" class="doc-nav-link">Privilege Management</a></li>
-                        <li><a href="#settings-management" class="doc-nav-link">Settings Management</a></li>
                         <li><a href="#profile-management" class="doc-nav-link">Profile Management</a></li>
                         <li><a href="#profile-photos" class="doc-nav-link">Profile Photos &amp; Gravatar</a></li>
                         <li><a href="#impersonation" class="doc-nav-link">User Impersonation</a></li>
@@ -216,10 +215,6 @@
                     <div class="doc-feature-item">
                         <h3 class="doc-feature-title">Privilege Management</h3>
                         <p class="doc-feature-desc">Manage privileges and assign them to roles for fine-grained access control.</p>
-                    </div>
-                    <div class="doc-feature-item">
-                        <h3 class="doc-feature-title">Settings Management</h3>
-                        <p class="doc-feature-desc">Configure Tyro and Tyro Login packages from a beautiful UI interface.</p>
                     </div>
                     <div class="doc-feature-item">
                         <h3 class="doc-feature-title">Profile Management</h3>
@@ -1084,53 +1079,6 @@ TYRO_DASHBOARD_LOGO="/images/logo.svg"</code></pre>
                 </table>
             </section>
 
-            <!-- Settings Management -->
-            <section id="settings-management" class="doc-section">
-                <h2 class="doc-section-title">Settings Management</h2>
-                <p class="doc-text">Configure Tyro packages through a beautiful UI:</p>
-
-                <h3 class="doc-section-subtitle">Tyro Settings</h3>
-                <p class="doc-text">Configure the main Tyro RBAC package settings:</p>
-                <ul class="doc-list">
-                    <li>Default role assignment</li>
-                    <li>Cache settings</li>
-                    <li>Permission checking behavior</li>
-                </ul>
-
-                <h3 class="doc-section-subtitle">Tyro Login Settings</h3>
-                <p class="doc-text">Configure Tyro Login package settings (if installed):</p>
-                <ul class="doc-list">
-                    <li>Layout options</li>
-                    <li>Branding settings</li>
-                    <li>Security features (lockout, captcha, OTP)</li>
-                    <li>Email verification settings</li>
-                    <li>Social login configuration</li>
-                </ul>
-
-                <div class="doc-alert doc-alert-info">
-                    <strong>Note:</strong> The Tyro Login settings page only appears if the <code class="doc-inline-code">hasinhayder/tyro-login</code> package is installed.
-                </div>
-
-                <h3 class="doc-section-subtitle">Routes</h3>
-                <table class="doc-table">
-                    <thead>
-                        <tr>
-                            <th>Route</th>
-                            <th>Description</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td><code class="doc-inline-code">/dashboard/settings/tyro</code></td>
-                            <td>Tyro package settings</td>
-                        </tr>
-                        <tr>
-                            <td><code class="doc-inline-code">/dashboard/settings/tyro-login</code></td>
-                            <td>Tyro Login settings</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </section>
 
             <!-- Profile Management -->
             <section id="profile-management" class="doc-section">
@@ -3282,7 +3230,6 @@ php artisan tyro-dashboard:remove-common-page "help-center"</code></pre>
                 { id: 'user-management', title: 'User Management', description: 'Create, edit, and manage users', icon: '👥' },
                 { id: 'role-management', title: 'Role Management', description: 'Manage roles and privileges', icon: '🔐' },
                 { id: 'privilege-management', title: 'Privilege Management', description: 'Fine-grained access control', icon: '🛡️' },
-                { id: 'settings-management', title: 'Settings Management', description: 'Configure Tyro packages', icon: '⚙️' },
                 { id: 'profile-management', title: 'Profile Management', description: 'User profile settings', icon: '👤' },
                 { id: 'profile-photos', title: 'Profile Photos & Gravatar', description: 'Upload photos or use Gravatar with HasProfilePhoto trait', icon: '🖼️' },
                 { id: 'impersonation', title: 'User Impersonation', description: 'Admins can impersonate users for debugging and support', icon: '🎭' },
