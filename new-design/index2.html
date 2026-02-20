@@ -176,22 +176,22 @@
 					<div class="crud-step-row">
 						<div class="crud-step-num">01</div>
 						<div class="crud-step-text">
-							<h3>Apply the Trait</h3>
-							<p>Add the <code>HasCrud</code> trait to your Eloquent model to instantly unlock dashboard capabilities.</p>
+							<h3>Open Configuration</h3>
+							<p>Everything is centrally managed in the <code>config/tyro-dashboard.php</code> configuration file.</p>
 						</div>
 					</div>
 					<div class="crud-step-row">
 						<div class="crud-step-num">02</div>
 						<div class="crud-step-text">
-							<h3>Configure Fields</h3>
-							<p>Override the <code>fields()</code> method to define how your data should be displayed and validated.</p>
+							<h3>Define Resource</h3>
+							<p>Add your eloquent model to the resources array, mapping its fields to specific input types like <code>richtext</code>, <code>file</code>, or <code>select</code>.</p>
 						</div>
 					</div>
 					<div class="crud-step-row">
 						<div class="crud-step-num">03</div>
 						<div class="crud-step-text">
 							<h3>Ship it</h3>
-							<p>Your beautiful, responsive CRUD interface is ready. No controllers or views needed.</p>
+							<p>Your beautiful, responsive CRUD interface is ready. Zero controllers, zero views, instant results.</p>
 						</div>
 					</div>
 				</div>
@@ -200,22 +200,25 @@
 					<div class="crud-code-bar">
 						<span></span><span></span><span></span>
 					</div>
-					<pre class="code-content" style="font-family: var(--font-mono); line-height: 1.6; font-size: 0.9rem;"><code><span style="color: #ff7b72;">class</span> <span style="color: #d2a8ff;">Post</span> <span style="color: #ff7b72;">extends</span> <span style="color: #d2a8ff;">Model</span> 
-{
-    <span style="color: #ff7b72;">use</span> <span style="color: #d2a8ff;">HasCrud</span>;
-
-    <span style="color: #ff7b72;">public function</span> <span style="color: #d2a8ff;">fields</span>() 
-    {
-        <span style="color: #ff7b72;">return</span> [
-            <span style="color: #79c0ff;">Field</span>::make(<span style="color: #a5d6ff;">'title'</span>)->searchable(),
-            <span style="color: #79c0ff;">Field</span>::make(<span style="color: #a5d6ff;">'content'</span>)->textarea(),
-            <span style="color: #79c0ff;">Field</span>::make(<span style="color: #a5d6ff;">'status'</span>)->select([
-                <span style="color: #a5d6ff;">'draft'</span> => <span style="color: #a5d6ff;">'Draft'</span>,
-                <span style="color: #a5d6ff;">'published'</span> => <span style="color: #a5d6ff;">'Published'</span>
-            ])
-        ];
-    }
-}</code></pre>
+					<pre class="code-content" style="font-family: var(--font-mono); line-height: 1.6; font-size: 0.9rem;"><code><span style="color: #ff7b72;">'resources'</span> => [
+    <span style="color: #a5d6ff;">'posts'</span> => [
+        <span style="color: #ff7b72;">'model'</span> => App\Models\Post::<span style="color: #79c0ff;">class</span>,
+        <span style="color: #ff7b72;">'search'</span> => [<span style="color: #a5d6ff;">'title'</span>, <span style="color: #a5d6ff;">'content'</span>],
+        <span style="color: #ff7b72;">'fields'</span> => [
+            <span style="color: #a5d6ff;">'title'</span> => [
+                <span style="color: #ff7b72;">'type'</span> => <span style="color: #a5d6ff;">'text'</span>,
+                <span style="color: #ff7b72;">'searchable'</span> => <span style="color: #79c0ff;">true</span>
+            ],
+            <span style="color: #a5d6ff;">'content'</span> => [
+                <span style="color: #ff7b72;">'type'</span> => <span style="color: #a5d6ff;">'richtext'</span>
+            ],
+            <span style="color: #a5d6ff;">'status'</span> => [
+                <span style="color: #ff7b72;">'type'</span> => <span style="color: #a5d6ff;">'select'</span>,
+                <span style="color: #ff7b72;">'options'</span> => [<span style="color: #a5d6ff;">'draft'</span>, <span style="color: #a5d6ff;">'published'</span>]
+            ]
+        ]
+    ]
+]</code></pre>
 				</div>
 			</div>
 		</div>
