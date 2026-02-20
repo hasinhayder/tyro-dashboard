@@ -47,6 +47,7 @@
 /* Layout */
 .doc-layout {
     display: flex;
+    align-items: flex-start;
     min-height: 100vh;
     padding-top: 80px;
 }
