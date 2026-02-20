@@ -90,3 +90,9 @@ lbOverlay?.addEventListener('click', (e) => {
         lbOverlay.classList.remove('open');
     }
 });
+
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+        lbOverlay?.classList.remove('open');
+    }
+});
