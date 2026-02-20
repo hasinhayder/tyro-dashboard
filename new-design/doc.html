@@ -129,6 +129,8 @@
                         <li><a href="#field-types-modifiers" class="doc-nav-link">Field Types & Modifiers</a></li>
                         <li><a href="#mastering-relationships" class="doc-nav-link">Mastering Relationships</a></li>
                         <li><a href="#file-image-modifiers" class="doc-nav-link">File & Image Modifiers</a></li>
+                        <li><a href="#access-management" class="doc-nav-link">Access Management</a></li>
+                        <li><a href="#readonly-resources" class="doc-nav-link">Readonly Resources</a></li>
                     </ul>
                 </div>
 
@@ -1769,105 +1771,39 @@ class Post extends Model
             </section>
 
 
-            <!-- Resource Configuration -->
-            <section id="search-config" class="doc-section">
-                <h2 class="doc-section-title">Search Configuration</h2>
-                <p class="doc-text">By default, Tyro searches in columns defined in your <code>fields()</code> method where <code>'searchable' => true</code>. You can customize the search behavior by overriding the <code>search()</code> method.</p>
-                
+
+
+            <!-- Access Management & Readonly -->
+            <section id="access-management" class="doc-section">
+                <h3 class="doc-feature-title" style="margin-top: 2rem;">Access Management</h3>
+                <p class="doc-text">
+                    Tyro Dashboard integrates deeply with Tyro RBAC. You can control exactly which roles have access to your CRUD resource by overriding the <code>$resourceRoles</code> array.
+                </p>
                 <div class="doc-code-block">
-                    <pre><code class="language-php">public function search()
+                    <pre><code class="language-php">class Product extends Model
 {
-    return [
-        'columns' => ['name', 'email', 'description'], // Columns to search
-        'placeholder' => 'Search users...' // Placeholder text for search input
-    ];
+    use HasCrud;
+
+    // Only these roles can access the resource dashboard
+    protected $resourceRoles = ['admin', 'manager']; 
 }</code></pre>
                 </div>
-            </section>
 
-            <section id="field-types" class="doc-section">
-                <h2 class="doc-section-title">Field Types</h2>
-                <p class="doc-text">Tyro supports a variety of field types to handle different data formats. Here is a complete reference:</p>
-
-                <table class="doc-table">
-                    <thead>
-                        <tr>
-                            <th>Type</th>
-                            <th>Description</th>
-                            <th>Options</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td><code class="doc-inline-code">text</code></td>
-                            <td>Standard text input</td>
-                            <td>required, label, placeholder</td>
-                        </tr>
-                        <tr>
-                            <td><code class="doc-inline-code">number</code></td>
-                            <td>Numeric input</td>
-                            <td>prefix, suffix, step, min, max</td>
-                        </tr>
-                        <tr>
-                            <td><code class="doc-inline-code">email</code></td>
-                            <td>Email input with validation</td>
-                            <td>required, label</td>
-                        </tr>
-                        <tr>
-                            <td><code class="doc-inline-code">password</code></td>
-                            <td>Password input (masked)</td>
-                            <td>required, label</td>
-                        </tr>
-                        <tr>
-                            <td><code class="doc-inline-code">textarea</code></td>
-                            <td>Multi-line text area</td>
-                            <td>rows, placeholder</td>
-                        </tr>
-                        <tr>
-                            <td><code class="doc-inline-code">richtext</code></td>
-                            <td>WYSIWYG editor (Trix)</td>
-                            <td>height, toolbar options</td>
-                        </tr>
-                        <tr>
-                            <td><code class="doc-inline-code">select</code></td>
-                            <td>Dropdown menu</td>
-                            <td>options (array or closure)</td>
-                        </tr>
-                        <tr>
-                            <td><code class="doc-inline-code">toggle</code></td>
-                            <td>Boolean switch</td>
-                            <td>active_label, inactive_label</td>
-                        </tr>
-                         <tr>
-                            <td><code class="doc-inline-code">date</code></td>
-                            <td>Date picker</td>
-                            <td>format</td>
-                        </tr>
-                        <tr>
-                            <td><code class="doc-inline-code">image</code></td>
-                            <td>Image uploader</td>
-                            <td>disk, path, preview_width</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </section>
-
-            <section id="rich-text" class="doc-section">
-                <h2 class="doc-section-title">Rich Text Editor</h2>
-                <p class="doc-text">To enable a rich text editor for a field, simply set the type to <code>richtext</code>. Tyro uses Trix editor by default.</p>
-                <div class="doc-code-block">
-                    <pre><code class="language-php">'bio' => [
-    'type' => 'richtext',
-    'label' => 'Biography',
-]</code></pre>
-                </div>
-            </section>
-
-            <section id="readonly-resources" class="doc-section">
-                <h2 class="doc-section-title">Readonly Resources</h2>
+                <h3 id="readonly-resources" class="doc-feature-title" style="margin-top: 2rem;">Readonly Resources</h3>
                 <p class="doc-text">If you want to disable creating, editing, or deleting records for a specific resource, you can set the <code>$readonly</code> property.</p>
                 <div class="doc-code-block">
                     <pre><code class="language-php">protected $readonly = true;</code></pre>
+                </div>
+                
+                <p class="doc-text" style="margin-top: 1rem;">Alternatively, you can restrict write access to specific roles by providing an array to the <code>$resourceReadonly</code> property in your Model overrides.</p>
+                <div class="doc-code-block">
+                    <pre><code class="language-php">class Product extends Model
+{
+    use HasCrud;
+
+    // The 'editor' role can only read/view this resource, but cannot create/update/destroy it
+    protected $resourceReadonly = ['editor']; 
+}</code></pre>
                 </div>
                 <p class="doc-text">This will remove the "Create" button and the "Edit/Delete" actions from the index view.</p>
             </section>
