@@ -791,15 +791,8 @@ class User extends Authenticatable
                     <li>Navigate to the <strong>Users</strong> admin page.</li>
                     <li>Click the <strong>Impersonate</strong> action button for the target user. A modal dialog will ask for confirmation.</li>
                     <li>After confirming, you are now browsing as that user.</li>
-                    <li>A persistent <strong>impersonation banner</strong> is rendered at the top of the page via the <code class="doc-inline-code">@tyroImpersonationBanner</code> Blade directive.</li>
-                    <li>Click <em>Leave Impersonation</em> in the banner to return to your admin session.</li>
+                    <li>To return to your admin session, navigate to the <code class="doc-inline-code">/dashboard/leave-impersonation</code> route.</li>
                 </ol>
-
-                <h3 class="doc-section-subtitle">Blade Directive</h3>
-                <p class="doc-text">Add the impersonation banner to your layout file (it renders nothing when not in an impersonation session):</p>
-                <div class="doc-code-block">
-                    <pre><code class="language-php">@tyroImpersonationBanner</code></pre>
-                </div>
 
                 <h3 class="doc-section-subtitle">Security</h3>
                 <ul class="doc-list">
@@ -808,7 +801,7 @@ class User extends Authenticatable
                     <li>Impersonation state is stored securely in the server-side session.</li>
                 </ul>
 
-                <h3 class="doc-section-subtitle">Routes</h3>
+                <!-- <h3 class="doc-section-subtitle">Routes</h3>
                 <table class="doc-table">
                     <thead>
                         <tr>
@@ -829,7 +822,7 @@ class User extends Authenticatable
                             <td><span class="route-badge route-badge-all">All Authenticated</span></td>
                         </tr>
                     </tbody>
-                </table>
+                </table> -->
             </section>
 
             <!-- Invitation & Referral System -->
