@@ -26,7 +26,7 @@
         <div class="navbar-container">
             <a href="index.html" class="navbar-brand">
                 <span class="navbar-logo">Tyro Dashboard</span>
-                <span class="navbar-badge">v1.12.0</span>
+                <span class="navbar-badge">v1.13.0</span>
             </a>
 
             <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Toggle menu">
@@ -115,6 +115,7 @@
                         <li><a href="#invitation-system" class="doc-nav-link">Invitation System</a></li>
                         <li><a href="#audit-trail" class="doc-nav-link">Audit Trail</a></li>
                         <li><a href="#modal-dialogs" class="doc-nav-link">Modal Dialogs</a></li>
+                        <li><a href="#admin-bar" class="doc-nav-link">Admin Bar</a></li>
                         <li><a href="#page-creation" class="doc-nav-link">Page Creation</a></li>
                         <li><a href="#page-removal" class="doc-nav-link">Page Removal</a></li>
                         <li><a href="#crud-workflow" class="doc-nav-link">CRUD Workflow</a></li>
@@ -249,6 +250,10 @@
                     <div class="doc-feature-item">
                         <h3 class="doc-feature-title">Modal Dialogs</h3>
                         <p class="doc-feature-desc">Native modal dialogs via <code>showConfirm()</code>, <code>showAlert()</code>, and <code>showDanger()</code> JS helpers — no extra dependencies.</p>
+                    </div>
+                    <div class="doc-feature-item">
+                        <h3 class="doc-feature-title">Global Admin Bar</h3>
+                        <p class="doc-feature-desc">Display globally visible logically adjustable announcements or system maintenance notices everywhere.</p>
                     </div>
                     <div class="doc-feature-item">
                         <h3 class="doc-feature-title">Sidebar Customization</h3>
@@ -979,6 +984,67 @@ showAlert('Success', 'The record has been saved successfully.');</code></pre>
 
                 <div class="doc-alert doc-alert-info">
                     <strong>No Dependencies:</strong> The modal system is built into Tyro Dashboard — no third-party libraries are required. It works in all dashboard views out of the box.
+                </div>
+            </section>
+
+            <!-- Admin Bar -->
+            <section id="admin-bar" class="doc-section">
+                <h2 class="doc-section-title">Admin Bar</h2>
+                <p class="doc-text">The <strong>Admin Bar</strong> in Tyro Dashboard allows you to display a globally visible announcement, alert, or notice at the very top of all dashboard layouts. It spans the full width of the screen (<code class="doc-inline-code">100vw</code>) and dynamically adjusts the dashboard elements below it, ensuring your layout remains flawless.</p>
+
+                <p class="doc-text">You can configure and enable the Admin Bar in two ways:</p>
+                <ul class="doc-list">
+                    <li><strong>Via Environment Variables / Configuration file</strong> (Persistent and global)</li>
+                    <li><strong>Programmatically via the <code>AdminNotice</code> Service Class</strong> (Dynamic, session-based, or logic-driven)</li>
+                </ul>
+
+                <h3 class="doc-section-subtitle">1. Using Configuration / Environment Variables</h3>
+                <p class="doc-text">The most straightforward way to use the admin bar is through your <code class="doc-inline-code">.env</code> file. This approach is highly useful for system maintenance messages or long-term announcements.</p>
+                
+                <div class="doc-code-block">
+                    <div class="doc-code-header">
+                        <span class="doc-code-title">.env</span>
+                        <button class="doc-code-copy" type="button">Copy</button>
+                    </div>
+                    <pre><code class="language-bash">TYRO_DASHBOARD_ADMIN_BAR_ENABLED=true
+TYRO_DASHBOARD_ADMIN_BAR_MESSAGE="⚠️ System will undergo scheduled maintenance this Sunday."
+TYRO_DASHBOARD_ADMIN_BAR_BG_COLOR="#ffcc00"
+TYRO_DASHBOARD_ADMIN_BAR_TEXT_COLOR="#000000"
+TYRO_DASHBOARD_ADMIN_BAR_ALIGN="center"
+TYRO_DASHBOARD_ADMIN_BAR_HEIGHT="40px"</code></pre>
+                </div>
+
+                <p class="doc-text">Alternatively, modify <code class="doc-inline-code">config/tyro-dashboard.php</code> directly:</p>
+                <div class="doc-code-block">
+                    <pre><code class="language-php">'admin_bar' => [
+    'enabled' => true,
+    'message' => 'System will undergo scheduled maintenance this Sunday.',
+    'bg_color' => '#ffcc00',     // Default is #000000
+    'text_color' => '#000000',   // Default is #ffffff
+    'align' => 'center',         // Default is left (options: left, center, right)
+    'height' => '40px',          // Configurable height
+],</code></pre>
+                </div>
+                
+                <div class="doc-alert doc-alert-info">
+                    <strong>Allowed HTML:</strong> The message supports basic formatting utilizing tags like <code class="doc-inline-code">&lt;p&gt;</code>, <code class="doc-inline-code">&lt;a&gt;</code>, <code class="doc-inline-code">&lt;b&gt;</code>, <code class="doc-inline-code">&lt;span&gt;</code>. Inline <code class="doc-inline-code">style</code> attributes are also permitted. Other tags are stripped for security.
+                </div>
+
+                <h3 class="doc-section-subtitle">2. Using the <code>AdminNotice</code> Service Class</h3>
+                <p class="doc-text">For dynamic messages, notifications tied to a specific user state, or alerts generated from middleware and controllers, inject notices at runtime using the <code class="doc-inline-code">AdminNotice</code> class.</p>
+                <div class="doc-code-block">
+                    <pre><code class="language-php">use HasinHayder\TyroDashboard\Services\AdminNotice;
+
+// Basic usage with just a message
+AdminNotice::show('Sale ends in 24 hours! &lt;b&gt;Don\'t miss out!&lt;/b&gt;');
+
+// Advanced usage with custom styling
+AdminNotice::show(
+    'Server SSD capacity is critically low (< 5%). &lt;a href="/admin/servers"&gt;Check Status&lt;/a&gt;', 
+    '#dc2626',   // Background Color (Red)
+    '#ffffff',   // Text Color (White)
+    'center'     // Text Alignment
+);</code></pre>
                 </div>
             </section>
 
