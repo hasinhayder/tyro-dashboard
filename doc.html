@@ -270,7 +270,67 @@
                 </div>
             </section>
 
+            <!-- Requirements -->
+            <section id="requirements" class="doc-section">
+                <h2 class="doc-section-title">Requirements</h2>
+                <ul class="doc-list">
+                    <li><strong>PHP:</strong> 8.2 or higher</li>
+                    <li><strong>Laravel:</strong> 12.x</li>
+                    <li><strong>Tyro Package:</strong> hasinhayder/tyro ^1.0 (required)</li>
+                    <li><strong>Tyro Login:</strong> hasinhayder/tyro-login ^1.0 (optional but recommended)</li>
+                    <li><strong>Database:</strong> Any database supported by Laravel</li>
+                </ul>
+            </section>
 
+            <!-- Installation -->
+            <section id="installation" class="doc-section">
+                <h2 class="doc-section-title">Installation</h2>
+                <p class="doc-text">Install Tyro Dashboard in just two simple steps:</p>
+
+                <h3 class="doc-section-subtitle">Step 1: Install via Composer</h3>
+                <div class="doc-code-block">
+                    <div class="doc-code-header">
+                        <span class="doc-code-title">Terminal</span>
+                        <button class="doc-code-copy" type="button">Copy</button>
+                    </div>
+                    <pre><code class="language-bash">composer require hasinhayder/tyro-dashboard</code></pre>
+                </div>
+
+                <h3 class="doc-section-subtitle">Step 2: Run the Interactive Installer</h3>
+                <div class="doc-code-block">
+                    <div class="doc-code-header">
+                        <span class="doc-code-title">Terminal</span>
+                        <button class="doc-code-copy" type="button">Copy</button>
+                    </div>
+                    <pre><code class="language-bash">php artisan tyro-dashboard:install</code></pre>
+                </div>
+
+                <p class="doc-text">The installer will:</p>
+                <ul class="doc-list">
+                    <li>Check dependencies (Tyro package)</li>
+                    <li>Publish the configuration file</li>
+                    <li>Optionally publish views for customization</li>
+                    <li>Help you configure admin roles and branding</li>
+                </ul>
+
+                <div class="doc-alert doc-alert-success">
+                    <strong>Done!</strong> Your admin dashboard is now available at <code class="doc-inline-code">/dashboard</code>. Login with an admin account to access all features.
+                </div>
+
+                <h3 class="doc-section-subtitle">Manual Installation</h3>
+                <p class="doc-text">If you prefer manual setup:</p>
+                <div class="doc-code-block">
+                    <div class="doc-code-header">
+                        <span class="doc-code-title">Terminal</span>
+                        <button class="doc-code-copy" type="button">Copy</button>
+                    </div>
+                    <pre><code class="language-bash"># Publish configuration
+php artisan vendor:publish --tag=tyro-dashboard-config
+
+# Optionally publish views
+php artisan vendor:publish --tag=tyro-dashboard-views</code></pre>
+                </div>
+            </section>
 
             <!-- Screenshots -->
             <section id="screenshots" class="doc-section">
@@ -410,68 +470,6 @@
                         </a>
                         <p class="doc-screenshot-caption">Edit Privilege Dark Mode</p>
                     </div>
-                </div>
-            </section>
-
-            <!-- Requirements -->
-            <section id="requirements" class="doc-section">
-                <h2 class="doc-section-title">Requirements</h2>
-                <ul class="doc-list">
-                    <li><strong>PHP:</strong> 8.2 or higher</li>
-                    <li><strong>Laravel:</strong> 12.x</li>
-                    <li><strong>Tyro Package:</strong> hasinhayder/tyro ^1.0 (required)</li>
-                    <li><strong>Tyro Login:</strong> hasinhayder/tyro-login ^1.0 (optional but recommended)</li>
-                    <li><strong>Database:</strong> Any database supported by Laravel</li>
-                </ul>
-            </section>
-
-            <!-- Installation -->
-            <section id="installation" class="doc-section">
-                <h2 class="doc-section-title">Installation</h2>
-                <p class="doc-text">Install Tyro Dashboard in just two simple steps:</p>
-
-                <h3 class="doc-section-subtitle">Step 1: Install via Composer</h3>
-                <div class="doc-code-block">
-                    <div class="doc-code-header">
-                        <span class="doc-code-title">Terminal</span>
-                        <button class="doc-code-copy" type="button">Copy</button>
-                    </div>
-                    <pre><code class="language-bash">composer require hasinhayder/tyro-dashboard</code></pre>
-                </div>
-
-                <h3 class="doc-section-subtitle">Step 2: Run the Interactive Installer</h3>
-                <div class="doc-code-block">
-                    <div class="doc-code-header">
-                        <span class="doc-code-title">Terminal</span>
-                        <button class="doc-code-copy" type="button">Copy</button>
-                    </div>
-                    <pre><code class="language-bash">php artisan tyro-dashboard:install</code></pre>
-                </div>
-
-                <p class="doc-text">The installer will:</p>
-                <ul class="doc-list">
-                    <li>Check dependencies (Tyro package)</li>
-                    <li>Publish the configuration file</li>
-                    <li>Optionally publish views for customization</li>
-                    <li>Help you configure admin roles and branding</li>
-                </ul>
-
-                <div class="doc-alert doc-alert-success">
-                    <strong>Done!</strong> Your admin dashboard is now available at <code class="doc-inline-code">/dashboard</code>. Login with an admin account to access all features.
-                </div>
-
-                <h3 class="doc-section-subtitle">Manual Installation</h3>
-                <p class="doc-text">If you prefer manual setup:</p>
-                <div class="doc-code-block">
-                    <div class="doc-code-header">
-                        <span class="doc-code-title">Terminal</span>
-                        <button class="doc-code-copy" type="button">Copy</button>
-                    </div>
-                    <pre><code class="language-bash"># Publish configuration
-php artisan vendor:publish --tag=tyro-dashboard-config
-
-# Optionally publish views
-php artisan vendor:publish --tag=tyro-dashboard-views</code></pre>
                 </div>
             </section>
 
