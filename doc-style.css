@@ -1,5 +1,31 @@
 /* ===== Documentation Styles for Tyro Dashboard ===== */
 
+/* ===== Custom Scrollbar Styles ===== */
+html {
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-primary) var(--color-bg-secondary);
+}
+
+html::-webkit-scrollbar {
+    width: 10px;
+}
+
+html::-webkit-scrollbar-track {
+    background: var(--color-bg-secondary);
+    border-radius: 10px;
+}
+
+html::-webkit-scrollbar-thumb {
+    background: linear-gradient(180deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
+    border-radius: 10px;
+    border: 2px solid var(--color-bg-secondary);
+    transition: background var(--transition-fast);
+}
+
+html::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(180deg, var(--color-primary-light) 0%, var(--color-primary) 100%);
+}
+
 /* CSS Variables for Documentation */
 :root {
     --color-surface: var(--color-bg);
