@@ -30,6 +30,7 @@ A production-ready Laravel package that delivers a complete admin & user dashboa
   - [Dynamic Resource CRUD](#dynamic-resource-crud)
   - [Separate Dashboards](#separate-dashboards)
   - [Impersonation & User Debugging](#impersonation--user-debugging)
+  - [Admin Bar & Global Notices](#admin-bar--global-notices)
   - [Audit Trail & Compliance](#audit-trail--compliance)
   - [Security & Authorization](#security--authorization)
 - [Installation](#installation)
@@ -57,6 +58,7 @@ Tyro Dashboard is a comprehensive Laravel package that eliminates the need to bu
 - **User Impersonation** — Debug user issues by securely logging in as them
 - **Audit Trail & Compliance** — Track all admin activities with searchable logs
 - **Beautiful UI** — Modern, responsive, built with shadcn components
+- **Admin Bar** — Deploy global maintenance or announcement notices in seconds
 - **Highly Configurable** — Publishable views, extensible controllers
 - **Security First** — Built-in authorization, protected resources, audit-ready
 
@@ -297,6 +299,43 @@ Securely log in as another user to diagnose issues, verify functionality, and pr
 4. You'll be logged in as that user while maintaining your admin session
 5. Browse the application as the user would see it
 6. Click **"Exit Impersonation"** to return to your admin account
+
+### Admin Bar & Global Notices
+
+The **Admin Bar** allows you to display globally visible announcements, alerts, or notices at the very top of all dashboard layouts. It's perfect for maintenance windows, system-wide alerts, or important announcements.
+
+#### Key Features
+- **Dynamic CSS Integration** — Automatically offsets the dashboard layout and sidebar to prevent overlapping.
+- **Configurable Aesthetics** — Customizable background color, text color, alignment, and height.
+- **Persistent or Dynamic** — Enable via `.env`/config or show programmatically at runtime.
+- **Security Focused** — Uses a strict allow-list for HTML tags (`<p>`, `<a>`, `<b>`, `<i>`, etc.) in messages.
+
+#### How to Use
+
+**1. Configuration via .env**
+Drop these into your `.env` to immediately activate a notice:
+```env
+TYRO_DASHBOARD_ADMIN_BAR_ENABLED=true
+TYRO_DASHBOARD_ADMIN_BAR_MESSAGE="⚠️ System maintenance this Sunday at 10:00 PM."
+TYRO_DASHBOARD_ADMIN_BAR_BG_COLOR="#ffcc00"
+```
+
+**2. Programmatic Usage**
+Use the `AdminNotice` service class to show notices based on your own application logic (e.g., in a middleware or service provider):
+
+```php
+use HasinHayder\TyroDashboard\Services\AdminNotice;
+
+// Basic usage
+AdminNotice::show('Sale ends in 24 hours! <b>Don\'t miss out!</b>');
+
+// Advanced usage with custom styling
+AdminNotice::show(
+    'Server SSD capacity is critically low (< 5%).',
+    '#dc2626', // Red background
+    '#ffffff'  // White text
+);
+```
 
 ### Audit Trail & Compliance
 
