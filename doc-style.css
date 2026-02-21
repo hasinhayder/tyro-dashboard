@@ -162,10 +162,7 @@
     font-family: var(--font-display);
     font-size: clamp(2rem, 5vw, 3rem);
     font-weight: 800;
-    background: var(--gradient-text);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+    color: var(--color-text);
     margin-bottom: var(--spacing-md);
 }
 
