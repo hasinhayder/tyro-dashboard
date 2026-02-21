@@ -71,6 +71,23 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Admin Bar
+    |--------------------------------------------------------------------------
+    |
+    | Configuration for the admin notice bar displayed at the top of the dashboard.
+    |
+    */
+    'admin_bar' => [
+        'enabled' => env('TYRO_DASHBOARD_ADMIN_BAR_ENABLED', false),
+        'message' => env('TYRO_DASHBOARD_ADMIN_BAR_MESSAGE', ''),
+        'bg_color' => env('TYRO_DASHBOARD_ADMIN_BAR_BG_COLOR', '#000000'),
+        'text_color' => env('TYRO_DASHBOARD_ADMIN_BAR_TEXT_COLOR', '#ffffff'),
+        'align' => env('TYRO_DASHBOARD_ADMIN_BAR_ALIGN', 'left'),
+        'height' => env('TYRO_DASHBOARD_ADMIN_BAR_HEIGHT', '40px'),
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
     | Collapsible Sidebar
     |--------------------------------------------------------------------------
     |

@@ -18,6 +18,7 @@
 </head>
 
 <body>
+    @include('tyro-dashboard::partials.admin-bar')
     <div class="dashboard-layout">
         <!-- Sidebar - Conditional based on role -->
         @hasanyrole('admin', 'superadmin')
