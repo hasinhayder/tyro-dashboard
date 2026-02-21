@@ -18,6 +18,7 @@
 </head>
 
 <body>
+    @include('tyro-dashboard::partials.admin-bar')
     <div class="dashboard-layout">
         <!-- Admin Sidebar -->
         @include('tyro-dashboard::partials.admin-sidebar')
