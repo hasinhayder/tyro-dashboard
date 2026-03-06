@@ -1,15 +1,15 @@
 <?php
 
-use HasinHayder\TyroDashboard\Http\Controllers\DashboardController;
+use HasinHayder\TyroDashboard\Http\Controllers\AuditController;
 use HasinHayder\TyroDashboard\Http\Controllers\ComponentsController;
-use HasinHayder\TyroDashboard\Http\Controllers\WidgetsController;
+use HasinHayder\TyroDashboard\Http\Controllers\DashboardController;
+use HasinHayder\TyroDashboard\Http\Controllers\InvitationController;
 use HasinHayder\TyroDashboard\Http\Controllers\PrivilegeController;
 use HasinHayder\TyroDashboard\Http\Controllers\ProfileController;
 use HasinHayder\TyroDashboard\Http\Controllers\RoleController;
 use HasinHayder\TyroDashboard\Http\Controllers\UserController;
+use HasinHayder\TyroDashboard\Http\Controllers\WidgetsController;
 use HasinHayder\TyroDashboard\Http\Controllers\XComponentsController;
-use HasinHayder\TyroDashboard\Http\Controllers\InvitationController;
-use HasinHayder\TyroDashboard\Http\Controllers\AuditController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -25,7 +25,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', [DashboardController::class, 'index'])->name('index');
 
 // Example and Demo Routes
-if (!config('tyro-dashboard.disable_examples', false) && !app()->environment('production')) {
+if (! config('tyro-dashboard.disable_examples', false) && ! app()->environment('production')) {
     // Backwards-compatible alias for the Examples Components page
     Route::get('/components', [ComponentsController::class, 'components'])->name('components');
 
@@ -125,6 +125,7 @@ Route::middleware('tyro-dashboard.admin')->group(function () {
     // Audit Logs (Admin)
     Route::prefix('audits')->name('audits.')->group(function () {
         Route::get('/', [AuditController::class, 'index'])->name('index');
+        Route::get('/export', [AuditController::class, 'exportCsv'])->name('export');
         Route::post('/bulk-delete', [AuditController::class, 'bulkDestroy'])->name('bulk-destroy');
         Route::delete('/flush', [AuditController::class, 'flush'])->name('flush');
         Route::delete('/{id}', [AuditController::class, 'destroy'])->name('destroy');

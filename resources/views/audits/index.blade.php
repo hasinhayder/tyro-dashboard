@@ -15,16 +15,24 @@
             <h1 class="page-title">Audit Logs</h1>
             <p class="page-description">Track system activity, security events, and administrative changes.</p>
         </div>
-        <form action="{{ route('tyro-dashboard.audits.flush', request()->query()) }}" method="POST" id="flush-audits-form">
-            @csrf
-            @method('DELETE')
-            <button type="button" class="btn btn-danger" onclick="event.preventDefault(); showDanger('Flush Audit Logs', 'Are you sure you want to permanently delete all audit log entries?').then(confirmed => { if (confirmed) document.getElementById('flush-audits-form').submit(); });">
+        <div style="display: flex; gap: 0.5rem;">
+            <a href="{{ route('tyro-dashboard.audits.export', request()->query()) }}" class="btn btn-secondary">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M3 6h18M8 6V4a1 1 0 011-1h6a1 1 0 011 1v2m1 0v14a2 2 0 01-2 2H9a2 2 0 01-2-2V6h10z" />
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
                 </svg>
-                Flush All Logs
-            </button>
-        </form>
+                Export CSV
+            </a>
+            <form action="{{ route('tyro-dashboard.audits.flush', request()->query()) }}" method="POST" id="flush-audits-form">
+                @csrf
+                @method('DELETE')
+                <button type="button" class="btn btn-danger" onclick="event.preventDefault(); showDanger('Flush Audit Logs', 'Are you sure you want to permanently delete all audit log entries?').then(confirmed => { if (confirmed) document.getElementById('flush-audits-form').submit(); });">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M3 6h18M8 6V4a1 1 0 011-1h6a1 1 0 011 1v2m1 0v14a2 2 0 01-2 2H9a2 2 0 01-2-2V6h10z" />
+                    </svg>
+                    Flush All Logs
+                </button>
+            </form>
+        </div>
     </div>
 </div>
 

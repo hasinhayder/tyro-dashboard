@@ -136,21 +136,118 @@ class AuditController extends BaseController
     }
 
     /**
+     * Export audit logs as CSV.
+     */
+    public function exportCsv(Request $request)
+    {
+        if ($redirect = $this->ensureAuditAvailable()) {
+            return $redirect;
+        }
+
+        $query = AuditLog::query()->with('user')->latest('created_at');
+
+        if ($search = trim((string) $request->get('search', ''))) {
+            $query->where(function ($q) use ($search) {
+                $q->where('event', 'like', "%{$search}%")
+                    ->orWhere('auditable_type', 'like', "%{$search}%")
+                    ->orWhere('auditable_id', 'like', "%{$search}%")
+                    ->orWhere('old_values', 'like', "%{$search}%")
+                    ->orWhere('new_values', 'like', "%{$search}%")
+                    ->orWhereHas('user', function ($userQuery) use ($search) {
+                        $userQuery->where('name', 'like', "%{$search}%")
+                            ->orWhere('email', 'like', "%{$search}%");
+                    });
+            });
+        }
+
+        if ($event = trim((string) $request->get('event', ''))) {
+            $query->where('event', 'like', "%{$event}%");
+        }
+
+        if ($actor = $request->get('actor')) {
+            if ($actor === 'system') {
+                $query->whereNull('user_id');
+            } elseif (is_numeric($actor)) {
+                $query->where('user_id', (int) $actor);
+            } else {
+                $query->whereHas('user', function ($userQuery) use ($actor) {
+                    $userQuery->where('name', 'like', "%{$actor}%")
+                        ->orWhere('email', 'like', "%{$actor}%");
+                });
+            }
+        }
+
+        if ($from = $request->get('from')) {
+            $query->where('created_at', '>=', $from);
+        }
+
+        if ($to = $request->get('to')) {
+            $query->where('created_at', '<=', $to);
+        }
+
+        return response()->streamDownload(function () use ($query) {
+            $handle = fopen('php://output', 'w');
+
+            fputcsv($handle, [
+                'ID',
+                'Time',
+                'Event',
+                'Actor ID',
+                'Actor Name',
+                'Actor Email',
+                'Target Type',
+                'Target ID',
+                'Old Values',
+                'New Values',
+                'URL',
+                'IP Address',
+                'User Agent',
+                'Summary',
+            ]);
+
+            $query->chunk(500, function ($logs) use ($handle) {
+                foreach ($logs as $log) {
+                    fputcsv($handle, [
+                        $log->id,
+                        $log->created_at ? $log->created_at->format('Y-m-d H:i:s') : '',
+                        $log->event,
+                        $log->user_id ?? 'System',
+                        $log->user ? $log->user->name : '',
+                        $log->user ? $log->user->email : '',
+                        $log->auditable_type,
+                        $log->auditable_id,
+                        is_string($log->old_values) ? $log->old_values : json_encode($log->old_values),
+                        is_string($log->new_values) ? $log->new_values : json_encode($log->new_values),
+                        $log->url,
+                        $log->ip_address,
+                        $log->user_agent,
+                        $log->summary,
+                    ]);
+                }
+            });
+
+            fclose($handle);
+        }, 'audit-logs-'.date('Y-m-d-His').'.csv', [
+            'Content-Type' => 'text/csv',
+        ]);
+    }
+
+    /**
      * Ensure audit logging is enabled and table exists.
      */
     protected function ensureAuditAvailable(): ?RedirectResponse
     {
-        if (!config('tyro-dashboard.features.audit_logs', true) || !config('tyro.audit.enabled', true)) {
+        if (! config('tyro-dashboard.features.audit_logs', true) || ! config('tyro.audit.enabled', true)) {
             return redirect()->route('tyro-dashboard.index');
         }
 
-        if (!class_exists(AuditLog::class)) {
+        if (! class_exists(AuditLog::class)) {
             return redirect()->route('tyro-dashboard.index');
         }
 
         $auditTable = config('tyro.tables.audit_logs', 'tyro_audit_logs');
 
-        if (!Schema::hasTable($auditTable)) {
+        if (! Schema::hasTable($auditTable)) {
             return redirect()->route('tyro-dashboard.index');
         }
 
