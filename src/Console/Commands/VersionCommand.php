@@ -21,7 +21,7 @@ class VersionCommand extends Command
      */
     public function handle(): int
     {
-        $version = "1.13.0"; //feat(admin-bar): add configurable admin notice bar with color, alignment, and config support
+        $version = "1.13.1"; //feat(audit-trail): audit log for user login and logout
         
         $this->info('');
         $this->info('  ╔════════════════════════════════════════╗');
@@ -73,6 +73,7 @@ class VersionCommand extends Command
 }
 
 //Changelog
+//1.13.1 - feat(audit-trail): audit log for user login and logout
 //1.13.0 - feat(admin-bar): add configurable admin notice bar with color, alignment, and config support
 //1.12.0 - Detail audit trail admin pages with filters, search and pagination
 //1.11.0 - replace JS confirm with built-in modal for impersonation confirmation
