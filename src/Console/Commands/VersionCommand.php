@@ -21,7 +21,7 @@ class VersionCommand extends Command
      */
     public function handle(): int
     {
-        $version = "1.14.0"; //feat(audit-trail): export audit trail to CSV
+        $version = "1.15.0"; //Laravel 13 support
         
         $this->info('');
         $this->info('  ╔════════════════════════════════════════╗');
@@ -73,6 +73,7 @@ class VersionCommand extends Command
 }
 
 //Changelog
+//1.15.0 - Laravel 13 support
 //1.14.0 - feat(audit-trail): export audit trail to CSV
 //1.13.1 - feat(audit-trail): audit log for user login and logout
 //1.13.0 - feat(admin-bar): add configurable admin notice bar with color, alignment, and config support
