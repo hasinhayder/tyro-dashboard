@@ -10,6 +10,15 @@ use HasinHayder\TyroDashboard\Concerns\HasCrud;
 
 class ResourceController extends BaseController
 {
+    protected function sanitizeRichtext($input)
+    {
+        if (class_exists(\Mews\Purifier\Facades\Purifier::class)) {
+            return \Purifier::clean($input);
+        }
+
+        return strip_tags($input, '<p><br><b><strong><i><em><u><s><ul><ol><li><a><h1><h2><h3><h4><h5><h6><blockquote><pre><code><hr><img><table><thead><tbody><tr><th><td><span><div>');
+    }
+
     protected function getResourceConfig($key)
     {
         // First, check config-based resources (backward compatibility)
@@ -409,9 +418,7 @@ class ResourceController extends BaseController
         $sanitizedRichtext = [];
         foreach ($config['fields'] as $key => $field) {
             if (($field['type'] ?? '') === 'richtext' && isset($item->$key)) {
-                $sanitizedRichtext[$key] = function_exists('clean')
-                    ? clean($item->$key)
-                    : strip_tags($item->$key, '<p><br><b><strong><i><em><u><s><ul><ol><li><a><h1><h2><h3><h4><h5><h6><blockquote><pre><code><hr><img><table><thead><tbody><tr><th><td><span><div>');
+                $sanitizedRichtext[$key] = $this->sanitizeRichtext($item->$key);
             }
         }
         
