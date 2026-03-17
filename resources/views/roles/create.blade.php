@@ -3,9 +3,9 @@
 @section('title', 'Create Role')
 
 @section('breadcrumb')
-<a href="{{ route('tyro-dashboard.index') }}">Dashboard</a>
+<a href="{{ route($dashboardRoute::name('index')) }}">Dashboard</a>
 <span class="breadcrumb-separator">/</span>
-<a href="{{ route('tyro-dashboard.roles.index') }}">Roles</a>
+<a href="{{ route($dashboardRoute::name('roles.index')) }}">Roles</a>
 <span class="breadcrumb-separator">/</span>
 <span>Create</span>
 @endsection
@@ -17,7 +17,7 @@
             <h1 class="page-title">Create Role</h1>
             <p class="page-description">Add a new role with associated privileges.</p>
         </div>
-        <a href="{{ route('tyro-dashboard.roles.index') }}" class="btn btn-secondary">
+        <a href="{{ route($dashboardRoute::name('roles.index')) }}" class="btn btn-secondary">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
             </svg>
@@ -27,7 +27,7 @@
 </div>
 
 <div class="card">
-    <form action="{{ route('tyro-dashboard.roles.store') }}" method="POST">
+    <form action="{{ route($dashboardRoute::name('roles.store')) }}" method="POST">
         @csrf
         <div class="card-body">
             <div class="form-row">
@@ -71,7 +71,7 @@
                         <path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
                     <div class="alert-content">
-                        <p class="alert-message">No privileges available. <a href="{{ route('tyro-dashboard.privileges.create') }}">Create one</a> first.</p>
+                        <p class="alert-message">No privileges available. <a href="{{ route($dashboardRoute::name('privileges.create')) }}">Create one</a> first.</p>
                     </div>
                 </div>
                 @endif
@@ -82,7 +82,7 @@
         </div>
         <div class="card-footer" style="display: flex; gap: 0.75rem;">
             <button type="submit" class="btn btn-primary">Create Role</button>
-            <a href="{{ route('tyro-dashboard.roles.index') }}" class="btn btn-secondary">Cancel</a>
+            <a href="{{ route($dashboardRoute::name('roles.index')) }}" class="btn btn-secondary">Cancel</a>
         </div>
     </form>
 </div>

@@ -104,7 +104,7 @@ class CreateAdminPageCommand extends Command
 @section('title', '{$pageTitle}')
 
 @section('breadcrumb')
-<a href="{{ route('tyro-dashboard.index') }}">Dashboard</a>
+<a href="{{ route($dashboardRoute::name('index')) }}">Dashboard</a>
 <span class="breadcrumb-separator">/</span>
 <span>{$pageTitle}</span>
 @endsection

@@ -2,6 +2,7 @@
 
 namespace HasinHayder\TyroDashboard\Http\Controllers;
 
+use HasinHayder\TyroDashboard\Support\DashboardRoute;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Schema;
@@ -130,7 +131,7 @@ class InvitationController extends BaseController
         $existingLink = InvitationLink::where('user_id', $user->id)->first();
 
         if ($existingLink) {
-            return redirect()->route('tyro-dashboard.invitations.admin.index')
+            return redirect()->route(DashboardRoute::name('invitations.admin.index'))
                 ->with('error', "User {$user->name} already has an invitation link.");
         }
 
@@ -148,7 +149,7 @@ class InvitationController extends BaseController
             'hash' => $invitationLink->hash,
         ]);
 
-        return redirect()->route('tyro-dashboard.invitations.admin.index')
+        return redirect()->route(DashboardRoute::name('invitations.admin.index'))
             ->with('success', "Invitation link created successfully for {$user->name}.");
     }
 
@@ -186,7 +187,7 @@ class InvitationController extends BaseController
             $message .= " ({$referralCount} referral record(s) were also removed)";
         }
 
-        return redirect()->route('tyro-dashboard.invitations.admin.index')
+        return redirect()->route(DashboardRoute::name('invitations.admin.index'))
             ->with('success', $message);
     }
 
@@ -237,7 +238,7 @@ class InvitationController extends BaseController
         $existingLink = InvitationLink::where('user_id', $user->id)->first();
 
         if ($existingLink) {
-            return redirect()->route('tyro-dashboard.invitations.index')
+            return redirect()->route(DashboardRoute::name('invitations.index'))
                 ->with('error', 'You already have an invitation link.');
         }
 
@@ -255,7 +256,7 @@ class InvitationController extends BaseController
             'hash' => $invitationLink->hash,
         ]);
 
-        return redirect()->route('tyro-dashboard.invitations.index')
+        return redirect()->route(DashboardRoute::name('invitations.index'))
             ->with('success', 'Your invitation link has been created successfully!');
     }
 

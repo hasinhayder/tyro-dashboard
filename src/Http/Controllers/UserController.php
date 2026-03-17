@@ -5,6 +5,7 @@ namespace HasinHayder\TyroDashboard\Http\Controllers;
 use HasinHayder\Tyro\Models\Role;
 use HasinHayder\Tyro\Support\PasswordRules;
 use HasinHayder\Tyro\Support\TyroAudit;
+use HasinHayder\TyroDashboard\Support\DashboardRoute;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Collection;
@@ -95,7 +96,7 @@ class UserController extends BaseController
         }
 
         return redirect()
-            ->route('tyro-dashboard.users.index')
+            ->route(DashboardRoute::name('users.index'))
             ->with('success', 'User created successfully.');
     }
 
@@ -165,7 +166,7 @@ class UserController extends BaseController
         }
 
         return redirect()
-            ->route('tyro-dashboard.users.index')
+            ->route(DashboardRoute::name('users.index'))
             ->with('success', 'User updated successfully.');
     }
 
@@ -180,7 +181,7 @@ class UserController extends BaseController
         // Prevent self-suspension
         if ($user->id === auth()->id()) {
             return redirect()
-                ->route('tyro-dashboard.users.index')
+                ->route(DashboardRoute::name('users.index'))
                 ->with('error', 'You cannot suspend yourself.');
         }
 
@@ -191,7 +192,7 @@ class UserController extends BaseController
         $user->suspend($validated['reason'] ?? null);
 
         return redirect()
-            ->route('tyro-dashboard.users.index')
+            ->route(DashboardRoute::name('users.index'))
             ->with('success', 'User suspended successfully.');
     }
 
@@ -206,7 +207,7 @@ class UserController extends BaseController
         $user->unsuspend();
 
         return redirect()
-            ->route('tyro-dashboard.users.index')
+            ->route(DashboardRoute::name('users.index'))
             ->with('success', 'User unsuspended successfully.');
     }
 
@@ -221,7 +222,7 @@ class UserController extends BaseController
         // Prevent self-deletion
         if ($user->id === auth()->id()) {
             return redirect()
-                ->route('tyro-dashboard.users.index')
+                ->route(DashboardRoute::name('users.index'))
                 ->with('error', 'You cannot delete yourself.');
         }
 
@@ -229,14 +230,14 @@ class UserController extends BaseController
         $protectedUsers = config('tyro-dashboard.protected.users', []);
         if (in_array($user->id, $protectedUsers)) {
             return redirect()
-                ->route('tyro-dashboard.users.index')
+                ->route(DashboardRoute::name('users.index'))
                 ->with('error', 'This user is protected and cannot be deleted.');
         }
 
         $user->delete();
 
         return redirect()
-            ->route('tyro-dashboard.users.index')
+            ->route(DashboardRoute::name('users.index'))
             ->with('success', 'User deleted successfully.');
     }
 
@@ -255,7 +256,7 @@ class UserController extends BaseController
         ])->save();
 
         return redirect()
-            ->route('tyro-dashboard.users.edit', $user->id)
+            ->route(DashboardRoute::name('users.edit'), $user->id)
             ->with('success', 'Two-factor authentication has been reset for this user.');
     }
 
@@ -275,7 +276,7 @@ class UserController extends BaseController
         // Prevent impersonating yourself
         if ($targetUser->id === auth()->id()) {
             return redirect()
-                ->route('tyro-dashboard.users.index')
+                ->route(DashboardRoute::name('users.index'))
                 ->with('error', 'You cannot impersonate yourself.');
         }
 
@@ -286,7 +287,7 @@ class UserController extends BaseController
         auth()->login($targetUser);
 
         return redirect()
-            ->route('tyro-dashboard.index')
+            ->route(DashboardRoute::name('index'))
             ->with('success', "You are now logged in as {$targetUser->name}.");
     }
 
@@ -299,7 +300,7 @@ class UserController extends BaseController
 
         if (!$impersonatorId) {
             return redirect()
-                ->route('tyro-dashboard.index')
+                ->route(DashboardRoute::name('index'))
                 ->with('error', 'You are not impersonating anyone.');
         }
 
@@ -313,7 +314,7 @@ class UserController extends BaseController
         auth()->login($originalUser);
 
         return redirect()
-            ->route('tyro-dashboard.users.index')
+            ->route(DashboardRoute::name('users.index'))
             ->with('success', 'You have stopped impersonating and returned to your account.');
     }
 

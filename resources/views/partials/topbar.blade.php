@@ -48,7 +48,7 @@
             </button>
 
             <div class="user-dropdown-menu">
-                <a href="{{ route('tyro-dashboard.profile') }}" class="dropdown-item">
+                <a href="{{ route($dashboardRoute::name('profile')) }}" class="dropdown-item">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                     </svg>
@@ -56,7 +56,7 @@
                 </a>
                 <div class="dropdown-divider"></div>
                 @if(session('impersonator_id'))
-                    <form action="{{ route('tyro-dashboard.leave-impersonation') }}" method="POST" style="margin: 0;">
+                    <form action="{{ route($dashboardRoute::name('leave-impersonation')) }}" method="POST" style="margin: 0;">
                         @csrf
                         <button type="submit" class="dropdown-item dropdown-item-danger" style="width: 100%; text-align: left; border: none; background: none; cursor: pointer;">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">

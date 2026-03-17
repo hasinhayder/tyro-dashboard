@@ -3,6 +3,7 @@
 namespace HasinHayder\TyroDashboard\Http\Middleware;
 
 use Closure;
+use HasinHayder\TyroDashboard\Support\DashboardRoute;
 use Illuminate\Http\Request;
 
 class HandleImpersonation
@@ -18,7 +19,7 @@ class HandleImpersonation
         // Check if this is a logout request and we're impersonating
         if ($request->routeIs('tyro-login.logout') && session('impersonator_id')) {
             // Redirect to leave impersonation instead of logging out
-            return redirect()->route('tyro-dashboard.leave-impersonation');
+            return redirect()->route(DashboardRoute::name('leave-impersonation'));
         }
 
         return $next($request);

@@ -3,6 +3,7 @@
 namespace HasinHayder\TyroDashboard\Http\Controllers;
 
 use HasinHayder\Tyro\Support\TyroAudit;
+use HasinHayder\TyroDashboard\Support\DashboardRoute;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
@@ -59,7 +60,7 @@ class ProfileController extends BaseController
         }
 
         return redirect()
-            ->route('tyro-dashboard.profile')
+            ->route(DashboardRoute::name('profile'))
             ->with('success', 'Profile updated successfully.');
     }
 
@@ -78,7 +79,7 @@ class ProfileController extends BaseController
         ]);
 
         return redirect()
-            ->route('tyro-dashboard.profile')
+            ->route(DashboardRoute::name('profile'))
             ->with('success', 'Password updated successfully.');
     }
 
@@ -96,7 +97,7 @@ class ProfileController extends BaseController
         ])->save();
 
         return redirect()
-            ->route('tyro-dashboard.profile')
+            ->route(DashboardRoute::name('profile'))
             ->with('success', 'Two-factor authentication has been reset.');
     }
 

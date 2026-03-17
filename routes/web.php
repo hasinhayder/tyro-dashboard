@@ -10,6 +10,7 @@ use HasinHayder\TyroDashboard\Http\Controllers\RoleController;
 use HasinHayder\TyroDashboard\Http\Controllers\UserController;
 use HasinHayder\TyroDashboard\Http\Controllers\WidgetsController;
 use HasinHayder\TyroDashboard\Http\Controllers\XComponentsController;
+use HasinHayder\TyroDashboard\Support\DashboardRoute;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -76,7 +77,7 @@ Route::middleware('tyro-dashboard.admin')->group(function () {
         Route::get('/create', [UserController::class, 'create'])->name('create');
         Route::post('/', [UserController::class, 'store'])->name('store');
         Route::get('/{id}', function ($id) {
-            return redirect()->route('tyro-dashboard.users.edit', $id);
+            return redirect()->route(DashboardRoute::name('users.edit'), $id);
         })->name('show');
         Route::get('/{id}/edit', [UserController::class, 'edit'])->name('edit');
         Route::put('/{id}', [UserController::class, 'update'])->name('update');

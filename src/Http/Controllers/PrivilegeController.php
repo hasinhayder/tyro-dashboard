@@ -5,6 +5,7 @@ namespace HasinHayder\TyroDashboard\Http\Controllers;
 use HasinHayder\Tyro\Models\Privilege;
 use HasinHayder\Tyro\Models\Role;
 use HasinHayder\Tyro\Support\TyroAudit;
+use HasinHayder\TyroDashboard\Support\DashboardRoute;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
@@ -90,7 +91,7 @@ class PrivilegeController extends BaseController
         ]);
 
         return redirect()
-            ->route('tyro-dashboard.privileges.index')
+            ->route(DashboardRoute::name('privileges.index'))
             ->with('success', 'Privilege created successfully.');
     }
 
@@ -189,7 +190,7 @@ class PrivilegeController extends BaseController
         }
 
         return redirect()
-            ->route('tyro-dashboard.privileges.index')
+            ->route(DashboardRoute::name('privileges.index'))
             ->with('success', 'Privilege updated successfully.');
     }
 
@@ -213,7 +214,7 @@ class PrivilegeController extends BaseController
         $this->auditSafely('privilege.deleted', null, $oldValues, null);
 
         return redirect()
-            ->route('tyro-dashboard.privileges.index')
+            ->route(DashboardRoute::name('privileges.index'))
             ->with('success', 'Privilege deleted successfully.');
     }
 
@@ -232,7 +233,7 @@ class PrivilegeController extends BaseController
         ]);
 
         return redirect()
-            ->route('tyro-dashboard.privileges.show', $id)
+            ->route(DashboardRoute::name('privileges.show'), $id)
             ->with('success', 'Privilege removed from role successfully.');
     }
 

@@ -17,6 +17,7 @@ use HasinHayder\TyroDashboard\Console\Commands\RemoveUserPageCommand;
 use HasinHayder\TyroDashboard\Console\Commands\VersionCommand;
 use HasinHayder\TyroDashboard\Http\Middleware\EnsureIsAdmin;
 use HasinHayder\TyroDashboard\Http\Middleware\HandleImpersonation;
+use HasinHayder\TyroDashboard\Support\DashboardRoute;
 use Illuminate\Routing\Router;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\View;
@@ -77,9 +78,23 @@ class TyroDashboardServiceProvider extends ServiceProvider
         Route::group([
             'prefix' => config('tyro-dashboard.routes.prefix', 'dashboard'),
             'middleware' => config('tyro-dashboard.routes.middleware', ['web', 'auth']),
-            'as' => config('tyro-dashboard.routes.name_prefix', 'tyro-dashboard.'),
+            'as' => DashboardRoute::prefix(),
         ], function (): void {
             $this->loadRoutesFrom(__DIR__.'/../../routes/web.php');
+        });
+
+        $url = $this->app['url'];
+
+        $url->resolveMissingNamedRoutesUsing(function (string $name, array $parameters = [], bool $absolute = true) use ($url) {
+            $translatedName = DashboardRoute::translate($name);
+
+            if ($translatedName === null) {
+                return null;
+            }
+
+            $route = $this->app['router']->getRoutes()->getByName($translatedName);
+
+            return $route ? $url->toRoute($route, $parameters, $absolute) : null;
         });
     }
 
@@ -93,6 +108,7 @@ class TyroDashboardServiceProvider extends ServiceProvider
         // Share authenticated user with all dashboard views
         View::composer(['tyro-dashboard::*', 'dashboard.*'], function ($view) {
             $view->with('user', auth()->user());
+            $view->with('dashboardRoute', DashboardRoute::class);
         });
 
         // Share filtered resources with sidebar views (based on user's role)

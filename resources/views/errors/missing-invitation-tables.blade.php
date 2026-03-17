@@ -17,7 +17,7 @@
 @section('title', 'Migration Required')
 
 @section('breadcrumb')
-<a href="{{ route('tyro-dashboard.index') }}">Dashboard</a>
+<a href="{{ route($dashboardRoute::name('index')) }}">Dashboard</a>
 <span class="breadcrumb-separator">/</span>
 <span>Migration Required</span>
 @endsection
@@ -119,7 +119,7 @@
 
         <!-- Action Buttons -->
         <div style="display: flex; gap: 0.75rem; justify-content: center; flex-wrap: wrap;">
-            <a href="{{ route('tyro-dashboard.index') }}" class="btn btn-secondary">
+            <a href="{{ route($dashboardRoute::name('index')) }}" class="btn btn-secondary">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
                 </svg>

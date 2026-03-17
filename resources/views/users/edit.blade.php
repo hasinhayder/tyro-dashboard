@@ -3,9 +3,9 @@
 @section('title', 'Edit User')
 
 @section('breadcrumb')
-<a href="{{ route('tyro-dashboard.index') }}">Dashboard</a>
+<a href="{{ route($dashboardRoute::name('index')) }}">Dashboard</a>
 <span class="breadcrumb-separator">/</span>
-<a href="{{ route('tyro-dashboard.users.index') }}">Users</a>
+<a href="{{ route($dashboardRoute::name('users.index')) }}">Users</a>
 <span class="breadcrumb-separator">/</span>
 <span>Edit</span>
 @endsection
@@ -17,7 +17,7 @@
             <h1 class="page-title">Edit User</h1>
             <p class="page-description">Update user information and roles.</p>
         </div>
-        <a href="{{ route('tyro-dashboard.users.index') }}" class="btn btn-secondary">
+        <a href="{{ route($dashboardRoute::name('users.index')) }}" class="btn btn-secondary">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
             </svg>
@@ -32,7 +32,7 @@
         <div class="card-header">
             <h3 class="card-title">User Information</h3>
         </div>
-        <form action="{{ route('tyro-dashboard.users.update', $editUser->id) }}" method="POST">
+        <form action="{{ route($dashboardRoute::name('users.update'), $editUser->id) }}" method="POST">
             @csrf
             @method('PUT')
             <div class="card-body">
@@ -87,7 +87,7 @@
             </div>
             <div class="card-footer" style="display: flex; gap: 0.75rem;">
                 <button type="submit" class="btn btn-primary">Save Changes</button>
-                <a href="{{ route('tyro-dashboard.users.index') }}" class="btn btn-secondary">Cancel</a>
+                <a href="{{ route($dashboardRoute::name('users.index')) }}" class="btn btn-secondary">Cancel</a>
             </div>
         </form>
     </div>
@@ -112,7 +112,7 @@
                         <div style="font-size: 0.875rem; color: var(--muted-foreground);">Member since {{ $editUser->created_at->format('M d, Y') }}</div>
                         @if(method_exists($editUser, 'hasProfilePhotoColumn') && $editUser->hasProfilePhotoColumn() && $editUser->profile_photo_path)
                         <div style="margin-top: 0.5rem;">
-                            <form id="delete-user-photo-form" action="{{ route('tyro-dashboard.users.photo.delete', $editUser->id) }}" method="POST" style="display: inline;">
+                            <form id="delete-user-photo-form" action="{{ route($dashboardRoute::name('users.photo.delete'), $editUser->id) }}" method="POST" style="display: inline;">
                                 @csrf
                                 @method('DELETE')
                                 <button type="button" class="btn btn-sm btn-ghost" style="color: var(--danger); padding: 0.25rem 0.5rem;" onclick="showDanger('Remove Photo', 'Are you sure you want to remove this user\'s profile photo?').then(confirmed => { if(confirmed) document.getElementById('delete-user-photo-form').submit(); })">
@@ -156,7 +156,7 @@
                         @endif
                     </div>
                     @if($editUser->two_factor_secret)
-                        <form action="{{ route('tyro-dashboard.users.2fa.reset', $editUser->id) }}" method="POST" id="reset-2fa-form">
+                        <form action="{{ route($dashboardRoute::name('users.2fa.reset'), $editUser->id) }}" method="POST" id="reset-2fa-form">
                             @csrf
                             @method('DELETE')
                             <button type="button" class="btn btn-sm btn-outline-warning" style="width: 100%;" onclick="event.preventDefault(); showConfirm('Reset 2FA', 'Are you sure you want to reset 2FA for this user?').then(confirmed => { if(confirmed) document.getElementById('reset-2fa-form').submit(); })">
@@ -169,7 +169,7 @@
 
                 <div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--border);">
                     @if(method_exists($editUser, 'isSuspended') && $editUser->isSuspended())
-                        <form action="{{ route('tyro-dashboard.users.unsuspend', $editUser->id) }}" method="POST">
+                        <form action="{{ route($dashboardRoute::name('users.unsuspend'), $editUser->id) }}" method="POST">
                             @csrf
                             <button type="submit" class="btn btn-success" style="width: 100%;">
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -199,7 +199,7 @@
                 <p style="font-size: 0.875rem; color: var(--muted-foreground); margin-bottom: 1rem;">
                     Once you delete a user, there is no going back. Please be certain.
                 </p>
-                <form action="{{ route('tyro-dashboard.users.destroy', $editUser->id) }}" method="POST" id="delete-user-form">
+                <form action="{{ route($dashboardRoute::name('users.destroy'), $editUser->id) }}" method="POST" id="delete-user-form">
                     @csrf
                     @method('DELETE')
                     <button type="button" class="btn btn-danger" style="width: 100%;" onclick="event.preventDefault(); showDanger('Delete User', 'Are you sure you want to delete this user? This action cannot be undone.').then(confirmed => { if(confirmed) document.getElementById('delete-user-form').submit(); })">
@@ -226,7 +226,7 @@
                 </svg>
             </button>
         </div>
-        <form action="{{ route('tyro-dashboard.users.suspend', $editUser->id) }}" method="POST">
+        <form action="{{ route($dashboardRoute::name('users.suspend'), $editUser->id) }}" method="POST">
             @csrf
             <div class="modal-body">
                 <p style="margin-bottom: 1rem; color: var(--muted-foreground);">
@@ -248,7 +248,7 @@
 </div>
 
 @push('scripts')
-<form id="delete-user-photo-form" action="{{ route('tyro-dashboard.users.photo.delete', $editUser->id) }}" method="POST" style="display: none;">
+<form id="delete-user-photo-form" action="{{ route($dashboardRoute::name('users.photo.delete'), $editUser->id) }}" method="POST" style="display: none;">
     @csrf
     @method('DELETE')
 </form>

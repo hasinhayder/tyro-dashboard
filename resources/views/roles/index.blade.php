@@ -3,7 +3,7 @@
 @section('title', 'Roles')
 
 @section('breadcrumb')
-<a href="{{ route('tyro-dashboard.index') }}">Dashboard</a>
+<a href="{{ route($dashboardRoute::name('index')) }}">Dashboard</a>
 <span class="breadcrumb-separator">/</span>
 <span>Roles</span>
 @endsection
@@ -15,7 +15,7 @@
             <h1 class="page-title">Roles</h1>
             <p class="page-description">Manage user roles and their associated privileges.</p>
         </div>
-        <a href="{{ route('tyro-dashboard.roles.create') }}" class="btn btn-primary">
+        <a href="{{ route($dashboardRoute::name('roles.create')) }}" class="btn btn-primary">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
             </svg>
@@ -27,7 +27,7 @@
 <!-- Filters -->
 <div class="card" style="margin-bottom: 1rem;">
     <div class="card-body">
-        <form action="{{ route('tyro-dashboard.roles.index') }}" method="GET">
+        <form action="{{ route($dashboardRoute::name('roles.index')) }}" method="GET">
             <div class="filters-bar">
                 <div class="search-box">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -37,7 +37,7 @@
                 </div>
                 <button type="submit" class="btn btn-secondary">Search</button>
                 @if(!empty($filters['search']))
-                    <a href="{{ route('tyro-dashboard.roles.index') }}" class="btn btn-ghost">Clear</a>
+                    <a href="{{ route($dashboardRoute::name('roles.index')) }}" class="btn btn-ghost">Clear</a>
                 @endif
             </div>
         </form>
@@ -62,7 +62,7 @@
                 @foreach($roles as $role)
                 <tr>
                     <td>
-                        <a href="{{ route('tyro-dashboard.roles.show', $role->id) }}" style="display: flex; align-items: center; gap: 0.75rem; text-decoration: none;">
+                        <a href="{{ route($dashboardRoute::name('roles.show'), $role->id) }}" style="display: flex; align-items: center; gap: 0.75rem; text-decoration: none;">
                             <div style="width: 36px; height: 36px; border-radius: 0.5rem; background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%); display: flex; align-items: center; justify-content: center;">
                                 <svg style="width: 18px; height: 18px; color: white;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
@@ -82,19 +82,19 @@
                     </td>
                     <td>
                         <div class="action-buttons" style="justify-content: flex-end;">
-                            <a href="{{ route('tyro-dashboard.roles.show', $role->id) }}" class="action-btn" title="View">
+                            <a href="{{ route($dashboardRoute::name('roles.show'), $role->id) }}" class="action-btn" title="View">
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
                                 </svg>
                             </a>
-                            <a href="{{ route('tyro-dashboard.roles.edit', $role->id) }}" class="action-btn" title="Edit">
+                            <a href="{{ route($dashboardRoute::name('roles.edit'), $role->id) }}" class="action-btn" title="Edit">
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                                 </svg>
                             </a>
                             @if(!in_array($role->slug, $protectedRoles))
-                                <form action="{{ route('tyro-dashboard.roles.destroy', $role->id) }}" method="POST" style="display: inline;" id="delete-role-form-{{ $role->id }}">
+                                <form action="{{ route($dashboardRoute::name('roles.destroy'), $role->id) }}" method="POST" style="display: inline;" id="delete-role-form-{{ $role->id }}">
                                     @csrf
                                     @method('DELETE')
                                     <button type="button" class="action-btn action-btn-danger" title="Delete" onclick="event.preventDefault(); showDanger('Delete Role', 'Are you sure you want to delete this role? All users will be unassigned from this role.').then(confirmed => { if(confirmed) document.getElementById('delete-role-form-{{ $role->id }}').submit(); })">
@@ -130,7 +130,7 @@
         </svg>
         <h3 class="empty-state-title">No roles found</h3>
         <p class="empty-state-description">Get started by creating a new role.</p>
-        <a href="{{ route('tyro-dashboard.roles.create') }}" class="btn btn-primary">
+        <a href="{{ route($dashboardRoute::name('roles.create')) }}" class="btn btn-primary">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
             </svg>

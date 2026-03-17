@@ -5,6 +5,7 @@ namespace HasinHayder\TyroDashboard\Http\Controllers;
 use HasinHayder\Tyro\Models\Privilege;
 use HasinHayder\Tyro\Models\Role;
 use HasinHayder\Tyro\Support\TyroAudit;
+use HasinHayder\TyroDashboard\Support\DashboardRoute;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
@@ -87,7 +88,7 @@ class RoleController extends BaseController
         ]);
 
         return redirect()
-            ->route('tyro-dashboard.roles.index')
+            ->route(DashboardRoute::name('roles.index'))
             ->with('success', 'Role created successfully.');
     }
 
@@ -175,7 +176,7 @@ class RoleController extends BaseController
         }
 
         return redirect()
-            ->route('tyro-dashboard.roles.index')
+            ->route(DashboardRoute::name('roles.index'))
             ->with('success', 'Role updated successfully.');
     }
 
@@ -195,7 +196,7 @@ class RoleController extends BaseController
         $protectedRoles = config('tyro-dashboard.protected.roles', []);
         if (in_array($role->slug, $protectedRoles)) {
             return redirect()
-                ->route('tyro-dashboard.roles.index')
+                ->route(DashboardRoute::name('roles.index'))
                 ->with('error', 'This role is protected and cannot be deleted.');
         }
 
@@ -207,7 +208,7 @@ class RoleController extends BaseController
         $this->auditSafely('role.deleted', null, $oldValues, null);
 
         return redirect()
-            ->route('tyro-dashboard.roles.index')
+            ->route(DashboardRoute::name('roles.index'))
             ->with('success', 'Role deleted successfully.');
     }
 
@@ -228,7 +229,7 @@ class RoleController extends BaseController
         ]);
 
         return redirect()
-            ->route('tyro-dashboard.roles.show', $id)
+            ->route(DashboardRoute::name('roles.show'), $id)
             ->with('success', 'User removed from role successfully.');
     }
 

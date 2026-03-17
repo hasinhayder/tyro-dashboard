@@ -3,7 +3,7 @@
 @section('title', 'Privileges')
 
 @section('breadcrumb')
-<a href="{{ route('tyro-dashboard.index') }}">Dashboard</a>
+<a href="{{ route($dashboardRoute::name('index')) }}">Dashboard</a>
 <span class="breadcrumb-separator">/</span>
 <span>Privileges</span>
 @endsection
@@ -15,7 +15,7 @@
             <h1 class="page-title">Privileges</h1>
             <p class="page-description">Manage granular permissions that can be assigned to roles.</p>
         </div>
-        <a href="{{ route('tyro-dashboard.privileges.create') }}" class="btn btn-primary">
+        <a href="{{ route($dashboardRoute::name('privileges.create')) }}" class="btn btn-primary">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
             </svg>
@@ -27,7 +27,7 @@
 <!-- Filters -->
 <div class="card" style="margin-bottom: 1rem;">
     <div class="card-body">
-        <form action="{{ route('tyro-dashboard.privileges.index') }}" method="GET">
+        <form action="{{ route($dashboardRoute::name('privileges.index')) }}" method="GET">
             <div class="filters-bar">
                 <div class="search-box">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -37,7 +37,7 @@
                 </div>
                 <button type="submit" class="btn btn-secondary">Search</button>
                 @if(!empty($filters['search']))
-                    <a href="{{ route('tyro-dashboard.privileges.index') }}" class="btn btn-ghost">Clear</a>
+                    <a href="{{ route($dashboardRoute::name('privileges.index')) }}" class="btn btn-ghost">Clear</a>
                 @endif
             </div>
         </form>
@@ -62,7 +62,7 @@
                 @foreach($privileges as $privilege)
                 <tr>
                     <td>
-                        <a href="{{ route('tyro-dashboard.privileges.show', $privilege->id) }}" style="display: flex; align-items: center; gap: 0.75rem; text-decoration: none;">
+                        <a href="{{ route($dashboardRoute::name('privileges.show'), $privilege->id) }}" style="display: flex; align-items: center; gap: 0.75rem; text-decoration: none;">
                             <div style="width: 36px; height: 36px; border-radius: 0.5rem; background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%); display: flex; align-items: center; justify-content: center;">
                                 <svg style="width: 18px; height: 18px; color: white;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z" />
@@ -82,18 +82,18 @@
                     </td>
                     <td>
                         <div class="action-buttons" style="justify-content: flex-end;">
-                            <a href="{{ route('tyro-dashboard.privileges.show', $privilege->id) }}" class="action-btn" title="View">
+                            <a href="{{ route($dashboardRoute::name('privileges.show'), $privilege->id) }}" class="action-btn" title="View">
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
                                 </svg>
                             </a>
-                            <a href="{{ route('tyro-dashboard.privileges.edit', $privilege->id) }}" class="action-btn" title="Edit">
+                            <a href="{{ route($dashboardRoute::name('privileges.edit'), $privilege->id) }}" class="action-btn" title="Edit">
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                                 </svg>
                             </a>
-                            <form action="{{ route('tyro-dashboard.privileges.destroy', $privilege->id) }}" method="POST" style="display: inline;" id="delete-privilege-form-{{ $privilege->id }}">
+                            <form action="{{ route($dashboardRoute::name('privileges.destroy'), $privilege->id) }}" method="POST" style="display: inline;" id="delete-privilege-form-{{ $privilege->id }}">
                                 @csrf
                                 @method('DELETE')
                                 <button type="button" class="action-btn action-btn-danger" title="Delete" onclick="event.preventDefault(); showDanger('Delete Privilege', 'Are you sure you want to delete this privilege? It will be removed from all roles.').then(confirmed => { if(confirmed) document.getElementById('delete-privilege-form-{{ $privilege->id }}').submit(); })">
@@ -122,7 +122,7 @@
         </svg>
         <h3 class="empty-state-title">No privileges found</h3>
         <p class="empty-state-description">Get started by creating a new privilege.</p>
-        <a href="{{ route('tyro-dashboard.privileges.create') }}" class="btn btn-primary">
+        <a href="{{ route($dashboardRoute::name('privileges.create')) }}" class="btn btn-primary">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
             </svg>

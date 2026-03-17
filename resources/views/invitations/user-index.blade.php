@@ -3,7 +3,7 @@
 @section('title', 'My Invitation Link')
 
 @section('breadcrumb')
-<a href="{{ route('tyro-dashboard.index') }}">Dashboard</a>
+<a href="{{ route($dashboardRoute::name('index')) }}">Dashboard</a>
 <span class="breadcrumb-separator">/</span>
 <span>My Invitation Link</span>
 @endsection
@@ -71,7 +71,7 @@
                     </div>
                     <h3 class="empty-state-title">No Invitation Link Yet</h3>
                     <p class="empty-state-description">Create your unique invitation link to start inviting others.</p>
-                    <form action="{{ route('tyro-dashboard.invitations.create') }}" method="POST">
+                    <form action="{{ route($dashboardRoute::name('invitations.create')) }}" method="POST">
                         @csrf
                         <button type="submit" class="btn btn-primary">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">

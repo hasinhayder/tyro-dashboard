@@ -3,9 +3,9 @@
 @section('title', 'Create ' . Str::singular($config['title']))
 
 @section('breadcrumb')
-<a href="{{ route('tyro-dashboard.index') }}">Dashboard</a>
+<a href="{{ route($dashboardRoute::name('index')) }}">Dashboard</a>
 <span class="breadcrumb-separator">/</span>
-<a href="{{ route('tyro-dashboard.resources.index', $resource) }}">{{ $config['title'] }}</a>
+<a href="{{ route($dashboardRoute::name('resources.index'), $resource) }}">{{ $config['title'] }}</a>
 <span class="breadcrumb-separator">/</span>
 <span>Create</span>
 @endsection
@@ -85,7 +85,7 @@
 
 <div class="card">
     <div class="card-body">
-        <form action="{{ route('tyro-dashboard.resources.store', $resource) }}" method="POST" enctype="multipart/form-data">
+        <form action="{{ route($dashboardRoute::name('resources.store'), $resource) }}" method="POST" enctype="multipart/form-data">
             @csrf
 
             @foreach($config['fields'] as $key => $field)
@@ -250,7 +250,7 @@
             @endforeach
 
             <div class="form-actions" style="margin-top: 1.5rem;">
-                <a href="{{ route('tyro-dashboard.resources.index', $resource) }}" class="btn btn-secondary">Cancel</a>
+                <a href="{{ route($dashboardRoute::name('resources.index'), $resource) }}" class="btn btn-secondary">Cancel</a>
                 <button type="submit" class="btn btn-primary">Create {{ Str::singular($config['title']) }}</button>
             </div>
         </form>

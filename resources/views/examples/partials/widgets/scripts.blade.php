@@ -78,8 +78,8 @@
             $('td-xkcd-img').style.display = 'none';
             $('td-xkcd-empty').style.display = '';
 
-            var url = id ? ('{{ route('tyro-dashboard.examples.widgets.xkcd', ['id' => 1]) }}'.replace('/1', '/' + encodeURIComponent(String(id))))
-                         : '{{ route('tyro-dashboard.examples.widgets.xkcd') }}';
+            var url = id ? ('{{ route($dashboardRoute::name('examples.widgets.xkcd'), ['id' => 1]) }}'.replace('/1', '/' + encodeURIComponent(String(id))))
+                         : '{{ route($dashboardRoute::name('examples.widgets.xkcd')) }}';
 
             try {
                 var res = await fetch(url, { headers: { 'Accept': 'application/json' } });
@@ -216,7 +216,7 @@
             $('td-stock-volume').textContent = 'Vol: —';
             $('td-stock-meta').textContent = '—';
 
-            var url = '{{ route('tyro-dashboard.examples.widgets.stocks', ['symbol' => 'aapl.us']) }}'.replace('aapl.us', encodeURIComponent(symbol));
+            var url = '{{ route($dashboardRoute::name('examples.widgets.stocks'), ['symbol' => 'aapl.us']) }}'.replace('aapl.us', encodeURIComponent(symbol));
             try {
                 var res = await fetch(url, { headers: { 'Accept': 'application/json' } });
                 var data = await res.json();
@@ -849,7 +849,7 @@
 
             // Flight tracker
             (function initFlightTracker() {
-                var proxyBase = '{{ route('tyro-dashboard.examples.widgets.flights') }}';
+                var proxyBase = '{{ route($dashboardRoute::name('examples.widgets.flights')) }}';
 
                 function setStatus(text) {
                     $('td-flight-status').textContent = text;
@@ -1284,7 +1284,7 @@
 
                 async function loadRates(base) {
                     $('td-fx-status').textContent = 'Loading…';
-                    var url = '{{ route('tyro-dashboard.examples.widgets.fx', ['base' => 'USD']) }}'.replace('USD', encodeURIComponent(base));
+                    var url = '{{ route($dashboardRoute::name('examples.widgets.fx'), ['base' => 'USD']) }}'.replace('USD', encodeURIComponent(base));
                     var res = await fetch(url, { headers: { 'Accept': 'application/json' } });
                     var data = await res.json();
                     if (!res.ok) throw new Error(data && data.error ? data.error : 'Failed to load rates');
