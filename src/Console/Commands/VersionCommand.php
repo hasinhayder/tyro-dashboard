@@ -21,7 +21,7 @@ class VersionCommand extends Command
      */
     public function handle(): int
     {
-        $version = "1.15.0"; //Laravel 13 support
+        $version = "1.15.1"; //fix(config) - Named prefix for tyro dashboard routes is now working perfectly
         
         $this->info('');
         $this->info('  ╔════════════════════════════════════════╗');
@@ -73,6 +73,7 @@ class VersionCommand extends Command
 }
 
 //Changelog
+//1.15.1 - fix(config) - Named prefix for tyro dashboard routes is now working perfectly
 //1.15.0 - Laravel 13 support
 //1.14.0 - feat(audit-trail): export audit trail to CSV
 //1.13.1 - feat(audit-trail): audit log for user login and logout
