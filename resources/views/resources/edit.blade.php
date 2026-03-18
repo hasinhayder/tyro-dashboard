@@ -3,9 +3,9 @@
 @section('title', 'Edit ' . Str::singular($config['title']))
 
 @section('breadcrumb')
-<a href="{{ route('tyro-dashboard.index') }}">Dashboard</a>
+<a href="{{ route($dashboardRoute::name('index')) }}">Dashboard</a>
 <span class="breadcrumb-separator">/</span>
-<a href="{{ route('tyro-dashboard.resources.index', $resource) }}">{{ $config['title'] }}</a>
+<a href="{{ route($dashboardRoute::name('resources.index'), $resource) }}">{{ $config['title'] }}</a>
 <span class="breadcrumb-separator">/</span>
 <span>Edit</span>
 @endsection
@@ -81,7 +81,7 @@
 @section('content')
 <div class="page-header">
     <div style="display: flex; align-items: center; gap: 1rem;">
-        <a href="{{ route('tyro-dashboard.resources.index', $resource) }}" class="btn btn-ghost" title="Back to {{ $config['title'] }}">
+        <a href="{{ route($dashboardRoute::name('resources.index'), $resource) }}" class="btn btn-ghost" title="Back to {{ $config['title'] }}">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 20px; height: 20px;">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
             </svg>
@@ -92,7 +92,7 @@
 
 <div class="card">
     <div class="card-body">
-        <form action="{{ route('tyro-dashboard.resources.update', [$resource, $item->id]) }}" method="POST" enctype="multipart/form-data">
+        <form action="{{ route($dashboardRoute::name('resources.update'), [$resource, $item->id]) }}" method="POST" enctype="multipart/form-data">
             @csrf
             @method('PUT')
 
@@ -295,7 +295,7 @@
             @endforeach
 
             <div class="form-actions" style="margin-top: 1.5rem;">
-                <a href="{{ route('tyro-dashboard.resources.index', $resource) }}" class="btn btn-secondary">Cancel</a>
+                <a href="{{ route($dashboardRoute::name('resources.index'), $resource) }}" class="btn btn-secondary">Cancel</a>
                 <button type="submit" class="btn btn-primary">Update {{ Str::singular($config['title']) }}</button>
             </div>
         </form>

@@ -16,7 +16,7 @@
                 You are currently logged in as <strong>{{ $currentUser->name }}</strong> ({{ $currentUser->email }}).
                 Originally logged in as <strong>{{ $impersonator->name ?? 'Admin' }}</strong>.
             </div>
-            <form action="{{ route('tyro-dashboard.leave-impersonation') }}" method="POST" style="margin: 0;">
+            <form action="{{ route($dashboardRoute::name('leave-impersonation')) }}" method="POST" style="margin: 0;">
                 @csrf
                 <button type="submit" class="impersonation-banner-btn">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">

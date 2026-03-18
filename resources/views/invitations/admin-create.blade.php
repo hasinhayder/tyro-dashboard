@@ -3,9 +3,9 @@
 @section('title', 'Create Invitation Link')
 
 @section('breadcrumb')
-<a href="{{ route('tyro-dashboard.index') }}">Dashboard</a>
+<a href="{{ route($dashboardRoute::name('index')) }}">Dashboard</a>
 <span class="breadcrumb-separator">/</span>
-<a href="{{ route('tyro-dashboard.invitations.admin.index') }}">Invitation Links</a>
+<a href="{{ route($dashboardRoute::name('invitations.admin.index')) }}">Invitation Links</a>
 <span class="breadcrumb-separator">/</span>
 <span>Create</span>
 @endsection
@@ -27,7 +27,7 @@
                 <h3 class="card-title">Invitation Details</h3>
             </div>
             <div class="card-body">
-                <form action="{{ route('tyro-dashboard.invitations.admin.store') }}" method="POST">
+                <form action="{{ route($dashboardRoute::name('invitations.admin.store')) }}" method="POST">
                     @csrf
 
                     <div class="form-group">
@@ -53,7 +53,7 @@
                             </svg>
                             Create Invitation Link
                         </button>
-                        <a href="{{ route('tyro-dashboard.invitations.admin.index') }}" class="btn btn-ghost">Cancel</a>
+                        <a href="{{ route($dashboardRoute::name('invitations.admin.index')) }}" class="btn btn-ghost">Cancel</a>
                     </div>
                 </form>
             </div>

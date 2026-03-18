@@ -98,7 +98,7 @@
     <div class="card">
         <div class="card-header">
             <h3 class="card-title" style="font-size: 1.0625rem;">Recent Users</h3>
-            <a href="{{ route('tyro-dashboard.users.index') }}" class="btn btn-sm btn-ghost">View All</a>
+            <a href="{{ route($dashboardRoute::name('users.index')) }}" class="btn btn-sm btn-ghost">View All</a>
         </div>
         <div class="card-body" style="padding: 0;">
             @if(isset($stats['recent_users']) && $stats['recent_users']->count())
@@ -108,7 +108,7 @@
                         @foreach($stats['recent_users'] as $recentUser)
                         <tr>
                             <td>
-                                <a href="{{ route('tyro-dashboard.users.edit', $recentUser->id) }}" class="user-cell" style="text-decoration: none;">
+                                <a href="{{ route($dashboardRoute::name('users.edit'), $recentUser->id) }}" class="user-cell" style="text-decoration: none;">
                                     <div class="user-cell-avatar" style="{{ ($recentUser->profile_photo_path || $recentUser->use_gravatar) ? 'background: none; padding: 0;' : '' }}">
                                         @if($recentUser->profile_photo_path || ($recentUser->use_gravatar && $recentUser->email))
                                             <img src="{{ $recentUser->profile_photo_url }}" alt="{{ $recentUser->name }}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">
@@ -146,7 +146,7 @@
     <div class="card">
         <div class="card-header">
             <h3 class="card-title" style="font-size: 1.0625rem;">Role Distribution</h3>
-            <a href="{{ route('tyro-dashboard.roles.index') }}" class="btn btn-sm btn-ghost">Manage Roles</a>
+            <a href="{{ route($dashboardRoute::name('roles.index')) }}" class="btn btn-sm btn-ghost">Manage Roles</a>
         </div>
         <div class="card-body" style="padding: 0;">
             @if(isset($stats['role_distribution']) && $stats['role_distribution']->count())
@@ -156,7 +156,7 @@
                         @foreach($stats['role_distribution'] as $roleStat)
                         <tr>
                             <td>
-                                <a href="{{ route('tyro-dashboard.roles.show', $roleStat['id']) }}" style="text-decoration: none;">
+                                <a href="{{ route($dashboardRoute::name('roles.show'), $roleStat['id']) }}" style="text-decoration: none;">
                                     <span class="badge badge-primary" style="font-size: 0.875rem;">{{ $roleStat['name'] }}</span>
                                 </a>
                             </td>

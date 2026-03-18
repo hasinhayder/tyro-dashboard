@@ -3,7 +3,7 @@
 @section('title', 'Invitation Links')
 
 @section('breadcrumb')
-<a href="{{ route('tyro-dashboard.index') }}">Dashboard</a>
+<a href="{{ route($dashboardRoute::name('index')) }}">Dashboard</a>
 <span class="breadcrumb-separator">/</span>
 <span>Invitation Links</span>
 @endsection
@@ -15,7 +15,7 @@
             <h1 class="page-title">Invitation Links</h1>
             <p class="page-description">Manage user invitation and referral links.</p>
         </div>
-        <a href="{{ route('tyro-dashboard.invitations.admin.create') }}" class="btn btn-primary">
+        <a href="{{ route($dashboardRoute::name('invitations.admin.create')) }}" class="btn btn-primary">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
             </svg>
@@ -27,7 +27,7 @@
 <!-- Search -->
 <div class="card" style="margin-bottom: 1rem;">
     <div class="card-body">
-        <form action="{{ route('tyro-dashboard.invitations.admin.index') }}" method="GET">
+        <form action="{{ route($dashboardRoute::name('invitations.admin.index')) }}" method="GET">
             <div class="filters-bar">
                 <div class="search-box">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -37,7 +37,7 @@
                 </div>
                 <button type="submit" class="btn btn-secondary">Search</button>
                 @if(request('search'))
-                    <a href="{{ route('tyro-dashboard.invitations.admin.index') }}" class="btn btn-ghost">Clear</a>
+                    <a href="{{ route($dashboardRoute::name('invitations.admin.index')) }}" class="btn btn-ghost">Clear</a>
                 @endif
             </div>
         </form>
@@ -92,7 +92,7 @@
                                         <path stroke-linecap="round" stroke-linejoin="round" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
                                     </svg>
                                 </button>
-                                <form action="{{ route('tyro-dashboard.invitations.admin.destroy', $link->id) }}" method="POST" style="display: inline;" id="delete-invitation-form-{{ $link->id }}">
+                                <form action="{{ route($dashboardRoute::name('invitations.admin.destroy'), $link->id) }}" method="POST" style="display: inline;" id="delete-invitation-form-{{ $link->id }}">
                                     @csrf
                                     @method('DELETE')
                                     <button type="button" class="btn btn-sm btn-danger" title="Delete invitation link" onclick="event.preventDefault(); showDanger('Delete Invitation Link', 'Are you sure you want to delete this invitation link?{{ $link->referrals->count() > 0 ? ' This will also remove ' . $link->referrals->count() . ' referral record(s).' : '' }}').then(confirmed => { if(confirmed) document.getElementById('delete-invitation-form-{{ $link->id }}').submit(); })">
@@ -125,7 +125,7 @@
             </div>
             <h3 class="empty-state-title">No invitation links found</h3>
             <p class="empty-state-description">Create an invitation link to get started with referrals.</p>
-            <a href="{{ route('tyro-dashboard.invitations.admin.create') }}" class="btn btn-primary">Create Invitation Link</a>
+            <a href="{{ route($dashboardRoute::name('invitations.admin.create')) }}" class="btn btn-primary">Create Invitation Link</a>
         </div>
         @endif
     </div>

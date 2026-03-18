@@ -3,9 +3,9 @@
 @section('title', 'Create User')
 
 @section('breadcrumb')
-<a href="{{ route('tyro-dashboard.index') }}">Dashboard</a>
+<a href="{{ route($dashboardRoute::name('index')) }}">Dashboard</a>
 <span class="breadcrumb-separator">/</span>
-<a href="{{ route('tyro-dashboard.users.index') }}">Users</a>
+<a href="{{ route($dashboardRoute::name('users.index')) }}">Users</a>
 <span class="breadcrumb-separator">/</span>
 <span>Create</span>
 @endsection
@@ -17,7 +17,7 @@
             <h1 class="page-title">Create User</h1>
             <p class="page-description">Add a new user to the system.</p>
         </div>
-        <a href="{{ route('tyro-dashboard.users.index') }}" class="btn btn-secondary">
+        <a href="{{ route($dashboardRoute::name('users.index')) }}" class="btn btn-secondary">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
             </svg>
@@ -27,7 +27,7 @@
 </div>
 
 <div class="card">
-    <form action="{{ route('tyro-dashboard.users.store') }}" method="POST">
+    <form action="{{ route($dashboardRoute::name('users.store')) }}" method="POST">
         @csrf
         <div class="card-body">
             <div class="form-row">
@@ -83,7 +83,7 @@
         </div>
         <div class="card-footer" style="display: flex; gap: 0.75rem;">
             <button type="submit" class="btn btn-primary">Create User</button>
-            <a href="{{ route('tyro-dashboard.users.index') }}" class="btn btn-secondary">Cancel</a>
+            <a href="{{ route($dashboardRoute::name('users.index')) }}" class="btn btn-secondary">Cancel</a>
         </div>
     </form>
 </div>

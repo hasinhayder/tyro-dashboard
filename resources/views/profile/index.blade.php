@@ -3,7 +3,7 @@
 @section('title', 'My Profile')
 
 @section('breadcrumb')
-<a href="{{ route('tyro-dashboard.index') }}">Dashboard</a>
+<a href="{{ route($dashboardRoute::name('index')) }}">Dashboard</a>
 <span class="breadcrumb-separator">/</span>
 <span>My Profile</span>
 @endsection
@@ -24,7 +24,7 @@
         <div class="card-header">
             <h3 class="card-title">Profile Information</h3>
         </div>
-        <form action="{{ route('tyro-dashboard.profile.update') }}" method="POST" enctype="multipart/form-data">
+        <form action="{{ route($dashboardRoute::name('profile.update')) }}" method="POST" enctype="multipart/form-data">
             @csrf
             @method('PUT')
             <div class="card-body">
@@ -104,7 +104,7 @@
         <div class="card-header">
             <h3 class="card-title">Update Password</h3>
         </div>
-        <form action="{{ route('tyro-dashboard.profile.password') }}" method="POST">
+        <form action="{{ route($dashboardRoute::name('profile.password')) }}" method="POST">
             @csrf
             @method('PUT')
             <div class="card-body">
@@ -137,7 +137,7 @@
 </div>
 
     <!-- Two-Factor Authentication -->
-    <form id="delete-photo-form" action="{{ route('tyro-dashboard.profile.photo.delete') }}" method="POST" style="display: none;">
+    <form id="delete-photo-form" action="{{ route($dashboardRoute::name('profile.photo.delete')) }}" method="POST" style="display: none;">
     @csrf
     @method('DELETE')
 </form>
@@ -152,7 +152,7 @@
                 <p style="margin-bottom: 1rem; color: var(--muted-foreground);">
                     Two-factor authentication is currently <strong>enabled</strong> for your account.
                 </p>
-                <form action="{{ route('tyro-dashboard.profile.2fa.reset') }}" method="POST" id="reset-profile-2fa-form">
+                <form action="{{ route($dashboardRoute::name('profile.2fa.reset')) }}" method="POST" id="reset-profile-2fa-form">
                     @csrf
                     @method('DELETE')
                     <button type="button" class="btn btn-warning" onclick="event.preventDefault(); showConfirm('Reset 2FA', 'Are you sure you want to reset your 2FA? You will need to set it up again.').then(confirmed => { if(confirmed) document.getElementById('reset-profile-2fa-form').submit(); })">

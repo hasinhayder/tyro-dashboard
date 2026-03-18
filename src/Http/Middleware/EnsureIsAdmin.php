@@ -3,6 +3,7 @@
 namespace HasinHayder\TyroDashboard\Http\Middleware;
 
 use Closure;
+use HasinHayder\TyroDashboard\Support\DashboardRoute;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Symfony\Component\HttpFoundation\Response;
@@ -43,7 +44,7 @@ class EnsureIsAdmin
 
         // If no admin role found, redirect to dashboard with error
         return redirect()
-            ->route('tyro-dashboard.index')
+            ->route(DashboardRoute::name('index'))
             ->with('error', 'You do not have permission to access this area.');
     }
 }

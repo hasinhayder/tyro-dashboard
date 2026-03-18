@@ -3,7 +3,7 @@
 @section('title', 'Users')
 
 @section('breadcrumb')
-<a href="{{ route('tyro-dashboard.index') }}">Dashboard</a>
+<a href="{{ route($dashboardRoute::name('index')) }}">Dashboard</a>
 <span class="breadcrumb-separator">/</span>
 <span>Users</span>
 @endsection
@@ -15,7 +15,7 @@
             <h1 class="page-title">Users</h1>
             <p class="page-description">Manage user accounts, roles, and permissions.</p>
         </div>
-        <a href="{{ route('tyro-dashboard.users.create') }}" class="btn btn-primary">
+        <a href="{{ route($dashboardRoute::name('users.create')) }}" class="btn btn-primary">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
             </svg>
@@ -27,7 +27,7 @@
 <!-- Filters -->
 <div class="card" style="margin-bottom: 1rem;">
     <div class="card-body">
-        <form action="{{ route('tyro-dashboard.users.index') }}" method="GET">
+        <form action="{{ route($dashboardRoute::name('users.index')) }}" method="GET">
             <div class="filters-bar">
                 <div class="search-box">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -54,7 +54,7 @@
                 </div>
                 <button type="submit" class="btn btn-secondary">Filter</button>
                 @if(!empty($filters['search']) || !empty($filters['role']) || !empty($filters['status']))
-                    <a href="{{ route('tyro-dashboard.users.index') }}" class="btn btn-ghost">Clear</a>
+                    <a href="{{ route($dashboardRoute::name('users.index')) }}" class="btn btn-ghost">Clear</a>
                 @endif
             </div>
         </form>
@@ -79,7 +79,7 @@
                 @foreach($users as $listUser)
                 <tr>
                     <td>
-                        <a href="{{ route('tyro-dashboard.users.edit', $listUser->id) }}" class="user-cell" style="text-decoration: none;">
+                        <a href="{{ route($dashboardRoute::name('users.edit'), $listUser->id) }}" class="user-cell" style="text-decoration: none;">
                             <div class="user-cell-avatar" style="{{ ($listUser->profile_photo_path || $listUser->use_gravatar) ? 'background: none; padding: 0;' : '' }}">
                                 @if($listUser->profile_photo_path || ($listUser->use_gravatar && $listUser->email))
                                     <img src="{{ $listUser->profile_photo_url }}" alt="{{ $listUser->name }}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">
@@ -112,13 +112,13 @@
                     <td>{{ $listUser->created_at->format('M d, Y') }}</td>
                     <td>
                         <div class="action-buttons" style="justify-content: flex-end;">
-                            <a href="{{ route('tyro-dashboard.users.edit', $listUser->id) }}" class="action-btn" title="Edit">
+                            <a href="{{ route($dashboardRoute::name('users.edit'), $listUser->id) }}" class="action-btn" title="Edit">
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                                 </svg>
                             </a>
                             @if($listUser->id !== $user->id)
-                                <form action="{{ route('tyro-dashboard.users.login-as', $listUser->id) }}" method="POST" style="display: inline;" id="login-as-form-{{ $listUser->id }}">
+                                <form action="{{ route($dashboardRoute::name('users.login-as'), $listUser->id) }}" method="POST" style="display: inline;" id="login-as-form-{{ $listUser->id }}">
                                     @csrf
                                     <button type="button" class="action-btn" title="Login As" onclick="event.preventDefault(); showConfirm('Login As User', 'Are you sure you want to log in as {{ addslashes($listUser->name) }}?').then(confirmed => { if(confirmed) document.getElementById('login-as-form-{{ $listUser->id }}').submit(); })">
                                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -128,7 +128,7 @@
                                 </form>
                             @endif
                             @if(method_exists($listUser, 'isSuspended') && $listUser->isSuspended())
-                                <form action="{{ route('tyro-dashboard.users.unsuspend', $listUser->id) }}" method="POST" style="display: inline;" id="unsuspend-form-{{ $listUser->id }}">
+                                <form action="{{ route($dashboardRoute::name('users.unsuspend'), $listUser->id) }}" method="POST" style="display: inline;" id="unsuspend-form-{{ $listUser->id }}">
                                     @csrf
                                     <button type="button" class="action-btn" title="Unsuspend" onclick="event.preventDefault(); showConfirm('Unsuspend User', 'Are you sure you want to unsuspend this user?').then(confirmed => { if(confirmed) document.getElementById('unsuspend-form-{{ $listUser->id }}').submit(); })">
                                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -144,7 +144,7 @@
                                 </button>
                             @endif
                             @if($listUser->id !== $user->id)
-                                <form action="{{ route('tyro-dashboard.users.destroy', $listUser->id) }}" method="POST" style="display: inline;" id="delete-user-form-{{ $listUser->id }}">
+                                <form action="{{ route($dashboardRoute::name('users.destroy'), $listUser->id) }}" method="POST" style="display: inline;" id="delete-user-form-{{ $listUser->id }}">
                                     @csrf
                                     @method('DELETE')
                                     <button type="button" class="action-btn action-btn-danger" title="Delete" onclick="event.preventDefault(); showDanger('Delete User', 'Are you sure you want to delete this user? This action cannot be undone.').then(confirmed => { if(confirmed) document.getElementById('delete-user-form-{{ $listUser->id }}').submit(); })">
@@ -174,7 +174,7 @@
         </svg>
         <h3 class="empty-state-title">No users found</h3>
         <p class="empty-state-description">Get started by creating a new user.</p>
-        <a href="{{ route('tyro-dashboard.users.create') }}" class="btn btn-primary">
+        <a href="{{ route($dashboardRoute::name('users.create')) }}" class="btn btn-primary">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
             </svg>

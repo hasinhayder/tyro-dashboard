@@ -3,6 +3,7 @@
 namespace HasinHayder\TyroDashboard\Http\Controllers;
 
 use HasinHayder\Tyro\Models\AuditLog;
+use HasinHayder\TyroDashboard\Support\DashboardRoute;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Schema;
@@ -91,7 +92,7 @@ class AuditController extends BaseController
         $log->delete();
 
         return redirect()
-            ->route('tyro-dashboard.audits.index')
+            ->route(DashboardRoute::name('audits.index'))
             ->with('success', 'Audit log entry deleted successfully.');
     }
 
@@ -114,7 +115,7 @@ class AuditController extends BaseController
             ->delete();
 
         return redirect()
-            ->route('tyro-dashboard.audits.index', $request->except(['selected_ids']))
+            ->route(DashboardRoute::name('audits.index'), $request->except(['selected_ids']))
             ->with('success', "Deleted {$deletedCount} audit log entries.");
     }
 
@@ -131,7 +132,7 @@ class AuditController extends BaseController
         AuditLog::query()->delete();
 
         return redirect()
-            ->route('tyro-dashboard.audits.index', $request->except(['_token', '_method']))
+            ->route(DashboardRoute::name('audits.index'), $request->except(['_token', '_method']))
             ->with('success', "Flushed {$deletedCount} audit log entries.");
     }
 
@@ -238,17 +239,17 @@ class AuditController extends BaseController
     protected function ensureAuditAvailable(): ?RedirectResponse
     {
         if (! config('tyro-dashboard.features.audit_logs', true) || ! config('tyro.audit.enabled', true)) {
-            return redirect()->route('tyro-dashboard.index');
+            return redirect()->route(DashboardRoute::name('index'));
         }
 
         if (! class_exists(AuditLog::class)) {
-            return redirect()->route('tyro-dashboard.index');
+            return redirect()->route(DashboardRoute::name('index'));
         }
 
         $auditTable = config('tyro.tables.audit_logs', 'tyro_audit_logs');
 
         if (! Schema::hasTable($auditTable)) {
-            return redirect()->route('tyro-dashboard.index');
+            return redirect()->route(DashboardRoute::name('index'));
         }
 
         return null;

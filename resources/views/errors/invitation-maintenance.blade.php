@@ -3,7 +3,7 @@
 @section('title', 'Maintenance Mode')
 
 @section('breadcrumb')
-<a href="{{ route('tyro-dashboard.index') }}">Dashboard</a>
+<a href="{{ route($dashboardRoute::name('index')) }}">Dashboard</a>
 <span class="breadcrumb-separator">/</span>
 <span>Invitation System</span>
 @endsection
@@ -48,7 +48,7 @@
         </div>
 
         <div style="margin-top: 2rem; display: flex; gap: 0.5rem;">
-            <a href="{{ route('tyro-dashboard.index') }}" class="btn btn-primary">
+            <a href="{{ route($dashboardRoute::name('index')) }}" class="btn btn-primary">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
                 </svg>

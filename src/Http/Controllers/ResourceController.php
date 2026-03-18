@@ -2,6 +2,7 @@
 
 namespace HasinHayder\TyroDashboard\Http\Controllers;
 
+use HasinHayder\TyroDashboard\Support\DashboardRoute;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Schema;
@@ -398,7 +399,7 @@ class ResourceController extends BaseController
             }
         }
 
-        return redirect()->route('tyro-dashboard.resources.index', $resource)
+        return redirect()->route(DashboardRoute::name('resources.index'), $resource)
             ->with('success', $config['title'] . ' created successfully.');
     }
 
@@ -644,7 +645,7 @@ class ResourceController extends BaseController
             }
         }
 
-        return redirect()->route('tyro-dashboard.resources.index', $resource)
+        return redirect()->route(DashboardRoute::name('resources.index'), $resource)
             ->with('success', $config['title'] . ' updated successfully.');
     }
 
@@ -681,7 +682,7 @@ class ResourceController extends BaseController
         
         $item->delete();
 
-        return redirect()->route('tyro-dashboard.resources.index', $resource)
+        return redirect()->route(DashboardRoute::name('resources.index'), $resource)
             ->with('success', $config['title'] . ' deleted successfully.');
     }
 }

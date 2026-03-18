@@ -3,9 +3,9 @@
 @section('title', $config['title'] . ' Details')
 
 @section('breadcrumb')
-<a href="{{ route('tyro-dashboard.index') }}">Dashboard</a>
+<a href="{{ route($dashboardRoute::name('index')) }}">Dashboard</a>
 <span class="breadcrumb-separator">/</span>
-<a href="{{ route('tyro-dashboard.resources.index', $resource) }}">{{ $config['title'] }}</a>
+<a href="{{ route($dashboardRoute::name('resources.index'), $resource) }}">{{ $config['title'] }}</a>
 <span class="breadcrumb-separator">/</span>
 <span>Details</span>
 @endsection
@@ -14,7 +14,7 @@
 <div class="page-header">
     <div class="page-header-row">
         <div style="display: flex; align-items: center; gap: 1rem;">
-            <a href="{{ route('tyro-dashboard.resources.index', $resource) }}" class="btn btn-ghost" title="Back to {{ $config['title'] }}">
+            <a href="{{ route($dashboardRoute::name('resources.index'), $resource) }}" class="btn btn-ghost" title="Back to {{ $config['title'] }}">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 20px; height: 20px;">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
                 </svg>
@@ -23,8 +23,8 @@
         </div>
         <div>
             @if(!($isReadonly ?? false))
-            <a href="{{ route('tyro-dashboard.resources.edit', [$resource, $item->id]) }}" class="btn btn-primary">Edit</a>
-            <form action="{{ route('tyro-dashboard.resources.destroy', [$resource, $item->id]) }}" method="POST" style="display: inline;" id="delete-resource-form">
+            <a href="{{ route($dashboardRoute::name('resources.edit'), [$resource, $item->id]) }}" class="btn btn-primary">Edit</a>
+            <form action="{{ route($dashboardRoute::name('resources.destroy'), [$resource, $item->id]) }}" method="POST" style="display: inline;" id="delete-resource-form">
                 @csrf
                 @method('DELETE')
                 <button type="button" class="btn btn-danger" onclick="event.preventDefault(); showDanger('Delete Item', 'Are you sure you want to delete this item?').then(confirmed => { if(confirmed) document.getElementById('delete-resource-form').submit(); })">Delete</button>

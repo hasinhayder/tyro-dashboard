@@ -3,7 +3,7 @@
 @section('title', 'Audit Logs')
 
 @section('breadcrumb')
-<a href="{{ route('tyro-dashboard.index') }}">Dashboard</a>
+<a href="{{ route($dashboardRoute::name('index')) }}">Dashboard</a>
 <span class="breadcrumb-separator">/</span>
 <span>Audit Logs</span>
 @endsection
@@ -16,13 +16,13 @@
             <p class="page-description">Track system activity, security events, and administrative changes.</p>
         </div>
         <div style="display: flex; gap: 0.5rem;">
-            <a href="{{ route('tyro-dashboard.audits.export', request()->query()) }}" class="btn btn-secondary">
+            <a href="{{ route($dashboardRoute::name('audits.export'), request()->query()) }}" class="btn btn-secondary">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
                 </svg>
                 Export CSV
             </a>
-            <form action="{{ route('tyro-dashboard.audits.flush', request()->query()) }}" method="POST" id="flush-audits-form">
+            <form action="{{ route($dashboardRoute::name('audits.flush'), request()->query()) }}" method="POST" id="flush-audits-form">
                 @csrf
                 @method('DELETE')
                 <button type="button" class="btn btn-danger" onclick="event.preventDefault(); showDanger('Flush Audit Logs', 'Are you sure you want to permanently delete all audit log entries?').then(confirmed => { if (confirmed) document.getElementById('flush-audits-form').submit(); });">
@@ -38,7 +38,7 @@
 
 <div class="card" style="margin-bottom: 1rem;">
     <div class="card-body">
-        <form action="{{ route('tyro-dashboard.audits.index') }}" method="GET">
+        <form action="{{ route($dashboardRoute::name('audits.index')) }}" method="GET">
             <div class="filters-bar" style="flex-wrap: wrap; gap: 0.75rem;">
                 <div class="search-box" style="min-width: 260px; flex: 1;">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -75,7 +75,7 @@
                 <div class="filter-group">
                 <button type="submit" class="btn btn-secondary">Filter</button>
                 @if(!empty($filters['search']) || !empty($filters['event']) || !empty($filters['actor']) || !empty($filters['from']) || !empty($filters['to']))
-                    <a href="{{ route('tyro-dashboard.audits.index') }}" class="btn btn-ghost">Clear</a>
+                    <a href="{{ route($dashboardRoute::name('audits.index')) }}" class="btn btn-ghost">Clear</a>
                 @endif
             </div>
         </form>
@@ -84,7 +84,7 @@
 
 <div class="card">
     @if($logs->count())
-        <form action="{{ route('tyro-dashboard.audits.bulk-destroy', request()->query()) }}" method="POST" id="bulk-delete-form">
+        <form action="{{ route($dashboardRoute::name('audits.bulk-destroy'), request()->query()) }}" method="POST" id="bulk-delete-form">
             @csrf
             <div class="card-body" style="border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 0.75rem; justify-content: space-between;">
                 <div style="display: flex; align-items: center; gap: 0.75rem;">
@@ -132,7 +132,7 @@
                                 <td>
                                     @if($log->user)
                                         <div style="font-size: 0.875rem;">
-                                            <a href="{{ route('tyro-dashboard.users.edit', $log->user->id) }}" style="font-weight: 500; color: var(--primary); text-decoration: none;">
+                                            <a href="{{ route($dashboardRoute::name('users.edit'), $log->user->id) }}" style="font-weight: 500; color: var(--primary); text-decoration: none;">
                                                 {{ $log->user->name }}
                                             </a>
                                         </div>
@@ -148,11 +148,11 @@
 
                                         if ($targetId) {
                                             if ($targetType === 'User') {
-                                                $targetRoute = route('tyro-dashboard.users.edit', $targetId);
+                                                $targetRoute = route($dashboardRoute::name('users.edit'), $targetId);
                                             } elseif ($targetType === 'Role') {
-                                                $targetRoute = route('tyro-dashboard.roles.show', $targetId);
+                                                $targetRoute = route($dashboardRoute::name('roles.show'), $targetId);
                                             } elseif ($targetType === 'Privilege') {
-                                                $targetRoute = route('tyro-dashboard.privileges.show', $targetId);
+                                                $targetRoute = route($dashboardRoute::name('privileges.show'), $targetId);
                                             }
                                         }
                                     @endphp
@@ -175,7 +175,7 @@
                                 </td>
                                 <td>
                                     <div class="action-buttons" style="justify-content: flex-end;">
-                                        <form action="{{ route('tyro-dashboard.audits.destroy', array_merge(request()->query(), ['id' => $log->id])) }}" method="POST" id="delete-log-form-{{ $log->id }}">
+                                        <form action="{{ route($dashboardRoute::name('audits.destroy'), array_merge(request()->query(), ['id' => $log->id])) }}" method="POST" id="delete-log-form-{{ $log->id }}">
                                             @csrf
                                             @method('DELETE')
                                             <button type="button" class="action-btn action-btn-danger" title="Delete" onclick="event.preventDefault(); showDanger('Delete Audit Log', 'Delete this audit log entry permanently?').then(confirmed => { if(confirmed) document.getElementById('delete-log-form-{{ $log->id }}').submit(); })">
