@@ -4,8 +4,7 @@ namespace HasinHayder\TyroDashboard\Console\Commands;
 
 use Illuminate\Console\Command;
 
-class InstallCommand extends Command
-{
+class InstallCommand extends Command {
     /**
      * The name and signature of the console command.
      */
@@ -20,8 +19,7 @@ class InstallCommand extends Command
     /**
      * Execute the console command.
      */
-    public function handle(): int
-    {
+    public function handle(): int {
         $this->info('');
         $this->info('  ╔════════════════════════════════════════╗');
         $this->info('  ║                                        ║');
@@ -147,24 +145,21 @@ class InstallCommand extends Command
     /**
      * Check if Tyro package is installed.
      */
-    protected function checkTyroInstalled(): bool
-    {
+    protected function checkTyroInstalled(): bool {
         return class_exists(\HasinHayder\Tyro\Providers\TyroServiceProvider::class);
     }
 
     /**
      * Check if Tyro Login package is installed.
      */
-    protected function checkTyroLoginInstalled(): bool
-    {
+    protected function checkTyroLoginInstalled(): bool {
         return class_exists(\HasinHayder\TyroLogin\Providers\TyroLoginServiceProvider::class);
     }
 
     /**
      * Check if User model has HasTyroRoles trait.
      */
-    protected function checkUserModelHasTrait(): bool
-    {
+    protected function checkUserModelHasTrait(): bool {
         $userModel = config('tyro-dashboard.user_model', config('tyro.models.user', 'App\\Models\\User'));
 
         if (! class_exists($userModel)) {
@@ -177,8 +172,7 @@ class InstallCommand extends Command
     /**
      * Run tyro:install and tyro-login:install without seeding.
      */
-    protected function runTyroInstall(): bool
-    {
+    protected function runTyroInstall(): bool {
         try {
             // Run tyro:install
             $exitCode = \Illuminate\Support\Facades\Artisan::call('tyro:install', [

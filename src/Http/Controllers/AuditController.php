@@ -8,13 +8,11 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Schema;
 
-class AuditController extends BaseController
-{
+class AuditController extends BaseController {
     /**
      * Display a listing of audit logs.
      */
-    public function index(Request $request)
-    {
+    public function index(Request $request) {
         if ($redirect = $this->ensureAuditAvailable()) {
             return $redirect;
         }
@@ -82,8 +80,7 @@ class AuditController extends BaseController
     /**
      * Remove a specific audit log entry.
      */
-    public function destroy($id): RedirectResponse
-    {
+    public function destroy($id): RedirectResponse {
         if ($redirect = $this->ensureAuditAvailable()) {
             return $redirect;
         }
@@ -99,8 +96,7 @@ class AuditController extends BaseController
     /**
      * Remove selected audit log entries.
      */
-    public function bulkDestroy(Request $request): RedirectResponse
-    {
+    public function bulkDestroy(Request $request): RedirectResponse {
         if ($redirect = $this->ensureAuditAvailable()) {
             return $redirect;
         }
@@ -122,8 +118,7 @@ class AuditController extends BaseController
     /**
      * Remove all audit logs.
      */
-    public function flush(Request $request): RedirectResponse
-    {
+    public function flush(Request $request): RedirectResponse {
         if ($redirect = $this->ensureAuditAvailable()) {
             return $redirect;
         }
@@ -139,8 +134,7 @@ class AuditController extends BaseController
     /**
      * Export audit logs as CSV.
      */
-    public function exportCsv(Request $request)
-    {
+    public function exportCsv(Request $request) {
         if ($redirect = $this->ensureAuditAvailable()) {
             return $redirect;
         }
@@ -236,8 +230,7 @@ class AuditController extends BaseController
     /**
      * Ensure audit logging is enabled and table exists.
      */
-    protected function ensureAuditAvailable(): ?RedirectResponse
-    {
+    protected function ensureAuditAvailable(): ?RedirectResponse {
         if (! config('tyro-dashboard.features.audit_logs', true) || ! config('tyro.audit.enabled', true)) {
             return redirect()->route(DashboardRoute::name('index'));
         }

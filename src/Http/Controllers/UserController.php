@@ -7,16 +7,14 @@ use HasinHayder\Tyro\Support\PasswordRules;
 use HasinHayder\Tyro\Support\TyroAudit;
 use HasinHayder\TyroDashboard\Support\DashboardRoute;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Hash;
 
-class UserController extends BaseController
-{
+class UserController extends BaseController {
     /**
      * Display a listing of users.
      */
-    public function index(Request $request)
-    {
+    public function index(Request $request) {
         $userModel = $this->getUserModel();
         $perPage = config('tyro-dashboard.pagination.users', 15);
 
@@ -26,7 +24,7 @@ class UserController extends BaseController
         if ($search = $request->get('search')) {
             $query->where(function ($q) use ($search) {
                 $q->where('name', 'like', "%{$search}%")
-                  ->orWhere('email', 'like', "%{$search}%");
+                    ->orWhere('email', 'like', "%{$search}%");
             });
         }
 
@@ -57,8 +55,7 @@ class UserController extends BaseController
     /**
      * Show the form for creating a new user.
      */
-    public function create()
-    {
+    public function create() {
         $roles = Role::all();
 
         return view('tyro-dashboard::users.create', $this->getViewData([
@@ -69,8 +66,7 @@ class UserController extends BaseController
     /**
      * Store a newly created user.
      */
-    public function store(Request $request)
-    {
+    public function store(Request $request) {
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
@@ -87,7 +83,7 @@ class UserController extends BaseController
             'password' => Hash::make($validated['password']),
         ]);
 
-        if (!empty($validated['roles'])) {
+        if (! empty($validated['roles'])) {
             $user->roles()->sync($validated['roles']);
 
             $assignedRoleIds = array_map('intval', $validated['roles']);
@@ -103,8 +99,7 @@ class UserController extends BaseController
     /**
      * Show the form for editing the specified user.
      */
-    public function edit($id)
-    {
+    public function edit($id) {
         $userModel = $this->getUserModel();
         $user = $userModel::with('roles')->findOrFail($id);
         $roles = Role::all();
@@ -118,8 +113,7 @@ class UserController extends BaseController
     /**
      * Update the specified user.
      */
-    public function update(Request $request, $id)
-    {
+    public function update(Request $request, $id) {
         $userModel = $this->getUserModel();
         $user = $userModel::findOrFail($id);
         $oldName = $user->name;
@@ -128,7 +122,7 @@ class UserController extends BaseController
 
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email,' . $user->id],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email,'.$user->id],
             'password' => array_merge(['nullable', 'confirmed'], PasswordRules::get(['name' => $request->input('name'), 'email' => $request->input('email')])),
             'roles' => ['array'],
             'roles.*' => ['exists:roles,id'],
@@ -137,7 +131,7 @@ class UserController extends BaseController
         $user->name = $validated['name'];
         $user->email = $validated['email'];
 
-        if (!empty($validated['password'])) {
+        if (! empty($validated['password'])) {
             $user->password = Hash::make($validated['password']);
         }
 
@@ -154,12 +148,12 @@ class UserController extends BaseController
             $attachedRoleIds = array_values(array_diff($newRoleIds, $oldRoleIds));
             $detachedRoleIds = array_values(array_diff($oldRoleIds, $newRoleIds));
 
-            if (!empty($attachedRoleIds)) {
+            if (! empty($attachedRoleIds)) {
                 $attachedRoles = Role::query()->whereIn('id', $attachedRoleIds)->get(['id', 'slug']);
                 $this->auditRoleAssignments($user, $attachedRoles, true);
             }
 
-            if (!empty($detachedRoleIds)) {
+            if (! empty($detachedRoleIds)) {
                 $detachedRoles = Role::query()->whereIn('id', $detachedRoleIds)->get(['id', 'slug']);
                 $this->auditRoleAssignments($user, $detachedRoles, false);
             }
@@ -173,8 +167,7 @@ class UserController extends BaseController
     /**
      * Suspend the specified user.
      */
-    public function suspend(Request $request, $id)
-    {
+    public function suspend(Request $request, $id) {
         $userModel = $this->getUserModel();
         $user = $userModel::findOrFail($id);
 
@@ -199,8 +192,7 @@ class UserController extends BaseController
     /**
      * Unsuspend the specified user.
      */
-    public function unsuspend($id)
-    {
+    public function unsuspend($id) {
         $userModel = $this->getUserModel();
         $user = $userModel::findOrFail($id);
 
@@ -214,8 +206,7 @@ class UserController extends BaseController
     /**
      * Remove the specified user.
      */
-    public function destroy($id)
-    {
+    public function destroy($id) {
         $userModel = $this->getUserModel();
         $user = $userModel::findOrFail($id);
 
@@ -244,8 +235,7 @@ class UserController extends BaseController
     /**
      * Reset 2FA for the specified user.
      */
-    public function reset2FA($id)
-    {
+    public function reset2FA($id) {
         $userModel = $this->getUserModel();
         $user = $userModel::findOrFail($id);
 
@@ -263,10 +253,9 @@ class UserController extends BaseController
     /**
      * Impersonate the specified user.
      */
-    public function loginAs($id)
-    {
+    public function loginAs($id) {
         // Only admins can impersonate
-        if (!$this->isAdmin()) {
+        if (! $this->isAdmin()) {
             abort(403, 'Unauthorized action.');
         }
 
@@ -294,11 +283,10 @@ class UserController extends BaseController
     /**
      * Leave impersonation and return to original admin account.
      */
-    public function leaveImpersonation()
-    {
+    public function leaveImpersonation() {
         $impersonatorId = session('impersonator_id');
 
-        if (!$impersonatorId) {
+        if (! $impersonatorId) {
             return redirect()
                 ->route(DashboardRoute::name('index'))
                 ->with('error', 'You are not impersonating anyone.');
@@ -321,8 +309,7 @@ class UserController extends BaseController
     /**
      * Write one audit entry per role assignment/removal for a user.
      */
-    protected function auditRoleAssignments($user, Collection $roles, bool $assigned): void
-    {
+    protected function auditRoleAssignments($user, Collection $roles, bool $assigned): void {
         $event = $assigned ? 'role.assigned' : 'role.removed';
 
         foreach ($roles as $role) {
@@ -336,8 +323,7 @@ class UserController extends BaseController
     /**
      * Write an audit entry without breaking user management actions.
      */
-    protected function auditSafely(string $event, $auditable = null, ?array $oldValues = null, ?array $newValues = null): void
-    {
+    protected function auditSafely(string $event, $auditable = null, ?array $oldValues = null, ?array $newValues = null): void {
         try {
             TyroAudit::log($event, $auditable, $oldValues, $newValues);
         } catch (\Throwable $e) {

@@ -2,14 +2,13 @@
 
 namespace HasinHayder\TyroDashboard\Console\Commands;
 
+use HasinHayder\Tyro\Models\Role;
+use HasinHayder\Tyro\Support\PasswordRules;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
-use HasinHayder\Tyro\Models\Role;
-use HasinHayder\Tyro\Support\PasswordRules;
 
-class CreateSuperUserCommand extends Command
-{
+class CreateSuperUserCommand extends Command {
     /**
      * The name and signature of the console command.
      *
@@ -27,14 +26,14 @@ class CreateSuperUserCommand extends Command
     /**
      * Execute the console command.
      */
-    public function handle()
-    {
+    public function handle() {
         $this->info('Create a new superuser');
 
         $userModel = config('tyro-dashboard.user_model', config('tyro.models.user', 'App\\Models\\User'));
 
-        if (!class_exists($userModel)) {
+        if (! class_exists($userModel)) {
             $this->error("User model [{$userModel}] not found.");
+
             return self::FAILURE;
         }
 
@@ -44,6 +43,7 @@ class CreateSuperUserCommand extends Command
         // Check if email already exists
         if ($userModel::where('email', $email)->exists()) {
             $this->error('User with this email already exists.');
+
             return self::FAILURE;
         }
 
@@ -53,6 +53,7 @@ class CreateSuperUserCommand extends Command
 
             if ($password !== $confirmPassword) {
                 $this->error('Passwords do not match. Please try again.');
+
                 continue;
             }
 
@@ -76,7 +77,7 @@ class CreateSuperUserCommand extends Command
 
         // Create User
         $this->info('Creating user...');
-        
+
         try {
             $user = $userModel::create([
                 'name' => $name,
@@ -84,13 +85,14 @@ class CreateSuperUserCommand extends Command
                 'password' => Hash::make($password),
             ]);
         } catch (\Exception $e) {
-            $this->error('Failed to create user: ' . $e->getMessage());
+            $this->error('Failed to create user: '.$e->getMessage());
+
             return self::FAILURE;
         }
 
         // Assign Role
         $this->info('Assigning admin role...');
-        
+
         $adminRoles = config('tyro-dashboard.admin_roles', ['super-admin', 'admin']);
         $roleAssigned = false;
 
@@ -104,20 +106,21 @@ class CreateSuperUserCommand extends Command
             }
         }
 
-        if (!$roleAssigned) {
+        if (! $roleAssigned) {
             $this->warn('No admin/super-admin role found in the system.');
             $this->warn('User created but has no administrative privileges.');
-            $this->info('Available roles: ' . Role::pluck('slug')->implode(', '));
-            
+            $this->info('Available roles: '.Role::pluck('slug')->implode(', '));
+
             if ($this->confirm('Would you like to assign an existing role?', true)) {
-                 $roleSlug = $this->choice('Select role', Role::pluck('slug')->toArray());
-                 $role = Role::where('slug', $roleSlug)->first();
-                 $user->roles()->attach($role->id);
-                 $this->info("Assigned role: {$role->name}");
+                $roleSlug = $this->choice('Select role', Role::pluck('slug')->toArray());
+                $role = Role::where('slug', $roleSlug)->first();
+                $user->roles()->attach($role->id);
+                $this->info("Assigned role: {$role->name}");
             }
         }
 
         $this->info('Superuser created successfully.');
+
         return self::SUCCESS;
     }
 }

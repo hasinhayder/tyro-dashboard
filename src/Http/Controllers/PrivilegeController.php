@@ -9,13 +9,11 @@ use HasinHayder\TyroDashboard\Support\DashboardRoute;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
-class PrivilegeController extends BaseController
-{
+class PrivilegeController extends BaseController {
     /**
      * Display a listing of privileges.
      */
-    public function index(Request $request)
-    {
+    public function index(Request $request) {
         $perPage = config('tyro-dashboard.pagination.privileges', 15);
 
         $query = Privilege::withCount('roles');
@@ -24,8 +22,8 @@ class PrivilegeController extends BaseController
         if ($search = $request->get('search')) {
             $query->where(function ($q) use ($search) {
                 $q->where('name', 'like', "%{$search}%")
-                  ->orWhere('slug', 'like', "%{$search}%")
-                  ->orWhere('description', 'like', "%{$search}%");
+                    ->orWhere('slug', 'like', "%{$search}%")
+                    ->orWhere('description', 'like', "%{$search}%");
             });
         }
 
@@ -40,8 +38,7 @@ class PrivilegeController extends BaseController
     /**
      * Show the form for creating a new privilege.
      */
-    public function create()
-    {
+    public function create() {
         $roles = Role::all();
 
         return view('tyro-dashboard::privileges.create', $this->getViewData([
@@ -52,8 +49,7 @@ class PrivilegeController extends BaseController
     /**
      * Store a newly created privilege.
      */
-    public function store(Request $request)
-    {
+    public function store(Request $request) {
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'slug' => ['nullable', 'string', 'max:255', 'unique:privileges,slug'],
@@ -69,7 +65,7 @@ class PrivilegeController extends BaseController
         ]);
 
         $selectedRoleIds = [];
-        if (!empty($validated['roles'])) {
+        if (! empty($validated['roles'])) {
             $privilege->roles()->sync($validated['roles']);
             $selectedRoleIds = array_map('intval', $validated['roles']);
 
@@ -98,8 +94,7 @@ class PrivilegeController extends BaseController
     /**
      * Display the specified privilege.
      */
-    public function show($id)
-    {
+    public function show($id) {
         $privilege = Privilege::with('roles')->findOrFail($id);
 
         return view('tyro-dashboard::privileges.show', $this->getViewData([
@@ -110,8 +105,7 @@ class PrivilegeController extends BaseController
     /**
      * Show the form for editing the specified privilege.
      */
-    public function edit($id)
-    {
+    public function edit($id) {
         $privilege = Privilege::with('roles')->findOrFail($id);
         $roles = Role::all();
 
@@ -124,8 +118,7 @@ class PrivilegeController extends BaseController
     /**
      * Update the specified privilege.
      */
-    public function update(Request $request, $id)
-    {
+    public function update(Request $request, $id) {
         $privilege = Privilege::findOrFail($id);
         $oldRoleIds = $privilege->roles()->pluck('roles.id')->map(fn ($item) => (int) $item)->values()->all();
         $oldValues = [
@@ -137,7 +130,7 @@ class PrivilegeController extends BaseController
 
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:255'],
-            'slug' => ['nullable', 'string', 'max:255', 'unique:privileges,slug,' . $privilege->id],
+            'slug' => ['nullable', 'string', 'max:255', 'unique:privileges,slug,'.$privilege->id],
             'description' => ['nullable', 'string', 'max:500'],
             'roles' => ['array'],
             'roles.*' => ['exists:roles,id'],
@@ -168,7 +161,7 @@ class PrivilegeController extends BaseController
             $attachedRoleIds = array_values(array_diff($newRoleIds, $oldRoleIds));
             $detachedRoleIds = array_values(array_diff($oldRoleIds, $newRoleIds));
 
-            if (!empty($attachedRoleIds)) {
+            if (! empty($attachedRoleIds)) {
                 $attachedRoles = Role::query()->whereIn('id', $attachedRoleIds)->get();
                 foreach ($attachedRoles as $role) {
                     $this->auditSafely('privilege.attached', $role, null, [
@@ -178,7 +171,7 @@ class PrivilegeController extends BaseController
                 }
             }
 
-            if (!empty($detachedRoleIds)) {
+            if (! empty($detachedRoleIds)) {
                 $detachedRoles = Role::query()->whereIn('id', $detachedRoleIds)->get();
                 foreach ($detachedRoles as $role) {
                     $this->auditSafely('privilege.detached', $role, null, [
@@ -197,8 +190,7 @@ class PrivilegeController extends BaseController
     /**
      * Remove the specified privilege.
      */
-    public function destroy($id)
-    {
+    public function destroy($id) {
         $privilege = Privilege::findOrFail($id);
         $oldValues = [
             'id' => $privilege->id,
@@ -221,8 +213,7 @@ class PrivilegeController extends BaseController
     /**
      * Remove this privilege from a specific role.
      */
-    public function removeRole($id, $roleId)
-    {
+    public function removeRole($id, $roleId) {
         $privilege = Privilege::findOrFail($id);
         $privilege->roles()->detach($roleId);
 
@@ -240,8 +231,7 @@ class PrivilegeController extends BaseController
     /**
      * Write an audit entry without breaking privilege management actions.
      */
-    protected function auditSafely(string $event, $auditable = null, ?array $oldValues = null, ?array $newValues = null): void
-    {
+    protected function auditSafely(string $event, $auditable = null, ?array $oldValues = null, ?array $newValues = null): void {
         try {
             TyroAudit::log($event, $auditable, $oldValues, $newValues);
         } catch (\Throwable $e) {

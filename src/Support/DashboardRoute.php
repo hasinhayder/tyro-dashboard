@@ -4,32 +4,26 @@ namespace HasinHayder\TyroDashboard\Support;
 
 use Illuminate\Support\Str;
 
-class DashboardRoute
-{
+class DashboardRoute {
     protected const LEGACY_PREFIX = 'tyro-dashboard.';
 
-    public static function prefix(): string
-    {
+    public static function prefix(): string {
         return static::normalizePrefix(config('tyro-dashboard.routes.name_prefix', static::LEGACY_PREFIX));
     }
 
-    public static function legacyPrefix(): string
-    {
+    public static function legacyPrefix(): string {
         return static::normalizePrefix(static::LEGACY_PREFIX);
     }
 
-    public static function name(string $name = ''): string
-    {
+    public static function name(string $name = ''): string {
         return static::build(static::prefix(), $name);
     }
 
-    public static function pattern(string $pattern = '*'): string
-    {
+    public static function pattern(string $pattern = '*'): string {
         return static::build(static::prefix(), $pattern);
     }
 
-    public static function translate(string $name): ?string
-    {
+    public static function translate(string $name): ?string {
         $currentPrefix = static::prefix();
         $legacyPrefix = static::legacyPrefix();
 
@@ -44,8 +38,7 @@ class DashboardRoute
         return null;
     }
 
-    public static function normalizePrefix(?string $prefix): string
-    {
+    public static function normalizePrefix(?string $prefix): string {
         $prefix = trim((string) $prefix);
 
         if ($prefix === '') {
@@ -55,8 +48,7 @@ class DashboardRoute
         return rtrim($prefix, '.').'.';
     }
 
-    protected static function build(string $prefix, string $name): string
-    {
+    protected static function build(string $prefix, string $name): string {
         $name = ltrim($name, '.');
 
         if ($name === '') {

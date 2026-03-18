@@ -4,8 +4,7 @@ namespace HasinHayder\TyroDashboard\Console\Commands;
 
 use Illuminate\Console\Command;
 
-class PublishCommand extends Command
-{
+class PublishCommand extends Command {
     /**
      * The name and signature of the console command.
      *
@@ -30,8 +29,7 @@ class PublishCommand extends Command
     /**
      * Execute the console command.
      */
-    public function handle(): int
-    {
+    public function handle(): int {
         $this->info('  ╔════════════════════════════════════════╗');
         $this->info('  ║     Tyro Dashboard Resource Publisher  ║');
         $this->info('  ╚════════════════════════════════════════╝');
@@ -40,6 +38,7 @@ class PublishCommand extends Command
         // If specific flags are provided, process them
         if ($this->option('all') || $this->option('style') || $this->option('views') || $this->option('user') || $this->option('admin') || $this->option('config')) {
             $this->processFlags();
+
             return self::SUCCESS;
         }
 
@@ -88,10 +87,10 @@ class PublishCommand extends Command
     /**
      * Process command line flags.
      */
-    protected function processFlags(): void
-    {
+    protected function processFlags(): void {
         if ($this->option('all')) {
             $this->publishTag('tyro-dashboard', 'All resources');
+
             return;
         }
 
@@ -119,10 +118,9 @@ class PublishCommand extends Command
     /**
      * Publish resources for a specific tag.
      */
-    protected function publishTag(string $tag, string $label): void
-    {
+    protected function publishTag(string $tag, string $label): void {
         $this->info("Publishing {$label}...");
-        
+
         $params = [
             '--tag' => $tag,
         ];
@@ -132,7 +130,7 @@ class PublishCommand extends Command
         }
 
         $this->call('vendor:publish', $params);
-        
+
         $this->info("✓ {$label} published successfully.");
         $this->info('');
     }

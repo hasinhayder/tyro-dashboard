@@ -10,13 +10,11 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 
-class RoleController extends BaseController
-{
+class RoleController extends BaseController {
     /**
      * Display a listing of roles.
      */
-    public function index(Request $request)
-    {
+    public function index(Request $request) {
         $perPage = config('tyro-dashboard.pagination.roles', 15);
 
         $query = Role::withCount(['users', 'privileges']);
@@ -25,7 +23,7 @@ class RoleController extends BaseController
         if ($search = $request->get('search')) {
             $query->where(function ($q) use ($search) {
                 $q->where('name', 'like', "%{$search}%")
-                  ->orWhere('slug', 'like', "%{$search}%");
+                    ->orWhere('slug', 'like', "%{$search}%");
             });
         }
 
@@ -42,8 +40,7 @@ class RoleController extends BaseController
     /**
      * Show the form for creating a new role.
      */
-    public function create()
-    {
+    public function create() {
         $privileges = Privilege::all();
 
         return view('tyro-dashboard::roles.create', $this->getViewData([
@@ -54,8 +51,7 @@ class RoleController extends BaseController
     /**
      * Store a newly created role.
      */
-    public function store(Request $request)
-    {
+    public function store(Request $request) {
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'slug' => ['nullable', 'string', 'max:255', 'unique:roles,slug'],
@@ -69,7 +65,7 @@ class RoleController extends BaseController
         ]);
 
         $selectedPrivilegeIds = [];
-        if (!empty($validated['privileges'])) {
+        if (! empty($validated['privileges'])) {
             $role->privileges()->sync($validated['privileges']);
             $selectedPrivilegeIds = array_map('intval', $validated['privileges']);
 
@@ -95,8 +91,7 @@ class RoleController extends BaseController
     /**
      * Display the specified role.
      */
-    public function show($id)
-    {
+    public function show($id) {
         $role = Role::with(['privileges', 'users'])->findOrFail($id);
 
         return view('tyro-dashboard::roles.show', $this->getViewData([
@@ -107,8 +102,7 @@ class RoleController extends BaseController
     /**
      * Show the form for editing the specified role.
      */
-    public function edit($id)
-    {
+    public function edit($id) {
         $role = Role::with('privileges')->findOrFail($id);
         $privileges = Privilege::all();
         $protectedRoles = config('tyro-dashboard.protected.roles', []);
@@ -123,8 +117,7 @@ class RoleController extends BaseController
     /**
      * Update the specified role.
      */
-    public function update(Request $request, $id)
-    {
+    public function update(Request $request, $id) {
         $role = Role::findOrFail($id);
         $oldPrivilegeIds = $role->privileges()->pluck('privileges.id')->map(fn ($item) => (int) $item)->values()->all();
         $oldValues = [
@@ -135,7 +128,7 @@ class RoleController extends BaseController
 
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:255'],
-            'slug' => ['nullable', 'string', 'max:255', 'unique:roles,slug,' . $role->id],
+            'slug' => ['nullable', 'string', 'max:255', 'unique:roles,slug,'.$role->id],
             'privileges' => ['array'],
             'privileges.*' => ['exists:privileges,id'],
         ]);
@@ -160,14 +153,14 @@ class RoleController extends BaseController
             $attachedPrivilegeIds = array_values(array_diff($newPrivilegeIds, $oldPrivilegeIds));
             $detachedPrivilegeIds = array_values(array_diff($oldPrivilegeIds, $newPrivilegeIds));
 
-            if (!empty($attachedPrivilegeIds)) {
+            if (! empty($attachedPrivilegeIds)) {
                 $attachedPrivileges = Privilege::query()
                     ->whereIn('id', $attachedPrivilegeIds)
                     ->get(['id', 'slug']);
                 $this->auditPrivilegeAssignments($role, $attachedPrivileges, true);
             }
 
-            if (!empty($detachedPrivilegeIds)) {
+            if (! empty($detachedPrivilegeIds)) {
                 $detachedPrivileges = Privilege::query()
                     ->whereIn('id', $detachedPrivilegeIds)
                     ->get(['id', 'slug']);
@@ -183,8 +176,7 @@ class RoleController extends BaseController
     /**
      * Remove the specified role.
      */
-    public function destroy($id)
-    {
+    public function destroy($id) {
         $role = Role::findOrFail($id);
         $oldValues = [
             'id' => $role->id,
@@ -215,8 +207,7 @@ class RoleController extends BaseController
     /**
      * Remove a user from the specified role.
      */
-    public function removeUser($id, $userId)
-    {
+    public function removeUser($id, $userId) {
         $role = Role::findOrFail($id);
         $role->users()->detach($userId);
 
@@ -236,8 +227,7 @@ class RoleController extends BaseController
     /**
      * Write an audit entry without breaking role management actions.
      */
-    protected function auditSafely(string $event, $auditable = null, ?array $oldValues = null, ?array $newValues = null): void
-    {
+    protected function auditSafely(string $event, $auditable = null, ?array $oldValues = null, ?array $newValues = null): void {
         try {
             TyroAudit::log($event, $auditable, $oldValues, $newValues);
         } catch (\Throwable $e) {
@@ -248,8 +238,7 @@ class RoleController extends BaseController
     /**
      * Write one audit entry per privilege attachment/detachment on a role.
      */
-    protected function auditPrivilegeAssignments(Role $role, Collection $privileges, bool $attached): void
-    {
+    protected function auditPrivilegeAssignments(Role $role, Collection $privileges, bool $attached): void {
         $event = $attached ? 'role.privilege_attached' : 'role.privilege_detached';
 
         foreach ($privileges as $privilege) {

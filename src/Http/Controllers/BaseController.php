@@ -4,24 +4,21 @@ namespace HasinHayder\TyroDashboard\Http\Controllers;
 
 use Illuminate\Routing\Controller;
 
-abstract class BaseController extends Controller
-{
+abstract class BaseController extends Controller {
     /**
      * Get the user model class.
      */
-    protected function getUserModel(): string
-    {
+    protected function getUserModel(): string {
         return config('tyro-dashboard.user_model', config('tyro.models.user', 'App\\Models\\User'));
     }
 
     /**
      * Check if the current user is an admin.
      */
-    protected function isAdmin(): bool
-    {
+    protected function isAdmin(): bool {
         $user = auth()->user();
-        
-        if (!$user || !method_exists($user, 'tyroRoleSlugs')) {
+
+        if (! $user || ! method_exists($user, 'tyroRoleSlugs')) {
             return false;
         }
 
@@ -40,8 +37,7 @@ abstract class BaseController extends Controller
     /**
      * Get common view data.
      */
-    protected function getViewData(array $data = []): array
-    {
+    protected function getViewData(array $data = []): array {
         return array_merge([
             'branding' => config('tyro-dashboard.branding'),
             'isAdmin' => $this->isAdmin(),

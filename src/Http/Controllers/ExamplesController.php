@@ -4,10 +4,8 @@ namespace HasinHayder\TyroDashboard\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-class ExamplesController extends BaseController
-{
-    public function components(Request $request)
-    {
+class ExamplesController extends BaseController {
+    public function components(Request $request) {
         $kpis = [
             [
                 'label' => 'Monthly Revenue',

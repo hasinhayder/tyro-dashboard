@@ -2,28 +2,26 @@
 
 namespace HasinHayder\TyroDashboard\Http\Controllers;
 
+use HasinHayder\TyroLogin\Models\InvitationLink;
+use HasinHayder\TyroLogin\Models\InvitationReferral;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Schema;
-use HasinHayder\TyroLogin\Models\InvitationLink;
-use HasinHayder\TyroLogin\Models\InvitationReferral;
 
-class DashboardController extends BaseController
-{
+class DashboardController extends BaseController {
     /**
      * Display the dashboard home.
      */
-    public function index(Request $request)
-    {
+    public function index(Request $request) {
         $userModel = $this->getUserModel();
-        
+
         $stats = [];
-        
+
         if ($this->isAdmin()) {
             try {
                 // User stats
                 $stats['total_users'] = class_exists($userModel) ? $userModel::count() : 0;
-                
+
                 // Try to get suspended users count
                 if (class_exists($userModel)) {
                     $user = new $userModel;
@@ -35,14 +33,14 @@ class DashboardController extends BaseController
                     $stats['recent_users'] = $userModel::latest()->take(5)->get();
                 } else {
                     $stats['suspended_users'] = 0;
-                    $stats['recent_users'] = new Collection();
+                    $stats['recent_users'] = new Collection;
                 }
-                
+
                 // Role stats
                 if (class_exists('\HasinHayder\Tyro\Models\Role')) {
                     $roleModel = '\HasinHayder\Tyro\Models\Role';
                     $stats['total_roles'] = $roleModel::count();
-                    
+
                     $roles = $roleModel::withCount('users')->get();
                     $stats['role_distribution'] = $roles->map(function ($role) {
                         return [
@@ -53,9 +51,9 @@ class DashboardController extends BaseController
                     });
                 } else {
                     $stats['total_roles'] = 0;
-                    $stats['role_distribution'] = new Collection();
+                    $stats['role_distribution'] = new Collection;
                 }
-                
+
                 // Privilege stats
                 if (class_exists('\HasinHayder\Tyro\Models\Privilege')) {
                     $privilegeModel = '\HasinHayder\Tyro\Models\Privilege';
@@ -63,11 +61,11 @@ class DashboardController extends BaseController
                 } else {
                     $stats['total_privileges'] = 0;
                 }
-                
+
                 // Invitation stats (only if enabled and tables exist)
-                if (config('tyro-dashboard.features.invitation_system', true) 
+                if (config('tyro-dashboard.features.invitation_system', true)
                     && class_exists('\HasinHayder\TyroLogin\Models\InvitationLink')
-                    && Schema::hasTable('invitation_links') 
+                    && Schema::hasTable('invitation_links')
                     && Schema::hasTable('invitation_referrals')) {
                     try {
                         $stats['total_invitations'] = InvitationLink::count();
@@ -80,16 +78,16 @@ class DashboardController extends BaseController
                     $stats['total_invitations'] = 0;
                     $stats['total_referrals'] = 0;
                 }
-                
+
             } catch (\Exception $e) {
                 // If any error occurs, provide default stats
                 $stats = [
                     'total_users' => 0,
                     'total_roles' => 0,
                     'total_privileges' => 0,
-                    'recent_users' => new Collection(),
+                    'recent_users' => new Collection,
                     'suspended_users' => 0,
-                    'role_distribution' => new Collection(),
+                    'role_distribution' => new Collection,
                 ];
             }
 
@@ -101,9 +99,9 @@ class DashboardController extends BaseController
 
         // Get stats for regular users
         try {
-            if (config('tyro-dashboard.features.invitation_system', true) 
+            if (config('tyro-dashboard.features.invitation_system', true)
                 && class_exists('\HasinHayder\TyroLogin\Models\InvitationLink')
-                && Schema::hasTable('invitation_links') 
+                && Schema::hasTable('invitation_links')
                 && Schema::hasTable('invitation_referrals')) {
                 $user = auth()->user();
                 $invitationLink = InvitationLink::where('user_id', $user->id)->first();
@@ -127,8 +125,7 @@ class DashboardController extends BaseController
     /**
      * Display a copy-ready components showcase page.
      */
-    public function components(Request $request)
-    {
+    public function components(Request $request) {
         $kpis = [
             [
                 'label' => 'Monthly Revenue',

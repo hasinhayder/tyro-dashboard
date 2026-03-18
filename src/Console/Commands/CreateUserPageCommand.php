@@ -5,8 +5,7 @@ namespace HasinHayder\TyroDashboard\Console\Commands;
 use Illuminate\Console\Command;
 use Illuminate\Support\Str;
 
-class CreateUserPageCommand extends Command
-{
+class CreateUserPageCommand extends Command {
     /**
      * The name and signature of the console command.
      */
@@ -22,16 +21,16 @@ class CreateUserPageCommand extends Command
     /**
      * Execute the console command.
      */
-    public function handle(): int
-    {
+    public function handle(): int {
         $name = $this->argument('name');
-        
+
         // Ask for page name if not provided
-        if (!$name) {
+        if (! $name) {
             $name = $this->ask('What is the name of the user page?');
-            
-            if (!$name) {
+
+            if (! $name) {
                 $this->error('Page name is required.');
+
                 return self::FAILURE;
             }
         }
@@ -46,7 +45,7 @@ class CreateUserPageCommand extends Command
 
         // Check if views directory exists, if not publish
         $viewsPath = resource_path('views/vendor/tyro-dashboard');
-        if (!file_exists($viewsPath)) {
+        if (! file_exists($viewsPath)) {
             $this->info('Publishing dashboard views...');
             $this->callSilently('vendor:publish', [
                 '--tag' => 'tyro-dashboard-views-user',
@@ -57,23 +56,24 @@ class CreateUserPageCommand extends Command
 
         // Create dashboard directory if it doesn't exist
         $dashboardViewPath = resource_path('views/dashboard');
-        if (!is_dir($dashboardViewPath)) {
+        if (! is_dir($dashboardViewPath)) {
             mkdir($dashboardViewPath, 0755, true);
             $this->info('   ✓ Created dashboard views directory');
         }
 
         // Create the view file
-        $viewFile = $dashboardViewPath . '/' . $pageName . '.blade.php';
-        
-        if (file_exists($viewFile) && !$this->option('force')) {
-            $this->error('   ✗ View file already exists: views/dashboard/' . $pageName . '.blade.php');
+        $viewFile = $dashboardViewPath.'/'.$pageName.'.blade.php';
+
+        if (file_exists($viewFile) && ! $this->option('force')) {
+            $this->error('   ✗ View file already exists: views/dashboard/'.$pageName.'.blade.php');
             $this->info('   Use --force to overwrite');
+
             return self::FAILURE;
         }
 
         $viewContent = $this->getViewTemplate($pageTitle);
         file_put_contents($viewFile, $viewContent);
-        $this->info('   ✓ Created view: views/dashboard/' . $pageName . '.blade.php');
+        $this->info('   ✓ Created view: views/dashboard/'.$pageName.'.blade.php');
 
         // Add route to web.php
         $this->addRouteToWebFile($pageName);
@@ -86,8 +86,8 @@ class CreateUserPageCommand extends Command
         $this->info('  ║            Page Created!               ║');
         $this->info('  ╚════════════════════════════════════════╝');
         $this->info('');
-        $this->info('  Page URL: /dashboard/' . $pageName);
-        $this->info('  View: resources/views/dashboard/' . $pageName . '.blade.php');
+        $this->info('  Page URL: /dashboard/'.$pageName);
+        $this->info('  View: resources/views/dashboard/'.$pageName.'.blade.php');
         $this->info('');
 
         return self::SUCCESS;
@@ -96,8 +96,7 @@ class CreateUserPageCommand extends Command
     /**
      * Get the view template content.
      */
-    protected function getViewTemplate(string $pageTitle): string
-    {
+    protected function getViewTemplate(string $pageTitle): string {
         return <<<BLADE
 @extends('tyro-dashboard::layouts.user')
 
@@ -135,12 +134,12 @@ BLADE;
     /**
      * Add route to web.php file.
      */
-    protected function addRouteToWebFile(string $pageName): void
-    {
+    protected function addRouteToWebFile(string $pageName): void {
         $webFile = base_path('routes/web.php');
-        
-        if (!file_exists($webFile)) {
+
+        if (! file_exists($webFile)) {
             $this->warn('   ⚠ routes/web.php not found');
+
             return;
         }
 
@@ -150,33 +149,35 @@ BLADE;
         // Check if route already exists
         if (strpos($content, "dashboard.{$pageName}") !== false) {
             $this->warn('   ⚠ Route already exists in web.php');
+
             return;
         }
 
         // Add route at the end of the file
-        $content = rtrim($content) . "\n\n" . $routeLine . "\n";
+        $content = rtrim($content)."\n\n".$routeLine."\n";
         file_put_contents($webFile, $content);
-        
+
         $this->info('   ✓ Added route to routes/web.php');
     }
 
     /**
      * Add link to sidebar.
      */
-    protected function addLinkToSidebar(string $pageName, string $pageTitle, string $sidebarType): void
-    {
+    protected function addLinkToSidebar(string $pageName, string $pageTitle, string $sidebarType): void {
         $sidebarFile = resource_path("views/vendor/tyro-dashboard/partials/{$sidebarType}-sidebar.blade.php");
-        
-        if (!file_exists($sidebarFile)) {
+
+        if (! file_exists($sidebarFile)) {
             $this->warn("   ⚠ {$sidebarType}-sidebar.blade.php not found. Publish views first if you want to customize the sidebar.");
+
             return;
         }
 
         $content = file_get_contents($sidebarFile);
-        
+
         // Check if link already exists
         if (strpos($content, "dashboard.{$pageName}") !== false) {
             $this->warn("   ⚠ Link already exists in {$sidebarType} sidebar");
+
             return;
         }
 
@@ -193,9 +194,9 @@ HTML;
 
         // Find the Menu section and add the link before the closing </div>
         $pattern = '/(<div class="sidebar-section">.*?<div class="sidebar-section-title">Menu<\/div>.*?<a href=.*?My Profile.*?<\/a>)/s';
-        
+
         if (preg_match($pattern, $content, $matches)) {
-            $replacement = $matches[1] . $linkHtml;
+            $replacement = $matches[1].$linkHtml;
             $content = preg_replace($pattern, $replacement, $content);
             file_put_contents($sidebarFile, $content);
             $this->info("   ✓ Added link to {$sidebarType} sidebar");

@@ -23,15 +23,12 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 
-class TyroDashboardServiceProvider extends ServiceProvider
-{
-    public function register(): void
-    {
+class TyroDashboardServiceProvider extends ServiceProvider {
+    public function register(): void {
         $this->mergeConfigFrom(__DIR__.'/../../config/tyro-dashboard.php', 'tyro-dashboard');
     }
 
-    public function boot(): void
-    {
+    public function boot(): void {
         $this->registerPublishing();
         $this->loadMigrationsFrom(__DIR__.'/../../database/migrations');
         $this->registerRoutes();
@@ -42,8 +39,7 @@ class TyroDashboardServiceProvider extends ServiceProvider
         $this->registerEventListeners();
     }
 
-    protected function registerEventListeners(): void
-    {
+    protected function registerEventListeners(): void {
         \Illuminate\Support\Facades\Event::listen(\Illuminate\Auth\Events\Login::class, function ($event) {
             if (config('tyro-dashboard.features.audit_logs', true)) {
                 $user = $event->user;
@@ -73,8 +69,7 @@ class TyroDashboardServiceProvider extends ServiceProvider
         });
     }
 
-    protected function registerRoutes(): void
-    {
+    protected function registerRoutes(): void {
         Route::group([
             'prefix' => config('tyro-dashboard.routes.prefix', 'dashboard'),
             'middleware' => config('tyro-dashboard.routes.middleware', ['web', 'auth']),
@@ -98,13 +93,11 @@ class TyroDashboardServiceProvider extends ServiceProvider
         });
     }
 
-    protected function registerViews(): void
-    {
+    protected function registerViews(): void {
         $this->loadViewsFrom(__DIR__.'/../../resources/views', 'tyro-dashboard');
     }
 
-    protected function registerViewComposers(): void
-    {
+    protected function registerViewComposers(): void {
         // Share authenticated user with all dashboard views
         View::composer(['tyro-dashboard::*', 'dashboard.*'], function ($view) {
             $view->with('user', auth()->user());
@@ -133,8 +126,7 @@ class TyroDashboardServiceProvider extends ServiceProvider
         });
     }
 
-    protected function getAllResources($user = null): array
-    {
+    protected function getAllResources($user = null): array {
         $resources = [];
 
         // Get config-based resources
@@ -160,8 +152,7 @@ class TyroDashboardServiceProvider extends ServiceProvider
         return $resources;
     }
 
-    protected function filterResourcesByUserRole(array $resources, $user): array
-    {
+    protected function filterResourcesByUserRole(array $resources, $user): array {
         // Check if user is admin
         $isAdmin = false;
         if (method_exists($user, 'tyroRoleSlugs')) {
@@ -225,8 +216,7 @@ class TyroDashboardServiceProvider extends ServiceProvider
         return $filteredResources;
     }
 
-    protected function getTraitBasedResources(): array
-    {
+    protected function getTraitBasedResources(): array {
         $resources = [];
         $modelPath = app_path('Models');
 
@@ -263,8 +253,7 @@ class TyroDashboardServiceProvider extends ServiceProvider
         return $resources;
     }
 
-    protected function registerMiddleware(): void
-    {
+    protected function registerMiddleware(): void {
         /** @var Router $router */
         $router = $this->app['router'];
         $router->aliasMiddleware('tyro-dashboard.admin', EnsureIsAdmin::class);
@@ -273,8 +262,7 @@ class TyroDashboardServiceProvider extends ServiceProvider
         $router->pushMiddlewareToGroup('web', HandleImpersonation::class);
     }
 
-    protected function registerCommands(): void
-    {
+    protected function registerCommands(): void {
         if (! $this->app->runningInConsole()) {
             return;
         }
@@ -296,8 +284,7 @@ class TyroDashboardServiceProvider extends ServiceProvider
         ]);
     }
 
-    protected function registerPublishing(): void
-    {
+    protected function registerPublishing(): void {
         if (! $this->app->runningInConsole()) {
             return;
         }

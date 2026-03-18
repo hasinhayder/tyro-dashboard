@@ -7,15 +7,12 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Str;
 
-class WidgetsController extends BaseController
-{
-    public function widgets(): \Illuminate\Contracts\View\View
-    {
+class WidgetsController extends BaseController {
+    public function widgets(): \Illuminate\Contracts\View\View {
         return view('tyro-dashboard::examples.widgets', $this->getViewData());
     }
 
-    public function xkcd(?int $id = null): JsonResponse
-    {
+    public function xkcd(?int $id = null): JsonResponse {
         $url = $id ? "https://xkcd.com/{$id}/info.0.json" : 'https://xkcd.com/info.0.json';
 
         try {
@@ -26,7 +23,7 @@ class WidgetsController extends BaseController
             ], 502);
         }
 
-        if (!$response->ok()) {
+        if (! $response->ok()) {
             return response()->json([
                 'error' => 'XKCD returned an error',
                 'status' => $response->status(),
@@ -36,8 +33,7 @@ class WidgetsController extends BaseController
         return response()->json($response->json());
     }
 
-    public function stockQuote(Request $request, string $symbol): JsonResponse
-    {
+    public function stockQuote(Request $request, string $symbol): JsonResponse {
         $symbol = Str::lower(trim($symbol));
 
         if ($symbol === '') {
@@ -59,12 +55,12 @@ class WidgetsController extends BaseController
             return response()->json(['error' => 'Failed to reach quote provider'], 502);
         }
 
-        if (!$response->ok()) {
+        if (! $response->ok()) {
             return response()->json(['error' => 'Quote provider returned an error'], 502);
         }
 
         $lines = preg_split('/\r\n|\r|\n/', trim($response->body()));
-        if (!$lines || count($lines) < 2) {
+        if (! $lines || count($lines) < 2) {
             return response()->json(['error' => 'Unexpected quote format'], 502);
         }
 
@@ -94,11 +90,10 @@ class WidgetsController extends BaseController
         ]);
     }
 
-    public function fxRates(string $base): JsonResponse
-    {
+    public function fxRates(string $base): JsonResponse {
         $base = strtoupper(trim($base));
 
-        if ($base === '' || !preg_match('/^[A-Z]{3}$/', $base)) {
+        if ($base === '' || ! preg_match('/^[A-Z]{3}$/', $base)) {
             return response()->json(['error' => 'Invalid base currency'], 422);
         }
 
@@ -111,7 +106,7 @@ class WidgetsController extends BaseController
             return response()->json(['error' => 'Failed to reach FX provider'], 502);
         }
 
-        if (!$response->ok()) {
+        if (! $response->ok()) {
             return response()->json([
                 'error' => 'FX provider returned an error',
                 'status' => $response->status(),
@@ -119,7 +114,7 @@ class WidgetsController extends BaseController
         }
 
         $json = $response->json();
-        if (!is_array($json) || !isset($json['rates']) || !is_array($json['rates'])) {
+        if (! is_array($json) || ! isset($json['rates']) || ! is_array($json['rates'])) {
             return response()->json(['error' => 'Unexpected FX format'], 502);
         }
 
@@ -137,8 +132,7 @@ class WidgetsController extends BaseController
         ]);
     }
 
-    public function flightStates(Request $request): JsonResponse
-    {
+    public function flightStates(Request $request): JsonResponse {
         $icao24 = Str::lower(trim((string) $request->query('icao24', '')));
         $callsign = strtoupper(trim((string) $request->query('callsign', '')));
 
@@ -149,7 +143,7 @@ class WidgetsController extends BaseController
 
         $hasBbox = $lamin !== null || $lamax !== null || $lomin !== null || $lomax !== null;
 
-        if ($icao24 !== '' && !preg_match('/^[0-9a-f]{6}$/', $icao24)) {
+        if ($icao24 !== '' && ! preg_match('/^[0-9a-f]{6}$/', $icao24)) {
             return response()->json(['error' => 'Invalid ICAO24 (expected 6 hex characters)'], 422);
         }
 
@@ -172,7 +166,7 @@ class WidgetsController extends BaseController
             }
         }
 
-        if ($icao24 === '' && !$hasBbox) {
+        if ($icao24 === '' && ! $hasBbox) {
             return response()->json(['error' => 'Provide either icao24 or a bounding box (lamin/lamax/lomin/lomax)'], 422);
         }
 
@@ -195,7 +189,7 @@ class WidgetsController extends BaseController
             return response()->json(['error' => 'Failed to reach flight provider'], 502);
         }
 
-        if (!$response->ok()) {
+        if (! $response->ok()) {
             return response()->json([
                 'error' => 'Flight provider returned an error',
                 'status' => $response->status(),
@@ -203,7 +197,7 @@ class WidgetsController extends BaseController
         }
 
         $json = $response->json();
-        if (!is_array($json) || !array_key_exists('states', $json)) {
+        if (! is_array($json) || ! array_key_exists('states', $json)) {
             return response()->json(['error' => 'Unexpected flight provider format'], 502);
         }
 
@@ -211,7 +205,7 @@ class WidgetsController extends BaseController
 
         $mapped = [];
         foreach ($states as $s) {
-            if (!is_array($s) || count($s) < 17) {
+            if (! is_array($s) || count($s) < 17) {
                 continue;
             }
 
@@ -236,7 +230,7 @@ class WidgetsController extends BaseController
 
             if ($callsign !== '' && $state['callsign']) {
                 $cs = strtoupper((string) $state['callsign']);
-                if (!str_starts_with($cs, $callsign)) {
+                if (! str_starts_with($cs, $callsign)) {
                     continue;
                 }
             }

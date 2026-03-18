@@ -9,21 +9,18 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rules\Password;
 
-class ProfileController extends BaseController
-{
+class ProfileController extends BaseController {
     /**
      * Display the profile page.
      */
-    public function index(Request $request)
-    {
+    public function index(Request $request) {
         return view('tyro-dashboard::profile.index', $this->getViewData());
     }
 
     /**
      * Update profile information.
      */
-    public function update(Request $request)
-    {
+    public function update(Request $request) {
         $user = $request->user();
         $oldEmail = $user->email;
 
@@ -67,8 +64,7 @@ class ProfileController extends BaseController
     /**
      * Update password.
      */
-    public function updatePassword(Request $request)
-    {
+    public function updatePassword(Request $request) {
         $validated = $request->validate([
             'current_password' => ['required', 'current_password'],
             'password' => ['required', 'confirmed', Password::defaults()],
@@ -86,8 +82,7 @@ class ProfileController extends BaseController
     /**
      * Reset 2FA.
      */
-    public function reset2FA(Request $request)
-    {
+    public function reset2FA(Request $request) {
         $user = $request->user();
 
         $user->forceFill([
@@ -104,8 +99,7 @@ class ProfileController extends BaseController
     /**
      * Delete profile photo.
      */
-    public function deletePhoto(Request $request)
-    {
+    public function deletePhoto(Request $request) {
         $user = $request->user();
         $user->deleteProfilePhoto();
 
@@ -115,8 +109,7 @@ class ProfileController extends BaseController
     /**
      * Delete another user's profile photo (Admin).
      */
-    public function deleteUserPhoto(Request $request, $id)
-    {
+    public function deleteUserPhoto(Request $request, $id) {
         $userModel = config('tyro-dashboard.user_model', 'App\Models\User');
         $user = $userModel::findOrFail($id);
 
@@ -137,8 +130,7 @@ class ProfileController extends BaseController
     /**
      * Write an audit entry without breaking profile actions.
      */
-    protected function auditSafely(string $event, $auditable = null, ?array $oldValues = null, ?array $newValues = null): void
-    {
+    protected function auditSafely(string $event, $auditable = null, ?array $oldValues = null, ?array $newValues = null): void {
         try {
             TyroAudit::log($event, $auditable, $oldValues, $newValues);
         } catch (\Throwable $e) {

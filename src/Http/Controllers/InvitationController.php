@@ -2,59 +2,53 @@
 
 namespace HasinHayder\TyroDashboard\Http\Controllers;
 
-use HasinHayder\TyroDashboard\Support\DashboardRoute;
-use Illuminate\Http\Request;
-use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Schema;
 use HasinHayder\Tyro\Support\TyroAudit;
+use HasinHayder\TyroDashboard\Support\DashboardRoute;
 use HasinHayder\TyroLogin\Models\InvitationLink;
-use HasinHayder\TyroLogin\Models\InvitationReferral;
-use HasinHayder\TyroLogin\Helpers\InvitationHelper;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Str;
 
-class InvitationController extends BaseController
-{
+class InvitationController extends BaseController {
     /**
      * Check if invitation system is enabled.
      */
-    protected function ensureInvitationSystemEnabled()
-    {
-        if (!config('tyro-dashboard.features.invitation_system', true)) {
+    protected function ensureInvitationSystemEnabled() {
+        if (! config('tyro-dashboard.features.invitation_system', true)) {
             abort(404, 'Invitation system is disabled.');
         }
     }
 
     /**
      * Check if invitation tables exist in database.
-     * 
-     * @param bool $isAdmin Whether the check is for admin context
+     *
+     * @param  bool  $isAdmin  Whether the check is for admin context
      * @return \Illuminate\View\View|null
      */
-    protected function ensureInvitationTablesExist($isAdmin = false)
-    {
-        if (!Schema::hasTable('invitation_links') || !Schema::hasTable('invitation_referrals')) {
+    protected function ensureInvitationTablesExist($isAdmin = false) {
+        if (! Schema::hasTable('invitation_links') || ! Schema::hasTable('invitation_referrals')) {
             // Show migration instructions for admins, maintenance message for users
-            $viewName = $isAdmin 
-                ? 'tyro-dashboard::errors.missing-invitation-tables' 
+            $viewName = $isAdmin
+                ? 'tyro-dashboard::errors.missing-invitation-tables'
                 : 'tyro-dashboard::errors.invitation-maintenance';
-            
+
             return view($viewName, $this->getViewData());
         }
-        
+
         return null;
     }
 
     /**
      * Display admin invitation management page.
      */
-    public function adminIndex(Request $request)
-    {
+    public function adminIndex(Request $request) {
         $this->ensureInvitationSystemEnabled();
-        
+
         if ($view = $this->ensureInvitationTablesExist(true)) {
             return $view;
         }
-        
-        if (!$this->isAdmin()) {
+
+        if (! $this->isAdmin()) {
             abort(403, 'Unauthorized');
         }
 
@@ -64,14 +58,14 @@ class InvitationController extends BaseController
         if ($request->has('search') && $request->search) {
             $search = $request->search;
             $userModel = $this->getUserModel();
-            
+
             // Get user IDs that match the search
             $userIds = $userModel::where('name', 'like', "%{$search}%")
                 ->orWhere('email', 'like', "%{$search}%")
                 ->pluck('id');
-            
+
             $query->whereIn('user_id', $userIds)
-                  ->orWhere('hash', 'like', "%{$search}%");
+                ->orWhere('hash', 'like', "%{$search}%");
         }
 
         $links = $query->orderBy('created_at', 'desc')
@@ -85,15 +79,14 @@ class InvitationController extends BaseController
     /**
      * Show create invitation form for admin.
      */
-    public function adminCreate()
-    {
+    public function adminCreate() {
         $this->ensureInvitationSystemEnabled();
-        
+
         if ($view = $this->ensureInvitationTablesExist(true)) {
             return $view;
         }
-        
-        if (!$this->isAdmin()) {
+
+        if (! $this->isAdmin()) {
             abort(403, 'Unauthorized');
         }
 
@@ -108,15 +101,14 @@ class InvitationController extends BaseController
     /**
      * Store invitation link (admin).
      */
-    public function adminStore(Request $request)
-    {
+    public function adminStore(Request $request) {
         $this->ensureInvitationSystemEnabled();
-        
+
         if ($view = $this->ensureInvitationTablesExist(true)) {
             return $view;
         }
-        
-        if (!$this->isAdmin()) {
+
+        if (! $this->isAdmin()) {
             abort(403, 'Unauthorized');
         }
 
@@ -137,7 +129,7 @@ class InvitationController extends BaseController
 
         // Create new invitation link
         $hash = Str::random(32);
-        
+
         $invitationLink = InvitationLink::create([
             'user_id' => $user->id,
             'hash' => $hash,
@@ -156,15 +148,14 @@ class InvitationController extends BaseController
     /**
      * Delete invitation link (admin).
      */
-    public function adminDestroy($id)
-    {
+    public function adminDestroy($id) {
         $this->ensureInvitationSystemEnabled();
-        
+
         if ($view = $this->ensureInvitationTablesExist(true)) {
             return $view;
         }
-        
-        if (!$this->isAdmin()) {
+
+        if (! $this->isAdmin()) {
             abort(403, 'Unauthorized');
         }
 
@@ -194,14 +185,13 @@ class InvitationController extends BaseController
     /**
      * Display user invitation panel.
      */
-    public function userIndex()
-    {
+    public function userIndex() {
         $this->ensureInvitationSystemEnabled();
-        
+
         if ($view = $this->ensureInvitationTablesExist(false)) {
             return $view;
         }
-        
+
         $user = auth()->user();
         $invitationLink = InvitationLink::where('user_id', $user->id)
             ->with('referrals.referredUser')
@@ -224,14 +214,13 @@ class InvitationController extends BaseController
     /**
      * Create invitation link for current user.
      */
-    public function userCreate()
-    {
+    public function userCreate() {
         $this->ensureInvitationSystemEnabled();
-        
+
         if ($view = $this->ensureInvitationTablesExist(false)) {
             return $view;
         }
-        
+
         $user = auth()->user();
 
         // Check if user already has an invitation link
@@ -244,7 +233,7 @@ class InvitationController extends BaseController
 
         // Create new invitation link
         $hash = Str::random(32);
-        
+
         $invitationLink = InvitationLink::create([
             'user_id' => $user->id,
             'hash' => $hash,
@@ -263,8 +252,7 @@ class InvitationController extends BaseController
     /**
      * Write an audit entry without breaking invitation management actions.
      */
-    protected function auditSafely(string $event, $auditable = null, ?array $oldValues = null, ?array $newValues = null): void
-    {
+    protected function auditSafely(string $event, $auditable = null, ?array $oldValues = null, ?array $newValues = null): void {
         try {
             TyroAudit::log($event, $auditable, $oldValues, $newValues);
         } catch (\Throwable $e) {

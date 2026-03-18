@@ -4,16 +4,14 @@ namespace HasinHayder\TyroDashboard\Traits;
 
 use Illuminate\Support\Facades\Storage;
 
-trait HasProfilePhoto
-{
+trait HasProfilePhoto {
     /**
      * Update the user's profile photo.
      *
      * @param  \Illuminate\Http\UploadedFile  $photo
      * @return void
      */
-    public function updateProfilePhoto($photo)
-    {
+    public function updateProfilePhoto($photo) {
         tap($this->profile_photo_path, function ($previous) use ($photo) {
             $path = $this->processAndStorePhoto($photo);
 
@@ -33,8 +31,7 @@ trait HasProfilePhoto
      * @param  \Illuminate\Http\UploadedFile  $photo
      * @return string
      */
-    protected function processAndStorePhoto($photo)
-    {
+    protected function processAndStorePhoto($photo) {
         $width = config('tyro-dashboard.profile_photo.width', 400);
         $height = config('tyro-dashboard.profile_photo.height', 400);
         $quality = config('tyro-dashboard.profile_photo.quality', 90);
@@ -64,8 +61,7 @@ trait HasProfilePhoto
      * @param  int  $quality
      * @return string|null
      */
-    protected function resizeImage($photo, $width, $height, $quality)
-    {
+    protected function resizeImage($photo, $width, $height, $quality) {
         $imageInfo = getimagesize($photo->getRealPath());
         if (! $imageInfo) {
             return null;
@@ -209,8 +205,7 @@ trait HasProfilePhoto
      *
      * @return void
      */
-    public function deleteProfilePhoto()
-    {
+    public function deleteProfilePhoto() {
         if (is_null($this->profile_photo_path)) {
             return;
         }
@@ -227,8 +222,7 @@ trait HasProfilePhoto
      *
      * @return string
      */
-    public function getProfilePhotoUrlAttribute()
-    {
+    public function getProfilePhotoUrlAttribute() {
         if ($this->use_gravatar && $this->email) {
             return $this->gravatar_url;
         }
@@ -243,8 +237,7 @@ trait HasProfilePhoto
      *
      * @return string
      */
-    protected function defaultProfilePhotoUrl()
-    {
+    protected function defaultProfilePhotoUrl() {
         $name = trim($this->name);
 
         return 'https://ui-avatars.com/api/?name='.urlencode($name).'&color=7F9CF5&background=EBF4FF';
@@ -255,8 +248,7 @@ trait HasProfilePhoto
      *
      * @return string
      */
-    public function getGravatarUrlAttribute()
-    {
+    public function getGravatarUrlAttribute() {
         $hash = md5(strtolower(trim($this->email)));
 
         return "https://www.gravatar.com/avatar/{$hash}?s=200&d=mp";
@@ -267,8 +259,7 @@ trait HasProfilePhoto
      *
      * @return bool
      */
-    public function hasProfilePhotoColumn()
-    {
+    public function hasProfilePhotoColumn() {
         return \Illuminate\Support\Facades\Schema::hasColumn($this->getTable(), 'profile_photo_path');
     }
 
@@ -277,8 +268,7 @@ trait HasProfilePhoto
      *
      * @return bool
      */
-    public function hasGravatarColumn()
-    {
+    public function hasGravatarColumn() {
         return \Illuminate\Support\Facades\Schema::hasColumn($this->getTable(), 'use_gravatar');
     }
 
@@ -287,8 +277,7 @@ trait HasProfilePhoto
      *
      * @return string
      */
-    protected function profilePhotoDisk()
-    {
+    protected function profilePhotoDisk() {
         return config('tyro-dashboard.profile_photo.disk', 'public');
     }
 }
