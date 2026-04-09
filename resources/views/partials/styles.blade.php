@@ -9,6 +9,22 @@
         @if($sidebar_text = config('tyro-dashboard.branding.sidebar_text'))
             --sidebar-foreground: {{ $sidebar_text }} !important;
         @endif
+        /* --sidebar-primary */
+        @if($primary = config('tyro-dashboard.branding.sidebar_primary'))
+            --sidebar-primary: {{ $primary }} !important;
+        @endif
+        /* --sidebar-header-border */
+        @if($headerBorder = config('tyro-dashboard.branding.sidebar_header_border'))
+            --sidebar-header-border: {{ $headerBorder }} !important;
+        @endif
+        /* --sidebar-accent */
+        @if($accent = config('tyro-dashboard.branding.sidebar_accent'))
+            --sidebar-accent: {{ $accent }} !important;
+        @endif
+        /* --sidebar-accent-foreground */
+        @if($accent = config('tyro-dashboard.branding.sidebar_accent_foreground'))
+            --sidebar-accent-foreground: {{ $accent }} !important;
+        @endif
     }
 
     *,

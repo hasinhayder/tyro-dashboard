@@ -19,7 +19,7 @@ class VersionCommand extends Command {
      * Execute the console command.
      */
     public function handle(): int {
-        $version = '1.15.2'; //1.15.2 - fix $dashboardRoute undefined error in create-admin, user and common page commands (closes #2)
+        $version = '1.16.0'; //Added more sidebar color options in config
 
         $this->info('');
         $this->info('  ╔════════════════════════════════════════╗');
@@ -70,6 +70,7 @@ class VersionCommand extends Command {
 }
 
 // Changelog
+// 1.16.0 - feat: added more sidebar color options in config (primary, accent, accent foreground and header border)
 // 1.15.2 - fix(console): fix $dashboardRoute undefined error in create-admin, user and common page commands (closes #2)
 // 1.15.1 - fix(config) - Named prefix for tyro dashboard routes is now working perfectly
 // 1.15.0 - Laravel 13 support
