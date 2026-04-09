@@ -152,7 +152,7 @@
 
     .sidebar-header {
         padding: 1.25rem 1.25rem;
-        border-bottom: 1px solid var(--border);
+        border-bottom: 1px solid var(--sidebar-header-border);
         position: relative;
         display: flex;
         align-items: center;
