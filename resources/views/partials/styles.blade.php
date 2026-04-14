@@ -2279,17 +2279,13 @@
 
     /* Toast Notification System */
     .toast-container {
-        position: absolute;
+        position: fixed;
         z-index: 9999;
         display: flex;
         flex-direction: column;
         gap: 0.75rem;
         padding: 1rem;
         pointer-events: none;
-    }
-
-    .page-content {
-        position: relative;
     }
 
     .toast-container[data-position="top-right"] {
