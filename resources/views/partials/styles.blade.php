@@ -2303,10 +2303,10 @@
         align-items: flex-start;
         gap: 0.75rem;
         padding: 1rem;
-        background: var(--background);
-        border: 1px solid var(--border);
+        background: #1e1e2e;
+        border: 1px solid #2d2d3f;
         border-radius: 10px;
-        box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1), 0 0 0 1px rgb(0 0 0 / 0.05);
+        box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.3), 0 4px 6px -4px rgb(0 0 0 / 0.2), 0 0 0 1px rgb(0 0 0 / 0.1);
         max-width: 400px;
         width: 100%;
         pointer-events: auto;
@@ -2389,14 +2389,14 @@
     .toast-message {
         font-size: 0.9375rem;
         font-weight: 500;
-        color: var(--foreground);
+        color: #ffffff;
         line-height: 1.4;
     }
 
     .toast-title {
         font-size: 0.9375rem;
         font-weight: 600;
-        color: var(--foreground);
+        color: #ffffff;
         margin-bottom: 0.25rem;
     }
 
@@ -2405,7 +2405,7 @@
         margin-left: 1rem;
         list-style: disc;
         font-size: 0.875rem;
-        color: var(--destructive);
+        color: #ff6b6b;
     }
 
     .toast-error-list li {
@@ -2417,7 +2417,7 @@
         padding: 0.25rem;
         border: none;
         background: transparent;
-        color: var(--muted-foreground);
+        color: #8b8b9e;
         cursor: pointer;
         border-radius: 4px;
         transition: all 0.15s ease;
@@ -2426,8 +2426,8 @@
     }
 
     .toast-close:hover {
-        background-color: var(--muted);
-        color: var(--foreground);
+        background-color: #2d2d3f;
+        color: #ffffff;
     }
 
     .toast-close svg {
@@ -2437,7 +2437,7 @@
 
     /* Toast variants */
     .toast-success .toast-icon {
-        color: var(--success);
+        color: #4ade80;
     }
 
     .toast-success:hover {
@@ -2445,7 +2445,7 @@
     }
 
     .toast-error .toast-icon {
-        color: var(--destructive);
+        color: #ff6b6b;
     }
 
     .toast-error:hover {
@@ -2453,7 +2453,7 @@
     }
 
     .toast-warning .toast-icon {
-        color: var(--warning);
+        color: #fbbf24;
     }
 
     .toast-warning:hover {
@@ -2461,17 +2461,11 @@
     }
 
     .toast-info .toast-icon {
-        color: var(--info);
+        color: #60a5fa;
     }
 
     .toast-info:hover {
         box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
-    }
-
-    /* Dark mode toast adjustments */
-    .dark .toast {
-        background: var(--card);
-        box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.3), 0 4px 6px -4px rgb(0 0 0 / 0.2), 0 0 0 1px rgb(0 0 0 / 0.1);
     }
 
     /* Responsive toast */
