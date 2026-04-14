@@ -266,6 +266,54 @@
         margin-bottom: 0.25rem;
     }
 
+    [data-sidebar-accordion] .sidebar-section-title {
+        position: relative;
+        cursor: pointer;
+        user-select: none;
+        padding-right: 2.25rem;
+        border-radius: 8px;
+        transition: background-color 0.15s ease, color 0.15s ease, opacity 0.15s ease;
+    }
+
+    [data-sidebar-accordion] .sidebar-section-title:hover {
+        background-color: var(--sidebar-accent);
+        color: var(--sidebar-accent-foreground);
+        opacity: 1;
+    }
+
+    [data-sidebar-accordion] .sidebar-section-title:focus-visible {
+        outline: 2px solid var(--sidebar-ring, var(--ring));
+        outline-offset: 2px;
+        opacity: 1;
+    }
+
+    [data-sidebar-accordion] .sidebar-section-title::after {
+        content: '';
+        position: absolute;
+        top: 50%;
+        right: 1rem;
+        width: 0.5rem;
+        height: 0.5rem;
+        border-right: 2px solid currentColor;
+        border-bottom: 2px solid currentColor;
+        transform: translateY(-50%) rotate(-45deg);
+        transform-origin: center;
+        transition: transform 0.15s ease, opacity 0.15s ease;
+        opacity: 0.75;
+    }
+
+    [data-sidebar-accordion] .sidebar-section-title[aria-expanded="true"]::after {
+        transform: translateY(-65%) rotate(45deg);
+    }
+
+    [data-sidebar-accordion] .sidebar-section-content[hidden] {
+        display: none;
+    }
+
+    [data-sidebar-accordion][data-sidebar-accordion-compact="true"]:not([data-sidebar-accordion-ready="true"]) .sidebar-section > .sidebar-link {
+        display: none;
+    }
+
     .sidebar-link {
         display: flex;
         align-items: center;

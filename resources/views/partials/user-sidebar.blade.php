@@ -24,7 +24,9 @@
     </button>
     @endif
 
-    <nav class="sidebar-nav">
+    <nav class="sidebar-nav sidebar-accordion"
+        data-sidebar-accordion
+        data-sidebar-accordion-compact="{{ config('tyro-dashboard.branding.sidebar_accordion_compact', false) ? 'true' : 'false' }}">
         <!-- Main Menu -->
         <div class="sidebar-section">
             <div class="sidebar-section-title">Menu</div>

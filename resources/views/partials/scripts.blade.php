@@ -58,6 +58,80 @@
     // Apply sidebar state on load
     restoreSidebarState();
 
+    (function initializeSidebarAccordion() {
+        const accordions = document.querySelectorAll('[data-sidebar-accordion]');
+
+        accordions.forEach((accordion, accordionIndex) => {
+            if (accordion.dataset.sidebarAccordionReady === 'true') {
+                return;
+            }
+
+            const compactMode = accordion.dataset.sidebarAccordionCompact === 'true';
+            const sections = Array.from(accordion.querySelectorAll('.sidebar-section'));
+
+            sections.forEach((section, sectionIndex) => {
+                const children = Array.from(section.children);
+                const title = children.find((child) => child.classList && child.classList.contains('sidebar-section-title'));
+
+                if (!title) {
+                    return;
+                }
+
+                let content = children.find((child) => child.classList && child.classList.contains('sidebar-section-content'));
+
+                if (!content) {
+                    content = document.createElement('div');
+                    content.className = 'sidebar-section-content';
+
+                    let sibling = title.nextElementSibling;
+                    while (sibling) {
+                        const nextSibling = sibling.nextElementSibling;
+                        content.appendChild(sibling);
+                        sibling = nextSibling;
+                    }
+
+                    section.appendChild(content);
+                }
+
+                const contentId = `sidebar-section-content-${accordionIndex}-${sectionIndex}`;
+                const hasActiveLink = Boolean(content.querySelector('.sidebar-link.active'));
+                const shouldExpand = compactMode ? sectionIndex === 0 || hasActiveLink : true;
+
+                title.setAttribute('role', 'button');
+                title.setAttribute('tabindex', '0');
+                title.setAttribute('aria-controls', contentId);
+                content.id = contentId;
+
+                const setExpandedState = (expanded) => {
+                    title.setAttribute('aria-expanded', expanded ? 'true' : 'false');
+                    content.hidden = !expanded;
+                };
+
+                setExpandedState(shouldExpand);
+
+                if (title.dataset.sidebarAccordionBound === 'true') {
+                    return;
+                }
+
+                const toggleSection = () => {
+                    setExpandedState(title.getAttribute('aria-expanded') !== 'true');
+                };
+
+                title.addEventListener('click', toggleSection);
+                title.addEventListener('keydown', (event) => {
+                    if (event.key === 'Enter' || event.key === ' ' || event.key === 'Spacebar') {
+                        event.preventDefault();
+                        toggleSection();
+                    }
+                });
+
+                title.dataset.sidebarAccordionBound = 'true';
+            });
+
+            accordion.dataset.sidebarAccordionReady = 'true';
+        });
+    })();
+
     // Add click handler to collapsed sidebar to expand it
     document.addEventListener('DOMContentLoaded', function() {
         const sidebar = document.getElementById('sidebar');
