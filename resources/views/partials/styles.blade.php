@@ -252,7 +252,7 @@
 
     .sidebar-section {
         padding: 0 0.5rem;
-        margin-bottom: 1rem;
+        margin-bottom: 0.5rem;
     }
 
     .sidebar-section-title {
@@ -262,8 +262,8 @@
         letter-spacing: 0.05em;
         color: var(--sidebar-foreground, var(--muted-foreground));
         opacity: 0.7;
-        padding: 0.625rem 1rem;
-        margin-bottom: 0.25rem;
+        padding: 0.6rem 1rem;
+        margin-bottom: 0.125rem;
     }
 
     [data-sidebar-accordion] .sidebar-section-title {
@@ -271,7 +271,7 @@
         cursor: pointer;
         user-select: none;
         padding-right: 2.25rem;
-        border-radius: 8px;
+        border-radius: 6px;
         transition: background-color 0.15s ease, color 0.15s ease, opacity 0.15s ease;
     }
 
@@ -318,8 +318,8 @@
         display: flex;
         align-items: center;
         gap: 0.75rem;
-        padding: 0.625rem 1rem;
-        border-radius: 8px;
+        padding: 0.5rem 1rem;
+        border-radius: 6px;
         color: var(--sidebar-foreground);
         text-decoration: none;
         font-size: 0.9375rem;
