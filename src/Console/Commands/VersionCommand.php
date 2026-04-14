@@ -19,7 +19,7 @@ class VersionCommand extends Command {
      * Execute the console command.
      */
     public function handle(): int {
-        $version = '1.18.1'; // Reduced sidebar item spacing for better accommodation of more items
+        $version = '1.19.0'; // Toast notification system with configurable notification style
 
         $this->info('');
         $this->info('  ╔════════════════════════════════════════╗');
@@ -70,6 +70,7 @@ class VersionCommand extends Command {
 }
 
 // Changelog
+// 1.19.0 - Toast notification system with configurable notification style (legacy/toast) and position (top-right/bottom-right)
 // 1.18.1 - Reduced sidebar item spacing for better accommodation of more items
 // 1.18.0 - Added tyro-dashboard:update-config, tyro-dashboard:update-style, tyro-dashboard:update-script, and tyro-dashboard:update commands
 // 1.17.0 - Added tyro-dashboard:update-config, tyro-dashboard:update-style, and tyro-dashboard:update-script commands
