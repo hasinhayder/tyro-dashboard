@@ -14,6 +14,8 @@ use HasinHayder\TyroDashboard\Console\Commands\PublishStyleCommand;
 use HasinHayder\TyroDashboard\Console\Commands\RemoveAdminPageCommand;
 use HasinHayder\TyroDashboard\Console\Commands\RemoveCommonPageCommand;
 use HasinHayder\TyroDashboard\Console\Commands\RemoveUserPageCommand;
+use HasinHayder\TyroDashboard\Console\Commands\UpdateConfigCommand;
+use HasinHayder\TyroDashboard\Console\Commands\UpdateStyleCommand;
 use HasinHayder\TyroDashboard\Console\Commands\VersionCommand;
 use HasinHayder\TyroDashboard\Http\Middleware\EnsureIsAdmin;
 use HasinHayder\TyroDashboard\Http\Middleware\HandleImpersonation;
@@ -279,6 +281,8 @@ class TyroDashboardServiceProvider extends ServiceProvider {
             RemoveAdminPageCommand::class,
             RemoveCommonPageCommand::class,
             RemoveUserPageCommand::class,
+            UpdateConfigCommand::class,
+            UpdateStyleCommand::class,
             VersionCommand::class,
             ClearResourceCacheCommand::class,
         ]);
