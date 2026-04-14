@@ -81,6 +81,7 @@
                     @error('email')
                         <span class="form-error">{{ $message }}</span>
                     @enderror
+                    {{-- 
                     @if($user->email_verified_at)
                         <span class="form-hint" style="color: var(--success);">
                             <svg style="width: 14px; height: 14px; display: inline-block; vertical-align: middle; margin-right: 4px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -91,6 +92,7 @@
                     @else
                         <span class="form-hint" style="color: var(--warning);">Email not verified</span>
                     @endif
+                    --}}
                 </div>
             </div>
             <div class="card-footer" style="margin-top: auto;">
