@@ -15,6 +15,8 @@ use HasinHayder\TyroDashboard\Console\Commands\RemoveAdminPageCommand;
 use HasinHayder\TyroDashboard\Console\Commands\RemoveCommonPageCommand;
 use HasinHayder\TyroDashboard\Console\Commands\RemoveUserPageCommand;
 use HasinHayder\TyroDashboard\Console\Commands\UpdateConfigCommand;
+use HasinHayder\TyroDashboard\Console\Commands\UpdateCommand;
+use HasinHayder\TyroDashboard\Console\Commands\UpdateScriptCommand;
 use HasinHayder\TyroDashboard\Console\Commands\UpdateStyleCommand;
 use HasinHayder\TyroDashboard\Console\Commands\VersionCommand;
 use HasinHayder\TyroDashboard\Http\Middleware\EnsureIsAdmin;
@@ -282,6 +284,8 @@ class TyroDashboardServiceProvider extends ServiceProvider {
             RemoveCommonPageCommand::class,
             RemoveUserPageCommand::class,
             UpdateConfigCommand::class,
+            UpdateCommand::class,
+            UpdateScriptCommand::class,
             UpdateStyleCommand::class,
             VersionCommand::class,
             ClearResourceCacheCommand::class,
@@ -344,6 +348,11 @@ class TyroDashboardServiceProvider extends ServiceProvider {
             $viewsPath.'/partials/shadcn-theme.blade.php' => resource_path('views/vendor/tyro-dashboard/partials/shadcn-theme.blade.php'),
             $viewsPath.'/partials/styles.blade.php' => resource_path('views/vendor/tyro-dashboard/partials/styles.blade.php'),
         ], 'tyro-dashboard-styles');
+
+        // Publish scripts only (for quick script customization)
+        $this->publishes([
+            $viewsPath.'/partials/scripts.blade.php' => resource_path('views/vendor/tyro-dashboard/partials/scripts.blade.php'),
+        ], 'tyro-dashboard-scripts');
 
         // Publish theme only (for quick theme customization)
         $this->publishes([

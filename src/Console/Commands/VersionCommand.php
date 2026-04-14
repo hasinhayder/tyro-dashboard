@@ -19,7 +19,7 @@ class VersionCommand extends Command {
      * Execute the console command.
      */
     public function handle(): int {
-        $version = '1.17.0'; // Added tyro-dashboard:update-config and tyro-dashboard:update-style commands
+        $version = '1.18.0'; // Added tyro-dashboard:update-script, and a central tyro-dashboard:update commands
 
         $this->info('');
         $this->info('  ╔════════════════════════════════════════╗');
@@ -70,7 +70,8 @@ class VersionCommand extends Command {
 }
 
 // Changelog
-// 1.17.0 - Added tyro-dashboard:update-config and tyro-dashboard:update-style commands
+// 1.18.0 - Added tyro-dashboard:update-config, tyro-dashboard:update-style, tyro-dashboard:update-script, and tyro-dashboard:update commands
+// 1.17.0 - Added tyro-dashboard:update-config, tyro-dashboard:update-style, and tyro-dashboard:update-script commands
 // 1.16.0 - more sidebar color options
 // 1.15.2 - fix(console): fix $dashboardRoute undefined error in create-admin, user and common page commands (closes #2)
 // 1.15.1 - fix(config) - Named prefix for tyro dashboard routes is now working perfectly
