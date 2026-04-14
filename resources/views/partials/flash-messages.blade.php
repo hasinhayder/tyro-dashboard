@@ -17,11 +17,6 @@
             <div class="toast-content">
                 <p class="toast-message">{{ session('success') }}</p>
             </div>
-            <button class="toast-close" onclick="this.closest('.toast').remove()">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-                </svg>
-            </button>
         </div>
         @endif
 
@@ -35,11 +30,6 @@
             <div class="toast-content">
                 <p class="toast-message">{{ session('error') }}</p>
             </div>
-            <button class="toast-close" onclick="this.closest('.toast').remove()">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-                </svg>
-            </button>
         </div>
         @endif
 
@@ -53,11 +43,6 @@
             <div class="toast-content">
                 <p class="toast-message">{{ session('warning') }}</p>
             </div>
-            <button class="toast-close" onclick="this.closest('.toast').remove()">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-                </svg>
-            </button>
         </div>
         @endif
 
@@ -71,11 +56,6 @@
             <div class="toast-content">
                 <p class="toast-message">{{ session('info') }}</p>
             </div>
-            <button class="toast-close" onclick="this.closest('.toast').remove()">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-                </svg>
-            </button>
         </div>
         @endif
 
@@ -94,11 +74,6 @@
                     @endforeach
                 </ul>
             </div>
-            <button class="toast-close" onclick="this.closest('.toast').remove()">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-                </svg>
-            </button>
         </div>
         @endif
     </div>
