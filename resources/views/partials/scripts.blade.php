@@ -224,18 +224,13 @@
         const toastContainer = document.getElementById('toast-container');
         
         if (toastContainer) {
-            const templates = toastContainer.querySelectorAll('.toast-template');
+            const toasts = toastContainer.querySelectorAll('.toast');
             const autoDismiss = parseInt(toastContainer.dataset.autoDismiss || 5000);
             
-            templates.forEach((template, index) => {
+            toasts.forEach((toast, index) => {
                 setTimeout(() => {
-                    const toast = template.cloneNode(true);
-                    toast.classList.remove('toast-template');
-                    toast.removeAttribute('data-toast-id');
-                    toastContainer.appendChild(toast);
-                    
-                    setTimeout(() => dismissToast(toast), autoDismiss);
-                }, index * 100);
+                    dismissToast(toast);
+                }, autoDismiss + (index * 100));
             });
         }
 
