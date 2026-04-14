@@ -171,19 +171,89 @@
         }
     });
 
-    // Auto-dismiss flash messages
-    document.addEventListener('DOMContentLoaded', function() {
-        const alerts = document.querySelectorAll('.alert');
-        const dismissTime = {{ config('tyro-dashboard.notifications.auto_dismiss_seconds', 5) * 1000 }};
+    // Toast Notification System
+    function showToast(message, type = 'success', options = {}) {
+        const container = document.getElementById('toast-container');
+        if (!container) return;
+
+        const toast = document.createElement('div');
+        toast.className = `toast toast-${type}`;
         
-        alerts.forEach(alert => {
-            setTimeout(() => {
-                alert.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
-                alert.style.opacity = '0';
-                alert.style.transform = 'translateY(-10px)';
-                setTimeout(() => alert.remove(), 300);
-            }, dismissTime);
-        });
+        const icons = {
+            success: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>',
+            error: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>',
+            warning: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>',
+            info: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>'
+        };
+
+        toast.innerHTML = `
+            <div class="toast-icon">${icons[type] || icons.success}</div>
+            <div class="toast-content">
+                <p class="toast-message">${message}</p>
+            </div>
+            <button class="toast-close" onclick="dismissToast(this.closest('.toast'))">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
+        `;
+
+        container.appendChild(toast);
+
+        const autoDismiss = parseInt(container.dataset.autoDismiss || 5000);
+        setTimeout(() => dismissToast(toast), autoDismiss);
+
+        return toast;
+    }
+
+    function dismissToast(toast) {
+        if (!toast || toast.classList.contains('toast-dismissing')) return;
+        
+        toast.classList.add('toast-dismissing');
+        toast.style.animationFillMode = 'forwards';
+        
+        setTimeout(() => {
+            if (toast.parentNode) {
+                toast.parentNode.removeChild(toast);
+            }
+        }, 300);
+    }
+
+    // Initialize toast notifications from flash messages
+    document.addEventListener('DOMContentLoaded', function() {
+        const toastContainer = document.getElementById('toast-container');
+        
+        if (toastContainer) {
+            const templates = toastContainer.querySelectorAll('.toast-template');
+            const autoDismiss = parseInt(toastContainer.dataset.autoDismiss || 5000);
+            
+            templates.forEach((template, index) => {
+                setTimeout(() => {
+                    const toast = template.cloneNode(true);
+                    toast.classList.remove('toast-template');
+                    toast.removeAttribute('data-toast-id');
+                    toastContainer.appendChild(toast);
+                    
+                    setTimeout(() => dismissToast(toast), autoDismiss);
+                }, index * 100);
+            });
+        }
+
+        // Legacy alert auto-dismiss (for non-toast mode)
+        const notificationStyle = '{{ config('tyro-dashboard.notifications.notification_style', 'legacy') }}';
+        if (notificationStyle === 'legacy') {
+            const alerts = document.querySelectorAll('.alert');
+            const dismissTime = {{ config('tyro-dashboard.notifications.auto_dismiss_seconds', 5) * 1000 }};
+            
+            alerts.forEach(alert => {
+                setTimeout(() => {
+                    alert.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
+                    alert.style.opacity = '0';
+                    alert.style.transform = 'translateY(-10px)';
+                    setTimeout(() => alert.remove(), 300);
+                }, dismissTime);
+            });
+        }
     });
 
     // Confirm delete

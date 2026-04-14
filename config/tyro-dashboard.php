@@ -160,6 +160,8 @@ return [
     'notifications' => [
         'show_flash_messages' => true,
         'auto_dismiss_seconds' => 5,
+        'notification_style' => env('TYRO_DASHBOARD_NOTIFICATION_STYLE', 'legacy'), // 'legacy' or 'toast'
+        'toast_position' => env('TYRO_DASHBOARD_TOAST_POSITION', 'bottom-right'), // 'top-right' or 'bottom-right'
     ],
 
     /*
