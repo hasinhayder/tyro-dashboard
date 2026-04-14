@@ -20,14 +20,14 @@
 
 <div class="grid-2">
     <!-- Profile Information -->
-    <div class="card">
+    <div class="card" style="display: flex; flex-direction: column;">
         <div class="card-header">
             <h3 class="card-title">Profile Information</h3>
         </div>
-        <form action="{{ route($dashboardRoute::name('profile.update')) }}" method="POST" enctype="multipart/form-data">
+        <form action="{{ route($dashboardRoute::name('profile.update')) }}" method="POST" enctype="multipart/form-data" style="flex: 1; display: flex; flex-direction: column;">
             @csrf
             @method('PUT')
-            <div class="card-body">
+            <div class="card-body" style="flex: 1;">
                 @if((config('tyro-dashboard.features.profile_photo_upload') && method_exists($user, 'hasProfilePhotoColumn') && $user->hasProfilePhotoColumn()) || (config('tyro-dashboard.features.gravatar') && method_exists($user, 'hasGravatarColumn') && $user->hasGravatarColumn()))
                 <div class="form-group">
                     <label class="form-label">Profile Photo</label>
@@ -93,21 +93,21 @@
                     @endif
                 </div>
             </div>
-            <div class="card-footer">
+            <div class="card-footer" style="margin-top: auto;">
                 <button type="submit" class="btn btn-primary">Save Changes</button>
             </div>
         </form>
     </div>
 
     <!-- Update Password -->
-    <div class="card">
+    <div class="card" style="display: flex; flex-direction: column;">
         <div class="card-header">
             <h3 class="card-title">Update Password</h3>
         </div>
-        <form action="{{ route($dashboardRoute::name('profile.password')) }}" method="POST">
+        <form action="{{ route($dashboardRoute::name('profile.password')) }}" method="POST" style="flex: 1; display: flex; flex-direction: column;">
             @csrf
             @method('PUT')
-            <div class="card-body">
+            <div class="card-body" style="flex: 1;">
                 <div class="form-group">
                     <label for="current_password" class="form-label">Current Password</label>
                     <input type="password" id="current_password" name="current_password" class="form-input @error('current_password') is-invalid @enderror" required>
@@ -129,7 +129,7 @@
                     <input type="password" id="password_confirmation" name="password_confirmation" class="form-input" required>
                 </div>
             </div>
-            <div class="card-footer">
+            <div class="card-footer" style="margin-top: auto;">
                 <button type="submit" class="btn btn-primary">Update Password</button>
             </div>
         </form>
