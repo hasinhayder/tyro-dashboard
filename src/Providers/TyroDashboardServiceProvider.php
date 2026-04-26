@@ -14,6 +14,7 @@ use HasinHayder\TyroDashboard\Console\Commands\PublishStyleCommand;
 use HasinHayder\TyroDashboard\Console\Commands\RemoveAdminPageCommand;
 use HasinHayder\TyroDashboard\Console\Commands\RemoveCommonPageCommand;
 use HasinHayder\TyroDashboard\Console\Commands\RemoveUserPageCommand;
+use HasinHayder\TyroDashboard\Console\Commands\SetupAiSkillCommand;
 use HasinHayder\TyroDashboard\Console\Commands\UpdateConfigCommand;
 use HasinHayder\TyroDashboard\Console\Commands\UpdateCommand;
 use HasinHayder\TyroDashboard\Console\Commands\UpdateScriptCommand;
@@ -283,6 +284,7 @@ class TyroDashboardServiceProvider extends ServiceProvider {
             RemoveAdminPageCommand::class,
             RemoveCommonPageCommand::class,
             RemoveUserPageCommand::class,
+            SetupAiSkillCommand::class,
             UpdateConfigCommand::class,
             UpdateCommand::class,
             UpdateScriptCommand::class,
