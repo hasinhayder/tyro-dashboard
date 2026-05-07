@@ -21,7 +21,7 @@
         "illuminate/routing": "^12.0 || ^13.0",
         "hasinhayder/tyro": "^1.5",
         "hasinhayder/tyro-login": "^2.4",
-        "intervention/image": "^3.0"
+        "intervention/image": "^4.0"
     },
     "require-dev": {
         "orchestra/testbench": "^10.0 || ^11.0",
