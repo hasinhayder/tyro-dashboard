@@ -1485,6 +1485,107 @@
                                     </div>
                                 </div>
                             </div>
+
+                            <div class="sys-settings-surface">
+                                <h4 class="sys-settings-surface-title">Page Content</h4>
+                                <p class="sys-settings-surface-description">Customise titles, subtitles, and background text for auth pages. Values are stored in <code>.env</code>.</p>
+
+                                <h5 style="margin:0 0 0.6rem;font-size:0.88rem;font-weight:700;color:var(--foreground);">Login Page</h5>
+                                <div class="form-group" style="margin-bottom:0.85rem;">
+                                    <label for="TYRO_LOGIN_BG_TITLE" class="form-label">Background title</label>
+                                    <input type="text" name="TYRO_LOGIN_BG_TITLE" id="TYRO_LOGIN_BG_TITLE" class="form-input" maxlength="255" value="{{ old('TYRO_LOGIN_BG_TITLE', $settings['TYRO_LOGIN_BG_TITLE']) }}">
+                                </div>
+                                <div class="form-group" style="margin-bottom:0.85rem;">
+                                    <label for="TYRO_LOGIN_BG_DESCRIPTION" class="form-label">Background description</label>
+                                    <input type="text" name="TYRO_LOGIN_BG_DESCRIPTION" id="TYRO_LOGIN_BG_DESCRIPTION" class="form-input" maxlength="500" value="{{ old('TYRO_LOGIN_BG_DESCRIPTION', $settings['TYRO_LOGIN_BG_DESCRIPTION']) }}">
+                                </div>
+
+                                <h5 style="margin:0 0 0.6rem;font-size:0.88rem;font-weight:700;color:var(--foreground);">Register Page</h5>
+                                <div class="form-group" style="margin-bottom:0.85rem;">
+                                    <label for="TYRO_LOGIN_REGISTER_BG_TITLE" class="form-label">Background title</label>
+                                    <input type="text" name="TYRO_LOGIN_REGISTER_BG_TITLE" id="TYRO_LOGIN_REGISTER_BG_TITLE" class="form-input" maxlength="255" value="{{ old('TYRO_LOGIN_REGISTER_BG_TITLE', $settings['TYRO_LOGIN_REGISTER_BG_TITLE']) }}">
+                                </div>
+                                <div class="form-group" style="margin-bottom:0.85rem;">
+                                    <label for="TYRO_LOGIN_REGISTER_BG_DESCRIPTION" class="form-label">Background description</label>
+                                    <input type="text" name="TYRO_LOGIN_REGISTER_BG_DESCRIPTION" id="TYRO_LOGIN_REGISTER_BG_DESCRIPTION" class="form-input" maxlength="500" value="{{ old('TYRO_LOGIN_REGISTER_BG_DESCRIPTION', $settings['TYRO_LOGIN_REGISTER_BG_DESCRIPTION']) }}">
+                                </div>
+
+                                <h5 style="margin:0 0 0.6rem;font-size:0.88rem;font-weight:700;color:var(--foreground);">Verify Email Page</h5>
+                                <div class="form-group" style="margin-bottom:0.85rem;">
+                                    <label for="TYRO_LOGIN_VERIFY_EMAIL_TITLE" class="form-label">Page title</label>
+                                    <input type="text" name="TYRO_LOGIN_VERIFY_EMAIL_TITLE" id="TYRO_LOGIN_VERIFY_EMAIL_TITLE" class="form-input" maxlength="255" value="{{ old('TYRO_LOGIN_VERIFY_EMAIL_TITLE', $settings['TYRO_LOGIN_VERIFY_EMAIL_TITLE']) }}">
+                                </div>
+                                <div class="form-group" style="margin-bottom:0.85rem;">
+                                    <label for="TYRO_LOGIN_VERIFY_EMAIL_SUBTITLE" class="form-label">Page subtitle</label>
+                                    <input type="text" name="TYRO_LOGIN_VERIFY_EMAIL_SUBTITLE" id="TYRO_LOGIN_VERIFY_EMAIL_SUBTITLE" class="form-input" maxlength="500" value="{{ old('TYRO_LOGIN_VERIFY_EMAIL_SUBTITLE', $settings['TYRO_LOGIN_VERIFY_EMAIL_SUBTITLE']) }}">
+                                </div>
+                                <div class="form-group" style="margin-bottom:0.85rem;">
+                                    <label for="TYRO_LOGIN_VERIFY_EMAIL_BG_TITLE" class="form-label">Background title</label>
+                                    <input type="text" name="TYRO_LOGIN_VERIFY_EMAIL_BG_TITLE" id="TYRO_LOGIN_VERIFY_EMAIL_BG_TITLE" class="form-input" maxlength="255" value="{{ old('TYRO_LOGIN_VERIFY_EMAIL_BG_TITLE', $settings['TYRO_LOGIN_VERIFY_EMAIL_BG_TITLE']) }}">
+                                </div>
+                                <div class="form-group" style="margin-bottom:0.85rem;">
+                                    <label for="TYRO_LOGIN_VERIFY_EMAIL_BG_DESCRIPTION" class="form-label">Background description</label>
+                                    <input type="text" name="TYRO_LOGIN_VERIFY_EMAIL_BG_DESCRIPTION" id="TYRO_LOGIN_VERIFY_EMAIL_BG_DESCRIPTION" class="form-input" maxlength="500" value="{{ old('TYRO_LOGIN_VERIFY_EMAIL_BG_DESCRIPTION', $settings['TYRO_LOGIN_VERIFY_EMAIL_BG_DESCRIPTION']) }}">
+                                </div>
+
+                                <h5 style="margin:0 0 0.6rem;font-size:0.88rem;font-weight:700;color:var(--foreground);">Email Not Verified Page</h5>
+                                <div class="form-group" style="margin-bottom:0.85rem;">
+                                    <label for="TYRO_LOGIN_EMAIL_NOT_VERIFIED_TITLE" class="form-label">Page title</label>
+                                    <input type="text" name="TYRO_LOGIN_EMAIL_NOT_VERIFIED_TITLE" id="TYRO_LOGIN_EMAIL_NOT_VERIFIED_TITLE" class="form-input" maxlength="255" value="{{ old('TYRO_LOGIN_EMAIL_NOT_VERIFIED_TITLE', $settings['TYRO_LOGIN_EMAIL_NOT_VERIFIED_TITLE']) }}">
+                                </div>
+                                <div class="form-group" style="margin-bottom:0.85rem;">
+                                    <label for="TYRO_LOGIN_EMAIL_NOT_VERIFIED_SUBTITLE" class="form-label">Page subtitle</label>
+                                    <input type="text" name="TYRO_LOGIN_EMAIL_NOT_VERIFIED_SUBTITLE" id="TYRO_LOGIN_EMAIL_NOT_VERIFIED_SUBTITLE" class="form-input" maxlength="500" value="{{ old('TYRO_LOGIN_EMAIL_NOT_VERIFIED_SUBTITLE', $settings['TYRO_LOGIN_EMAIL_NOT_VERIFIED_SUBTITLE']) }}">
+                                </div>
+                                <div class="form-group" style="margin-bottom:0.85rem;">
+                                    <label for="TYRO_LOGIN_EMAIL_NOT_VERIFIED_BG_TITLE" class="form-label">Background title</label>
+                                    <input type="text" name="TYRO_LOGIN_EMAIL_NOT_VERIFIED_BG_TITLE" id="TYRO_LOGIN_EMAIL_NOT_VERIFIED_BG_TITLE" class="form-input" maxlength="255" value="{{ old('TYRO_LOGIN_EMAIL_NOT_VERIFIED_BG_TITLE', $settings['TYRO_LOGIN_EMAIL_NOT_VERIFIED_BG_TITLE']) }}">
+                                </div>
+                                <div class="form-group" style="margin-bottom:0.85rem;">
+                                    <label for="TYRO_LOGIN_EMAIL_NOT_VERIFIED_BG_DESCRIPTION" class="form-label">Background description</label>
+                                    <input type="text" name="TYRO_LOGIN_EMAIL_NOT_VERIFIED_BG_DESCRIPTION" id="TYRO_LOGIN_EMAIL_NOT_VERIFIED_BG_DESCRIPTION" class="form-input" maxlength="500" value="{{ old('TYRO_LOGIN_EMAIL_NOT_VERIFIED_BG_DESCRIPTION', $settings['TYRO_LOGIN_EMAIL_NOT_VERIFIED_BG_DESCRIPTION']) }}">
+                                </div>
+
+                                <h5 style="margin:0 0 0.6rem;font-size:0.88rem;font-weight:700;color:var(--foreground);">Forgot Password Page</h5>
+                                <div class="form-group" style="margin-bottom:0.85rem;">
+                                    <label for="TYRO_LOGIN_FORGOT_PASSWORD_TITLE" class="form-label">Page title</label>
+                                    <input type="text" name="TYRO_LOGIN_FORGOT_PASSWORD_TITLE" id="TYRO_LOGIN_FORGOT_PASSWORD_TITLE" class="form-input" maxlength="255" value="{{ old('TYRO_LOGIN_FORGOT_PASSWORD_TITLE', $settings['TYRO_LOGIN_FORGOT_PASSWORD_TITLE']) }}">
+                                </div>
+                                <div class="form-group" style="margin-bottom:0.85rem;">
+                                    <label for="TYRO_LOGIN_FORGOT_PASSWORD_SUBTITLE" class="form-label">Page subtitle</label>
+                                    <input type="text" name="TYRO_LOGIN_FORGOT_PASSWORD_SUBTITLE" id="TYRO_LOGIN_FORGOT_PASSWORD_SUBTITLE" class="form-input" maxlength="500" value="{{ old('TYRO_LOGIN_FORGOT_PASSWORD_SUBTITLE', $settings['TYRO_LOGIN_FORGOT_PASSWORD_SUBTITLE']) }}">
+                                </div>
+                                <div class="form-group" style="margin-bottom:0.85rem;">
+                                    <label for="TYRO_LOGIN_FORGOT_PASSWORD_BG_TITLE" class="form-label">Background title</label>
+                                    <input type="text" name="TYRO_LOGIN_FORGOT_PASSWORD_BG_TITLE" id="TYRO_LOGIN_FORGOT_PASSWORD_BG_TITLE" class="form-input" maxlength="255" value="{{ old('TYRO_LOGIN_FORGOT_PASSWORD_BG_TITLE', $settings['TYRO_LOGIN_FORGOT_PASSWORD_BG_TITLE']) }}">
+                                </div>
+                                <div class="form-group" style="margin-bottom:0;">
+                                    <label for="TYRO_LOGIN_FORGOT_PASSWORD_BG_DESCRIPTION" class="form-label">Background description</label>
+                                    <input type="text" name="TYRO_LOGIN_FORGOT_PASSWORD_BG_DESCRIPTION" id="TYRO_LOGIN_FORGOT_PASSWORD_BG_DESCRIPTION" class="form-input" maxlength="500" value="{{ old('TYRO_LOGIN_FORGOT_PASSWORD_BG_DESCRIPTION', $settings['TYRO_LOGIN_FORGOT_PASSWORD_BG_DESCRIPTION']) }}">
+                                </div>
+                            </div>
+
+                            <div class="sys-settings-surface">
+                                <h4 class="sys-settings-surface-title">Reset Password Page</h4>
+                                <p class="sys-settings-surface-description">Page titles and background text shown on the reset password page.</p>
+
+                                <div class="form-group" style="margin-bottom:0.85rem;">
+                                    <label for="TYRO_LOGIN_RESET_PASSWORD_TITLE" class="form-label">Page title</label>
+                                    <input type="text" name="TYRO_LOGIN_RESET_PASSWORD_TITLE" id="TYRO_LOGIN_RESET_PASSWORD_TITLE" class="form-input" maxlength="255" value="{{ old('TYRO_LOGIN_RESET_PASSWORD_TITLE', $settings['TYRO_LOGIN_RESET_PASSWORD_TITLE']) }}">
+                                </div>
+                                <div class="form-group" style="margin-bottom:0.85rem;">
+                                    <label for="TYRO_LOGIN_RESET_PASSWORD_SUBTITLE" class="form-label">Page subtitle</label>
+                                    <input type="text" name="TYRO_LOGIN_RESET_PASSWORD_SUBTITLE" id="TYRO_LOGIN_RESET_PASSWORD_SUBTITLE" class="form-input" maxlength="500" value="{{ old('TYRO_LOGIN_RESET_PASSWORD_SUBTITLE', $settings['TYRO_LOGIN_RESET_PASSWORD_SUBTITLE']) }}">
+                                </div>
+                                <div class="form-group" style="margin-bottom:0.85rem;">
+                                    <label for="TYRO_LOGIN_RESET_PASSWORD_BG_TITLE" class="form-label">Background title</label>
+                                    <input type="text" name="TYRO_LOGIN_RESET_PASSWORD_BG_TITLE" id="TYRO_LOGIN_RESET_PASSWORD_BG_TITLE" class="form-input" maxlength="255" value="{{ old('TYRO_LOGIN_RESET_PASSWORD_BG_TITLE', $settings['TYRO_LOGIN_RESET_PASSWORD_BG_TITLE']) }}">
+                                </div>
+                                <div class="form-group" style="margin-bottom:0;">
+                                    <label for="TYRO_LOGIN_RESET_PASSWORD_BG_DESCRIPTION" class="form-label">Background description</label>
+                                    <input type="text" name="TYRO_LOGIN_RESET_PASSWORD_BG_DESCRIPTION" id="TYRO_LOGIN_RESET_PASSWORD_BG_DESCRIPTION" class="form-input" maxlength="500" value="{{ old('TYRO_LOGIN_RESET_PASSWORD_BG_DESCRIPTION', $settings['TYRO_LOGIN_RESET_PASSWORD_BG_DESCRIPTION']) }}">
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
