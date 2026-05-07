@@ -13,7 +13,7 @@ class UpdateConfigCommand extends Command {
         $appConfigPath = config_path('tyro-dashboard.php');
 
         if ($this->option('with-backup')) {
-            $backupFilename = 'tyro-dashboard-backup-' . date('Y-m-d-His') . '.txt';
+            $backupFilename = 'tyro-dashboard-backup-'.date('Y-m-d-His').'.txt';
             $backupPath = config_path($backupFilename);
 
             if (file_exists($appConfigPath)) {

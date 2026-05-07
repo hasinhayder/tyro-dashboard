@@ -161,6 +161,24 @@
         }
     });
 
+    // Vertical Tab switching
+    document.addEventListener('click', function(e) {
+        var btn = e.target.closest('.vtabs-item[data-vtab]');
+        if (!btn) return;
+        e.preventDefault();
+
+        var tabId = btn.dataset.vtab;
+        var container = btn.closest('.vtabs-layout');
+        if (!container) return;
+
+        container.querySelectorAll('.vtabs-item').forEach(function(t) { t.classList.remove('active'); });
+        container.querySelectorAll('.vtabs-panel').forEach(function(p) { p.classList.remove('active'); });
+
+        btn.classList.add('active');
+        var panel = document.getElementById('vtab-' + tabId);
+        if (panel) panel.classList.add('active');
+    });
+
     // Apply theme on load
     setTheme(getTheme());
 

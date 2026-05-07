@@ -124,6 +124,14 @@
             </a>
             @endif
 
+            <a href="{{ route($dashboardRoute::name('settings.system.index')) }}" class="sidebar-link {{ request()->routeIs($dashboardRoute::pattern('settings.system.*')) ? 'active' : '' }}">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 2l7 4v6c0 5-3.5 9.5-7 10-3.5-.5-7-5-7-10V6l7-4z" />
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 2v20" />
+                </svg>
+                System Settings
+            </a>
+
             @if(!empty($adminMenuItems))
                 @foreach($adminMenuItems as $item)
                     <a href="{{ route($item['route'] ?? '#') }}" class="sidebar-link {{ request()->routeIs($item['route'] ?? '') ? 'active' : '' }}">

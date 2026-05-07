@@ -34,9 +34,9 @@ class UpdateCommand extends Command {
         }
 
         $oldNavLine = '<nav class="sidebar-nav">';
-        $newNavLine = '<nav class="sidebar-nav sidebar-accordion"' . "\n"
-            . '        data-sidebar-accordion' . "\n"
-            . '        data-sidebar-accordion-compact="{{ config(\'tyro-dashboard.branding.sidebar_accordion_compact\', false) ? \'true\' : \'false\' }}">';
+        $newNavLine = '<nav class="sidebar-nav sidebar-accordion"'."\n"
+            .'        data-sidebar-accordion'."\n"
+            .'        data-sidebar-accordion-compact="{{ config(\'tyro-dashboard.branding.sidebar_accordion_compact\', false) ? \'true\' : \'false\' }}">';
 
         $content = file_get_contents($sidebarPath);
 
@@ -56,7 +56,7 @@ class UpdateCommand extends Command {
             return;
         }
 
-        $updatedContent = @file_get_contents(__DIR__ . '/../../../resources/views/partials/flash-messages.blade.php');
+        $updatedContent = @file_get_contents(__DIR__.'/../../../resources/views/partials/flash-messages.blade.php');
 
         if ($updatedContent === false || $updatedContent === '') {
             return;

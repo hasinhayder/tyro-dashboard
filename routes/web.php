@@ -7,6 +7,7 @@ use HasinHayder\TyroDashboard\Http\Controllers\InvitationController;
 use HasinHayder\TyroDashboard\Http\Controllers\PrivilegeController;
 use HasinHayder\TyroDashboard\Http\Controllers\ProfileController;
 use HasinHayder\TyroDashboard\Http\Controllers\RoleController;
+use HasinHayder\TyroDashboard\Http\Controllers\SystemSettingsController;
 use HasinHayder\TyroDashboard\Http\Controllers\UserController;
 use HasinHayder\TyroDashboard\Http\Controllers\WidgetsController;
 use HasinHayder\TyroDashboard\Http\Controllers\XComponentsController;
@@ -130,6 +131,12 @@ Route::middleware('tyro-dashboard.admin')->group(function () {
         Route::post('/bulk-delete', [AuditController::class, 'bulkDestroy'])->name('bulk-destroy');
         Route::delete('/flush', [AuditController::class, 'flush'])->name('flush');
         Route::delete('/{id}', [AuditController::class, 'destroy'])->name('destroy');
+    });
+
+    // System Settings (Admin) - manage .env config values
+    Route::prefix('settings/system')->name('settings.system.')->group(function () {
+        Route::get('/', [SystemSettingsController::class, 'index'])->name('index');
+        Route::post('/update', [SystemSettingsController::class, 'update'])->name('update');
     });
 });
 
