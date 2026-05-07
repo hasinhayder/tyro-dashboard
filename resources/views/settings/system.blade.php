@@ -1705,7 +1705,7 @@ function resetSbColors() {
 }
 
 function confirmResetSbColors() {
-    showConfirm(
+    showDanger(
         'Reset sidebar colours?',
         'This will revert the sidebar to its default colours.',
         { confirmText: 'Reset to Default' }
@@ -1744,7 +1744,7 @@ function resetAbColors() {
 }
 
 function confirmResetAbColors() {
-    showConfirm(
+    showDanger(
         'Reset admin bar colours?',
         'This will revert the admin bar to its default colours.',
         { confirmText: 'Reset to Default' }
