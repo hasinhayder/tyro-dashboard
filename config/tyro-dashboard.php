@@ -259,4 +259,21 @@ return [
     |
     */
     'disable_examples' => env('TYRO_DASHBOARD_DISABLE_EXAMPLES', false),
+
+    /*
+    |--------------------------------------------------------------------------
+    | Media
+    |--------------------------------------------------------------------------
+    |
+    | Configure media library API keys for external image import providers.
+    |
+    */
+    'media' => [
+        'api_keys' => [
+            'freepik' => env('TYRO_DASHBOARD_FREEPIK_KEY'),
+            'pexels' => env('TYRO_DASHBOARD_PEXELS_KEY'),
+            'unsplash' => env('TYRO_DASHBOARD_UNSPLASH_ACCESS_KEY'),
+            'pixabay' => env('TYRO_DASHBOARD_PIXABAY_KEY'),
+        ],
+    ],
 ];

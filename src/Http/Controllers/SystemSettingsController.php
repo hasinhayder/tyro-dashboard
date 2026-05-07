@@ -179,7 +179,13 @@ class SystemSettingsController extends BaseController {
             'TYRO_LOGIN_RESET_PASSWORD_TITLE' => 'nullable|string|max:255',
             'TYRO_LOGIN_RESET_PASSWORD_SUBTITLE' => 'nullable|string|max:500',
             'TYRO_LOGIN_RESET_PASSWORD_BG_TITLE' => 'nullable|string|max:255',
+            'TYRO_LOGIN_RESET_PASSWORD_BG_SUBTITLE' => 'nullable|string|max:500',
             'TYRO_LOGIN_RESET_PASSWORD_BG_DESCRIPTION' => 'nullable|string|max:500',
+
+            'TYRO_DASHBOARD_FREEPIK_KEY' => 'nullable|string|max:255',
+            'TYRO_DASHBOARD_PEXELS_KEY' => 'nullable|string|max:255',
+            'TYRO_DASHBOARD_UNSPLASH_ACCESS_KEY' => 'nullable|string|max:255',
+            'TYRO_DASHBOARD_PIXABAY_KEY' => 'nullable|string|max:255',
         ]);
 
         $booleans = $this->booleanKeys();
@@ -447,7 +453,13 @@ class SystemSettingsController extends BaseController {
             'TYRO_LOGIN_RESET_PASSWORD_TITLE' => config('tyro-login.pages.reset_password.title'),
             'TYRO_LOGIN_RESET_PASSWORD_SUBTITLE' => config('tyro-login.pages.reset_password.subtitle'),
             'TYRO_LOGIN_RESET_PASSWORD_BG_TITLE' => config('tyro-login.pages.reset_password.background_title'),
+            'TYRO_LOGIN_RESET_PASSWORD_BG_SUBTITLE' => config('tyro-login.pages.reset_password.background_description'),
             'TYRO_LOGIN_RESET_PASSWORD_BG_DESCRIPTION' => config('tyro-login.pages.reset_password.background_description'),
+
+            'TYRO_DASHBOARD_FREEPIK_KEY' => config('tyro-dashboard.media.api_keys.freepik'),
+            'TYRO_DASHBOARD_PEXELS_KEY' => config('tyro-dashboard.media.api_keys.pexels'),
+            'TYRO_DASHBOARD_UNSPLASH_ACCESS_KEY' => config('tyro-dashboard.media.api_keys.unsplash'),
+            'TYRO_DASHBOARD_PIXABAY_KEY' => config('tyro-dashboard.media.api_keys.pixabay'),
         ];
     }
 }
