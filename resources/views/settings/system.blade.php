@@ -587,27 +587,27 @@
                         <div class="sys-settings-section-intro">
                             <div class="sys-settings-section-copy">
                                 <h4 class="sys-settings-section-heading">Manage Tyro RBAC environment configuration</h4>
-                                <p class="sys-settings-section-description">Control caching, default roles, password rules, and API availability. All values are written to the <code>.env</code> file.</p>
+                                <p class="sys-settings-section-description">Control audit logs, API availability, default roles, and tokens. All values are written to the <code>.env</code> file.</p>
                             </div>
                             <span class="sys-settings-section-badge">.env</span>
                         </div>
 
                         <div class="sys-settings-grid">
                             <div class="sys-settings-surface">
-                                <h4 class="sys-settings-surface-title">Caching</h4>
-                                <p class="sys-settings-surface-description">Control RBAC cache behavior.</p>
+                                <h4 class="sys-settings-surface-title">Audit Logs</h4>
+                                <p class="sys-settings-surface-description">Control audit log behaviour and retention.</p>
 
                                 <div class="sys-settings-toggles" style="margin-bottom:0.85rem;">
                                     <div class="sys-settings-toggle">
                                         <div class="sys-settings-toggle-top">
                                             <div>
-                                                <p class="sys-settings-toggle-title">Enable RBAC cache</p>
-                                                <p class="sys-settings-toggle-description">Writes <code>TYRO_CACHE_ENABLED</code>.</p>
+                                                <p class="sys-settings-toggle-title">Enable audit logs</p>
+                                                <p class="sys-settings-toggle-description">Writes <code>TYRO_AUDIT_ENABLED</code>.</p>
                                             </div>
                                             <div>
-                                                <input type="hidden" name="TYRO_CACHE_ENABLED" value="0">
+                                                <input type="hidden" name="TYRO_AUDIT_ENABLED" value="0">
                                                 <label class="toggle-label">
-                                                    <input type="checkbox" name="TYRO_CACHE_ENABLED" value="1" class="toggle-input" {{ old('TYRO_CACHE_ENABLED', $settings['TYRO_CACHE_ENABLED']) !== false ? 'checked' : '' }}>
+                                                    <input type="checkbox" name="TYRO_AUDIT_ENABLED" value="1" class="toggle-input" id="tyro_audit_enabled" {{ old('TYRO_AUDIT_ENABLED', $settings['TYRO_AUDIT_ENABLED']) !== false ? 'checked' : '' }}>
                                                     <span class="toggle-slider"></span>
                                                 </label>
                                             </div>
@@ -615,12 +615,12 @@
                                     </div>
                                 </div>
 
-                                <div class="form-group" style="margin-bottom:0;">
-                                    <label for="TYRO_CACHE_TTL" class="form-label">Cache TTL (seconds)</label>
-                                    <input type="number" name="TYRO_CACHE_TTL" id="TYRO_CACHE_TTL"
-                                           class="form-input" min="0" max="86400"
-                                           value="{{ old('TYRO_CACHE_TTL', $settings['TYRO_CACHE_TTL']) }}">
-                                    <p class="form-hint" style="margin-top:0.35rem;">Default is 300 (5 minutes).</p>
+                                <div class="form-group" style="margin-bottom:0;" id="tyro_audit_retention_group">
+                                    <label for="TYRO_AUDIT_RETENTION_DAYS" class="form-label">Retention days</label>
+                                    <input type="number" name="TYRO_AUDIT_RETENTION_DAYS" id="TYRO_AUDIT_RETENTION_DAYS"
+                                           class="form-input" min="1" max="3650"
+                                           value="{{ old('TYRO_AUDIT_RETENTION_DAYS', $settings['TYRO_AUDIT_RETENTION_DAYS']) }}">
+                                    <p class="form-hint">Writes <code>TYRO_AUDIT_RETENTION_DAYS</code>.</p>
                                 </div>
                             </div>
 
@@ -692,105 +692,10 @@
                                 </div>
                             </div>
 
-                            <div class="sys-settings-surface">
-                                <h4 class="sys-settings-surface-title">Password Rules</h4>
-                                <p class="sys-settings-surface-description">Control password requirements for registration and updates.</p>
-
-                                <div class="form-group" style="margin-bottom:0.85rem;">
-                                    <label for="TYRO_PASSWORD_MIN_LENGTH" class="form-label">Minimum password length</label>
-                                    <input type="number" name="TYRO_PASSWORD_MIN_LENGTH" id="TYRO_PASSWORD_MIN_LENGTH"
-                                           class="form-input" min="4" max="100"
-                                           value="{{ old('TYRO_PASSWORD_MIN_LENGTH', $settings['TYRO_PASSWORD_MIN_LENGTH']) }}">
-                                </div>
-
-                                <div class="sys-settings-toggles" style="margin-bottom:0;">
-                                    <div class="sys-settings-toggle">
-                                        <div class="sys-settings-toggle-top">
-                                            <div>
-                                                <p class="sys-settings-toggle-title">Require uppercase</p>
-                                                <p class="sys-settings-toggle-description">Writes <code>TYRO_PASSWORD_REQUIRE_UPPERCASE</code>.</p>
-                                            </div>
-                                            <div>
-                                                <input type="hidden" name="TYRO_PASSWORD_REQUIRE_UPPERCASE" value="0">
-                                                <label class="toggle-label">
-                                                    <input type="checkbox" name="TYRO_PASSWORD_REQUIRE_UPPERCASE" value="1" class="toggle-input" {{ old('TYRO_PASSWORD_REQUIRE_UPPERCASE', $settings['TYRO_PASSWORD_REQUIRE_UPPERCASE']) ? 'checked' : '' }}>
-                                                    <span class="toggle-slider"></span>
-                                                </label>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="sys-settings-toggle">
-                                        <div class="sys-settings-toggle-top">
-                                            <div>
-                                                <p class="sys-settings-toggle-title">Require lowercase</p>
-                                                <p class="sys-settings-toggle-description">Writes <code>TYRO_PASSWORD_REQUIRE_LOWERCASE</code>.</p>
-                                            </div>
-                                            <div>
-                                                <input type="hidden" name="TYRO_PASSWORD_REQUIRE_LOWERCASE" value="0">
-                                                <label class="toggle-label">
-                                                    <input type="checkbox" name="TYRO_PASSWORD_REQUIRE_LOWERCASE" value="1" class="toggle-input" {{ old('TYRO_PASSWORD_REQUIRE_LOWERCASE', $settings['TYRO_PASSWORD_REQUIRE_LOWERCASE']) ? 'checked' : '' }}>
-                                                    <span class="toggle-slider"></span>
-                                                </label>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="sys-settings-toggle">
-                                        <div class="sys-settings-toggle-top">
-                                            <div>
-                                                <p class="sys-settings-toggle-title">Require numbers</p>
-                                                <p class="sys-settings-toggle-description">Writes <code>TYRO_PASSWORD_REQUIRE_NUMBERS</code>.</p>
-                                            </div>
-                                            <div>
-                                                <input type="hidden" name="TYRO_PASSWORD_REQUIRE_NUMBERS" value="0">
-                                                <label class="toggle-label">
-                                                    <input type="checkbox" name="TYRO_PASSWORD_REQUIRE_NUMBERS" value="1" class="toggle-input" {{ old('TYRO_PASSWORD_REQUIRE_NUMBERS', $settings['TYRO_PASSWORD_REQUIRE_NUMBERS']) ? 'checked' : '' }}>
-                                                    <span class="toggle-slider"></span>
-                                                </label>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="sys-settings-toggle">
-                                        <div class="sys-settings-toggle-top">
-                                            <div>
-                                                <p class="sys-settings-toggle-title">Require special characters</p>
-                                                <p class="sys-settings-toggle-description">Writes <code>TYRO_PASSWORD_REQUIRE_SPECIAL_CHARS</code>.</p>
-                                            </div>
-                                            <div>
-                                                <input type="hidden" name="TYRO_PASSWORD_REQUIRE_SPECIAL_CHARS" value="0">
-                                                <label class="toggle-label">
-                                                    <input type="checkbox" name="TYRO_PASSWORD_REQUIRE_SPECIAL_CHARS" value="1" class="toggle-input" {{ old('TYRO_PASSWORD_REQUIRE_SPECIAL_CHARS', $settings['TYRO_PASSWORD_REQUIRE_SPECIAL_CHARS']) ? 'checked' : '' }}>
-                                                    <span class="toggle-slider"></span>
-                                                </label>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="sys-settings-toggle">
-                                        <div class="sys-settings-toggle-top">
-                                            <div>
-                                                <p class="sys-settings-toggle-title">Block common passwords</p>
-                                                <p class="sys-settings-toggle-description">Writes <code>TYRO_PASSWORD_CHECK_COMMON</code>.</p>
-                                            </div>
-                                            <div>
-                                                <input type="hidden" name="TYRO_PASSWORD_CHECK_COMMON" value="0">
-                                                <label class="toggle-label">
-                                                    <input type="checkbox" name="TYRO_PASSWORD_CHECK_COMMON" value="1" class="toggle-input" {{ old('TYRO_PASSWORD_CHECK_COMMON', $settings['TYRO_PASSWORD_CHECK_COMMON']) ? 'checked' : '' }}>
-                                                    <span class="toggle-slider"></span>
-                                                </label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-
-            {{-- RBAC Advanced Tab --}}
             <div class="vtabs-panel" id="vtab-rbac-advanced">
                 <div class="card">
                     <div class="card-header" style="display:flex;align-items:center;justify-content:space-between;gap:1rem;">
@@ -801,7 +706,7 @@
                         <div class="sys-settings-section-intro">
                             <div class="sys-settings-section-copy">
                                 <h4 class="sys-settings-section-heading">Advanced RBAC environment configuration</h4>
-                                <p class="sys-settings-section-description">Fine-tune cache driver, audit logs, route prefix, and extended password rules.</p>
+                                <p class="sys-settings-section-description">Fine-tune cache driver, cache store, and route prefix.</p>
                             </div>
                             <span class="sys-settings-section-badge">Advanced</span>
                         </div>
@@ -821,20 +726,20 @@
                             </div>
 
                             <div class="sys-settings-surface">
-                                <h4 class="sys-settings-surface-title">Audit Logs</h4>
-                                <p class="sys-settings-surface-description">Control audit log behaviour and retention.</p>
+                                <h4 class="sys-settings-surface-title">Caching</h4>
+                                <p class="sys-settings-surface-description">Control RBAC cache behavior.</p>
 
                                 <div class="sys-settings-toggles" style="margin-bottom:0.85rem;">
                                     <div class="sys-settings-toggle">
                                         <div class="sys-settings-toggle-top">
                                             <div>
-                                                <p class="sys-settings-toggle-title">Enable audit logs</p>
-                                                <p class="sys-settings-toggle-description">Writes <code>TYRO_AUDIT_ENABLED</code>.</p>
+                                                <p class="sys-settings-toggle-title">Enable RBAC cache</p>
+                                                <p class="sys-settings-toggle-description">Writes <code>TYRO_CACHE_ENABLED</code>.</p>
                                             </div>
                                             <div>
-                                                <input type="hidden" name="TYRO_AUDIT_ENABLED" value="0">
+                                                <input type="hidden" name="TYRO_CACHE_ENABLED" value="0">
                                                 <label class="toggle-label">
-                                                    <input type="checkbox" name="TYRO_AUDIT_ENABLED" value="1" class="toggle-input" id="tyro_audit_enabled" {{ old('TYRO_AUDIT_ENABLED', $settings['TYRO_AUDIT_ENABLED']) !== false ? 'checked' : '' }}>
+                                                    <input type="checkbox" name="TYRO_CACHE_ENABLED" value="1" class="toggle-input" {{ old('TYRO_CACHE_ENABLED', $settings['TYRO_CACHE_ENABLED']) !== false ? 'checked' : '' }}>
                                                     <span class="toggle-slider"></span>
                                                 </label>
                                             </div>
@@ -842,12 +747,12 @@
                                     </div>
                                 </div>
 
-                                <div class="form-group" style="margin-bottom:0;" id="tyro_audit_retention_group">
-                                    <label for="TYRO_AUDIT_RETENTION_DAYS" class="form-label">Retention days</label>
-                                    <input type="number" name="TYRO_AUDIT_RETENTION_DAYS" id="TYRO_AUDIT_RETENTION_DAYS"
-                                           class="form-input" min="1" max="3650"
-                                           value="{{ old('TYRO_AUDIT_RETENTION_DAYS', $settings['TYRO_AUDIT_RETENTION_DAYS']) }}">
-                                    <p class="form-hint">Writes <code>TYRO_AUDIT_RETENTION_DAYS</code>.</p>
+                                <div class="form-group" style="margin-bottom:0;">
+                                    <label for="TYRO_CACHE_TTL" class="form-label">Cache TTL (seconds)</label>
+                                    <input type="number" name="TYRO_CACHE_TTL" id="TYRO_CACHE_TTL"
+                                           class="form-input" min="0" max="86400"
+                                           value="{{ old('TYRO_CACHE_TTL', $settings['TYRO_CACHE_TTL']) }}">
+                                    <p class="form-hint" style="margin-top:0.35rem;">Default is 300 (5 minutes).</p>
                                 </div>
                             </div>
 
@@ -864,52 +769,6 @@
                                 </div>
                             </div>
 
-                            <div class="sys-settings-surface">
-                                <h4 class="sys-settings-surface-title">Password Rules</h4>
-                                <p class="sys-settings-surface-description">Extended password validation rules.</p>
-
-                                <div class="sys-settings-toggles" style="margin-bottom:0;">
-                                    <div class="sys-settings-toggle">
-                                        <div class="sys-settings-toggle-top">
-                                            <div>
-                                                <p class="sys-settings-toggle-title">Require password confirmation</p>
-                                                <p class="sys-settings-toggle-description">Writes <code>TYRO_PASSWORD_REQUIRE_CONFIRMATION</code>.</p>
-                                            </div>
-                                            <div>
-                                                <input type="hidden" name="TYRO_PASSWORD_REQUIRE_CONFIRMATION" value="0">
-                                                <label class="toggle-label">
-                                                    <input type="checkbox" name="TYRO_PASSWORD_REQUIRE_CONFIRMATION" value="1" class="toggle-input" {{ old('TYRO_PASSWORD_REQUIRE_CONFIRMATION', $settings['TYRO_PASSWORD_REQUIRE_CONFIRMATION']) ? 'checked' : '' }}>
-                                                    <span class="toggle-slider"></span>
-                                                </label>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="sys-settings-toggle">
-                                        <div class="sys-settings-toggle-top">
-                                            <div>
-                                                <p class="sys-settings-toggle-title">Disallow user info in password</p>
-                                                <p class="sys-settings-toggle-description">Prevents passwords containing email/name parts. Writes <code>TYRO_PASSWORD_DISALLOW_USER_INFO</code>.</p>
-                                            </div>
-                                            <div>
-                                                <input type="hidden" name="TYRO_PASSWORD_DISALLOW_USER_INFO" value="0">
-                                                <label class="toggle-label">
-                                                    <input type="checkbox" name="TYRO_PASSWORD_DISALLOW_USER_INFO" value="1" class="toggle-input" {{ old('TYRO_PASSWORD_DISALLOW_USER_INFO', $settings['TYRO_PASSWORD_DISALLOW_USER_INFO']) ? 'checked' : '' }}>
-                                                    <span class="toggle-slider"></span>
-                                                </label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="form-group" style="margin-top:0.85rem; margin-bottom:0;">
-                                    <label for="TYRO_PASSWORD_MAX_LENGTH" class="form-label">Maximum password length</label>
-                                    <input type="number" name="TYRO_PASSWORD_MAX_LENGTH" id="TYRO_PASSWORD_MAX_LENGTH"
-                                           class="form-input" min="0" max="500"
-                                           value="{{ old('TYRO_PASSWORD_MAX_LENGTH', $settings['TYRO_PASSWORD_MAX_LENGTH']) }}">
-                                    <p class="form-hint">Leave 0 for no limit. Writes <code>TYRO_PASSWORD_MAX_LENGTH</code>.</p>
-                                </div>
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -926,7 +785,7 @@
                         <div class="sys-settings-section-intro">
                             <div class="sys-settings-section-copy">
                                 <h4 class="sys-settings-section-heading">Manage Tyro Login environment configuration</h4>
-                                <p class="sys-settings-section-description">Control layout, registration, OTP, 2FA, captcha, social login, email settings, and lockout protection.</p>
+                                <p class="sys-settings-section-description">Control layout, registration, OTP, 2FA, captcha, social login, password rules, email settings, and lockout protection.</p>
                             </div>
                             <span class="sys-settings-section-badge">.env</span>
                         </div>
@@ -1365,8 +1224,139 @@
                                 </div>
                             </div>
 
+                            <div class="sys-settings-surface">
+                                <h4 class="sys-settings-surface-title">Password Rules</h4>
+                                <p class="sys-settings-surface-description">Control password requirements for registration and updates.</p>
 
+                                <div class="form-group" style="margin-bottom:0.85rem;">
+                                    <label for="TYRO_LOGIN_PASSWORD_MIN_LENGTH" class="form-label">Minimum password length</label>
+                                    <input type="number" name="TYRO_LOGIN_PASSWORD_MIN_LENGTH" id="TYRO_LOGIN_PASSWORD_MIN_LENGTH"
+                                           class="form-input" min="4" max="100"
+                                           value="{{ old('TYRO_LOGIN_PASSWORD_MIN_LENGTH', $settings['TYRO_LOGIN_PASSWORD_MIN_LENGTH']) }}">
+                                </div>
 
+                                <div class="sys-settings-toggles" style="margin-bottom:0;">
+                                    <div class="sys-settings-toggle">
+                                        <div class="sys-settings-toggle-top">
+                                            <div>
+                                                <p class="sys-settings-toggle-title">Require uppercase</p>
+                                                <p class="sys-settings-toggle-description">Writes <code>TYRO_LOGIN_PASSWORD_REQUIRE_UPPERCASE</code>.</p>
+                                            </div>
+                                            <div>
+                                                <input type="hidden" name="TYRO_LOGIN_PASSWORD_REQUIRE_UPPERCASE" value="0">
+                                                <label class="toggle-label">
+                                                    <input type="checkbox" name="TYRO_LOGIN_PASSWORD_REQUIRE_UPPERCASE" value="1" class="toggle-input" {{ old('TYRO_LOGIN_PASSWORD_REQUIRE_UPPERCASE', $settings['TYRO_LOGIN_PASSWORD_REQUIRE_UPPERCASE']) ? 'checked' : '' }}>
+                                                    <span class="toggle-slider"></span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="sys-settings-toggle">
+                                        <div class="sys-settings-toggle-top">
+                                            <div>
+                                                <p class="sys-settings-toggle-title">Require lowercase</p>
+                                                <p class="sys-settings-toggle-description">Writes <code>TYRO_LOGIN_PASSWORD_REQUIRE_LOWERCASE</code>.</p>
+                                            </div>
+                                            <div>
+                                                <input type="hidden" name="TYRO_LOGIN_PASSWORD_REQUIRE_LOWERCASE" value="0">
+                                                <label class="toggle-label">
+                                                    <input type="checkbox" name="TYRO_LOGIN_PASSWORD_REQUIRE_LOWERCASE" value="1" class="toggle-input" {{ old('TYRO_LOGIN_PASSWORD_REQUIRE_LOWERCASE', $settings['TYRO_LOGIN_PASSWORD_REQUIRE_LOWERCASE']) ? 'checked' : '' }}>
+                                                    <span class="toggle-slider"></span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="sys-settings-toggle">
+                                        <div class="sys-settings-toggle-top">
+                                            <div>
+                                                <p class="sys-settings-toggle-title">Require numbers</p>
+                                                <p class="sys-settings-toggle-description">Writes <code>TYRO_LOGIN_PASSWORD_REQUIRE_NUMBERS</code>.</p>
+                                            </div>
+                                            <div>
+                                                <input type="hidden" name="TYRO_LOGIN_PASSWORD_REQUIRE_NUMBERS" value="0">
+                                                <label class="toggle-label">
+                                                    <input type="checkbox" name="TYRO_LOGIN_PASSWORD_REQUIRE_NUMBERS" value="1" class="toggle-input" {{ old('TYRO_LOGIN_PASSWORD_REQUIRE_NUMBERS', $settings['TYRO_LOGIN_PASSWORD_REQUIRE_NUMBERS']) ? 'checked' : '' }}>
+                                                    <span class="toggle-slider"></span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="sys-settings-toggle">
+                                        <div class="sys-settings-toggle-top">
+                                            <div>
+                                                <p class="sys-settings-toggle-title">Require special characters</p>
+                                                <p class="sys-settings-toggle-description">Writes <code>TYRO_LOGIN_PASSWORD_REQUIRE_SPECIAL_CHARS</code>.</p>
+                                            </div>
+                                            <div>
+                                                <input type="hidden" name="TYRO_LOGIN_PASSWORD_REQUIRE_SPECIAL_CHARS" value="0">
+                                                <label class="toggle-label">
+                                                    <input type="checkbox" name="TYRO_LOGIN_PASSWORD_REQUIRE_SPECIAL_CHARS" value="1" class="toggle-input" {{ old('TYRO_LOGIN_PASSWORD_REQUIRE_SPECIAL_CHARS', $settings['TYRO_LOGIN_PASSWORD_REQUIRE_SPECIAL_CHARS']) ? 'checked' : '' }}>
+                                                    <span class="toggle-slider"></span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="sys-settings-toggle">
+                                        <div class="sys-settings-toggle-top">
+                                            <div>
+                                                <p class="sys-settings-toggle-title">Block common passwords</p>
+                                                <p class="sys-settings-toggle-description">Writes <code>TYRO_LOGIN_PASSWORD_CHECK_COMMON</code>.</p>
+                                            </div>
+                                            <div>
+                                                <input type="hidden" name="TYRO_LOGIN_PASSWORD_CHECK_COMMON" value="0">
+                                                <label class="toggle-label">
+                                                    <input type="checkbox" name="TYRO_LOGIN_PASSWORD_CHECK_COMMON" value="1" class="toggle-input" {{ old('TYRO_LOGIN_PASSWORD_CHECK_COMMON', $settings['TYRO_LOGIN_PASSWORD_CHECK_COMMON']) ? 'checked' : '' }}>
+                                                    <span class="toggle-slider"></span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="sys-settings-toggle">
+                                        <div class="sys-settings-toggle-top">
+                                            <div>
+                                                <p class="sys-settings-toggle-title">Require password confirmation</p>
+                                                <p class="sys-settings-toggle-description">Writes <code>TYRO_LOGIN_PASSWORD_REQUIRE_CONFIRMATION</code>.</p>
+                                            </div>
+                                            <div>
+                                                <input type="hidden" name="TYRO_LOGIN_PASSWORD_REQUIRE_CONFIRMATION" value="0">
+                                                <label class="toggle-label">
+                                                    <input type="checkbox" name="TYRO_LOGIN_PASSWORD_REQUIRE_CONFIRMATION" value="1" class="toggle-input" {{ old('TYRO_LOGIN_PASSWORD_REQUIRE_CONFIRMATION', $settings['TYRO_LOGIN_PASSWORD_REQUIRE_CONFIRMATION']) ? 'checked' : '' }}>
+                                                    <span class="toggle-slider"></span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="sys-settings-toggle">
+                                        <div class="sys-settings-toggle-top">
+                                            <div>
+                                                <p class="sys-settings-toggle-title">Disallow user info in password</p>
+                                                <p class="sys-settings-toggle-description">Prevents passwords containing email/name parts. Writes <code>TYRO_LOGIN_PASSWORD_DISALLOW_USER_INFO</code>.</p>
+                                            </div>
+                                            <div>
+                                                <input type="hidden" name="TYRO_LOGIN_PASSWORD_DISALLOW_USER_INFO" value="0">
+                                                <label class="toggle-label">
+                                                    <input type="checkbox" name="TYRO_LOGIN_PASSWORD_DISALLOW_USER_INFO" value="1" class="toggle-input" {{ old('TYRO_LOGIN_PASSWORD_DISALLOW_USER_INFO', $settings['TYRO_LOGIN_PASSWORD_DISALLOW_USER_INFO']) ? 'checked' : '' }}>
+                                                    <span class="toggle-slider"></span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group" style="margin-top:0.85rem; margin-bottom:0;">
+                                    <label for="TYRO_LOGIN_PASSWORD_MAX_LENGTH" class="form-label">Maximum password length</label>
+                                    <input type="number" name="TYRO_LOGIN_PASSWORD_MAX_LENGTH" id="TYRO_LOGIN_PASSWORD_MAX_LENGTH"
+                                           class="form-input" min="0" max="500"
+                                           value="{{ old('TYRO_LOGIN_PASSWORD_MAX_LENGTH', $settings['TYRO_LOGIN_PASSWORD_MAX_LENGTH']) }}">
+                                    <p class="form-hint">Leave 0 for no limit. Writes <code>TYRO_LOGIN_PASSWORD_MAX_LENGTH</code>.</p>
+                                </div>
+                            </div>
 
                         </div>
                     </div>
