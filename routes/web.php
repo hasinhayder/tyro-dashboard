@@ -137,6 +137,7 @@ Route::middleware('tyro-dashboard.admin')->group(function () {
     Route::prefix('settings/system')->name('settings.system.')->group(function () {
         Route::get('/', [SystemSettingsController::class, 'index'])->name('index');
         Route::post('/update', [SystemSettingsController::class, 'update'])->name('update');
+        Route::post('/clear-config-cache', [SystemSettingsController::class, 'clearConfigCache'])->name('clear-config-cache');
     });
 });
 

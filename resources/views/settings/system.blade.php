@@ -1618,7 +1618,19 @@ function confirmResetAbColors() {
             body: new FormData(form)
         }).then(function(r) {
             if (r.ok) {
-                return r.json().then(function(d) { showToast(d.message, 'success'); });
+                return r.json().then(function(d) {
+                    showToast(d.message, 'success');
+                    setTimeout(function() {
+                        fetch('{{ route($dashboardRoute::name('settings.system.clear-config-cache')) }}', {
+                            method: 'POST',
+                            headers: {
+                                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '',
+                                'Content-Type': 'application/json',
+                                'Accept': 'application/json'
+                            }
+                        }).catch(function() {});
+                    }, 500);
+                });
             }
             if (r.status === 422) {
                 return r.json().then(function(d) {
