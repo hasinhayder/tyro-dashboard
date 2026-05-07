@@ -257,9 +257,13 @@
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><path stroke-linecap="round" stroke-linejoin="round" d="M12 2l7 4v6c0 5-3.5 9.5-7 10-3.5-.5-7-5-7-10V6l7-4z"/><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4"/></svg>
                 Login &amp; Auth
             </button>
-            <button class="vtabs-item" data-vtab="sidebar-admin-bar" type="button">
+            <button class="vtabs-item" data-vtab="sidebar-colors" type="button">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="9" y1="3" x2="9" y2="21"/></svg>
-                Sidebar &amp; Admin Bar
+                Sidebar Colors
+            </button>
+            <button class="vtabs-item" data-vtab="admin-bar-colors" type="button">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><rect x="2" y="2" width="20" height="8" rx="2"/><rect x="2" y="14" width="20" height="8" rx="2"/></svg>
+                Admin Bar
             </button>
         </nav>
 
@@ -1125,7 +1129,7 @@
                 </div>
             </div>
 
-        {{-- Sidebar & Admin Bar Tab --}}
+        {{-- Sidebar Colors Tab --}}
         @php
             $sbBg   = old('TYRO_DASHBOARD_SIDEBAR_BG', $settings['TYRO_DASHBOARD_SIDEBAR_BG'] ?: '#0e0e0e');
             $sbText = old('TYRO_DASHBOARD_SIDEBAR_TEXT', $settings['TYRO_DASHBOARD_SIDEBAR_TEXT'] ?: '#f8fafc');
@@ -1134,41 +1138,32 @@
             $sbAccentFg = old('TYRO_DASHBOARD_SIDEBAR_ACCENT_FOREGROUND', $settings['TYRO_DASHBOARD_SIDEBAR_ACCENT_FOREGROUND'] ?: '#171717');
             $sbHeaderBorder = old('TYRO_DASHBOARD_SIDEBAR_HEADER_BORDER', $settings['TYRO_DASHBOARD_SIDEBAR_HEADER_BORDER'] ?: '#333c56');
             $sbAccordionCompact = filter_var(old('TYRO_DASHBOARD_SIDEBAR_ACCORDION_COMPACT', $settings['TYRO_DASHBOARD_SIDEBAR_ACCORDION_COMPACT'] ?? false), FILTER_VALIDATE_BOOLEAN);
-            $abBg = old('TYRO_DASHBOARD_ADMIN_BAR_BG_COLOR', $settings['TYRO_DASHBOARD_ADMIN_BAR_BG_COLOR'] ?: '#000000');
-            $abText = old('TYRO_DASHBOARD_ADMIN_BAR_TEXT_COLOR', $settings['TYRO_DASHBOARD_ADMIN_BAR_TEXT_COLOR'] ?: '#ffffff');
-            $abMessage = old('TYRO_DASHBOARD_ADMIN_BAR_MESSAGE', $settings['TYRO_DASHBOARD_ADMIN_BAR_MESSAGE'] ?: '');
-            $abAlign = old('TYRO_DASHBOARD_ADMIN_BAR_ALIGN', $settings['TYRO_DASHBOARD_ADMIN_BAR_ALIGN'] ?: 'left');
-            $abHeight = old('TYRO_DASHBOARD_ADMIN_BAR_HEIGHT', $settings['TYRO_DASHBOARD_ADMIN_BAR_HEIGHT'] ?: '40px');
         @endphp
-        <div class="vtabs-panel" id="vtab-sidebar-admin-bar">
+        <div class="vtabs-panel" id="vtab-sidebar-colors">
             <div class="card">
                 <div class="card-header" style="display:flex;align-items:center;justify-content:space-between;gap:1rem;">
-                    <h3 class="card-title">Sidebar &amp; Admin Bar</h3>
-                    <button type="submit" form="systemSettingsForm" class="btn btn-primary btn-sm section-save-button">Save</button>
+                    <h3 class="card-title">Sidebar Colors</h3>
+                    <div style="display:flex;align-items:center;gap:0.5rem;">
+                        <button type="button" onclick="confirmResetSbColors()" class="btn btn-secondary btn-sm">Reset to Default</button>
+                        <button type="submit" form="systemSettingsForm" class="btn btn-primary btn-sm section-save-button">Save</button>
+                    </div>
                 </div>
                 <div class="card-body">
                     <div class="sys-settings-section-intro">
                         <div class="sys-settings-section-copy">
-                            <h4 class="sys-settings-section-heading">Customize the sidebar and admin bar appearance</h4>
-                            <p class="sys-settings-section-description">Pick colors for the dashboard sidebar and configure the admin notice bar. Values are stored in <code>.env</code> and take effect after saving.</p>
+                            <h4 class="sys-settings-section-heading">Customize the admin sidebar appearance</h4>
+                            <p class="sys-settings-section-description">Choose the background, text, highlight, hover, and separator colors for the dashboard sidebar. These values are stored in your <code>.env</code> file and take effect immediately after saving.</p>
                         </div>
-                        <span class="sys-settings-section-badge">Colors</span>
+                        <span class="sys-settings-section-badge">Sidebar</span>
                     </div>
 
-                    {{-- Sidebar Colors --}}
                     <div class="sys-settings-surface" style="margin-bottom:1.25rem;">
-                        <div style="display:flex;align-items:center;justify-content:space-between;gap:0.75rem;margin-bottom:0.5rem;">
-                            <h4 class="sys-settings-surface-title" style="margin:0;">Sidebar Colors</h4>
-                            <button type="button" onclick="confirmResetSbColors()" class="btn btn-secondary btn-sm">Reset to Default</button>
-                        </div>
-                        <p class="sys-settings-surface-description">Background, text, highlight, hover, and separator colors for the dashboard sidebar.</p>
-
                         <div class="sys-settings-toggles" style="margin-bottom:1rem;">
                             <div class="sys-settings-toggle">
                                 <div class="sys-settings-toggle-top">
                                     <div>
                                         <p class="sys-settings-toggle-title">Accordion style sidebar sections</p>
-                                        <p class="sys-settings-toggle-description">When enabled, sidebar sections are collapsible. Writes <code>TYRO_DASHBOARD_SIDEBAR_ACCORDION_COMPACT</code>.</p>
+                                        <p class="sys-settings-toggle-description">When enabled, sidebar sections are collapsible. Home &amp; Essentials section stays open while other sections can be collapsed. Writes <code>TYRO_DASHBOARD_SIDEBAR_ACCORDION_COMPACT</code>.</p>
                                     </div>
                                     <div>
                                         <input type="hidden" name="TYRO_DASHBOARD_SIDEBAR_ACCORDION_COMPACT" value="0">
@@ -1204,7 +1199,6 @@
                                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px;"><path stroke-linecap="round" stroke-linejoin="round" d="M1 4v6h6M23 20v-6h-6"/><path stroke-linecap="round" stroke-linejoin="round" d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15"/></svg>
                                 </button>
                             </div>
-
                             <div class="branding-theme-color">
                                 <input type="color"
                                     name="TYRO_DASHBOARD_SIDEBAR_TEXT"
@@ -1227,7 +1221,6 @@
                                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px;"><path stroke-linecap="round" stroke-linejoin="round" d="M1 4v6h6M23 20v-6h-6"/><path stroke-linecap="round" stroke-linejoin="round" d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15"/></svg>
                                 </button>
                             </div>
-
                             <div class="branding-theme-color">
                                 <input type="color"
                                     name="TYRO_DASHBOARD_SIDEBAR_PRIMARY"
@@ -1250,7 +1243,6 @@
                                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px;"><path stroke-linecap="round" stroke-linejoin="round" d="M1 4v6h6M23 20v-6h-6"/><path stroke-linecap="round" stroke-linejoin="round" d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15"/></svg>
                                 </button>
                             </div>
-
                             <div class="branding-theme-color">
                                 <input type="color"
                                     name="TYRO_DASHBOARD_SIDEBAR_ACCENT"
@@ -1273,7 +1265,6 @@
                                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px;"><path stroke-linecap="round" stroke-linejoin="round" d="M1 4v6h6M23 20v-6h-6"/><path stroke-linecap="round" stroke-linejoin="round" d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15"/></svg>
                                 </button>
                             </div>
-
                             <div class="branding-theme-color">
                                 <input type="color"
                                     name="TYRO_DASHBOARD_SIDEBAR_ACCENT_FOREGROUND"
@@ -1296,7 +1287,6 @@
                                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px;"><path stroke-linecap="round" stroke-linejoin="round" d="M1 4v6h6M23 20v-6h-6"/><path stroke-linecap="round" stroke-linejoin="round" d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15"/></svg>
                                 </button>
                             </div>
-
                             <div class="branding-theme-color">
                                 <input type="color"
                                     name="TYRO_DASHBOARD_SIDEBAR_HEADER_BORDER"
@@ -1337,15 +1327,37 @@
                             </div>
                         </div>
                     </div>
+                </div>
+            </div>
+        </div>
 
-                    {{-- Admin Bar Colors --}}
-                    <div class="sys-settings-surface">
-                        <div style="display:flex;align-items:center;justify-content:space-between;gap:0.75rem;margin-bottom:0.5rem;">
-                            <h4 class="sys-settings-surface-title" style="margin:0;">Admin Bar Colors</h4>
-                            <button type="button" onclick="confirmResetAbColors()" class="btn btn-secondary btn-sm">Reset to Default</button>
+        {{-- Admin Bar Colors Tab --}}
+        @php
+            $abBg = old('TYRO_DASHBOARD_ADMIN_BAR_BG_COLOR', $settings['TYRO_DASHBOARD_ADMIN_BAR_BG_COLOR'] ?: '#000000');
+            $abText = old('TYRO_DASHBOARD_ADMIN_BAR_TEXT_COLOR', $settings['TYRO_DASHBOARD_ADMIN_BAR_TEXT_COLOR'] ?: '#ffffff');
+            $abMessage = old('TYRO_DASHBOARD_ADMIN_BAR_MESSAGE', $settings['TYRO_DASHBOARD_ADMIN_BAR_MESSAGE'] ?: '');
+            $abAlign = old('TYRO_DASHBOARD_ADMIN_BAR_ALIGN', $settings['TYRO_DASHBOARD_ADMIN_BAR_ALIGN'] ?: 'left');
+            $abHeight = old('TYRO_DASHBOARD_ADMIN_BAR_HEIGHT', $settings['TYRO_DASHBOARD_ADMIN_BAR_HEIGHT'] ?: '40px');
+        @endphp
+        <div class="vtabs-panel" id="vtab-admin-bar-colors">
+            <div class="card">
+                <div class="card-header" style="display:flex;align-items:center;justify-content:space-between;gap:1rem;">
+                    <h3 class="card-title">Admin Bar</h3>
+                    <div style="display:flex;align-items:center;gap:0.5rem;">
+                        <button type="button" onclick="confirmResetAbColors()" class="btn btn-secondary btn-sm">Reset to Default</button>
+                        <button type="submit" form="systemSettingsForm" class="btn btn-primary btn-sm section-save-button">Save</button>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="sys-settings-section-intro">
+                        <div class="sys-settings-section-copy">
+                            <h4 class="sys-settings-section-heading">Configure the admin notice bar</h4>
+                            <p class="sys-settings-section-description">Control the visibility, colors, message, alignment, and height of the admin notice bar at the top of the dashboard. Values are stored in <code>.env</code>.</p>
                         </div>
-                        <p class="sys-settings-surface-description">The admin notice bar sits at the top of the dashboard. Control its visibility, colors, message, alignment, and height.</p>
+                        <span class="sys-settings-section-badge">Admin Bar</span>
+                    </div>
 
+                    <div class="sys-settings-surface">
                         <div class="sys-settings-toggles" style="margin-bottom:1rem;">
                             <div class="sys-settings-toggle">
                                 <div class="sys-settings-toggle-top">
@@ -1394,7 +1406,6 @@
                                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px;"><path stroke-linecap="round" stroke-linejoin="round" d="M1 4v6h6M23 20v-6h-6"/><path stroke-linecap="round" stroke-linejoin="round" d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15"/></svg>
                                 </button>
                             </div>
-
                             <div class="branding-theme-color">
                                 <input type="color"
                                     name="TYRO_DASHBOARD_ADMIN_BAR_TEXT_COLOR"
