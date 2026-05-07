@@ -1332,7 +1332,7 @@ $authUserId = auth()->id();
 </div>
 @endif
 
-{{ $media->links('vendor.pagination.tyro') }}
+{{ $media->links('pagination.tyro') }}
 @else
 <div class="card">
     <div class="card-body gallery-empty-state">
