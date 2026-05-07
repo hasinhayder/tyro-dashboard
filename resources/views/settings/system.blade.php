@@ -1802,13 +1802,18 @@ function resetSbColors() {
     updateSbPreview();
 }
 
+function saveForm() {
+    var f = document.getElementById('systemSettingsForm');
+    if (f) f.requestSubmit();
+}
+
 function confirmResetSbColors() {
     showDanger(
         'Reset sidebar colours?',
         'This will revert the sidebar to its default colours.',
         { confirmText: 'Reset to Default' }
     ).then(function(confirmed) {
-        if (confirmed) resetSbColors();
+        if (confirmed) { resetSbColors(); saveForm(); }
     });
 }
 
@@ -1847,7 +1852,7 @@ function confirmResetAbColors() {
         'This will revert the admin bar to its default colours.',
         { confirmText: 'Reset to Default' }
     ).then(function(confirmed) {
-        if (confirmed) resetAbColors();
+        if (confirmed) { resetAbColors(); saveForm(); }
     });
 }
 
@@ -1930,7 +1935,7 @@ function confirmResetAllDcColors() {
         'This will revert all shadcn UI colour variables to their defaults.',
         { confirmText: 'Reset to Default' }
     ).then(function(confirmed) {
-        if (confirmed) resetAllDcColors();
+        if (confirmed) { resetAllDcColors(); saveForm(); }
     });
 }
 
