@@ -100,6 +100,10 @@ class TyroDashboardServiceProvider extends ServiceProvider {
 
     protected function registerViews(): void {
         $this->loadViewsFrom(__DIR__.'/../../resources/views', 'tyro-dashboard');
+
+        // Also add as a general view location so non-namespaced references
+        // (e.g. vendor.pagination.tyro) resolve within the package.
+        View::addLocation(__DIR__.'/../../resources/views');
     }
 
     protected function registerViewComposers(): void {
