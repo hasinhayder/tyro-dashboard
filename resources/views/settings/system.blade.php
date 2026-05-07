@@ -626,6 +626,37 @@
                             </div>
 
                             <div class="sys-settings-surface">
+                                <h4 class="sys-settings-surface-title">Audit Logs</h4>
+                                <p class="sys-settings-surface-description">Control audit log behaviour and retention.</p>
+
+                                <div class="sys-settings-toggles" style="margin-bottom:0.85rem;">
+                                    <div class="sys-settings-toggle">
+                                        <div class="sys-settings-toggle-top">
+                                            <div>
+                                                <p class="sys-settings-toggle-title">Enable audit logs</p>
+                                                <p class="sys-settings-toggle-description">Writes <code>TYRO_AUDIT_ENABLED</code>.</p>
+                                            </div>
+                                            <div>
+                                                <input type="hidden" name="TYRO_AUDIT_ENABLED" value="0">
+                                                <label class="toggle-label">
+                                                    <input type="checkbox" name="TYRO_AUDIT_ENABLED" value="1" class="toggle-input" {{ old('TYRO_AUDIT_ENABLED', $settings['TYRO_AUDIT_ENABLED']) !== false ? 'checked' : '' }}>
+                                                    <span class="toggle-slider"></span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group" style="margin-bottom:0;">
+                                    <label for="TYRO_AUDIT_RETENTION_DAYS" class="form-label">Retention days</label>
+                                    <input type="number" name="TYRO_AUDIT_RETENTION_DAYS" id="TYRO_AUDIT_RETENTION_DAYS"
+                                           class="form-input" min="1" max="3650"
+                                           value="{{ old('TYRO_AUDIT_RETENTION_DAYS', $settings['TYRO_AUDIT_RETENTION_DAYS']) }}">
+                                    <p class="form-hint">Writes <code>TYRO_AUDIT_RETENTION_DAYS</code>.</p>
+                                </div>
+                            </div>
+
+                            <div class="sys-settings-surface">
                                 <h4 class="sys-settings-surface-title">API &amp; Tokens</h4>
                                 <p class="sys-settings-surface-description">Control API availability and token behavior.</p>
 
@@ -649,6 +680,22 @@
                                     <div class="sys-settings-toggle">
                                         <div class="sys-settings-toggle-top">
                                             <div>
+                                                <p class="sys-settings-toggle-title">Disable Tyro commands</p>
+                                                <p class="sys-settings-toggle-description">Writes <code>TYRO_DISABLE_COMMANDS</code>.</p>
+                                            </div>
+                                            <div>
+                                                <input type="hidden" name="TYRO_DISABLE_COMMANDS" value="0">
+                                                <label class="toggle-label">
+                                                    <input type="checkbox" name="TYRO_DISABLE_COMMANDS" value="1" class="toggle-input" {{ old('TYRO_DISABLE_COMMANDS', $settings['TYRO_DISABLE_COMMANDS']) ? 'checked' : '' }}>
+                                                    <span class="toggle-slider"></span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="sys-settings-toggle">
+                                        <div class="sys-settings-toggle-top">
+                                            <div>
                                                 <p class="sys-settings-toggle-title">Delete previous tokens on login</p>
                                                 <p class="sys-settings-toggle-description">Writes <code>DELETE_PREVIOUS_ACCESS_TOKENS_ON_LOGIN</code>.</p>
                                             </div>
@@ -661,6 +708,14 @@
                                             </div>
                                         </div>
                                     </div>
+                                </div>
+
+                                <div class="form-group" style="margin-top:0.85rem; margin-bottom:0;">
+                                    <label for="TYRO_ROUTE_PREFIX" class="form-label">Route prefix</label>
+                                    <input type="text" name="TYRO_ROUTE_PREFIX" id="TYRO_ROUTE_PREFIX"
+                                           class="form-input" maxlength="50"
+                                           value="{{ old('TYRO_ROUTE_PREFIX', $settings['TYRO_ROUTE_PREFIX']) }}">
+                                    <p class="form-hint">API route prefix. Writes <code>TYRO_ROUTE_PREFIX</code>.</p>
                                 </div>
                             </div>
 
