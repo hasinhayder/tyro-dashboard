@@ -177,6 +177,18 @@
         btn.classList.add('active');
         var panel = document.getElementById('vtab-' + tabId);
         if (panel) panel.classList.add('active');
+
+        try { localStorage.setItem('vtab-' + location.pathname, tabId); } catch (e) {}
+    });
+
+    // Restore last active vtab on page load
+    document.addEventListener('DOMContentLoaded', function() {
+        var saved;
+        try { saved = localStorage.getItem('vtab-' + location.pathname); } catch (e) {}
+        if (!saved) return;
+
+        var btn = document.querySelector('.vtabs-item[data-vtab="' + saved + '"]');
+        if (btn) btn.click();
     });
 
     // Apply theme on load
