@@ -219,8 +219,27 @@ class SystemSettingsController extends BaseController {
         }
 
         $content = file_get_contents($envPath);
+        $defaults = $this->defaultValues();
 
         foreach ($validated as $key => $value) {
+            if ($value === null) {
+                $content = $this->removeEnvLine($content, $key);
+                continue;
+            }
+
+            if (array_key_exists($key, $defaults)) {
+                if (in_array($key, $booleans, true)) {
+                    $matchesDefault = (bool) $value === (bool) $defaults[$key];
+                } else {
+                    $matchesDefault = (string) $value === (string) $defaults[$key];
+                }
+
+                if ($matchesDefault) {
+                    $content = $this->removeEnvLine($content, $key);
+                    continue;
+                }
+            }
+
             $envValue = in_array($key, $booleans, true)
                 ? ($value ? 'true' : 'false')
                 : (string) $value;
@@ -460,6 +479,182 @@ class SystemSettingsController extends BaseController {
             'TYRO_DASHBOARD_PEXELS_KEY' => config('tyro-dashboard.media.api_keys.pexels'),
             'TYRO_DASHBOARD_UNSPLASH_ACCESS_KEY' => config('tyro-dashboard.media.api_keys.unsplash'),
             'TYRO_DASHBOARD_PIXABAY_KEY' => config('tyro-dashboard.media.api_keys.pixabay'),
+        ];
+    }
+
+    protected function removeEnvLine(string $content, string $key): string
+    {
+        if (preg_match("/^{$key}=/m", $content)) {
+            $content = preg_replace("/^{$key}=.*\n?/m", '', $content);
+
+            return rtrim($content)."\n";
+        }
+
+        return $content;
+    }
+
+    protected function defaultValues(): array
+    {
+        return [
+            'TYRO_DASHBOARD_APP_NAME' => null,
+            'TYRO_DASHBOARD_LOGO_HEIGHT' => '32px',
+            'TYRO_DASHBOARD_SIDEBAR_BG' => null,
+            'TYRO_DASHBOARD_SIDEBAR_TEXT' => null,
+            'TYRO_DASHBOARD_SIDEBAR_PRIMARY' => null,
+            'TYRO_DASHBOARD_SIDEBAR_ACCENT' => null,
+            'TYRO_DASHBOARD_SIDEBAR_ACCENT_FOREGROUND' => null,
+            'TYRO_DASHBOARD_SIDEBAR_HEADER_BORDER' => null,
+            'TYRO_DASHBOARD_SIDEBAR_ACCORDION_COMPACT' => false,
+            'TYRO_DASHBOARD_COLLAPSIBLE_SIDEBAR' => true,
+            'TYRO_DASHBOARD_DISABLE_EXAMPLES' => false,
+            'TYRO_DASHBOARD_ENABLE_INVITATION' => true,
+            'TYRO_DASHBOARD_ENABLE_AUDIT_LOGS' => true,
+            'TYRO_DASHBOARD_NOTIFICATION_STYLE' => 'legacy',
+            'TYRO_DASHBOARD_TOAST_POSITION' => 'bottom-right',
+            'TYRO_DASHBOARD_ADMIN_BAR_ENABLED' => false,
+            'TYRO_DASHBOARD_ADMIN_BAR_MESSAGE' => '',
+            'TYRO_DASHBOARD_ADMIN_BAR_BG_COLOR' => '#000000',
+            'TYRO_DASHBOARD_ADMIN_BAR_TEXT_COLOR' => '#ffffff',
+            'TYRO_DASHBOARD_ADMIN_BAR_ALIGN' => 'left',
+            'TYRO_DASHBOARD_ADMIN_BAR_HEIGHT' => '40px',
+
+            'TYRO_CACHE_ENABLED' => true,
+            'TYRO_CACHE_TTL' => 300,
+            'TYRO_CACHE_STORE' => null,
+            'DEFAULT_ROLE_SLUG' => 'user',
+            'DELETE_PREVIOUS_ACCESS_TOKENS_ON_LOGIN' => false,
+            'TYRO_DISABLE_API' => false,
+            'TYRO_DISABLE_COMMANDS' => false,
+            'TYRO_ROUTE_PREFIX' => 'api',
+            'TYRO_AUDIT_ENABLED' => true,
+            'TYRO_AUDIT_RETENTION_DAYS' => 30,
+
+            'TYRO_LOGIN_PASSWORD_MIN_LENGTH' => 8,
+            'TYRO_LOGIN_PASSWORD_MAX_LENGTH' => null,
+            'TYRO_LOGIN_PASSWORD_REQUIRE_CONFIRMATION' => true,
+            'TYRO_LOGIN_PASSWORD_DISALLOW_USER_INFO' => false,
+            'TYRO_LOGIN_PASSWORD_REQUIRE_UPPERCASE' => false,
+            'TYRO_LOGIN_PASSWORD_REQUIRE_LOWERCASE' => false,
+            'TYRO_LOGIN_PASSWORD_REQUIRE_NUMBERS' => false,
+            'TYRO_LOGIN_PASSWORD_REQUIRE_SPECIAL_CHARS' => false,
+            'TYRO_LOGIN_PASSWORD_CHECK_COMMON' => false,
+
+            'TYRO_LOGIN_LAYOUT' => 'centered',
+            'TYRO_LOGIN_APP_NAME' => null,
+            'TYRO_LOGIN_BACKGROUND_IMAGE' => 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=1920&q=80',
+            'TYRO_LOGIN_LOGO' => null,
+            'TYRO_LOGIN_LOGO_DARK' => null,
+            'TYRO_LOGIN_LOGO_HEIGHT' => '48px',
+            'TYRO_LOGIN_REDIRECT_AFTER_LOGIN' => '/',
+            'TYRO_LOGIN_REDIRECT_AFTER_LOGOUT' => '/login',
+            'TYRO_LOGIN_REDIRECT_AFTER_REGISTER' => '/',
+            'TYRO_LOGIN_REDIRECT_AFTER_EMAIL_VERIFICATION' => '/login',
+            'TYRO_LOGIN_REGISTRATION_ENABLED' => true,
+            'TYRO_LOGIN_REQUIRE_EMAIL_VERIFICATION' => false,
+            'TYRO_LOGIN_REGISTRATION_AUTO_LOGIN' => true,
+            'TYRO_LOGIN_DISABLE_PASSWORD' => false,
+            'TYRO_LOGIN_REMEMBER_ME' => true,
+            'TYRO_LOGIN_FORGOT_PASSWORD' => true,
+            'TYRO_LOGIN_FIELD' => 'email',
+            'TYRO_LOGIN_CAPTCHA_LOGIN' => false,
+            'TYRO_LOGIN_CAPTCHA_REGISTER' => false,
+            'TYRO_LOGIN_OTP_ENABLED' => false,
+            'TYRO_LOGIN_OTP_LENGTH' => 4,
+            'TYRO_LOGIN_OTP_EXPIRE' => 5,
+            'TYRO_LOGIN_OTP_MAX_RESEND' => 3,
+            'TYRO_LOGIN_OTP_RESEND_COOLDOWN' => 60,
+            'TYRO_LOGIN_2FA_ENABLED' => false,
+            'TYRO_LOGIN_2FA_ALLOW_SKIP' => false,
+            'TYRO_LOGIN_2FA_IGNORE_COOKIE_DAYS' => 30,
+            'TYRO_LOGIN_2FA_FORCED_ROLES' => '',
+            'TYRO_LOGIN_ENABLE_MAGIC_LINKS' => false,
+            'TYRO_LOGIN_EMAIL_MAGIC_LINK_SUBJECT' => 'Your Magic Login Link',
+            'TYRO_LOGIN_MAGIC_LINK_EXPIRE' => 5,
+            'TYRO_LOGIN_SOCIAL_ENABLED' => false,
+            'TYRO_LOGIN_SOCIAL_AUTO_REGISTER' => true,
+            'TYRO_LOGIN_SOCIAL_LINK_EXISTING' => true,
+            'TYRO_LOGIN_SOCIAL_AUTO_VERIFY_EMAIL' => true,
+            'TYRO_LOGIN_LOCKOUT_ENABLED' => true,
+            'TYRO_LOGIN_LOCKOUT_MAX_ATTEMPTS' => 5,
+            'TYRO_LOGIN_LOCKOUT_DURATION' => 15,
+            'TYRO_LOGIN_SHOW_ATTEMPTS_LEFT' => false,
+            'TYRO_LOGIN_VERIFICATION_EXPIRE' => 60,
+            'TYRO_LOGIN_PASSWORD_RESET_EXPIRE' => 60,
+            'TYRO_LOGIN_EMAIL_OTP' => true,
+            'TYRO_LOGIN_EMAIL_PASSWORD_RESET' => true,
+            'TYRO_LOGIN_EMAIL_VERIFY' => true,
+            'TYRO_LOGIN_EMAIL_WELCOME' => true,
+            'TYRO_LOGIN_EMAIL_MAGIC_LINK' => true,
+
+            'TYRO_LOGIN_CAPTCHA_LABEL' => 'Security Check',
+            'TYRO_LOGIN_CAPTCHA_PLACEHOLDER' => 'Enter the answer',
+            'TYRO_LOGIN_CAPTCHA_ERROR' => 'Incorrect answer. Please try again.',
+            'TYRO_LOGIN_CAPTCHA_MIN' => 1,
+            'TYRO_LOGIN_CAPTCHA_MAX' => 10,
+
+            'TYRO_LOGIN_OTP_TITLE' => 'Enter Verification Code',
+            'TYRO_LOGIN_OTP_SUBTITLE' => "We've sent a :length-digit code to :email",
+            'TYRO_LOGIN_OTP_LABEL' => 'Verification Code',
+            'TYRO_LOGIN_OTP_PLACEHOLDER' => 'Enter code',
+            'TYRO_LOGIN_OTP_SUBMIT_BUTTON' => 'Verify',
+            'TYRO_LOGIN_OTP_RESEND_BUTTON' => 'Resend Code',
+            'TYRO_LOGIN_OTP_ERROR' => 'Invalid or expired verification code.',
+            'TYRO_LOGIN_OTP_RESEND_SUCCESS' => 'A new verification code has been sent to your email.',
+            'TYRO_LOGIN_OTP_MAX_RESEND_ERROR' => 'Maximum resend attempts reached. Please try logging in again.',
+            'TYRO_LOGIN_OTP_BG_TITLE' => 'Almost There!',
+            'TYRO_LOGIN_OTP_BG_DESCRIPTION' => 'Enter the verification code we sent to your email to complete the login process.',
+
+            'TYRO_LOGIN_2FA_SETUP_TITLE' => 'Two Factor Authentication',
+            'TYRO_LOGIN_2FA_SETUP_SUBTITLE' => 'Scan the QR code with your authenticator app.',
+            'TYRO_LOGIN_2FA_CHALLENGE_TITLE' => 'Two Factor Authentication',
+            'TYRO_LOGIN_2FA_CHALLENGE_SUBTITLE' => 'Enter the code from your authenticator app.',
+
+            'TYRO_LOGIN_SOCIAL_GOOGLE' => false,
+            'TYRO_LOGIN_SOCIAL_FACEBOOK' => false,
+            'TYRO_LOGIN_SOCIAL_GITHUB' => false,
+            'TYRO_LOGIN_SOCIAL_TWITTER' => false,
+            'TYRO_LOGIN_SOCIAL_LINKEDIN' => false,
+            'TYRO_LOGIN_SOCIAL_BITBUCKET' => false,
+            'TYRO_LOGIN_SOCIAL_GITLAB' => false,
+            'TYRO_LOGIN_SOCIAL_SLACK' => false,
+            'TYRO_LOGIN_SOCIAL_DIVIDER' => 'Or continue with',
+
+            'TYRO_LOGIN_LOCKOUT_AUTO_REDIRECT' => true,
+            'TYRO_LOGIN_LOCKOUT_MESSAGE' => 'Too many failed login attempts. Please try again in :minutes minutes.',
+            'TYRO_LOGIN_LOCKOUT_TITLE' => 'Account Temporarily Locked',
+            'TYRO_LOGIN_LOCKOUT_SUBTITLE' => "For your security, we've temporarily locked your account.",
+
+            'TYRO_LOGIN_EMAIL_OTP_SUBJECT' => 'Your Verification Code',
+            'TYRO_LOGIN_EMAIL_PASSWORD_RESET_SUBJECT' => 'Reset Your Password',
+            'TYRO_LOGIN_EMAIL_VERIFY_SUBJECT' => 'Verify Your Email Address',
+            'TYRO_LOGIN_EMAIL_WELCOME_SUBJECT' => null,
+
+            'TYRO_LOGIN_BG_TITLE' => 'Welcome Back!',
+            'TYRO_LOGIN_BG_DESCRIPTION' => "Sign in to access your account and continue where you left off. We're glad to see you again.",
+            'TYRO_LOGIN_REGISTER_BG_TITLE' => 'Join Us Today!',
+            'TYRO_LOGIN_REGISTER_BG_DESCRIPTION' => 'Create your account and start your journey with us. It only takes a minute to get started.',
+            'TYRO_LOGIN_VERIFY_EMAIL_TITLE' => 'Verify Your Email',
+            'TYRO_LOGIN_VERIFY_EMAIL_SUBTITLE' => "We've sent a verification link to your email address.",
+            'TYRO_LOGIN_VERIFY_EMAIL_BG_TITLE' => 'Check Your Email',
+            'TYRO_LOGIN_VERIFY_EMAIL_BG_DESCRIPTION' => "We've sent a verification link to your email address. Click the link to verify your account.",
+            'TYRO_LOGIN_EMAIL_NOT_VERIFIED_TITLE' => 'Email Not Verified',
+            'TYRO_LOGIN_EMAIL_NOT_VERIFIED_SUBTITLE' => 'Please verify your email address to continue.',
+            'TYRO_LOGIN_EMAIL_NOT_VERIFIED_BG_TITLE' => 'Email Verification Required',
+            'TYRO_LOGIN_EMAIL_NOT_VERIFIED_BG_DESCRIPTION' => 'Your email address needs to be verified before you can access your account.',
+            'TYRO_LOGIN_FORGOT_PASSWORD_TITLE' => 'Forgot Password?',
+            'TYRO_LOGIN_FORGOT_PASSWORD_SUBTITLE' => "Enter your email and we'll send you a reset link.",
+            'TYRO_LOGIN_FORGOT_PASSWORD_BG_TITLE' => 'Forgot Your Password?',
+            'TYRO_LOGIN_FORGOT_PASSWORD_BG_DESCRIPTION' => "No worries! Enter your email and we'll send you a link to reset your password.",
+            'TYRO_LOGIN_RESET_PASSWORD_TITLE' => 'Reset Password',
+            'TYRO_LOGIN_RESET_PASSWORD_SUBTITLE' => 'Enter your new password below.',
+            'TYRO_LOGIN_RESET_PASSWORD_BG_TITLE' => 'Reset Your Password',
+            'TYRO_LOGIN_RESET_PASSWORD_BG_SUBTITLE' => 'Create a new secure password for your account.',
+            'TYRO_LOGIN_RESET_PASSWORD_BG_DESCRIPTION' => 'Create a new secure password for your account.',
+
+            'TYRO_DASHBOARD_FREEPIK_KEY' => null,
+            'TYRO_DASHBOARD_PEXELS_KEY' => null,
+            'TYRO_DASHBOARD_UNSPLASH_ACCESS_KEY' => null,
+            'TYRO_DASHBOARD_PIXABAY_KEY' => null,
         ];
     }
 }
