@@ -607,12 +607,21 @@
                                     </div>
                                 </div>
 
-                                <div class="form-group" style="margin-bottom:0;">
-                                    <label for="TYRO_CACHE_TTL" class="form-label">Cache TTL (seconds)</label>
-                                    <input type="number" name="TYRO_CACHE_TTL" id="TYRO_CACHE_TTL"
-                                           class="form-input" min="0" max="86400"
-                                           value="{{ old('TYRO_CACHE_TTL', $settings['TYRO_CACHE_TTL']) }}">
-                                    <p class="form-hint">How long RBAC data is cached. Default is 300 (5 minutes).</p>
+                                <div class="sys-settings-metrics" style="margin-bottom:0.85rem;">
+                                    <div class="form-group sys-settings-metric" style="margin-bottom:0;">
+                                        <label for="TYRO_CACHE_TTL" class="form-label">Cache TTL (seconds)</label>
+                                        <input type="number" name="TYRO_CACHE_TTL" id="TYRO_CACHE_TTL"
+                                               class="form-input" min="0" max="86400"
+                                               value="{{ old('TYRO_CACHE_TTL', $settings['TYRO_CACHE_TTL']) }}">
+                                        <p class="form-hint" style="margin-top:0.35rem;">Default is 300 (5 minutes).</p>
+                                    </div>
+                                    <div class="form-group sys-settings-metric" style="margin-bottom:0;">
+                                        <label for="TYRO_CACHE_STORE" class="form-label">Cache store</label>
+                                        <input type="text" name="TYRO_CACHE_STORE" id="TYRO_CACHE_STORE"
+                                               class="form-input" maxlength="50"
+                                               value="{{ old('TYRO_CACHE_STORE', $settings['TYRO_CACHE_STORE']) }}">
+                                        <p class="form-hint" style="margin-top:0.35rem;">e.g. <code>redis</code>, <code>file</code>, <code>memcached</code>.</p>
+                                    </div>
                                 </div>
                             </div>
 
@@ -672,11 +681,20 @@
                                 <h4 class="sys-settings-surface-title">Password Rules</h4>
                                 <p class="sys-settings-surface-description">Control password requirements for registration and updates.</p>
 
-                                <div class="form-group" style="margin-bottom:0.85rem;">
-                                    <label for="TYRO_PASSWORD_MIN_LENGTH" class="form-label">Minimum password length</label>
-                                    <input type="number" name="TYRO_PASSWORD_MIN_LENGTH" id="TYRO_PASSWORD_MIN_LENGTH"
-                                           class="form-input" min="4" max="100"
-                                           value="{{ old('TYRO_PASSWORD_MIN_LENGTH', $settings['TYRO_PASSWORD_MIN_LENGTH']) }}">
+                                <div class="sys-settings-metrics" style="margin-bottom:0.85rem;">
+                                    <div class="form-group sys-settings-metric" style="margin-bottom:0;">
+                                        <label for="TYRO_PASSWORD_MIN_LENGTH" class="form-label">Minimum password length</label>
+                                        <input type="number" name="TYRO_PASSWORD_MIN_LENGTH" id="TYRO_PASSWORD_MIN_LENGTH"
+                                               class="form-input" min="4" max="100"
+                                               value="{{ old('TYRO_PASSWORD_MIN_LENGTH', $settings['TYRO_PASSWORD_MIN_LENGTH']) }}">
+                                    </div>
+                                    <div class="form-group sys-settings-metric" style="margin-bottom:0;">
+                                        <label for="TYRO_PASSWORD_MAX_LENGTH" class="form-label">Maximum password length</label>
+                                        <input type="number" name="TYRO_PASSWORD_MAX_LENGTH" id="TYRO_PASSWORD_MAX_LENGTH"
+                                               class="form-input" min="0" max="500"
+                                               value="{{ old('TYRO_PASSWORD_MAX_LENGTH', $settings['TYRO_PASSWORD_MAX_LENGTH']) }}">
+                                        <p class="form-hint" style="margin-top:0.35rem;">Leave 0 for no limit. Writes <code>TYRO_PASSWORD_MAX_LENGTH</code>.</p>
+                                    </div>
                                 </div>
 
                                 <div class="sys-settings-toggles" style="margin-bottom:0;">
@@ -759,6 +777,38 @@
                                             </div>
                                         </div>
                                     </div>
+
+                                    <div class="sys-settings-toggle">
+                                        <div class="sys-settings-toggle-top">
+                                            <div>
+                                                <p class="sys-settings-toggle-title">Require password confirmation</p>
+                                                <p class="sys-settings-toggle-description">Writes <code>TYRO_PASSWORD_REQUIRE_CONFIRMATION</code>.</p>
+                                            </div>
+                                            <div>
+                                                <input type="hidden" name="TYRO_PASSWORD_REQUIRE_CONFIRMATION" value="0">
+                                                <label class="toggle-label">
+                                                    <input type="checkbox" name="TYRO_PASSWORD_REQUIRE_CONFIRMATION" value="1" class="toggle-input" {{ old('TYRO_PASSWORD_REQUIRE_CONFIRMATION', $settings['TYRO_PASSWORD_REQUIRE_CONFIRMATION']) ? 'checked' : '' }}>
+                                                    <span class="toggle-slider"></span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="sys-settings-toggle">
+                                        <div class="sys-settings-toggle-top">
+                                            <div>
+                                                <p class="sys-settings-toggle-title">Disallow user info in password</p>
+                                                <p class="sys-settings-toggle-description">Prevents passwords containing email/name parts. Writes <code>TYRO_PASSWORD_DISALLOW_USER_INFO</code>.</p>
+                                            </div>
+                                            <div>
+                                                <input type="hidden" name="TYRO_PASSWORD_DISALLOW_USER_INFO" value="0">
+                                                <label class="toggle-label">
+                                                    <input type="checkbox" name="TYRO_PASSWORD_DISALLOW_USER_INFO" value="1" class="toggle-input" {{ old('TYRO_PASSWORD_DISALLOW_USER_INFO', $settings['TYRO_PASSWORD_DISALLOW_USER_INFO']) ? 'checked' : '' }}>
+                                                    <span class="toggle-slider"></span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -805,12 +855,36 @@
                                            value="{{ old('TYRO_LOGIN_APP_NAME', $settings['TYRO_LOGIN_APP_NAME']) }}">
                                 </div>
 
-                                <div class="form-group" style="margin-bottom:0;">
+                                <div class="form-group" style="margin-bottom:0.85rem;">
                                     <label for="TYRO_LOGIN_BACKGROUND_IMAGE" class="form-label">Background image URL</label>
                                     <input type="url" name="TYRO_LOGIN_BACKGROUND_IMAGE" id="TYRO_LOGIN_BACKGROUND_IMAGE"
                                            class="form-input" maxlength="500"
                                            value="{{ old('TYRO_LOGIN_BACKGROUND_IMAGE', $settings['TYRO_LOGIN_BACKGROUND_IMAGE']) }}">
                                     <p class="form-hint">Used for split and fullscreen layouts.</p>
+                                </div>
+
+                                <div class="form-group" style="margin-bottom:0.85rem;">
+                                    <label for="TYRO_LOGIN_LOGO" class="form-label">Logo URL</label>
+                                    <input type="url" name="TYRO_LOGIN_LOGO" id="TYRO_LOGIN_LOGO"
+                                           class="form-input" maxlength="500"
+                                           value="{{ old('TYRO_LOGIN_LOGO', $settings['TYRO_LOGIN_LOGO']) }}">
+                                    <p class="form-hint">Custom logo shown on auth pages. Writes <code>TYRO_LOGIN_LOGO</code>.</p>
+                                </div>
+
+                                <div class="form-group" style="margin-bottom:0.85rem;">
+                                    <label for="TYRO_LOGIN_LOGO_DARK" class="form-label">Logo URL (dark mode)</label>
+                                    <input type="url" name="TYRO_LOGIN_LOGO_DARK" id="TYRO_LOGIN_LOGO_DARK"
+                                           class="form-input" maxlength="500"
+                                           value="{{ old('TYRO_LOGIN_LOGO_DARK', $settings['TYRO_LOGIN_LOGO_DARK']) }}">
+                                    <p class="form-hint">Falls back to the light logo when not set.</p>
+                                </div>
+
+                                <div class="form-group" style="margin-bottom:0;">
+                                    <label for="TYRO_LOGIN_LOGO_HEIGHT" class="form-label">Logo height</label>
+                                    <input type="text" name="TYRO_LOGIN_LOGO_HEIGHT" id="TYRO_LOGIN_LOGO_HEIGHT"
+                                           class="form-input" maxlength="20"
+                                           value="{{ old('TYRO_LOGIN_LOGO_HEIGHT', $settings['TYRO_LOGIN_LOGO_HEIGHT']) }}">
+                                    <p class="form-hint">CSS value e.g. <code>32px</code>, <code>3rem</code>. Defaults to <code>48px</code>.</p>
                                 </div>
                             </div>
 
@@ -825,11 +899,25 @@
                                            value="{{ old('TYRO_LOGIN_REDIRECT_AFTER_LOGIN', $settings['TYRO_LOGIN_REDIRECT_AFTER_LOGIN']) }}">
                                 </div>
 
-                                <div class="form-group" style="margin-bottom:0;">
+                                <div class="form-group" style="margin-bottom:0.85rem;">
                                     <label for="TYRO_LOGIN_REDIRECT_AFTER_LOGOUT" class="form-label">After logout</label>
                                     <input type="text" name="TYRO_LOGIN_REDIRECT_AFTER_LOGOUT" id="TYRO_LOGIN_REDIRECT_AFTER_LOGOUT"
                                            class="form-input" maxlength="255"
                                            value="{{ old('TYRO_LOGIN_REDIRECT_AFTER_LOGOUT', $settings['TYRO_LOGIN_REDIRECT_AFTER_LOGOUT']) }}">
+                                </div>
+
+                                <div class="form-group" style="margin-bottom:0.85rem;">
+                                    <label for="TYRO_LOGIN_REDIRECT_AFTER_REGISTER" class="form-label">After register</label>
+                                    <input type="text" name="TYRO_LOGIN_REDIRECT_AFTER_REGISTER" id="TYRO_LOGIN_REDIRECT_AFTER_REGISTER"
+                                           class="form-input" maxlength="255"
+                                           value="{{ old('TYRO_LOGIN_REDIRECT_AFTER_REGISTER', $settings['TYRO_LOGIN_REDIRECT_AFTER_REGISTER']) }}">
+                                </div>
+
+                                <div class="form-group" style="margin-bottom:0;">
+                                    <label for="TYRO_LOGIN_REDIRECT_AFTER_EMAIL_VERIFICATION" class="form-label">After email verification</label>
+                                    <input type="text" name="TYRO_LOGIN_REDIRECT_AFTER_EMAIL_VERIFICATION" id="TYRO_LOGIN_REDIRECT_AFTER_EMAIL_VERIFICATION"
+                                           class="form-input" maxlength="255"
+                                           value="{{ old('TYRO_LOGIN_REDIRECT_AFTER_EMAIL_VERIFICATION', $settings['TYRO_LOGIN_REDIRECT_AFTER_EMAIL_VERIFICATION']) }}">
                                 </div>
                             </div>
 
@@ -896,6 +984,38 @@
                                                 <input type="hidden" name="TYRO_LOGIN_FORGOT_PASSWORD" value="0">
                                                 <label class="toggle-label">
                                                     <input type="checkbox" name="TYRO_LOGIN_FORGOT_PASSWORD" value="1" class="toggle-input" {{ old('TYRO_LOGIN_FORGOT_PASSWORD', $settings['TYRO_LOGIN_FORGOT_PASSWORD']) ? 'checked' : '' }}>
+                                                    <span class="toggle-slider"></span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="sys-settings-toggle">
+                                        <div class="sys-settings-toggle-top">
+                                            <div>
+                                                <p class="sys-settings-toggle-title">Auto-login after registration</p>
+                                                <p class="sys-settings-toggle-description">Writes <code>TYRO_LOGIN_REGISTRATION_AUTO_LOGIN</code>.</p>
+                                            </div>
+                                            <div>
+                                                <input type="hidden" name="TYRO_LOGIN_REGISTRATION_AUTO_LOGIN" value="0">
+                                                <label class="toggle-label">
+                                                    <input type="checkbox" name="TYRO_LOGIN_REGISTRATION_AUTO_LOGIN" value="1" class="toggle-input" {{ old('TYRO_LOGIN_REGISTRATION_AUTO_LOGIN', $settings['TYRO_LOGIN_REGISTRATION_AUTO_LOGIN']) ? 'checked' : '' }}>
+                                                    <span class="toggle-slider"></span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="sys-settings-toggle">
+                                        <div class="sys-settings-toggle-top">
+                                            <div>
+                                                <p class="sys-settings-toggle-title">Disable password login</p>
+                                                <p class="sys-settings-toggle-description">Hides password field, remember me, and forgot password link. Writes <code>TYRO_LOGIN_DISABLE_PASSWORD</code>.</p>
+                                            </div>
+                                            <div>
+                                                <input type="hidden" name="TYRO_LOGIN_DISABLE_PASSWORD" value="0">
+                                                <label class="toggle-label">
+                                                    <input type="checkbox" name="TYRO_LOGIN_DISABLE_PASSWORD" value="1" class="toggle-input" {{ old('TYRO_LOGIN_DISABLE_PASSWORD', $settings['TYRO_LOGIN_DISABLE_PASSWORD']) ? 'checked' : '' }}>
                                                     <span class="toggle-slider"></span>
                                                 </label>
                                             </div>
@@ -998,6 +1118,23 @@
                                         </div>
                                     </div>
 
+                                    <div class="sys-settings-metrics" style="margin-top:0.85rem;">
+                                        <div class="form-group sys-settings-metric" style="margin-bottom:0;">
+                                            <label for="TYRO_LOGIN_2FA_IGNORE_COOKIE_DAYS" class="form-label">2FA skip cookie days</label>
+                                            <input type="number" name="TYRO_LOGIN_2FA_IGNORE_COOKIE_DAYS" id="TYRO_LOGIN_2FA_IGNORE_COOKIE_DAYS"
+                                                   class="form-input" min="1" max="365"
+                                                   value="{{ old('TYRO_LOGIN_2FA_IGNORE_COOKIE_DAYS', $settings['TYRO_LOGIN_2FA_IGNORE_COOKIE_DAYS']) }}">
+                                            <p class="form-hint">Writes <code>TYRO_LOGIN_2FA_IGNORE_COOKIE_DAYS</code>.</p>
+                                        </div>
+                                        <div class="form-group sys-settings-metric" style="margin-bottom:0;">
+                                            <label for="TYRO_LOGIN_2FA_FORCED_ROLES" class="form-label">2FA forced roles</label>
+                                            <input type="text" name="TYRO_LOGIN_2FA_FORCED_ROLES" id="TYRO_LOGIN_2FA_FORCED_ROLES"
+                                                   class="form-input" maxlength="255"
+                                                   value="{{ old('TYRO_LOGIN_2FA_FORCED_ROLES', $settings['TYRO_LOGIN_2FA_FORCED_ROLES']) }}">
+                                            <p class="form-hint">Comma-separated slugs. Writes <code>TYRO_LOGIN_2FA_FORCED_ROLES</code>.</p>
+                                        </div>
+                                    </div>
+
                                     <div class="sys-settings-toggle">
                                         <div class="sys-settings-toggle-top">
                                             <div>
@@ -1037,6 +1174,15 @@
                                                class="form-input" min="1" max="20"
                                                value="{{ old('TYRO_LOGIN_OTP_MAX_RESEND', $settings['TYRO_LOGIN_OTP_MAX_RESEND']) }}">
                                     </div>
+                                    <div class="form-group sys-settings-metric" style="margin-bottom:0;">
+                                        <label for="TYRO_LOGIN_OTP_RESEND_COOLDOWN" class="form-label">OTP resend cooldown (sec)</label>
+                                        <input type="number" name="TYRO_LOGIN_OTP_RESEND_COOLDOWN" id="TYRO_LOGIN_OTP_RESEND_COOLDOWN"
+                                               class="form-input" min="10" max="600"
+                                               value="{{ old('TYRO_LOGIN_OTP_RESEND_COOLDOWN', $settings['TYRO_LOGIN_OTP_RESEND_COOLDOWN']) }}">
+                                    </div>
+                                </div>
+
+                                <div class="sys-settings-metrics" style="margin-top:0.85rem;">
                                     <div class="form-group sys-settings-metric" style="margin-bottom:0;">
                                         <label for="TYRO_LOGIN_MAGIC_LINK_EXPIRE" class="form-label">Magic link expire (min)</label>
                                         <input type="number" name="TYRO_LOGIN_MAGIC_LINK_EXPIRE" id="TYRO_LOGIN_MAGIC_LINK_EXPIRE"
@@ -1089,6 +1235,38 @@
                                             </div>
                                         </div>
                                     </div>
+
+                                    <div class="sys-settings-toggle">
+                                        <div class="sys-settings-toggle-top">
+                                            <div>
+                                                <p class="sys-settings-toggle-title">Link existing accounts by email</p>
+                                                <p class="sys-settings-toggle-description">Writes <code>TYRO_LOGIN_SOCIAL_LINK_EXISTING</code>.</p>
+                                            </div>
+                                            <div>
+                                                <input type="hidden" name="TYRO_LOGIN_SOCIAL_LINK_EXISTING" value="0">
+                                                <label class="toggle-label">
+                                                    <input type="checkbox" name="TYRO_LOGIN_SOCIAL_LINK_EXISTING" value="1" class="toggle-input" {{ old('TYRO_LOGIN_SOCIAL_LINK_EXISTING', $settings['TYRO_LOGIN_SOCIAL_LINK_EXISTING']) ? 'checked' : '' }}>
+                                                    <span class="toggle-slider"></span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="sys-settings-toggle">
+                                        <div class="sys-settings-toggle-top">
+                                            <div>
+                                                <p class="sys-settings-toggle-title">Auto-verify email after social login</p>
+                                                <p class="sys-settings-toggle-description">Writes <code>TYRO_LOGIN_SOCIAL_AUTO_VERIFY_EMAIL</code>.</p>
+                                            </div>
+                                            <div>
+                                                <input type="hidden" name="TYRO_LOGIN_SOCIAL_AUTO_VERIFY_EMAIL" value="0">
+                                                <label class="toggle-label">
+                                                    <input type="checkbox" name="TYRO_LOGIN_SOCIAL_AUTO_VERIFY_EMAIL" value="1" class="toggle-input" {{ old('TYRO_LOGIN_SOCIAL_AUTO_VERIFY_EMAIL', $settings['TYRO_LOGIN_SOCIAL_AUTO_VERIFY_EMAIL']) ? 'checked' : '' }}>
+                                                    <span class="toggle-slider"></span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
 
@@ -1114,7 +1292,7 @@
                                     </div>
                                 </div>
 
-                                <div class="sys-settings-metrics" style="margin-bottom:0;">
+                                <div class="sys-settings-metrics" style="margin-bottom:0.85rem;">
                                     <div class="form-group sys-settings-metric" style="margin-bottom:0;">
                                         <label for="TYRO_LOGIN_LOCKOUT_MAX_ATTEMPTS" class="form-label">Max attempts</label>
                                         <input type="number" name="TYRO_LOGIN_LOCKOUT_MAX_ATTEMPTS" id="TYRO_LOGIN_LOCKOUT_MAX_ATTEMPTS"
@@ -1126,6 +1304,22 @@
                                         <input type="number" name="TYRO_LOGIN_LOCKOUT_DURATION" id="TYRO_LOGIN_LOCKOUT_DURATION"
                                                class="form-input" min="1" max="1440"
                                                value="{{ old('TYRO_LOGIN_LOCKOUT_DURATION', $settings['TYRO_LOGIN_LOCKOUT_DURATION']) }}">
+                                    </div>
+                                </div>
+
+                                <div class="sys-settings-toggle" style="margin-bottom:0;">
+                                    <div class="sys-settings-toggle-top">
+                                        <div>
+                                            <p class="sys-settings-toggle-title">Show remaining attempts</p>
+                                            <p class="sys-settings-toggle-description">Writes <code>TYRO_LOGIN_SHOW_ATTEMPTS_LEFT</code>.</p>
+                                        </div>
+                                        <div>
+                                            <input type="hidden" name="TYRO_LOGIN_SHOW_ATTEMPTS_LEFT" value="0">
+                                            <label class="toggle-label">
+                                                <input type="checkbox" name="TYRO_LOGIN_SHOW_ATTEMPTS_LEFT" value="1" class="toggle-input" {{ old('TYRO_LOGIN_SHOW_ATTEMPTS_LEFT', $settings['TYRO_LOGIN_SHOW_ATTEMPTS_LEFT']) ? 'checked' : '' }}>
+                                                <span class="toggle-slider"></span>
+                                            </label>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
