@@ -151,6 +151,59 @@
     .sys-settings-metrics { grid-template-columns: 1fr; }
     .sys-settings-toggle-top { align-items: flex-start; }
 }
+
+.branding-theme-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.85rem;
+}
+.branding-theme-color {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem;
+    border: 1px solid var(--border);
+    border-radius: 0.75rem;
+    background: var(--card);
+}
+.branding-theme-color-meta {
+    flex: 1;
+    min-width: 0;
+}
+.branding-theme-color-name {
+    font-size: 0.84rem;
+    font-weight: 600;
+    color: var(--foreground);
+}
+.branding-theme-color-var {
+    font-size: 0.72rem;
+    color: var(--muted-foreground);
+    font-family: monospace;
+    margin-top: 0.05rem;
+}
+.branding-theme-color-text {
+    width: 80px;
+    padding: 0.4rem 0.5rem;
+    border: 1px solid var(--border);
+    border-radius: 0.45rem;
+    background: var(--muted);
+    color: var(--foreground);
+    font-size: 0.8rem;
+    font-family: monospace;
+    text-align: center;
+    transition: border-color 0.15s;
+    flex-shrink: 0;
+}
+.branding-theme-color-text:focus {
+    border-color: var(--primary);
+    outline: none;
+}
+.branding-surface-title {
+    margin: 0 0 0.25rem;
+    color: var(--foreground);
+    font-size: 0.94rem;
+    font-weight: 700;
+}
 </style>
 @endpush
 
@@ -186,6 +239,10 @@
             <button class="vtabs-item" data-vtab="login-auth" type="button">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><path stroke-linecap="round" stroke-linejoin="round" d="M12 2l7 4v6c0 5-3.5 9.5-7 10-3.5-.5-7-5-7-10V6l7-4z"/><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4"/></svg>
                 Login &amp; Auth
+            </button>
+            <button class="vtabs-item" data-vtab="sidebar-admin-bar" type="button">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="9" y1="3" x2="9" y2="21"/></svg>
+                Sidebar &amp; Admin Bar
             </button>
         </nav>
 
@@ -373,67 +430,6 @@
                                 </div>
                             </div>
 
-                            <div class="sys-settings-surface">
-                                <h4 class="sys-settings-surface-title">Admin Bar</h4>
-                                <p class="sys-settings-surface-description">A notice bar at the top of the dashboard.</p>
-
-                                <div class="sys-settings-toggles" style="margin-bottom:0.85rem;">
-                                    <div class="sys-settings-toggle">
-                                        <div class="sys-settings-toggle-top">
-                                            <div>
-                                                <p class="sys-settings-toggle-title">Enable admin bar</p>
-                                                <p class="sys-settings-toggle-description">Writes <code>TYRO_DASHBOARD_ADMIN_BAR_ENABLED</code>.</p>
-                                            </div>
-                                            <div>
-                                                <input type="hidden" name="TYRO_DASHBOARD_ADMIN_BAR_ENABLED" value="0">
-                                                <label class="toggle-label">
-                                                    <input type="checkbox" name="TYRO_DASHBOARD_ADMIN_BAR_ENABLED" value="1" class="toggle-input" {{ old('TYRO_DASHBOARD_ADMIN_BAR_ENABLED', $settings['TYRO_DASHBOARD_ADMIN_BAR_ENABLED']) ? 'checked' : '' }}>
-                                                    <span class="toggle-slider"></span>
-                                                </label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="form-group" style="margin-bottom:0.85rem;">
-                                    <label for="TYRO_DASHBOARD_ADMIN_BAR_MESSAGE" class="form-label">Bar message</label>
-                                    <input type="text" name="TYRO_DASHBOARD_ADMIN_BAR_MESSAGE" id="TYRO_DASHBOARD_ADMIN_BAR_MESSAGE"
-                                           class="form-input" maxlength="500"
-                                           value="{{ old('TYRO_DASHBOARD_ADMIN_BAR_MESSAGE', $settings['TYRO_DASHBOARD_ADMIN_BAR_MESSAGE']) }}">
-                                </div>
-
-                                <div class="sys-settings-metrics">
-                                    <div class="form-group sys-settings-metric" style="margin-bottom:0;">
-                                        <label for="TYRO_DASHBOARD_ADMIN_BAR_BG_COLOR" class="form-label">Background color</label>
-                                        <input type="text" name="TYRO_DASHBOARD_ADMIN_BAR_BG_COLOR" id="TYRO_DASHBOARD_ADMIN_BAR_BG_COLOR"
-                                               class="form-input" maxlength="50"
-                                               value="{{ old('TYRO_DASHBOARD_ADMIN_BAR_BG_COLOR', $settings['TYRO_DASHBOARD_ADMIN_BAR_BG_COLOR']) }}">
-                                    </div>
-                                    <div class="form-group sys-settings-metric" style="margin-bottom:0;">
-                                        <label for="TYRO_DASHBOARD_ADMIN_BAR_TEXT_COLOR" class="form-label">Text color</label>
-                                        <input type="text" name="TYRO_DASHBOARD_ADMIN_BAR_TEXT_COLOR" id="TYRO_DASHBOARD_ADMIN_BAR_TEXT_COLOR"
-                                               class="form-input" maxlength="50"
-                                               value="{{ old('TYRO_DASHBOARD_ADMIN_BAR_TEXT_COLOR', $settings['TYRO_DASHBOARD_ADMIN_BAR_TEXT_COLOR']) }}">
-                                    </div>
-                                </div>
-
-                                <div class="sys-settings-metrics" style="margin-top:0.85rem;">
-                                    <div class="form-group sys-settings-metric" style="margin-bottom:0;">
-                                        <label for="TYRO_DASHBOARD_ADMIN_BAR_ALIGN" class="form-label">Alignment</label>
-                                        <select name="TYRO_DASHBOARD_ADMIN_BAR_ALIGN" id="TYRO_DASHBOARD_ADMIN_BAR_ALIGN" class="form-select">
-                                            <option value="left" {{ old('TYRO_DASHBOARD_ADMIN_BAR_ALIGN', $settings['TYRO_DASHBOARD_ADMIN_BAR_ALIGN']) === 'left' ? 'selected' : '' }}>Left</option>
-                                            <option value="center" {{ old('TYRO_DASHBOARD_ADMIN_BAR_ALIGN', $settings['TYRO_DASHBOARD_ADMIN_BAR_ALIGN']) === 'center' ? 'selected' : '' }}>Center</option>
-                                            <option value="right" {{ old('TYRO_DASHBOARD_ADMIN_BAR_ALIGN', $settings['TYRO_DASHBOARD_ADMIN_BAR_ALIGN']) === 'right' ? 'selected' : '' }}>Right</option>
-                                        </select>
-                                    </div>
-                                    <div class="form-group sys-settings-metric" style="margin-bottom:0;">
-                                        <label for="TYRO_DASHBOARD_ADMIN_BAR_HEIGHT" class="form-label">Bar height</label>
-                                        <input type="text" name="TYRO_DASHBOARD_ADMIN_BAR_HEIGHT" id="TYRO_DASHBOARD_ADMIN_BAR_HEIGHT"
-                                               class="form-input" maxlength="20"
-                                               value="{{ old('TYRO_DASHBOARD_ADMIN_BAR_HEIGHT', $settings['TYRO_DASHBOARD_ADMIN_BAR_HEIGHT']) }}">
-                                    </div>
-                                </div>
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -1111,6 +1107,302 @@
                     </div>
                 </div>
             </div>
+
+        {{-- Sidebar & Admin Bar Tab --}}
+        @php
+            $sbBg   = old('TYRO_DASHBOARD_SIDEBAR_BG', $settings['TYRO_DASHBOARD_SIDEBAR_BG'] ?: '#0e0e0e');
+            $sbText = old('TYRO_DASHBOARD_SIDEBAR_TEXT', $settings['TYRO_DASHBOARD_SIDEBAR_TEXT'] ?: '#f8fafc');
+            $sbPrimary = old('TYRO_DASHBOARD_SIDEBAR_PRIMARY', $settings['TYRO_DASHBOARD_SIDEBAR_PRIMARY'] ?: '#333333');
+            $sbAccent = old('TYRO_DASHBOARD_SIDEBAR_ACCENT', $settings['TYRO_DASHBOARD_SIDEBAR_ACCENT'] ?: '#f5f5f5');
+            $sbAccentFg = old('TYRO_DASHBOARD_SIDEBAR_ACCENT_FOREGROUND', $settings['TYRO_DASHBOARD_SIDEBAR_ACCENT_FOREGROUND'] ?: '#171717');
+            $sbHeaderBorder = old('TYRO_DASHBOARD_SIDEBAR_HEADER_BORDER', $settings['TYRO_DASHBOARD_SIDEBAR_HEADER_BORDER'] ?: '#333c56');
+            $sbAccordionCompact = filter_var(old('TYRO_DASHBOARD_SIDEBAR_ACCORDION_COMPACT', $settings['TYRO_DASHBOARD_SIDEBAR_ACCORDION_COMPACT'] ?? false), FILTER_VALIDATE_BOOLEAN);
+            $abBg = old('TYRO_DASHBOARD_ADMIN_BAR_BG_COLOR', $settings['TYRO_DASHBOARD_ADMIN_BAR_BG_COLOR'] ?: '#000000');
+            $abText = old('TYRO_DASHBOARD_ADMIN_BAR_TEXT_COLOR', $settings['TYRO_DASHBOARD_ADMIN_BAR_TEXT_COLOR'] ?: '#ffffff');
+            $abMessage = old('TYRO_DASHBOARD_ADMIN_BAR_MESSAGE', $settings['TYRO_DASHBOARD_ADMIN_BAR_MESSAGE'] ?: '');
+            $abAlign = old('TYRO_DASHBOARD_ADMIN_BAR_ALIGN', $settings['TYRO_DASHBOARD_ADMIN_BAR_ALIGN'] ?: 'left');
+            $abHeight = old('TYRO_DASHBOARD_ADMIN_BAR_HEIGHT', $settings['TYRO_DASHBOARD_ADMIN_BAR_HEIGHT'] ?: '40px');
+        @endphp
+        <div class="vtabs-panel" id="vtab-sidebar-admin-bar">
+            <div class="card">
+                <div class="card-header" style="display:flex;align-items:center;justify-content:space-between;gap:1rem;">
+                    <h3 class="card-title">Sidebar &amp; Admin Bar</h3>
+                    <button type="submit" form="systemSettingsForm" class="btn btn-primary btn-sm section-save-button">Save</button>
+                </div>
+                <div class="card-body">
+                    <div class="sys-settings-section-intro">
+                        <div class="sys-settings-section-copy">
+                            <h4 class="sys-settings-section-heading">Customize the sidebar and admin bar appearance</h4>
+                            <p class="sys-settings-section-description">Pick colors for the dashboard sidebar and configure the admin notice bar. Values are stored in <code>.env</code> and take effect after saving.</p>
+                        </div>
+                        <span class="sys-settings-section-badge">Colors</span>
+                    </div>
+
+                    {{-- Sidebar Colors --}}
+                    <div class="sys-settings-surface" style="margin-bottom:1.25rem;">
+                        <h4 class="sys-settings-surface-title">Sidebar Colors</h4>
+                        <p class="sys-settings-surface-description">Background, text, highlight, hover, and separator colors for the dashboard sidebar.</p>
+
+                        <div class="sys-settings-toggles" style="margin-bottom:1rem;">
+                            <div class="sys-settings-toggle">
+                                <div class="sys-settings-toggle-top">
+                                    <div>
+                                        <p class="sys-settings-toggle-title">Accordion style sidebar sections</p>
+                                        <p class="sys-settings-toggle-description">When enabled, sidebar sections are collapsible. Writes <code>TYRO_DASHBOARD_SIDEBAR_ACCORDION_COMPACT</code>.</p>
+                                    </div>
+                                    <div>
+                                        <input type="hidden" name="TYRO_DASHBOARD_SIDEBAR_ACCORDION_COMPACT" value="0">
+                                        <label class="toggle-label">
+                                            <input type="checkbox" name="TYRO_DASHBOARD_SIDEBAR_ACCORDION_COMPACT" value="1" class="toggle-input" id="sb_accordion_compact" {{ $sbAccordionCompact ? 'checked' : '' }}>
+                                            <span class="toggle-slider"></span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="branding-theme-grid">
+                            <div class="branding-theme-color">
+                                <input type="color"
+                                    name="TYRO_DASHBOARD_SIDEBAR_BG"
+                                    id="sb_bg_picker"
+                                    value="{{ $sbBg }}"
+                                    data-default="#0e0e0e"
+                                    style="width:36px;height:36px;padding:2px;border:1px solid var(--border);border-radius:6px;cursor:pointer;background:var(--background);flex-shrink:0;"
+                                    oninput="document.getElementById('sb_bg_text').value=this.value;updateSbPreview()">
+                                <div class="branding-theme-color-meta">
+                                    <div class="branding-theme-color-name">Background</div>
+                                    <div class="branding-theme-color-var">--sidebar</div>
+                                </div>
+                                <input type="text"
+                                    id="sb_bg_text"
+                                    value="{{ $sbBg }}"
+                                    maxlength="7"
+                                    class="branding-theme-color-text"
+                                    oninput="syncSbPicker(this,'sb_bg_picker');updateSbPreview()">
+                            </div>
+
+                            <div class="branding-theme-color">
+                                <input type="color"
+                                    name="TYRO_DASHBOARD_SIDEBAR_TEXT"
+                                    id="sb_text_picker"
+                                    value="{{ $sbText }}"
+                                    data-default="#f8fafc"
+                                    style="width:36px;height:36px;padding:2px;border:1px solid var(--border);border-radius:6px;cursor:pointer;background:var(--background);flex-shrink:0;"
+                                    oninput="document.getElementById('sb_text_text').value=this.value;updateSbPreview()">
+                                <div class="branding-theme-color-meta">
+                                    <div class="branding-theme-color-name">Text</div>
+                                    <div class="branding-theme-color-var">--sidebar-foreground</div>
+                                </div>
+                                <input type="text"
+                                    id="sb_text_text"
+                                    value="{{ $sbText }}"
+                                    maxlength="7"
+                                    class="branding-theme-color-text"
+                                    oninput="syncSbPicker(this,'sb_text_picker');updateSbPreview()">
+                            </div>
+
+                            <div class="branding-theme-color">
+                                <input type="color"
+                                    name="TYRO_DASHBOARD_SIDEBAR_PRIMARY"
+                                    id="sb_primary_picker"
+                                    value="{{ $sbPrimary }}"
+                                    data-default="#333333"
+                                    style="width:36px;height:36px;padding:2px;border:1px solid var(--border);border-radius:6px;cursor:pointer;background:var(--background);flex-shrink:0;"
+                                    oninput="document.getElementById('sb_primary_text').value=this.value;updateSbPreview()">
+                                <div class="branding-theme-color-meta">
+                                    <div class="branding-theme-color-name">Highlight</div>
+                                    <div class="branding-theme-color-var">--sidebar-primary</div>
+                                </div>
+                                <input type="text"
+                                    id="sb_primary_text"
+                                    value="{{ $sbPrimary }}"
+                                    maxlength="7"
+                                    class="branding-theme-color-text"
+                                    oninput="syncSbPicker(this,'sb_primary_picker');updateSbPreview()">
+                            </div>
+
+                            <div class="branding-theme-color">
+                                <input type="color"
+                                    name="TYRO_DASHBOARD_SIDEBAR_ACCENT"
+                                    id="sb_accent_picker"
+                                    value="{{ $sbAccent }}"
+                                    data-default="#f5f5f5"
+                                    style="width:36px;height:36px;padding:2px;border:1px solid var(--border);border-radius:6px;cursor:pointer;background:var(--background);flex-shrink:0;"
+                                    oninput="document.getElementById('sb_accent_text').value=this.value;updateSbPreview()">
+                                <div class="branding-theme-color-meta">
+                                    <div class="branding-theme-color-name">Hover</div>
+                                    <div class="branding-theme-color-var">--sidebar-accent</div>
+                                </div>
+                                <input type="text"
+                                    id="sb_accent_text"
+                                    value="{{ $sbAccent }}"
+                                    maxlength="7"
+                                    class="branding-theme-color-text"
+                                    oninput="syncSbPicker(this,'sb_accent_picker');updateSbPreview()">
+                            </div>
+
+                            <div class="branding-theme-color">
+                                <input type="color"
+                                    name="TYRO_DASHBOARD_SIDEBAR_ACCENT_FOREGROUND"
+                                    id="sb_accent_fg_picker"
+                                    value="{{ $sbAccentFg }}"
+                                    data-default="#171717"
+                                    style="width:36px;height:36px;padding:2px;border:1px solid var(--border);border-radius:6px;cursor:pointer;background:var(--background);flex-shrink:0;"
+                                    oninput="document.getElementById('sb_accent_fg_text').value=this.value;updateSbPreview()">
+                                <div class="branding-theme-color-meta">
+                                    <div class="branding-theme-color-name">Hover Text</div>
+                                    <div class="branding-theme-color-var">--sidebar-accent-foreground</div>
+                                </div>
+                                <input type="text"
+                                    id="sb_accent_fg_text"
+                                    value="{{ $sbAccentFg }}"
+                                    maxlength="7"
+                                    class="branding-theme-color-text"
+                                    oninput="syncSbPicker(this,'sb_accent_fg_picker');updateSbPreview()">
+                            </div>
+
+                            <div class="branding-theme-color">
+                                <input type="color"
+                                    name="TYRO_DASHBOARD_SIDEBAR_HEADER_BORDER"
+                                    id="sb_header_border_picker"
+                                    value="{{ $sbHeaderBorder }}"
+                                    data-default="#333c56"
+                                    style="width:36px;height:36px;padding:2px;border:1px solid var(--border);border-radius:6px;cursor:pointer;background:var(--background);flex-shrink:0;"
+                                    oninput="document.getElementById('sb_header_border_text').value=this.value;updateSbPreview()">
+                                <div class="branding-theme-color-meta">
+                                    <div class="branding-theme-color-name">Separator</div>
+                                    <div class="branding-theme-color-var">--sidebar-header-border</div>
+                                </div>
+                                <input type="text"
+                                    id="sb_header_border_text"
+                                    value="{{ $sbHeaderBorder }}"
+                                    maxlength="7"
+                                    class="branding-theme-color-text"
+                                    oninput="syncSbPicker(this,'sb_header_border_picker');updateSbPreview()">
+                            </div>
+                        </div>
+
+                        {{-- Sidebar live preview --}}
+                        <h4 class="branding-surface-title" style="margin:1.25rem 0 0.75rem;">Sidebar Preview</h4>
+                        <div id="sidebarPreview" style="border-radius:0.75rem;overflow:hidden;border:1px solid var(--border);width:25rem;">
+                            <div style="padding:1rem 1.25rem;display:flex;align-items:center;gap:0.75rem;background:{{ $sbBg }};border-bottom:1px solid {{ $sbHeaderBorder }};">
+                                <div style="width:24px;height:24px;border-radius:6px;background:{{ $sbText }};opacity:0.85;display:flex;align-items:center;justify-content:center;">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="{{ $sbBg }}" stroke-width="2" style="width:14px;height:14px;"><rect x="3" y="3" width="18" height="18" rx="2"/></svg>
+                                </div>
+                                <span style="font-size:0.94rem;font-weight:600;color:{{ $sbText }};">Dashboard</span>
+                            </div>
+                            <div style="padding:0.5rem 0.75rem 0.75rem;display:flex;flex-direction:column;gap:4px;background:{{ $sbBg }};">
+                                <div style="padding:0.4rem 0.6rem;border-radius:6px;font-size:0.82rem;font-weight:500;color:{{ $sbText }};opacity:0.7;">Users</div>
+                                <div style="padding:0.4rem 0.6rem;border-radius:6px;font-size:0.82rem;font-weight:500;background:{{ $sbPrimary }};color:{{ $sbText }};">Settings</div>
+                                <div style="padding:0.4rem 0.6rem;border-radius:6px;font-size:0.82rem;font-weight:500;background:{{ $sbAccent }};color:{{ $sbAccentFg }};">System</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {{-- Admin Bar Colors --}}
+                    <div class="sys-settings-surface">
+                        <h4 class="sys-settings-surface-title">Admin Bar Colors</h4>
+                        <p class="sys-settings-surface-description">The admin notice bar sits at the top of the dashboard. Control its visibility, colors, message, alignment, and height.</p>
+
+                        <div class="sys-settings-toggles" style="margin-bottom:1rem;">
+                            <div class="sys-settings-toggle">
+                                <div class="sys-settings-toggle-top">
+                                    <div>
+                                        <p class="sys-settings-toggle-title">Enable admin bar</p>
+                                        <p class="sys-settings-toggle-description">Writes <code>TYRO_DASHBOARD_ADMIN_BAR_ENABLED</code>.</p>
+                                    </div>
+                                    <div>
+                                        <input type="hidden" name="TYRO_DASHBOARD_ADMIN_BAR_ENABLED" value="0">
+                                        <label class="toggle-label">
+                                            <input type="checkbox" name="TYRO_DASHBOARD_ADMIN_BAR_ENABLED" value="1" class="toggle-input" id="ab_enabled" {{ old('TYRO_DASHBOARD_ADMIN_BAR_ENABLED', $settings['TYRO_DASHBOARD_ADMIN_BAR_ENABLED']) ? 'checked' : '' }}>
+                                            <span class="toggle-slider"></span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group" style="margin-bottom:0.85rem;">
+                            <label for="TYRO_DASHBOARD_ADMIN_BAR_MESSAGE" class="form-label">Bar message</label>
+                            <input type="text" name="TYRO_DASHBOARD_ADMIN_BAR_MESSAGE" id="TYRO_DASHBOARD_ADMIN_BAR_MESSAGE"
+                                   class="form-input" maxlength="500"
+                                   value="{{ $abMessage }}">
+                        </div>
+
+                        <div class="branding-theme-grid" style="margin-bottom:1rem;">
+                            <div class="branding-theme-color">
+                                <input type="color"
+                                    name="TYRO_DASHBOARD_ADMIN_BAR_BG_COLOR"
+                                    id="ab_bg_picker"
+                                    value="{{ $abBg }}"
+                                    data-default="#000000"
+                                    style="width:36px;height:36px;padding:2px;border:1px solid var(--border);border-radius:6px;cursor:pointer;background:var(--background);flex-shrink:0;"
+                                    oninput="document.getElementById('ab_bg_text').value=this.value;updateAbPreview()">
+                                <div class="branding-theme-color-meta">
+                                    <div class="branding-theme-color-name">Bar Background</div>
+                                    <div class="branding-theme-color-var">--admin-bar-bg</div>
+                                </div>
+                                <input type="text"
+                                    id="ab_bg_text"
+                                    value="{{ $abBg }}"
+                                    maxlength="7"
+                                    class="branding-theme-color-text"
+                                    oninput="syncSbPicker(this,'ab_bg_picker');updateAbPreview()">
+                            </div>
+
+                            <div class="branding-theme-color">
+                                <input type="color"
+                                    name="TYRO_DASHBOARD_ADMIN_BAR_TEXT_COLOR"
+                                    id="ab_text_picker"
+                                    value="{{ $abText }}"
+                                    data-default="#ffffff"
+                                    style="width:36px;height:36px;padding:2px;border:1px solid var(--border);border-radius:6px;cursor:pointer;background:var(--background);flex-shrink:0;"
+                                    oninput="document.getElementById('ab_text_text').value=this.value;updateAbPreview()">
+                                <div class="branding-theme-color-meta">
+                                    <div class="branding-theme-color-name">Bar Text</div>
+                                    <div class="branding-theme-color-var">--admin-bar-text</div>
+                                </div>
+                                <input type="text"
+                                    id="ab_text_text"
+                                    value="{{ $abText }}"
+                                    maxlength="7"
+                                    class="branding-theme-color-text"
+                                    oninput="syncSbPicker(this,'ab_text_picker');updateAbPreview()">
+                            </div>
+                        </div>
+
+                        <div class="sys-settings-metrics" style="margin-bottom:0;">
+                            <div class="form-group sys-settings-metric" style="margin-bottom:0;">
+                                <label for="TYRO_DASHBOARD_ADMIN_BAR_ALIGN" class="form-label">Text alignment</label>
+                                <select name="TYRO_DASHBOARD_ADMIN_BAR_ALIGN" id="ab_align" class="form-select" onchange="updateAbPreview()">
+                                    <option value="left" {{ $abAlign === 'left' ? 'selected' : '' }}>Left</option>
+                                    <option value="center" {{ $abAlign === 'center' ? 'selected' : '' }}>Center</option>
+                                    <option value="right" {{ $abAlign === 'right' ? 'selected' : '' }}>Right</option>
+                                </select>
+                            </div>
+                            <div class="form-group sys-settings-metric" style="margin-bottom:0;">
+                                <label for="TYRO_DASHBOARD_ADMIN_BAR_HEIGHT" class="form-label">Bar height</label>
+                                <input type="text" name="TYRO_DASHBOARD_ADMIN_BAR_HEIGHT" id="ab_height"
+                                       class="form-input" maxlength="20"
+                                       value="{{ $abHeight }}" onchange="updateAbPreview()">
+                            </div>
+                        </div>
+
+                        {{-- Admin bar live preview --}}
+                        <h4 class="branding-surface-title" style="margin:1.25rem 0 0.75rem;">Admin Bar Preview</h4>
+                        <div id="adminBarPreview" style="border-radius:0.75rem;overflow:hidden;border:1px solid var(--border);">
+                            <div id="ab_preview_bar" style="padding:0.5rem 1rem;background:{{ $abBg }};color:{{ $abText }};text-align:{{ $abAlign }};font-size:0.85rem;font-weight:500;height:{{ $abHeight }};display:flex;align-items:center;justify-content:{{ $abAlign === 'center' ? 'center' : ($abAlign === 'right' ? 'flex-end' : 'flex-start') }};">
+                                <span id="ab_preview_text">{{ $abMessage ?: 'Admin notice bar message' }}</span>
+                            </div>
+                            <div style="padding:1rem;background:var(--card);">
+                                <div style="height:12px;width:60%;background:var(--muted);border-radius:4px;margin-bottom:8px;"></div>
+                                <div style="height:12px;width:40%;background:var(--muted);border-radius:4px;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -1125,6 +1417,69 @@
 
 @push('scripts')
 <script>
+function syncSbPicker(textInput, pickerId) {
+    var picker = document.getElementById(pickerId);
+    if (picker) picker.value = textInput.value;
+}
+
+function updateSbPreview() {
+    var bg = document.getElementById('sb_bg_picker').value;
+    var text = document.getElementById('sb_text_picker').value;
+    var primary = document.getElementById('sb_primary_picker').value;
+    var accent = document.getElementById('sb_accent_picker').value;
+    var accentFg = document.getElementById('sb_accent_fg_picker').value;
+    var headerBorder = document.getElementById('sb_header_border_picker').value;
+
+    var preview = document.getElementById('sidebarPreview');
+    if (!preview) return;
+
+    var header = preview.querySelector('div:first-child');
+    if (header) {
+        header.style.background = bg;
+        header.style.borderBottomColor = headerBorder;
+        var iconBox = header.querySelector('div:first-child');
+        if (iconBox) {
+            iconBox.style.background = text;
+            var svg = iconBox.querySelector('svg');
+            if (svg) svg.setAttribute('stroke', bg);
+        }
+        var title = header.querySelector('span');
+        if (title) title.style.color = text;
+    }
+
+    var body = preview.querySelector('div:last-child');
+    if (body) {
+        body.style.background = bg;
+        var items = body.querySelectorAll('div');
+        if (items.length >= 3) {
+            items[0].style.color = text;
+            items[1].style.background = primary;
+            items[1].style.color = text;
+            items[2].style.background = accent;
+            items[2].style.color = accentFg;
+        }
+    }
+}
+
+function updateAbPreview() {
+    var bg = document.getElementById('ab_bg_picker').value;
+    var text = document.getElementById('ab_text_picker').value;
+    var align = document.getElementById('ab_align').value;
+    var height = document.getElementById('ab_height').value;
+    var msg = document.getElementById('TYRO_DASHBOARD_ADMIN_BAR_MESSAGE').value;
+
+    var bar = document.getElementById('ab_preview_bar');
+    if (!bar) return;
+
+    bar.style.background = bg;
+    bar.style.color = text;
+    bar.style.height = height;
+    bar.style.justifyContent = align === 'center' ? 'center' : (align === 'right' ? 'flex-end' : 'flex-start');
+
+    var textEl = document.getElementById('ab_preview_text');
+    if (textEl) textEl.textContent = msg || 'Admin notice bar message';
+}
+
 (function() {
     var form = document.getElementById('systemSettingsForm');
     if (!form) return;
