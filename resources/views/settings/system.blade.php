@@ -1390,12 +1390,12 @@
 
                                 <div class="form-group" style="margin-bottom:0.85rem;">
                                     <label for="TYRO_LOGIN_LOGO" class="form-label">Logo URL</label>
-                                    <input type="url" name="TYRO_LOGIN_LOGO" id="TYRO_LOGIN_LOGO" class="form-input" maxlength="500" value="{{ old('TYRO_LOGIN_LOGO', $settings['TYRO_LOGIN_LOGO']) }}">
+                                    <input type="text" name="TYRO_LOGIN_LOGO" id="TYRO_LOGIN_LOGO" class="form-input" maxlength="500" value="{{ old('TYRO_LOGIN_LOGO', $settings['TYRO_LOGIN_LOGO']) }}">
                                     <p class="form-hint">Custom logo shown on auth pages.</p>
                                 </div>
                                 <div class="form-group" style="margin-bottom:0.85rem;">
                                     <label for="TYRO_LOGIN_LOGO_DARK" class="form-label">Logo URL (dark mode)</label>
-                                    <input type="url" name="TYRO_LOGIN_LOGO_DARK" id="TYRO_LOGIN_LOGO_DARK" class="form-input" maxlength="500" value="{{ old('TYRO_LOGIN_LOGO_DARK', $settings['TYRO_LOGIN_LOGO_DARK']) }}">
+                                    <input type="text" name="TYRO_LOGIN_LOGO_DARK" id="TYRO_LOGIN_LOGO_DARK" class="form-input" maxlength="500" value="{{ old('TYRO_LOGIN_LOGO_DARK', $settings['TYRO_LOGIN_LOGO_DARK']) }}">
                                     <p class="form-hint">Falls back to the light logo when not set.</p>
                                 </div>
                                 <div class="form-group" style="margin-bottom:0;">

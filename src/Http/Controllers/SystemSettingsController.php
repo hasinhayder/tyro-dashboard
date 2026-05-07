@@ -225,8 +225,8 @@ class SystemSettingsController extends BaseController {
                 ? ($value ? 'true' : 'false')
                 : (string) $value;
 
-            $escaped = str_replace("'", "\\'", $envValue);
-            $serialized = "'{$escaped}'";
+            $sanitized = str_replace('"', "'", $envValue);
+            $serialized = "\"{$sanitized}\"";
 
             if (preg_match("/^{$key}=/m", $content)) {
                 $content = preg_replace("/^{$key}=.*/m", "{$key}={$serialized}", $content);
