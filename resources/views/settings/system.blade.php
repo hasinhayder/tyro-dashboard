@@ -204,6 +204,23 @@
     font-size: 0.94rem;
     font-weight: 700;
 }
+.branding-color-reset {
+    padding:4px;
+    border:none;
+    background:none;
+    cursor:pointer;
+    color:var(--muted-foreground);
+    flex-shrink:0;
+    border-radius:4px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    transition: color 0.15s ease, background 0.15s ease;
+}
+.branding-color-reset:hover {
+    color: var(--destructive);
+    background: color-mix(in srgb, var(--destructive), transparent 90%);
+}
 </style>
 @endpush
 
@@ -1140,7 +1157,10 @@
 
                     {{-- Sidebar Colors --}}
                     <div class="sys-settings-surface" style="margin-bottom:1.25rem;">
-                        <h4 class="sys-settings-surface-title">Sidebar Colors</h4>
+                        <div style="display:flex;align-items:center;justify-content:space-between;gap:0.75rem;margin-bottom:0.5rem;">
+                            <h4 class="sys-settings-surface-title" style="margin:0;">Sidebar Colors</h4>
+                            <button type="button" onclick="confirmResetSbColors()" class="btn btn-secondary btn-sm">Reset to Default</button>
+                        </div>
                         <p class="sys-settings-surface-description">Background, text, highlight, hover, and separator colors for the dashboard sidebar.</p>
 
                         <div class="sys-settings-toggles" style="margin-bottom:1rem;">
@@ -1180,6 +1200,9 @@
                                     maxlength="7"
                                     class="branding-theme-color-text"
                                     oninput="syncSbPicker(this,'sb_bg_picker');updateSbPreview()">
+                                <button type="button" onclick="resetSingleSbColor(this)" class="branding-color-reset" title="Reset to default">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px;"><path stroke-linecap="round" stroke-linejoin="round" d="M1 4v6h6M23 20v-6h-6"/><path stroke-linecap="round" stroke-linejoin="round" d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15"/></svg>
+                                </button>
                             </div>
 
                             <div class="branding-theme-color">
@@ -1200,6 +1223,9 @@
                                     maxlength="7"
                                     class="branding-theme-color-text"
                                     oninput="syncSbPicker(this,'sb_text_picker');updateSbPreview()">
+                                <button type="button" onclick="resetSingleSbColor(this)" class="branding-color-reset" title="Reset to default">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px;"><path stroke-linecap="round" stroke-linejoin="round" d="M1 4v6h6M23 20v-6h-6"/><path stroke-linecap="round" stroke-linejoin="round" d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15"/></svg>
+                                </button>
                             </div>
 
                             <div class="branding-theme-color">
@@ -1220,6 +1246,9 @@
                                     maxlength="7"
                                     class="branding-theme-color-text"
                                     oninput="syncSbPicker(this,'sb_primary_picker');updateSbPreview()">
+                                <button type="button" onclick="resetSingleSbColor(this)" class="branding-color-reset" title="Reset to default">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px;"><path stroke-linecap="round" stroke-linejoin="round" d="M1 4v6h6M23 20v-6h-6"/><path stroke-linecap="round" stroke-linejoin="round" d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15"/></svg>
+                                </button>
                             </div>
 
                             <div class="branding-theme-color">
@@ -1240,6 +1269,9 @@
                                     maxlength="7"
                                     class="branding-theme-color-text"
                                     oninput="syncSbPicker(this,'sb_accent_picker');updateSbPreview()">
+                                <button type="button" onclick="resetSingleSbColor(this)" class="branding-color-reset" title="Reset to default">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px;"><path stroke-linecap="round" stroke-linejoin="round" d="M1 4v6h6M23 20v-6h-6"/><path stroke-linecap="round" stroke-linejoin="round" d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15"/></svg>
+                                </button>
                             </div>
 
                             <div class="branding-theme-color">
@@ -1260,6 +1292,9 @@
                                     maxlength="7"
                                     class="branding-theme-color-text"
                                     oninput="syncSbPicker(this,'sb_accent_fg_picker');updateSbPreview()">
+                                <button type="button" onclick="resetSingleSbColor(this)" class="branding-color-reset" title="Reset to default">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px;"><path stroke-linecap="round" stroke-linejoin="round" d="M1 4v6h6M23 20v-6h-6"/><path stroke-linecap="round" stroke-linejoin="round" d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15"/></svg>
+                                </button>
                             </div>
 
                             <div class="branding-theme-color">
@@ -1280,6 +1315,9 @@
                                     maxlength="7"
                                     class="branding-theme-color-text"
                                     oninput="syncSbPicker(this,'sb_header_border_picker');updateSbPreview()">
+                                <button type="button" onclick="resetSingleSbColor(this)" class="branding-color-reset" title="Reset to default">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px;"><path stroke-linecap="round" stroke-linejoin="round" d="M1 4v6h6M23 20v-6h-6"/><path stroke-linecap="round" stroke-linejoin="round" d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15"/></svg>
+                                </button>
                             </div>
                         </div>
 
@@ -1302,7 +1340,10 @@
 
                     {{-- Admin Bar Colors --}}
                     <div class="sys-settings-surface">
-                        <h4 class="sys-settings-surface-title">Admin Bar Colors</h4>
+                        <div style="display:flex;align-items:center;justify-content:space-between;gap:0.75rem;margin-bottom:0.5rem;">
+                            <h4 class="sys-settings-surface-title" style="margin:0;">Admin Bar Colors</h4>
+                            <button type="button" onclick="confirmResetAbColors()" class="btn btn-secondary btn-sm">Reset to Default</button>
+                        </div>
                         <p class="sys-settings-surface-description">The admin notice bar sits at the top of the dashboard. Control its visibility, colors, message, alignment, and height.</p>
 
                         <div class="sys-settings-toggles" style="margin-bottom:1rem;">
@@ -1349,6 +1390,9 @@
                                     maxlength="7"
                                     class="branding-theme-color-text"
                                     oninput="syncSbPicker(this,'ab_bg_picker');updateAbPreview()">
+                                <button type="button" onclick="resetSingleAbColor(this)" class="branding-color-reset" title="Reset to default">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px;"><path stroke-linecap="round" stroke-linejoin="round" d="M1 4v6h6M23 20v-6h-6"/><path stroke-linecap="round" stroke-linejoin="round" d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15"/></svg>
+                                </button>
                             </div>
 
                             <div class="branding-theme-color">
@@ -1369,6 +1413,9 @@
                                     maxlength="7"
                                     class="branding-theme-color-text"
                                     oninput="syncSbPicker(this,'ab_text_picker');updateAbPreview()">
+                                <button type="button" onclick="resetSingleAbColor(this)" class="branding-color-reset" title="Reset to default">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px;"><path stroke-linecap="round" stroke-linejoin="round" d="M1 4v6h6M23 20v-6h-6"/><path stroke-linecap="round" stroke-linejoin="round" d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15"/></svg>
+                                </button>
                             </div>
                         </div>
 
@@ -1478,6 +1525,88 @@ function updateAbPreview() {
 
     var textEl = document.getElementById('ab_preview_text');
     if (textEl) textEl.textContent = msg || 'Admin notice bar message';
+}
+
+// ── Sidebar Colors Reset ──────────────────────────────────────
+function resetSingleSbColor(btn) {
+    var card = btn.closest('.branding-theme-color');
+    if (!card) return;
+    var colorIn = card.querySelector('input[type="color"]');
+    var textIn = card.querySelector('input[type="text"]');
+    var def = colorIn ? colorIn.dataset.default : null;
+    if (def && colorIn) colorIn.value = def;
+    if (def && textIn) textIn.value = def;
+    updateSbPreview();
+}
+
+function resetSbColors() {
+    var defaults = {
+        sb_bg_picker: '#0e0e0e',
+        sb_text_picker: '#f8fafc',
+        sb_primary_picker: '#333333',
+        sb_accent_picker: '#f5f5f5',
+        sb_accent_fg_picker: '#171717',
+        sb_header_border_picker: '#333c56'
+    };
+    Object.keys(defaults).forEach(function(id) {
+        var picker = document.getElementById(id);
+        if (!picker) return;
+        var def = picker.dataset.default || defaults[id];
+        picker.value = def;
+        var textId = id.replace('_picker', '_text');
+        var textInput = document.getElementById(textId);
+        if (textInput) textInput.value = def;
+    });
+    updateSbPreview();
+}
+
+function confirmResetSbColors() {
+    showConfirm(
+        'Reset sidebar colours?',
+        'This will revert the sidebar to its default colours.',
+        { confirmText: 'Reset to Default' }
+    ).then(function(confirmed) {
+        if (confirmed) resetSbColors();
+    });
+}
+
+// ── Admin Bar Colors Reset ────────────────────────────────────
+function resetSingleAbColor(btn) {
+    var card = btn.closest('.branding-theme-color');
+    if (!card) return;
+    var colorIn = card.querySelector('input[type="color"]');
+    var textIn = card.querySelector('input[type="text"]');
+    var def = colorIn ? colorIn.dataset.default : null;
+    if (def && colorIn) colorIn.value = def;
+    if (def && textIn) textIn.value = def;
+    updateAbPreview();
+}
+
+function resetAbColors() {
+    var defaults = {
+        ab_bg_picker: '#000000',
+        ab_text_picker: '#ffffff'
+    };
+    Object.keys(defaults).forEach(function(id) {
+        var picker = document.getElementById(id);
+        if (!picker) return;
+        var def = picker.dataset.default || defaults[id];
+        picker.value = def;
+        var textId = id.replace('_picker', '_text');
+        var textInput = document.getElementById(textId);
+        if (textInput) textInput.value = def;
+    });
+    updateAbPreview();
+}
+
+function confirmResetAbColors() {
+    showConfirm(
+        'Reset admin bar colours?',
+        'This will revert the admin bar to its default colours.',
+        { confirmText: 'Reset to Default' }
+    ).then(function(confirmed) {
+        if (confirmed) resetAbColors();
+    });
 }
 
 (function() {
