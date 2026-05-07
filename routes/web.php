@@ -4,6 +4,7 @@ use HasinHayder\TyroDashboard\Http\Controllers\AuditController;
 use HasinHayder\TyroDashboard\Http\Controllers\ComponentsController;
 use HasinHayder\TyroDashboard\Http\Controllers\DashboardController;
 use HasinHayder\TyroDashboard\Http\Controllers\InvitationController;
+use HasinHayder\TyroDashboard\Http\Controllers\MediaController;
 use HasinHayder\TyroDashboard\Http\Controllers\PrivilegeController;
 use HasinHayder\TyroDashboard\Http\Controllers\ProfileController;
 use HasinHayder\TyroDashboard\Http\Controllers\RoleController;
@@ -69,6 +70,21 @@ if (config('tyro-dashboard.features.invitation_system', true)) {
 
 // Leave impersonation (accessible to anyone currently impersonating)
 Route::post('/leave-impersonation', [UserController::class, 'leaveImpersonation'])->name('leave-impersonation');
+
+// Media Library (all authenticated users)
+Route::get('media', [MediaController::class, 'index'])->name('media');
+Route::prefix('media')->name('media.')->group(function () {
+    Route::post('/upload', [MediaController::class, 'store'])->name('upload');
+    Route::get('/picker', [MediaController::class, 'picker'])->name('picker');
+    Route::get('/image-search', [MediaController::class, 'imageSearch'])->name('image-search');
+    Route::post('/image-import', [MediaController::class, 'imageImport'])->name('image-import');
+    Route::post('/starred-images', [MediaController::class, 'storeStarredImage'])->name('starred-images.store');
+    Route::delete('/starred-images', [MediaController::class, 'destroyStarredImage'])->name('starred-images.destroy');
+    Route::post('/{media}/alt', [MediaController::class, 'updateAlt'])->name('alt');
+    Route::patch('/{media}/rename', [MediaController::class, 'rename'])->name('rename');
+    Route::post('/{media}/crop-resize', [MediaController::class, 'cropResize'])->name('crop-resize');
+    Route::delete('/{media}', [MediaController::class, 'destroy'])->name('destroy')->where('media', '[0-9]+');
+});
 
 // Admin-only routes
 Route::middleware('tyro-dashboard.admin')->group(function () {
