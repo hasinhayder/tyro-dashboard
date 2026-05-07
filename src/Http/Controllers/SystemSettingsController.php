@@ -2,6 +2,7 @@
 
 namespace HasinHayder\TyroDashboard\Http\Controllers;
 
+use HasinHayder\TyroDashboard\Support\DashboardColors;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Artisan;
@@ -86,9 +87,39 @@ class SystemSettingsController extends BaseController {
             'TYRO_LOGIN_EMAIL_VERIFY' => 'nullable|boolean',
             'TYRO_LOGIN_EMAIL_WELCOME' => 'nullable|boolean',
             'TYRO_LOGIN_EMAIL_MAGIC_LINK' => 'nullable|boolean',
+
+            'dashboard_colors' => 'nullable|array',
+            'dashboard_colors.light' => 'nullable|array',
+            'dashboard_colors.dark' => 'nullable|array',
+            'dashboard_colors.light.*.hex' => ['nullable', 'regex:/^#[0-9a-fA-F]{6}$/'],
+            'dashboard_colors.light.*.alpha' => 'nullable|integer|min:0|max:100',
+            'dashboard_colors.dark.*.hex' => ['nullable', 'regex:/^#[0-9a-fA-F]{6}$/'],
+            'dashboard_colors.dark.*.alpha' => 'nullable|integer|min:0|max:100',
         ]);
 
         $booleans = $this->booleanKeys();
+
+        if (array_key_exists('dashboard_colors', $validated)) {
+            $submitted = $validated['dashboard_colors'] ?? [];
+            $cleaned = [];
+
+            foreach (['light', 'dark'] as $mode) {
+                if (! isset($submitted[$mode])) {
+                    continue;
+                }
+                foreach ($submitted[$mode] as $var => $config) {
+                    if (is_array($config) && isset($config['hex'], $config['alpha'])) {
+                        $cleaned[$mode][$var] = [
+                            'hex' => $config['hex'],
+                            'alpha' => (int) $config['alpha'],
+                        ];
+                    }
+                }
+            }
+
+            DashboardColors::save(empty($cleaned) ? ['light' => [], 'dark' => []] : $cleaned);
+            unset($validated['dashboard_colors']);
+        }
 
         $envPath = base_path('.env');
 
