@@ -2055,6 +2055,19 @@
     .vtabs-item.active svg { opacity: 1; }
     .vtabs-panel { display: none; }
     .vtabs-panel.active { display: block; }
+    .vtabs-sidebar .vtabs-save-bar {
+        display: none;
+    }
+    .vtabs-sidebar .vtabs-save-bar.visible {
+        display: block;
+        position: sticky;
+        bottom: -1px;
+        z-index: 15;
+        margin: auto -0.5rem -0.5rem;
+        padding: 0.75rem 0.5rem 0.5rem;
+        background: linear-gradient(to top, var(--card) 60%, transparent);
+        border-radius: 0 0 1rem 1rem;
+    }
     @media (max-width: 900px) {
         .vtabs-layout {
             grid-template-columns: 1fr;

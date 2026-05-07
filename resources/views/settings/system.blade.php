@@ -144,6 +144,137 @@
     padding-top: 1.5rem;
     border-top: 1px solid var(--border);
 }
+@media (max-width: 640px) {
+    .sys-settings-metrics { grid-template-columns: 1fr; }
+    .sys-settings-toggle-top { align-items: flex-start; }
+}
+.sys-settings-copy { max-width: 36rem; }
+.sys-settings-kicker {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    padding: 0.35rem 0.7rem;
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--primary) 10%, var(--card));
+    color: var(--primary);
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 0.85rem;
+}
+.sys-settings-heading {
+    margin: 0;
+    color: var(--foreground);
+    font-size: 1.25rem;
+    line-height: 1.2;
+}
+.sys-settings-description {
+    margin: 0.55rem 0 0;
+    color: var(--muted-foreground);
+    font-size: 0.9375rem;
+    line-height: 1.7;
+}
+.sys-settings-surface {
+    padding: 1rem 1.05rem;
+    border: 1px solid var(--border);
+    border-radius: 1rem;
+    background: var(--muted);
+}
+.sys-settings-surface-title {
+    margin: 0 0 0.25rem;
+    color: var(--foreground);
+    font-size: 0.94rem;
+    font-weight: 700;
+}
+.sys-settings-surface-description {
+    margin: 0 0 0.9rem;
+    color: var(--muted-foreground);
+    font-size: 0.84rem;
+    line-height: 1.6;
+}
+.sys-settings-section-intro {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 1.25rem;
+}
+.sys-settings-section-copy { max-width: 38rem; }
+.sys-settings-section-heading {
+    margin: 0;
+    color: var(--foreground);
+    font-size: 1.05rem;
+    font-weight: 700;
+}
+.sys-settings-section-description {
+    margin: 0.45rem 0 0;
+    color: var(--muted-foreground);
+    font-size: 0.875rem;
+    line-height: 1.65;
+}
+.sys-settings-section-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 3rem;
+    padding: 0.45rem 0.75rem;
+    border-radius: 999px;
+    border: 1px solid var(--border);
+    background: var(--muted);
+    color: var(--foreground);
+    font-size: 0.8rem;
+    font-weight: 700;
+    white-space: nowrap;
+}
+.sys-settings-grid {
+    display: grid;
+    gap: 1rem;
+}
+.sys-settings-toggles {
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+}
+.sys-settings-toggle {
+    padding: 1rem 1.05rem;
+    border: 1px solid var(--border);
+    border-radius: 1rem;
+    background: var(--card);
+}
+.sys-settings-toggle-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+}
+.sys-settings-toggle-title {
+    margin: 0;
+    color: var(--foreground);
+    font-size: 0.95rem;
+    font-weight: 700;
+}
+.sys-settings-toggle-description {
+    margin: 0.35rem 0 0;
+    color: var(--muted-foreground);
+    font-size: 0.85rem;
+    line-height: 1.55;
+}
+.sys-settings-metrics {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.9rem;
+}
+.sys-settings-metric .form-label { margin-bottom: 0.45rem; }
+.sys-settings-metric .form-input,
+.sys-settings-metric .form-select { max-width: none !important; }
+.sys-settings-save-row {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border);
+}
 @media (max-width: 1024px) {
     .sys-settings-section-intro { flex-direction: column; }
 }
@@ -265,6 +396,12 @@
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><rect x="2" y="2" width="20" height="8" rx="2"/><rect x="2" y="14" width="20" height="8" rx="2"/></svg>
                 Admin Bar
             </button>
+        <div class="vtabs-save-bar">
+            <button type="submit" form="systemSettingsForm" class="btn btn-primary btn-sm" style="width:100%;">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px;"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
+                Save Settings
+            </button>
+        </div>
         </nav>
 
         <div class="vtabs-content">
@@ -1509,6 +1646,30 @@ function updateAbPreview() {
     var textEl = document.getElementById('ab_preview_text');
     if (textEl) textEl.textContent = msg || 'Admin notice bar message';
 }
+
+// Sticky sidebar save button visibility
+(function() {
+    var topBtn = document.getElementById('systemSettingsSaveButton');
+    var sideBar = document.querySelector('.vtabs-save-bar');
+    if (!topBtn || !sideBar) return;
+
+    var ticking = false;
+
+    function updateSideSaveBtn() {
+        var rect = topBtn.getBoundingClientRect();
+        var isVisible = rect.top < window.innerHeight && rect.bottom > 0;
+        sideBar.classList.toggle('visible', !isVisible);
+        ticking = false;
+    }
+
+    window.addEventListener('scroll', function() {
+        if (!ticking) {
+            requestAnimationFrame(updateSideSaveBtn);
+            ticking = true;
+        }
+    });
+    updateSideSaveBtn();
+})();
 
 // ── Sidebar Colors Reset ──────────────────────────────────────
 function resetSingleSbColor(btn) {
