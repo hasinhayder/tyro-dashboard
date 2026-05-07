@@ -902,6 +902,7 @@
             'starredStoreUrl' => route($dashboardRoute::name('media.starred-images.store')),
             'starredDeleteUrl' => route($dashboardRoute::name('media.starred-images.destroy')),
             'mediaUrl' => route($dashboardRoute::name('media')),
+            'settingsUrl' => route($dashboardRoute::name('settings.system.index')),
             'importerKeys' => $importerKeys,
             'starredImages' => $starredImages,
         ];
@@ -2528,9 +2529,10 @@ $authUserId = auth()->id();
     function iiSetNoKeyMessage(provider) {
         const label = iiNoKeyLabels[provider];
         document.getElementById('iiNoKeyTitle').textContent = label.title;
+        const settingsUrl = MEDIA_CONFIG.settingsUrl || '/dashboard/settings/system';
         document.getElementById('iiNoKeyMsg').innerHTML =
             `No API key configured for this provider. Add your key in ` +
-            `<a href="/dashboard/settings#integrations" style="color:var(--primary);text-decoration:underline;">Dashboard Settings</a>.`;
+            `<a href="${settingsUrl}" style="color:var(--primary);text-decoration:underline;">Dashboard Settings &rarr; Media</a>.`;
     }
 
     function iiShowZone(zone, options = {}) {
