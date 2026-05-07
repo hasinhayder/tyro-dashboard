@@ -57,9 +57,11 @@ class MediaController extends BaseController {
             $user?->tyroRoleSlugs() ?? []
         ));
 
+        $isImpersonating = session()->has('impersonator_id');
+
         $query = Media::latest();
 
-        if (! $isAdmin) {
+        if ($isImpersonating || ! $isAdmin) {
             $query->where('user_id', $user->id);
         }
 
@@ -88,10 +90,16 @@ class MediaController extends BaseController {
         }
 
         $media = $query->paginate($mediaPerPage)->withQueryString();
-        $totalCount = Media::count();
-        $totalSize = Media::sum('size');
 
-        $uploadDates = Media::selectRaw('DATE(created_at) as upload_date')
+        $statsQuery = Media::query();
+        if ($isImpersonating || ! $isAdmin) {
+            $statsQuery->where('user_id', $user->id);
+        }
+        $totalCount = $statsQuery->count();
+        $totalSize = $statsQuery->sum('size');
+
+        $uploadDates = (clone $statsQuery)
+            ->selectRaw('DATE(created_at) as upload_date')
             ->groupBy('upload_date')
             ->orderByDesc('upload_date')
             ->pluck('upload_date')
@@ -146,9 +154,11 @@ class MediaController extends BaseController {
             $user?->tyroRoleSlugs() ?? []
         ));
 
+        $isImpersonating = session()->has('impersonator_id');
+
         $query = Media::latest();
 
-        if (! $isAdmin) {
+        if ($isImpersonating || ! $isAdmin) {
             $query->where('user_id', $user->id);
         }
 
@@ -414,7 +424,8 @@ class MediaController extends BaseController {
 
     public function destroy(Media $media): JsonResponse {
         $user = auth()->user();
-        $isEditorOrAbove = ! empty(array_intersect(
+        $isImpersonating = session()->has('impersonator_id');
+        $isEditorOrAbove = ! $isImpersonating && ! empty(array_intersect(
             ['admin', 'super-admin', 'editor'],
             $user->tyroRoleSlugs()
         ));

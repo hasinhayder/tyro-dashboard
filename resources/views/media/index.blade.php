@@ -1132,15 +1132,6 @@ $authUserId = auth()->id();
                     </svg>
                 </button>
                 <button type="button" class="btn btn-secondary"
-                        onclick="copyShortcode({{ $file->id }}, this)"
-                        title="Copy shortcode">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;">
-                        <path d="M7 4 H5 V20 H7" stroke-linecap="round" stroke-linejoin="round"/>
-                        <path d="M10.5 19 L13.5 5" stroke-linecap="round" stroke-linejoin="round"/>
-                        <path d="M17 4 H19 V20 H17" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>
-                </button>
-                <button type="button" class="btn btn-secondary"
                         data-media-id="{{ $file->id }}"
                         data-media-rename
                         data-filename="{{ e($file->filename) }}"
@@ -1280,15 +1271,6 @@ $authUserId = auth()->id();
                             title="Copy URL">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M13.19 8.688a4.5 4.5 0 0 1 1.242 7.244l-4.5 4.5a4.5 4.5 0 0 1-6.364-6.364l1.757-1.757m13.35-.622 1.757-1.757a4.5 4.5 0 0 0-6.364-6.364l-4.5 4.5a4.5 4.5 0 0 0 1.242 7.244"/>
-                            </svg>
-                        </button>
-                        <button type="button" class="btn btn-secondary"
-                            onclick="copyShortcode( '{{ $file->id }}', this)"
-                            title="Copy shortcode">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M8 5.5H7.25A1.75 1.75 0 0 0 5.5 7.25v7.5A1.75 1.75 0 0 0 7.25 16.5H8"/>
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M14 16.5 8.5 5.5"/>
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M16 5.5h.75A1.75 1.75 0 0 1 18.5 7.25v7.5A1.75 1.75 0 0 1 16.75 16.5H16"/>
                             </svg>
                         </button>
                         <button type="button" class="btn btn-secondary"
@@ -1680,17 +1662,6 @@ $authUserId = auth()->id();
             showCopyToast('URL copied to the clipboard!');
         }).catch(() => {
             showAlert('Could not copy the URL automatically. Please copy it from the media item.', 'Copy Failed', {
-                variant: 'info',
-                confirmText: 'OK',
-            });
-        });
-    }
-
-    function copyShortcode(id) {
-        navigator.clipboard.writeText(`[image id='${id}']`).then(() => {
-            showCopyToast('Shortcode copied to the clipboard!');
-        }).catch(() => {
-            showAlert('Could not copy the shortcode automatically. Please copy it from the media item.', 'Copy Failed', {
                 variant: 'info',
                 confirmText: 'OK',
             });
