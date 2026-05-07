@@ -305,40 +305,11 @@
                                     <p class="form-hint">CSS height value e.g. <code>32px</code>, <code>3rem</code>.</p>
                                 </div>
 
-                                <div class="sys-settings-metrics">
-                                    <div class="form-group sys-settings-metric" style="margin-bottom:0;">
-                                        <label for="TYRO_DASHBOARD_SIDEBAR_BG" class="form-label">Sidebar background</label>
-                                        <input type="text" name="TYRO_DASHBOARD_SIDEBAR_BG" id="TYRO_DASHBOARD_SIDEBAR_BG"
-                                               class="form-input" maxlength="50"
-                                               value="{{ old('TYRO_DASHBOARD_SIDEBAR_BG', $settings['TYRO_DASHBOARD_SIDEBAR_BG']) }}">
-                                    </div>
-                                    <div class="form-group sys-settings-metric" style="margin-bottom:0;">
-                                        <label for="TYRO_DASHBOARD_SIDEBAR_TEXT" class="form-label">Sidebar text</label>
-                                        <input type="text" name="TYRO_DASHBOARD_SIDEBAR_TEXT" id="TYRO_DASHBOARD_SIDEBAR_TEXT"
-                                               class="form-input" maxlength="50"
-                                               value="{{ old('TYRO_DASHBOARD_SIDEBAR_TEXT', $settings['TYRO_DASHBOARD_SIDEBAR_TEXT']) }}">
-                                    </div>
-                                </div>
-
-                                <div class="sys-settings-metrics" style="margin-top:0.85rem;">
-                                    <div class="form-group sys-settings-metric" style="margin-bottom:0;">
-                                        <label for="TYRO_DASHBOARD_SIDEBAR_PRIMARY" class="form-label">Sidebar primary</label>
-                                        <input type="text" name="TYRO_DASHBOARD_SIDEBAR_PRIMARY" id="TYRO_DASHBOARD_SIDEBAR_PRIMARY"
-                                               class="form-input" maxlength="50"
-                                               value="{{ old('TYRO_DASHBOARD_SIDEBAR_PRIMARY', $settings['TYRO_DASHBOARD_SIDEBAR_PRIMARY']) }}">
-                                    </div>
-                                    <div class="form-group sys-settings-metric" style="margin-bottom:0;">
-                                        <label for="TYRO_DASHBOARD_SIDEBAR_ACCENT" class="form-label">Sidebar accent</label>
-                                        <input type="text" name="TYRO_DASHBOARD_SIDEBAR_ACCENT" id="TYRO_DASHBOARD_SIDEBAR_ACCENT"
-                                               class="form-input" maxlength="50"
-                                               value="{{ old('TYRO_DASHBOARD_SIDEBAR_ACCENT', $settings['TYRO_DASHBOARD_SIDEBAR_ACCENT']) }}">
-                                    </div>
-                                </div>
                             </div>
 
                             <div class="sys-settings-surface">
-                                <h4 class="sys-settings-surface-title">Sidebar Behavior</h4>
-                                <p class="sys-settings-surface-description">Toggle sidebar collapse, accordion mode, and example sections.</p>
+                                <h4 class="sys-settings-surface-title">Collapsible Sidebar</h4>
+                                <p class="sys-settings-surface-description">Toggle collapsible sidebar, compact accordion mode, and disable example sections.</p>
 
                                 <div class="sys-settings-toggles" style="margin-bottom:0;">
                                     <div class="sys-settings-toggle">
@@ -360,7 +331,7 @@
                                     <div class="sys-settings-toggle">
                                         <div class="sys-settings-toggle-top">
                                             <div>
-                                                <p class="sys-settings-toggle-title">Compact accordion</p>
+                                                <p class="sys-settings-toggle-title">Compact accordion mode</p>
                                                 <p class="sys-settings-toggle-description">Writes <code>TYRO_DASHBOARD_SIDEBAR_ACCORDION_COMPACT</code>.</p>
                                             </div>
                                             <div>
