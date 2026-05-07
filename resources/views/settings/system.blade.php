@@ -1463,6 +1463,7 @@
             </div>
         </div>
     </div>
+</div>
 
     <div class="sys-settings-save-row">
         <button type="submit" class="btn btn-primary">
