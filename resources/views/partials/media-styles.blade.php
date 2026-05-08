@@ -103,6 +103,11 @@
     .tyro-media-picker-input {
         min-width: 0;
         flex: 1;
+        height: 2.5rem;
+    }
+
+    .tyro-media-picker-actions .btn {
+        height: 2.5rem;
     }
 
     .tyro-media-picker-actions {
