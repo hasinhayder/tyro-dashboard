@@ -2406,6 +2406,19 @@
 
                     <div class="sys-settings-grid">
                         <div class="sys-settings-surface">
+                            <h4 class="sys-settings-surface-title">Upload Settings</h4>
+                            <p class="sys-settings-surface-description">Maximum file size for media uploads in kilobytes.</p>
+
+                            <div class="form-group" style="margin-bottom:0;">
+                                <label for="TYRO_DASHBOARD_MEDIA_MAX_SIZE" class="form-label">Max upload size (KB)</label>
+                                <input type="number" name="TYRO_DASHBOARD_MEDIA_MAX_SIZE" id="TYRO_DASHBOARD_MEDIA_MAX_SIZE"
+                                       class="form-input" min="1" max="1048576"
+                                       value="{{ old('TYRO_DASHBOARD_MEDIA_MAX_SIZE', $settings['TYRO_DASHBOARD_MEDIA_MAX_SIZE']) }}">
+                                <p class="form-hint">Default is 10240 (10MB). Writes <code>TYRO_DASHBOARD_MEDIA_MAX_SIZE</code> in <code>.env</code>.</p>
+                            </div>
+                        </div>
+
+                        <div class="sys-settings-surface">
                             <h4 class="sys-settings-surface-title">Freepik</h4>
                             <p class="sys-settings-surface-description">API key for searching and importing Freepik images.</p>
 

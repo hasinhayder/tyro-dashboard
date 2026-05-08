@@ -9,9 +9,16 @@
 @section('content')
 <div class="page-header">
     <div class="page-header-row">
-        <div>
-            <h1 class="page-title">Welcome back, {{ $user->name ?? 'User' }}!</h1>
-            <p class="page-description" style="font-size: 1rem;">Here's what's happening with your application today.</p>
+        <div style="display: flex; align-items: center; gap: 1rem;">
+            @if($user->profile_photo_path || ($user->use_gravatar ?? false))
+                <div style="width: 48px; height: 48px; border-radius: 50%; overflow: hidden; flex-shrink: 0; background: none;">
+                    <img src="{{ $user->profile_photo_url }}" alt="{{ $user->name }}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">
+                </div>
+            @endif
+            <div>
+                <h1 class="page-title">Welcome back, {{ $user->name ?? 'User' }}!</h1>
+                <p class="page-description" style="font-size: 1rem;">Here's what's happening with your application today.</p>
+            </div>
         </div>
     </div>
 </div>

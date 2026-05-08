@@ -189,6 +189,7 @@ class SystemSettingsController extends BaseController {
             'TYRO_DASHBOARD_PEXELS_KEY' => 'nullable|string|max:255',
             'TYRO_DASHBOARD_UNSPLASH_ACCESS_KEY' => 'nullable|string|max:255',
             'TYRO_DASHBOARD_PIXABAY_KEY' => 'nullable|string|max:255',
+            'TYRO_DASHBOARD_MEDIA_MAX_SIZE' => 'nullable|integer|min:1|max:1048576',
         ]);
 
         $booleans = $this->booleanKeys();
@@ -492,6 +493,7 @@ class SystemSettingsController extends BaseController {
             'TYRO_DASHBOARD_PEXELS_KEY' => config('tyro-dashboard.media.api_keys.pexels'),
             'TYRO_DASHBOARD_UNSPLASH_ACCESS_KEY' => config('tyro-dashboard.media.api_keys.unsplash'),
             'TYRO_DASHBOARD_PIXABAY_KEY' => config('tyro-dashboard.media.api_keys.pixabay'),
+            'TYRO_DASHBOARD_MEDIA_MAX_SIZE' => config('tyro-dashboard.media.max_size'),
         ];
     }
 
@@ -671,6 +673,7 @@ class SystemSettingsController extends BaseController {
             'TYRO_DASHBOARD_PEXELS_KEY' => null,
             'TYRO_DASHBOARD_UNSPLASH_ACCESS_KEY' => null,
             'TYRO_DASHBOARD_PIXABAY_KEY' => null,
+            'TYRO_DASHBOARD_MEDIA_MAX_SIZE' => 10240,
         ];
     }
 }
