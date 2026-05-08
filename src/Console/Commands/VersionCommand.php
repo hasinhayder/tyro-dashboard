@@ -19,7 +19,7 @@ class VersionCommand extends Command {
      * Execute the console command.
      */
     public function handle(): int {
-        $version = '1.20.0'; // AI skill setup command for Claude, Copilot, Codex, Gemini, and Kilo
+        $version = '1.30.0'; // Settings Editor, Dashboard color branding, Media Gallery and media picker
 
         $this->info('');
         $this->info('  ╔════════════════════════════════════════╗');
@@ -70,6 +70,7 @@ class VersionCommand extends Command {
 }
 
 // Changelog
+// 1.30.0 - Settings Editor, Dashboard color branding, Media Gallery and media picker
 // 1.20.0 - AI skill setup command (tyro-dashboard:setup-ai-skill) for installing project context to Claude, Copilot, Codex, Gemini, and Kilo agents
 // 1.19.0 - Toast notification system with configurable notification style (legacy/toast) and position (top-right/bottom-right)
 // 1.18.1 - Reduced sidebar item spacing for better accommodation of more items
