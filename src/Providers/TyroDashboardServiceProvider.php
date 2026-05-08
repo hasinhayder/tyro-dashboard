@@ -23,7 +23,9 @@ use HasinHayder\TyroDashboard\Console\Commands\VersionCommand;
 use HasinHayder\TyroDashboard\Http\Middleware\EnsureIsAdmin;
 use HasinHayder\TyroDashboard\Http\Middleware\HandleImpersonation;
 use HasinHayder\TyroDashboard\Support\DashboardRoute;
+use HasinHayder\TyroDashboard\View\Components\MediaPicker;
 use Illuminate\Routing\Router;
+use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
@@ -100,6 +102,10 @@ class TyroDashboardServiceProvider extends ServiceProvider {
 
     protected function registerViews(): void {
         $this->loadViewsFrom(__DIR__.'/../../resources/views', 'tyro-dashboard');
+        Blade::component(MediaPicker::class, 'tyro-dashboard-media-picker');
+        Blade::component(MediaPicker::class, 'tyro-dashbaord-media-picker');
+        Blade::anonymousComponentPath(__DIR__.'/../../resources/views/components', 'tyro-dashboard');
+        Blade::anonymousComponentPath(__DIR__.'/../../resources/views/components', 'tyro-dashbaord');
 
         // Also add as a general view location so non-namespaced references
         // (e.g. vendor.pagination.tyro) resolve within the package.
