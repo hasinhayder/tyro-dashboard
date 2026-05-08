@@ -2035,6 +2035,11 @@
                                 </div>
                             </div>
                         </div>
+                    </div>
+
+                    <div class="sys-settings-surface">
+                        <h4 class="sys-settings-surface-title">Sidebar Logo</h4>
+                        <p class="sys-settings-surface-description">Custom logo image shown in the sidebar header. When not set, the default icon and app name are shown.</p>
 
                         <div class="form-group" style="margin-bottom:0;">
                             <x-media-picker
@@ -2050,7 +2055,6 @@
                                 label="Sidebar Logo"
                                 width="100%"
                             />
-                            <p class="form-hint">Custom logo image shown in the sidebar header. When not set, the default icon and app name are shown.</p>
                         </div>
                     </div>
 
