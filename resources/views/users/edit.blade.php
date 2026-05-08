@@ -197,7 +197,7 @@
                 <p style="font-size: 0.875rem; color: var(--muted-foreground); margin-bottom: 1rem;">
                     Once you delete a user, there is no going back. Please be certain.
                 </p>
-                <div style="display: flex; justify-content: flex-end;">
+                <div style="display: flex; justify-content: flex-end; padding-top: 1rem; border-top: 1px solid var(--border);">
                     <form action="{{ route($dashboardRoute::name('users.destroy'), $editUser->id) }}" method="POST" id="delete-user-form">
                         @csrf
                         @method('DELETE')

@@ -22,7 +22,7 @@
             <form action="{{ route($dashboardRoute::name('roles.destroy'), $role->id) }}" method="POST" style="display: inline;" id="delete-role-edit-form">
                 @csrf
                 @method('DELETE')
-                <button type="button" class="btn btn-danger" onclick="event.preventDefault(); showDanger('Delete Role', 'Are you sure you want to delete this role? This action cannot be undone.').then(confirmed => { if(confirmed) document.getElementById('delete-role-edit-form').submit(); })">
+                <button type="button" class="btn btn-destructive" onclick="event.preventDefault(); showDanger('Delete Role', 'Are you sure you want to delete this role? This action cannot be undone.').then(confirmed => { if(confirmed) document.getElementById('delete-role-edit-form').submit(); })">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                     </svg>
