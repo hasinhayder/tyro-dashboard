@@ -1579,10 +1579,7 @@ $authUserId = auth()->id();
     let previousOverflow = '';
 
     toggleUploadForm?.addEventListener('click', () => {
-        uploadPanel.classList.toggle('is-open');
-        if (uploadPanel.classList.contains('is-open')) {
-            uploadPanel.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }
+        document.getElementById('fileInput')?.click();
     });
 
     // ── Drag & drop ───────────────────────────────────────────────────
