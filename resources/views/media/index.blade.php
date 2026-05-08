@@ -413,6 +413,7 @@
         border-radius: 0.65rem;
         overflow: hidden;
         flex-shrink: 0;
+        cursor: pointer;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -1187,7 +1188,7 @@ $authUserId = auth()->id();
             <tr id="media-{{ $file->id }}" data-media-entry>
                 <td>
                     <div class="media-table-file">
-                        <div class="media-table-thumb">
+                        <div class="media-table-thumb" @if($file->is_image) data-lightbox-trigger data-image-src="{{ $file->url }}" data-image-alt="{{ $file->alt_text ?: $file->filename }}" data-image-name="{{ $file->filename }}" data-image-meta="{{ $file->formatted_size }} · {{ strtoupper(pathinfo($file->filename, PATHINFO_EXTENSION)) }}" role="button" tabindex="0" aria-label="Preview {{ $file->alt_text ?: $file->filename }}" title="Preview image" @endif>
                             @if($file->is_image)
                                 <img src="{{ $file->thumbnail_url }}" alt="{{ $file->alt_text ?: $file->filename }}" loading="lazy">
                             @else
