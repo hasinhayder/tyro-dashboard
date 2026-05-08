@@ -551,6 +551,38 @@
                                             </div>
                                         </div>
                                     </div>
+
+                                    <div class="sys-settings-toggle">
+                                        <div class="sys-settings-toggle-top">
+                                            <div>
+                                                <p class="sys-settings-toggle-title">Profile photo upload</p>
+                                                <p class="sys-settings-toggle-description">Writes <code>TYRO_DASHBOARD_ENABLE_PROFILE_PHOTO</code>.</p>
+                                            </div>
+                                            <div>
+                                                <input type="hidden" name="TYRO_DASHBOARD_ENABLE_PROFILE_PHOTO" value="0">
+                                                <label class="toggle-label">
+                                                    <input type="checkbox" name="TYRO_DASHBOARD_ENABLE_PROFILE_PHOTO" value="1" class="toggle-input" {{ old('TYRO_DASHBOARD_ENABLE_PROFILE_PHOTO', $settings['TYRO_DASHBOARD_ENABLE_PROFILE_PHOTO']) ? 'checked' : '' }}>
+                                                    <span class="toggle-slider"></span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="sys-settings-toggle">
+                                        <div class="sys-settings-toggle-top">
+                                            <div>
+                                                <p class="sys-settings-toggle-title">Gravatar</p>
+                                                <p class="sys-settings-toggle-description">Writes <code>TYRO_DASHBOARD_ENABLE_GRAVATAR</code>.</p>
+                                            </div>
+                                            <div>
+                                                <input type="hidden" name="TYRO_DASHBOARD_ENABLE_GRAVATAR" value="0">
+                                                <label class="toggle-label">
+                                                    <input type="checkbox" name="TYRO_DASHBOARD_ENABLE_GRAVATAR" value="1" class="toggle-input" {{ old('TYRO_DASHBOARD_ENABLE_GRAVATAR', $settings['TYRO_DASHBOARD_ENABLE_GRAVATAR']) ? 'checked' : '' }}>
+                                                    <span class="toggle-slider"></span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
 
