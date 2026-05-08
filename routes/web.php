@@ -107,28 +107,32 @@ Route::middleware('tyro-dashboard.admin')->group(function () {
     });
 
     // Role Management
-    Route::prefix('roles')->name('roles.')->group(function () {
-        Route::get('/', [RoleController::class, 'index'])->name('index');
-        Route::get('/create', [RoleController::class, 'create'])->name('create');
-        Route::post('/', [RoleController::class, 'store'])->name('store');
-        Route::get('/{id}', [RoleController::class, 'show'])->name('show');
-        Route::get('/{id}/edit', [RoleController::class, 'edit'])->name('edit');
-        Route::put('/{id}', [RoleController::class, 'update'])->name('update');
-        Route::delete('/{id}', [RoleController::class, 'destroy'])->name('destroy');
-        Route::delete('/{id}/users/{userId}', [RoleController::class, 'removeUser'])->name('remove-user');
-    });
+    if (config('tyro-dashboard.features.show_roles_menu', true)) {
+        Route::prefix('roles')->name('roles.')->group(function () {
+            Route::get('/', [RoleController::class, 'index'])->name('index');
+            Route::get('/create', [RoleController::class, 'create'])->name('create');
+            Route::post('/', [RoleController::class, 'store'])->name('store');
+            Route::get('/{id}', [RoleController::class, 'show'])->name('show');
+            Route::get('/{id}/edit', [RoleController::class, 'edit'])->name('edit');
+            Route::put('/{id}', [RoleController::class, 'update'])->name('update');
+            Route::delete('/{id}', [RoleController::class, 'destroy'])->name('destroy');
+            Route::delete('/{id}/users/{userId}', [RoleController::class, 'removeUser'])->name('remove-user');
+        });
+    }
 
     // Privilege Management
-    Route::prefix('privileges')->name('privileges.')->group(function () {
-        Route::get('/', [PrivilegeController::class, 'index'])->name('index');
-        Route::get('/create', [PrivilegeController::class, 'create'])->name('create');
-        Route::post('/', [PrivilegeController::class, 'store'])->name('store');
-        Route::get('/{id}', [PrivilegeController::class, 'show'])->name('show');
-        Route::get('/{id}/edit', [PrivilegeController::class, 'edit'])->name('edit');
-        Route::put('/{id}', [PrivilegeController::class, 'update'])->name('update');
-        Route::delete('/{id}', [PrivilegeController::class, 'destroy'])->name('destroy');
-        Route::delete('/{id}/roles/{roleId}', [PrivilegeController::class, 'removeRole'])->name('remove-role');
-    });
+    if (config('tyro-dashboard.features.show_privileges_menu', true)) {
+        Route::prefix('privileges')->name('privileges.')->group(function () {
+            Route::get('/', [PrivilegeController::class, 'index'])->name('index');
+            Route::get('/create', [PrivilegeController::class, 'create'])->name('create');
+            Route::post('/', [PrivilegeController::class, 'store'])->name('store');
+            Route::get('/{id}', [PrivilegeController::class, 'show'])->name('show');
+            Route::get('/{id}/edit', [PrivilegeController::class, 'edit'])->name('edit');
+            Route::put('/{id}', [PrivilegeController::class, 'update'])->name('update');
+            Route::delete('/{id}', [PrivilegeController::class, 'destroy'])->name('destroy');
+            Route::delete('/{id}/roles/{roleId}', [PrivilegeController::class, 'removeRole'])->name('remove-role');
+        });
+    }
 
     // Invitation Management (Admin)
     if (config('tyro-dashboard.features.invitation_system', true)) {
