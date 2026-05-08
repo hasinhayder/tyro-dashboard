@@ -162,6 +162,32 @@ $mediaUploadUrl = route(\HasinHayder\TyroDashboard\Support\DashboardRoute::name(
             return outputMode;
         }
 
+        function updateActivePreview(item) {
+            if (!activeInput) {
+                return;
+            }
+
+            const field = activeInput.closest('[data-tyro-media-picker-field]');
+            const preview = field?.querySelector('[data-tyro-media-picker-preview]');
+            const previewImg = field?.querySelector('[data-tyro-media-picker-preview-img]');
+            const previewEmpty = field?.querySelector('[data-tyro-media-picker-preview-empty]');
+
+            if (!preview || !previewImg) {
+                return;
+            }
+
+            const previewUrl = item.thumbnail_url || item.webp_url || item.url || activeInput.value || '';
+
+            if (previewUrl) {
+                previewImg.src = previewUrl;
+                previewImg.style.display = '';
+                preview.classList.add('has-image');
+                if (previewEmpty) {
+                    previewEmpty.style.display = 'none';
+                }
+            }
+        }
+
         function syncOutputSelector() {
             const shouldShow = activeInput?.dataset.tyroMediaOutput === 'select';
 
@@ -273,6 +299,7 @@ $mediaUploadUrl = route(\HasinHayder\TyroDashboard\Support\DashboardRoute::name(
             }
 
             activeInput.value = outputUrl(item, currentOutputMode());
+            updateActivePreview(item);
             activeInput.dispatchEvent(new Event('input', { bubbles: true }));
             activeInput.dispatchEvent(new Event('change', { bubbles: true }));
             close();

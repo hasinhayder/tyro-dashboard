@@ -8,6 +8,10 @@
     'label' => null,
     'width' => '550px',
     'button' => 'secondary',
+    'preview' => false,
+    'preview_position' => 'top',
+    'preview_width' => '100px',
+    'preview_height' => null,
 ])
 
 @php
@@ -15,6 +19,19 @@
     $fieldValue = $name ? old($name, $value) : $value;
     $outputMode = in_array((string) $output, ['original', 'thumb', 'webp', 'select'], true) ? (string) $output : 'webp';
     $buttonStyle = in_array((string) $button, ['primary', 'secondary', 'ghost', 'outline', 'outline-btn', 'danger', 'success'], true) ? (string) $button : 'secondary';
+    $showPreview = filter_var($preview, FILTER_VALIDATE_BOOL);
+    $previewPosition = in_array((string) $preview_position, ['top', 'bottom', 'left', 'right'], true) ? (string) $preview_position : 'top';
+    $previewStyles = [];
+
+    if ($preview_width) {
+        $previewStyles[] = 'width: '.$preview_width;
+    }
+
+    if ($preview_height) {
+        $previewStyles[] = 'height: '.$preview_height;
+    } else {
+        $previewStyles[] = 'height: auto';
+    }
 @endphp
 
 <div class="tyro-media-picker-field" data-tyro-media-picker-field style="margin-top:5px;">
@@ -22,10 +39,30 @@
         <label class="form-label" for="{{ $fieldId }}">{{ $label }}</label>
     @endif
 
-    <div class="tyro-media-picker-control" style="width: {{ $width }};">
+    <div
+        class="tyro-media-picker-control {{ $showPreview ? 'has-preview preview-'.$previewPosition : '' }}"
+        style="width: {{ $width }};"
+        data-tyro-media-preview-position="{{ $previewPosition }}"
+    >
+        @if($showPreview)
+            <div
+                class="tyro-media-picker-preview {{ filled($fieldValue) ? 'has-image' : '' }}"
+                style="{{ implode('; ', $previewStyles) }}"
+                data-tyro-media-picker-preview
+            >
+                <img
+                    src="{{ $fieldValue }}"
+                    alt=""
+                    data-tyro-media-picker-preview-img
+                    style="{{ filled($fieldValue) ? '' : 'display:none;' }}"
+                >
+                <span data-tyro-media-picker-preview-empty style="{{ filled($fieldValue) ? 'display:none;' : '' }}">No media selected</span>
+            </div>
+        @endif
+
         <input
             {{ $attributes->merge(['class' => 'form-input tyro-media-picker-input']) }}
-            type="text"
+            type="{{ $showPreview ? 'hidden' : 'text' }}"
             @if($name) name="{{ $name }}" @endif
             id="{{ $fieldId }}"
             value="{{ $fieldValue }}"
