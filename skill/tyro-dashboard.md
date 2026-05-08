@@ -21,20 +21,26 @@ src/
   Console/Commands/          # Artisan commands
   Concerns/                  # Traits for models (HasCrud)
   Http/
-    Controllers/             # Dashboard, User, Role, Privilege, Resource, etc.
+    Controllers/             # Dashboard, User, Role, Privilege, Resource, Media, Settings, Widgets, etc.
     Middleware/              # EnsureIsAdmin, HandleImpersonation
+  Models/
+    Media.php                # Media library model (tyro_media table)
+    StarredImportImage.php   # Starred imported images model
   Providers/
     TyroDashboardServiceProvider.php
   Services/
     AdminNotice.php          # Runtime admin bar notices
   Support/
     DashboardRoute.php       # Route name helper with prefix translation
+    DashboardColors.php      # Light/dark mode CSS variable overrides
   Traits/
     HasProfilePhoto.php      # Profile photo upload & Gravatar support
+  View/Components/
+    MediaPicker.php          # Media picker Blade component
 
 resources/views/
   layouts/                   # admin.blade.php, user.blade.php, app.blade.php
-  partials/                  # sidebars, styles, scripts, flash-messages, etc.
+  partials/                  # sidebars, styles, scripts, flash-messages, media-styles, media-script, etc.
   dashboard/                 # admin.blade.php, user.blade.php, index.blade.php
   users/                     # CRUD views
   roles/                     # CRUD views
@@ -44,6 +50,10 @@ resources/views/
   invitations/               # Invitation system views
   audits/                    # Audit log views
   examples/                  # Widgets & components demos
+  media/                     # Media library index (grid/list browser, upload, crop/resize)
+  settings/                  # System settings UI with tabbed env management
+  pagination/                # Custom pagination view (tyro.blade.php)
+  components/                # Anonymous Blade components (media-picker.blade.php)
   errors/                    # Missing tables, maintenance pages
 
 config/tyro-dashboard.php    # Main configuration file
@@ -54,6 +64,7 @@ routes/web.php               # Package routes
 
 - `hasinhayder/tyro` (^1.5) — RBAC framework (Role, Privilege, AuditLog models)
 - `hasinhayder/tyro-login` (^2.4) — Authentication & invitation system
+- `intervention/image` (^4.0) — Image processing (crop, resize, WebP conversion, thumbnail generation)
 - Optional: `mews/purifier` — HTML sanitization for richtext fields
 
 ## Console Commands
@@ -110,17 +121,20 @@ Key sections agents should know:
 - **`routes`** — `prefix` (default `dashboard`), `middleware`, `name_prefix`
 - **`admin_roles`** — `['admin', 'super-admin']`
 - **`user_model`** — Default `App\Models\User`
-- **`branding`** — `app_name`, `logo`, `sidebar_bg`, `sidebar_text`, `sidebar_primary`, `sidebar_accent`, etc.
-- **`admin_bar`** — Enable global notices with colors/alignment
-- **`features`** — Toggle: `user_management`, `role_management`, `privilege_management`, `settings_management`, `profile_management`, `invitation_system`, `audit_logs`, `profile_photo_upload`, `gravatar`
+- **`pagination`** — `users`, `roles`, `privileges` per-page defaults (all `15`)
+- **`branding`** — `app_name`, `logo`, `logo_height`, `favicon`, `sidebar_bg`, `sidebar_text`, `sidebar_primary`, `sidebar_accent`, `sidebar_accent_foreground`, `sidebar_header_border`, `sidebar_accordion_compact`, `sidebar_logo`
+- **`admin_bar`** — Enable global notices with colors/alignment, `height`
+- **`collapsible_sidebar`** — Enable collapsible sidebar (default `true`)
+- **`features`** — Toggle: `user_management`, `role_management`, `privilege_management`, `settings_management`, `profile_management`, `invitation_system`, `audit_logs`, `system_settings`, `show_roles_menu`, `show_privileges_menu`, `show_resources_menu`, `activity_log` (future), `profile_photo_upload`, `gravatar`
 - **`protected`** — Role slugs and user IDs that cannot be deleted
 - **`widgets`** — Dashboard widget toggles
 - **`notifications`** — `show_flash_messages`, `auto_dismiss_seconds`, `notification_style` (`legacy` or `toast`), `toast_position`
 - **`uploads`** — Default disk (`public`), directory, auto-delete behavior
-- **`profile_photo`** — Disk, directory, max size, dimensions, quality, crop position, allowed types
+- **`profile_photo`** — Disk, directory, max size, dimensions, quality, crop position, allowed types, `auto_delete_on_user_delete`
 - **`resources`** — Array of dynamic CRUD resource definitions
 - **`resource_ui`** — `show_global_errors`, `show_field_errors`
 - **`disable_examples`** — Hide example routes and sidebar sections
+- **`media`** — `max_size`, `api_keys` (freepik, pexels, unsplash, pixabay)
 
 ## Routes (`routes/web.php`)
 
@@ -130,27 +144,39 @@ All routes are grouped under the configured prefix (default `/dashboard`) with `
 
 1. **Dashboard Home** — `GET /`
 2. **Examples** (disabled in production or via `disable_examples`)
-   - `/components`, `/examples/components`
-   - `/widgets`, `/examples/widgets`
+   - `/components`, `/examples/components` — Demo page with KPIs, charts, progress, info cards
+   - `/widgets`, `/examples/widgets` — Interactive widget demo page
    - `/x-components` (if `TyroDashboardComponentsServiceProvider` exists)
-   - Widget proxies: `/examples/widgets/xkcd/{id}`, `/examples/widgets/stocks/{symbol}`, `/examples/widgets/fx/{base}`, `/examples/widgets/flights`
+   - Widget proxy routes: `xkcd/{id}`, `stocks/{symbol}`, `fx/{base}`, `flights`
 3. **Profile** (`prefix: profile`)
    - `GET /` — View profile
    - `PUT /update` — Update profile
    - `PUT /password` — Change password
    - `DELETE /photo` — Delete own photo
-   - `DELETE /2fa/reset` — Reset 2FA
+   - `DELETE /2fa/reset` — Reset own 2FA
 4. **Invitations** (if enabled)
    - `GET /invitations` — User invitation panel
    - `POST /invitations/create` — Create own invitation link
-5. **Leave Impersonation** — `POST /leave-impersonation`
-6. **Admin Routes** (`middleware: tyro-dashboard.admin`)
-   - **Users**: `/users` — CRUD, suspend, unsuspend, login-as, reset 2FA, delete photo
+5. **Media Library** (all authenticated users)
+   - `GET /media` — Browse media library (grid/list view)
+   - `POST /media/upload` — Upload with WebP auto-conversion, thumbnail generation
+   - `GET /media/picker` — AJAX picker modal
+   - `GET /media/image-search` — External image search (Unsplash, Pixabay, Freepik, Pexels)
+   - `POST /media/image-import` — Import selected image
+   - `POST /media/starred-images` / `DELETE /media/starred-images` — Starred import management
+   - `POST /media/{media}/alt` — Update alt text
+   - `PATCH /media/{media}/rename` — Rename file
+   - `POST /media/{media}/crop-resize` — Crop/resize with Intervention Image
+   - `DELETE /media/{media}` — Delete media
+6. **Leave Impersonation** — `POST /leave-impersonation`
+7. **Admin Routes** (`middleware: tyro-dashboard.admin`)
+   - **Users**: `/users` — CRUD, suspend, unsuspend, login-as, reset 2FA (`DELETE /users/{id}/2fa`), delete photo
    - **Roles**: `/roles` — CRUD, remove user from role
    - **Privileges**: `/privileges` — CRUD, remove role from privilege
    - **Invitations Admin**: `/invitations/admin` — Manage invitation links
    - **Audits**: `/audits` — View, export CSV, bulk delete, flush
-7. **Dynamic Resources** (`prefix: resources/{resource}`)
+   - **System Settings** (if enabled): `/settings/system` — `.env` management UI, config cache clear
+8. **Dynamic Resources** (`prefix: resources/{resource}`)
    - Full CRUD: index, create, store, show, edit, update, destroy
 
 ### Route Name Helper
@@ -177,7 +203,6 @@ All controllers extend `BaseController`. It provides:
 ### DashboardController
 
 - `index(Request)` — Shows `dashboard.admin` for admins, `dashboard.user` for regular users
-- `components(Request)` — Demo page with KPIs, charts, progress, info cards, activity (for copy-paste)
 
 ### UserController (admin-only)
 
@@ -240,6 +265,42 @@ Access control: `hasAccess()` checks `roles`/`readonly` config. `isReadonly()` r
 - `adminIndex(Request)`, `adminCreate()`, `adminStore(Request)`, `adminDestroy($id)`
 - `userIndex()`, `userCreate()`
 - Checks if invitation system is enabled and tables exist
+
+### ComponentsController (all authenticated users, examples)
+
+- `components(Request)` — Demo page with KPIs, charts, progress, info cards, activity
+
+### WidgetsController (all authenticated users, examples)
+
+- `widgets(Request)` — Interactive widget demo page
+- `xkcd($id)` — Same-origin proxy for XKCD comic API
+- `stockQuote($symbol)` — Same-origin proxy for Stooq stock API
+- `fxRates($base)` — Same-origin proxy for open.er-api.com FX rates
+- `flightStates()` — Same-origin proxy for OpenSky Network flight data
+
+### XComponentsController (all authenticated users, optional)
+
+- `index()` — Reusable form components demo (when `TyroDashboardComponentsServiceProvider` exists)
+
+### MediaController (all authenticated users)
+
+- `index(Request)` — Media library with grid/list view, search, load-more
+- `store(Request)` — Upload file with WebP conversion, thumbnail generation (via Intervention Image)
+- `picker(Request)` — AJAX-based media picker modal for use in forms
+- `imageSearch(Request)` — Search external image providers (Unsplash, Pixabay, Freepik, Pexels)
+- `imageImport(Request)` — Download and store a selected external image
+- `storeStarredImage(Request)` — Star/bookmark an import result
+- `destroyStarredImage(Request)` — Remove star from an import result
+- `updateAlt(Request, $media)` — Update alt text
+- `rename(Request, $media)` — Rename file
+- `cropResize(Request, $media)` — Crop/resize using Intervention Image
+- `destroy($media)` — Delete media file
+
+### SystemSettingsController (admin-only)
+
+- `index(Request)` — Settings page with tabbed UI for Tyro Dashboard, Tyro (RBAC), and Tyro Login `.env` configs
+- `update(Request)` — Save env settings (writes to `.env`, supports DashboardColors light/dark mode overrides)
+- `clearConfigCache(Request)` — Run `config:clear` Artisan command
 
 ## Middleware
 
@@ -419,6 +480,35 @@ DashboardRoute::translate('tyro-dashboard.users.index'); // Handles custom prefi
 
 Always use this in controllers/views instead of hardcoded strings.
 
+### DashboardColors
+
+Stores/loads light/dark mode CSS variable overrides in `storage/app/dashboard-colors.json`. Provides defaults for 20+ shadcn CSS custom properties.
+
+```php
+use HasinHayder\TyroDashboard\Support\DashboardColors;
+
+$colors = DashboardColors::load();                    // Load with defaults merged
+$saved  = DashboardColors::save($overrides);           // Save overrides
+$light  = DashboardColors::getLightDefaults();         // Get defaults for light mode
+$dark   = DashboardColors::getDarkDefaults();          // Get defaults for dark mode
+```
+
+## Models
+
+### Media
+
+Eloquent model for the `tyro_media` table. Columns: `user_id`, `filename`, `path`, `webp_path`, `thumbnail_path`, `disk`, `mime_type`, `size`, `alt_text`, `source_url`. Provides accessors: `url`, `webp_url`, `thumbnail_url`, `formatted_size`, `is_image`. Static helpers: `thumbnailUrlFrom()`, `webpUrlFrom()`.
+
+### StarredImportImage
+
+Eloquent model for the `tyro_starred_import_images` table. Columns: `user_id`, `star_key`, `provider`, `external_id`, `alt`, `author`, `thumb_url`, `preview_url`, `download_url`, `download_location`, `source_url`, `payload` (JSON), `starred_at`. Has `toImporterArray()` for API serialization.
+
+## View Components
+
+### MediaPicker (Blade Component)
+
+Registered as `<x-tyro-dashboard-media-picker>` (also aliased as `<x-tyro-dashbaord-media-picker>` for backwards compatibility). Props: `name`, `id`, `value`, `output` (original/thumb/webp/select), `buttonText`, `placeholder`, `label`, `width`, `button` (style), `preview` (boolean), `preview_position`, `preview_width`, `preview_height`, `circle`. Pushes `media-styles` and `media-script` to `@stack('styles')` and `@stack('scripts')` via `@once`.
+
 ## Views & Blade
 
 ### Layouts
@@ -446,8 +536,10 @@ All layouts support:
 - `partials/admin-bar.blade.php` — Global notice bar
 - `partials/impersonation-banner.blade.php` — Impersonation indicator
 - `partials/modal.blade.php` — Reusable modal component
+- `partials/media-styles.blade.php` — Media picker modal CSS
+- `partials/media-script.blade.php` — Media picker modal JS (upload, search, load-more, selection)
 
-### View Composers (in ServiceProvider)
+### View Composers & Service Provider Features
 
 All `tyro-dashboard::*` and `dashboard.*` views receive:
 - `$user` — Authenticated user
@@ -456,6 +548,13 @@ All `tyro-dashboard::*` and `dashboard.*` views receive:
 Sidebar views additionally receive:
 - `$allResources` — Filtered resources based on user's role
 - `$adminMenuItems`, `$commonMenuItems`, `$userMenuItems` — From `config/menu.php`
+
+Additional Service Provider registrations:
+- **Event Listeners**: `Login` → logs `user.login`, `Logout` → logs `user.logout` audit events
+- **Named Route Resolution**: Fallback `resolveMissingNamedRoutesUsing` translates legacy routes via `DashboardRoute::translate()`
+- **Blade Components**: Registers `<x-tyro-dashboard-media-picker>` (and typo alias `<x-tyro-dashbaord-media-picker>`)
+- **Anonymous Components**: `resources/views/components` path registered under `tyro-dashboard` namespace (plus typo alias)
+- **View Location**: `resources/views` added as a loadable path (enables `vendor.pagination.tyro` without namespace)
 
 ## Publishing Tags
 
@@ -514,12 +613,52 @@ php artisan tyro-dashboard:publish --admin
 
 Then edit `resources/views/vendor/tyro-dashboard/partials/admin-sidebar.blade.php`.
 
+### Configure System Settings
+
+The system settings UI at `/dashboard/settings/system` lets admins manage `.env` values for:
+- **Dashboard**: App name, logo, branding colors, sidebar colors, pagination, notifications, features, media API keys
+- **Login/Auth**: Login methods, OAuth, 2FA, registration, password rules, session, throttle, email verification
+- **RBAC**: Audit log settings, caching
+
+Enable/disable with `TYRO_DASHBOARD_ENABLE_SYSTEM_SETTINGS=true` in `.env` and `system_settings` feature toggle in config.
+
 ### Enable Profile Photos
 
 1. Run migrations (adds `profile_photo_path` and `use_gravatar` columns)
 2. Add `HasProfilePhoto` trait to User model
 3. Set `TYRO_DASHBOARD_ENABLE_PROFILE_PHOTO=true` in `.env`
 4. Run `php artisan storage:link`
+
+### Use the Media Picker in a Form
+
+```blade
+{{-- Single image picker --}}
+<x-tyro-dashboard-media-picker
+    name="thumbnail"
+    output="thumb"
+    label="Thumbnail"
+/>
+
+{{-- Multiple image select --}}
+<x-tyro-dashboard-media-picker
+    name="gallery[]"
+    output="select"
+    multiple
+    label="Gallery Images"
+/>
+
+{{-- With preview --}}
+<x-tyro-dashboard-media-picker
+    name="avatar"
+    output="original"
+    label="Avatar"
+    :preview="true"
+    preview_position="top"
+    preview_width="150"
+    preview_height="150"
+    :circle="true"
+/>
+```
 
 ### Add Audit Logging to Custom Actions
 
@@ -549,6 +688,8 @@ protected function auditSafely(string $event, $auditable = null, ?array $oldValu
 - Protected roles/users prevent accidental deletion of critical data
 - Self-deletion and self-suspension are blocked
 - Impersonation stores original admin ID in session; intercepts logout
+- System settings page is admin-only and guarded by `features.system_settings` config and `tyro-dashboard.admin` middleware
+- Media uploads respect configured disk and directory; file type validation is enforced
 
 ## Important Files to Know
 
@@ -556,12 +697,23 @@ protected function auditSafely(string $event, $auditable = null, ?array $oldValu
 |------|---------|
 | `src/Providers/TyroDashboardServiceProvider.php` | Bootstraps routes, views, middleware, commands, view composers, event listeners |
 | `src/Http/Controllers/BaseController.php` | Common controller logic (isAdmin, getUserModel, getViewData) |
+| `src/Http/Controllers/MediaController.php` | Media library with upload, crop, resize, external imports |
+| `src/Http/Controllers/SystemSettingsController.php` | .env management UI for Dashboard, RBAC, and Login configs |
 | `src/Support/DashboardRoute.php` | Route name builder with prefix awareness |
+| `src/Support/DashboardColors.php` | Light/dark mode CSS variable overrides storage |
 | `src/Concerns/HasCrud.php` | Auto-CRUD trait for models |
+| `src/Models/Media.php` | Media library Eloquent model |
+| `src/View/Components/MediaPicker.php` | Media picker Blade component class |
 | `config/tyro-dashboard.php` | All package configuration |
 | `routes/web.php` | Package route definitions |
 | `resources/views/layouts/admin.blade.php` | Admin layout |
 | `resources/views/layouts/user.blade.php` | User layout |
+| `resources/views/media/index.blade.php` | Full media library page (grid/list, upload, crop/resize) |
+| `resources/views/settings/system.blade.php` | System settings with tabbed env management |
+| `resources/views/components/media-picker.blade.php` | Media picker anonymous Blade component |
 | `resources/views/partials/flash-messages.blade.php` | Notification system (legacy + toast) |
 | `resources/views/partials/styles.blade.php` | All dashboard styles |
 | `resources/views/partials/scripts.blade.php` | All dashboard scripts |
+| `resources/views/partials/media-styles.blade.php` | Media picker modal CSS |
+| `resources/views/partials/media-script.blade.php` | Media picker modal JavaScript |
+| `resources/views/pagination/tyro.blade.php` | Custom pagination view |
