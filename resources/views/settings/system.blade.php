@@ -2424,7 +2424,7 @@
 
                             <div class="form-group" style="margin-bottom:0;">
                                 <label for="TYRO_DASHBOARD_FREEPIK_KEY" class="form-label">Freepik API Key (TYRO_DASHBOARD_FREEPIK_KEY)</label>
-                                <input type="text" name="TYRO_DASHBOARD_FREEPIK_KEY" id="TYRO_DASHBOARD_FREEPIK_KEY"
+                                 <input type="password" name="TYRO_DASHBOARD_FREEPIK_KEY" id="TYRO_DASHBOARD_FREEPIK_KEY"
                                        class="form-input" maxlength="255"
                                        value="{{ old('TYRO_DASHBOARD_FREEPIK_KEY', $settings['TYRO_DASHBOARD_FREEPIK_KEY']) }}">
                                 <p class="form-hint">Writes <code>TYRO_DASHBOARD_FREEPIK_KEY</code> in <code>.env</code>. Get yours at <a href="https://www.freepik.com/api" target="_blank" rel="noopener">freepik.com/api</a>.</p>
@@ -2437,7 +2437,7 @@
 
                             <div class="form-group" style="margin-bottom:0;">
                                 <label for="TYRO_DASHBOARD_PEXELS_KEY" class="form-label">Pexels API Key (TYRO_DASHBOARD_PEXELS_KEY)</label>
-                                <input type="text" name="TYRO_DASHBOARD_PEXELS_KEY" id="TYRO_DASHBOARD_PEXELS_KEY"
+                                 <input type="password" name="TYRO_DASHBOARD_PEXELS_KEY" id="TYRO_DASHBOARD_PEXELS_KEY"
                                        class="form-input" maxlength="255"
                                        value="{{ old('TYRO_DASHBOARD_PEXELS_KEY', $settings['TYRO_DASHBOARD_PEXELS_KEY']) }}">
                                 <p class="form-hint">Writes <code>TYRO_DASHBOARD_PEXELS_KEY</code> in <code>.env</code>. Get yours at <a href="https://www.pexels.com/api/" target="_blank" rel="noopener">pexels.com/api</a>.</p>
@@ -2450,7 +2450,7 @@
 
                             <div class="form-group" style="margin-bottom:0;">
                                 <label for="TYRO_DASHBOARD_UNSPLASH_ACCESS_KEY" class="form-label">Unsplash Access Key (TYRO_DASHBOARD_UNSPLASH_ACCESS_KEY)</label>
-                                <input type="text" name="TYRO_DASHBOARD_UNSPLASH_ACCESS_KEY" id="TYRO_DASHBOARD_UNSPLASH_ACCESS_KEY"
+                                 <input type="password" name="TYRO_DASHBOARD_UNSPLASH_ACCESS_KEY" id="TYRO_DASHBOARD_UNSPLASH_ACCESS_KEY"
                                        class="form-input" maxlength="255"
                                        value="{{ old('TYRO_DASHBOARD_UNSPLASH_ACCESS_KEY', $settings['TYRO_DASHBOARD_UNSPLASH_ACCESS_KEY']) }}">
                                 <p class="form-hint">Writes <code>TYRO_DASHBOARD_UNSPLASH_ACCESS_KEY</code> in <code>.env</code>. Get yours at <a href="https://unsplash.com/developers" target="_blank" rel="noopener">unsplash.com/developers</a>.</p>
@@ -2463,7 +2463,7 @@
 
                             <div class="form-group" style="margin-bottom:0;">
                                 <label for="TYRO_DASHBOARD_PIXABAY_KEY" class="form-label">Pixabay API Key (TYRO_DASHBOARD_PIXABAY_KEY)</label>
-                                <input type="text" name="TYRO_DASHBOARD_PIXABAY_KEY" id="TYRO_DASHBOARD_PIXABAY_KEY"
+                                 <input type="password" name="TYRO_DASHBOARD_PIXABAY_KEY" id="TYRO_DASHBOARD_PIXABAY_KEY"
                                        class="form-input" maxlength="255"
                                        value="{{ old('TYRO_DASHBOARD_PIXABAY_KEY', $settings['TYRO_DASHBOARD_PIXABAY_KEY']) }}">
                                 <p class="form-hint">Writes <code>TYRO_DASHBOARD_PIXABAY_KEY</code> in <code>.env</code>. Get yours at <a href="https://pixabay.com/api/docs/" target="_blank" rel="noopener">pixabay.com/api/docs</a>.</p>
