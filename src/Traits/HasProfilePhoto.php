@@ -12,17 +12,11 @@ trait HasProfilePhoto {
      * @return void
      */
     public function updateProfilePhoto($photo) {
-        tap($this->profile_photo_path, function ($previous) use ($photo) {
-            $path = $this->processAndStorePhoto($photo);
+        $path = $this->processAndStorePhoto($photo);
 
-            $this->forceFill([
-                'profile_photo_path' => $path,
-            ])->save();
-
-            if ($previous) {
-                Storage::disk($this->profilePhotoDisk())->delete($previous);
-            }
-        });
+        $this->forceFill([
+            'profile_photo_path' => $path,
+        ])->save();
     }
 
     /**
@@ -209,8 +203,6 @@ trait HasProfilePhoto {
         if (is_null($this->profile_photo_path)) {
             return;
         }
-
-        Storage::disk($this->profilePhotoDisk())->delete($this->profile_photo_path);
 
         $this->forceFill([
             'profile_photo_path' => null,

@@ -15,6 +15,7 @@
     'previewWidth' => null,
     'preview_height' => null,
     'previewHeight' => null,
+    'circle' => false,
 ])
 
 @php
@@ -51,8 +52,8 @@
     >
         @if($showPreview)
             <div
-                class="tyro-media-picker-preview {{ filled($fieldValue) ? 'has-image' : '' }} {{ $previewHasFixedHeight ? 'has-fixed-height' : '' }}"
-                style="{{ implode('; ', $previewStyles) }};"
+                class="tyro-media-picker-preview {{ filled($fieldValue) ? 'has-image' : '' }} {{ $previewHasFixedHeight ? 'has-fixed-height' : '' }} {{ $circle ? 'circle' : '' }}"
+                style="{{ implode('; ', $previewStyles) }};{{ $circle ? ' border-radius: 50%; overflow: hidden;' : '' }}"
                 data-tyro-media-picker-preview
                 data-tyro-media-picker-trigger
                 data-input-id="{{ $fieldId }}"
@@ -66,7 +67,7 @@
                     data-tyro-media-picker-preview-img
                     style="{{ filled($fieldValue) ? '' : 'display:none;' }}"
                 >
-                <span class="tyro-media-picker-preview-placeholder" data-tyro-media-picker-preview-empty style="{{ filled($fieldValue) ? 'display:none;' : '' }}" aria-label="No media selected">
+                <span class="tyro-media-picker-preview-placeholder {{ $circle ? 'circle' : '' }}" data-tyro-media-picker-preview-empty style="{{ filled($fieldValue) ? 'display:none;' : '' }}" aria-label="No media selected">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
                         <rect x="3" y="5" width="18" height="14" rx="2" />
                         <path stroke-linecap="round" stroke-linejoin="round" d="m7 15 3-3 2.5 2.5L15 12l2 3" />

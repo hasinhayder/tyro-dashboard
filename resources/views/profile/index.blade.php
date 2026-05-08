@@ -39,7 +39,8 @@
                             preview-width="64px"
                             preview-height="64px"
                             button-text="Choose Photo"
-                            output="original"
+                            output="webp"
+                            circle="true"
                             label="Profile Photo"
                             width="100%"
                         />

@@ -1599,6 +1599,11 @@ $authUserId = auth()->id();
         handleFiles(e.dataTransfer.files);
     });
 
+    document.getElementById('fileInput').addEventListener('change', e => {
+        handleFiles(e.target.files);
+        e.target.value = '';
+    });
+
     async function handleFiles(files) {
         const arr = Array.from(files);
         if (!arr.length) return;

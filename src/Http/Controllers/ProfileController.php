@@ -6,7 +6,6 @@ use HasinHayder\Tyro\Support\TyroAudit;
 use HasinHayder\TyroDashboard\Support\DashboardRoute;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rules\Password;
 
 class ProfileController extends BaseController {
@@ -33,10 +32,19 @@ class ProfileController extends BaseController {
 
         if (method_exists($user, 'hasProfilePhotoColumn') && $user->hasProfilePhotoColumn()) {
             if (array_key_exists('profile_photo_url', $validated)) {
-                if ($user->profile_photo_path && !filter_var($user->profile_photo_path, FILTER_VALIDATE_URL)) {
-                    Storage::disk(config('tyro-dashboard.profile_photo.disk', 'public'))->delete($user->profile_photo_path);
+                $photoUrl = $validated['profile_photo_url'];
+                if ($photoUrl) {
+                    $appUrl = url('/');
+                    if (str_starts_with($photoUrl, $appUrl)) {
+                        $photoUrl = substr($photoUrl, strlen($appUrl));
+                    }
+                    $storageUrl = config('filesystems.disks.public.url', '/storage');
+                    $storagePath = rtrim(parse_url($storageUrl, PHP_URL_PATH) ?: '/storage', '/');
+                    if (str_starts_with($photoUrl, $storagePath)) {
+                        $photoUrl = substr($photoUrl, strlen($storagePath));
+                    }
                 }
-                $user->profile_photo_path = $validated['profile_photo_url'] ?: null;
+                $user->profile_photo_path = $photoUrl ?: null;
             }
         }
 
@@ -120,9 +128,7 @@ class ProfileController extends BaseController {
         if (method_exists($user, 'deleteProfilePhoto')) {
             $user->deleteProfilePhoto();
         } else {
-            // Fallback if trait is missing for some reason
             if ($user->profile_photo_path) {
-                Storage::disk(config('tyro-dashboard.profile_photo.disk', 'public'))->delete($user->profile_photo_path);
                 $user->profile_photo_path = null;
                 $user->save();
             }
