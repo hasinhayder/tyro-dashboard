@@ -1,11 +1,16 @@
 <aside class="sidebar" id="sidebar">
     <div class="sidebar-header">
         <a href="{{ route($dashboardRoute::name('index')) }}" class="sidebar-logo">
-            <div class="sidebar-logo-icon">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
-                </svg>
-            </div>
+            @php $sidebarLogo = config('tyro-dashboard.branding.sidebar_logo'); @endphp
+            @if($sidebarLogo)
+                <img src="{{ $sidebarLogo }}" alt="{{ $branding['app_name'] ?? config('app.name', 'Laravel') }}" class="sidebar-logo-img">
+            @else
+                <div class="sidebar-logo-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                    </svg>
+                </div>
+            @endif
             <span class="sidebar-logo-text">{{ $branding['app_name'] ?? config('app.name', 'Laravel') }}</span>
         </a>
         @if(config('tyro-dashboard.collapsible_sidebar', false))

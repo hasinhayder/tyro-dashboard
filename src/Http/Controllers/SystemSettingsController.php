@@ -29,6 +29,7 @@ class SystemSettingsController extends BaseController {
             'TYRO_DASHBOARD_SIDEBAR_ACCENT_FOREGROUND' => 'nullable|string|max:50',
             'TYRO_DASHBOARD_SIDEBAR_HEADER_BORDER' => 'nullable|string|max:50',
             'TYRO_DASHBOARD_SIDEBAR_ACCORDION_COMPACT' => 'nullable|boolean',
+            'TYRO_DASHBOARD_SIDEBAR_LOGO' => 'nullable|string|max:500',
             'TYRO_DASHBOARD_COLLAPSIBLE_SIDEBAR' => 'nullable|boolean',
             'TYRO_DASHBOARD_DISABLE_EXAMPLES' => 'nullable|boolean',
             'TYRO_DASHBOARD_ENABLE_INVITATION' => 'nullable|boolean',
@@ -258,6 +259,11 @@ class SystemSettingsController extends BaseController {
 
         file_put_contents($envPath, $content);
 
+        try {
+            Artisan::call('config:clear');
+        } catch (\Throwable $e) {
+        }
+
         return response()->json(['success' => true, 'message' => 'System settings saved successfully.']);
     }
 
@@ -339,6 +345,7 @@ class SystemSettingsController extends BaseController {
             'TYRO_DASHBOARD_SIDEBAR_ACCENT_FOREGROUND' => config('tyro-dashboard.branding.sidebar_accent_foreground'),
             'TYRO_DASHBOARD_SIDEBAR_HEADER_BORDER' => config('tyro-dashboard.branding.sidebar_header_border'),
             'TYRO_DASHBOARD_SIDEBAR_ACCORDION_COMPACT' => config('tyro-dashboard.branding.sidebar_accordion_compact'),
+            'TYRO_DASHBOARD_SIDEBAR_LOGO' => config('tyro-dashboard.branding.sidebar_logo'),
             'TYRO_DASHBOARD_COLLAPSIBLE_SIDEBAR' => config('tyro-dashboard.collapsible_sidebar'),
             'TYRO_DASHBOARD_DISABLE_EXAMPLES' => config('tyro-dashboard.disable_examples'),
             'TYRO_DASHBOARD_ENABLE_INVITATION' => config('tyro-dashboard.features.invitation_system'),
@@ -511,6 +518,7 @@ class SystemSettingsController extends BaseController {
             'TYRO_DASHBOARD_SIDEBAR_ACCENT_FOREGROUND' => null,
             'TYRO_DASHBOARD_SIDEBAR_HEADER_BORDER' => null,
             'TYRO_DASHBOARD_SIDEBAR_ACCORDION_COMPACT' => false,
+            'TYRO_DASHBOARD_SIDEBAR_LOGO' => null,
             'TYRO_DASHBOARD_COLLAPSIBLE_SIDEBAR' => true,
             'TYRO_DASHBOARD_DISABLE_EXAMPLES' => false,
             'TYRO_DASHBOARD_ENABLE_INVITATION' => true,

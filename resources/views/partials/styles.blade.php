@@ -239,6 +239,14 @@
         color: var(--sidebar, var(--background));
     }
 
+    .sidebar-logo-img {
+        width: 36px;
+        height: 36px;
+        object-fit: contain;
+        border-radius: 8px;
+        flex-shrink: 0;
+    }
+
     .sidebar-logo-text {
         font-size: 1rem;
         font-weight: 600;

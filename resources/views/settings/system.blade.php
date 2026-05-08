@@ -398,7 +398,7 @@
             </button>
             <button class="vtabs-item" data-vtab="sidebar-colors" type="button">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="9" y1="3" x2="9" y2="21"/></svg>
-                Sidebar Colors
+                Sidebar
             </button>
             <button class="vtabs-item" data-vtab="admin-bar-colors" type="button">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><rect x="2" y="2" width="20" height="8" rx="2"/><rect x="2" y="14" width="20" height="8" rx="2"/></svg>
@@ -1947,11 +1947,12 @@
             $sbAccentFg = old('TYRO_DASHBOARD_SIDEBAR_ACCENT_FOREGROUND', $settings['TYRO_DASHBOARD_SIDEBAR_ACCENT_FOREGROUND'] ?? '#171717');
             $sbHeaderBorder = old('TYRO_DASHBOARD_SIDEBAR_HEADER_BORDER', $settings['TYRO_DASHBOARD_SIDEBAR_HEADER_BORDER'] ?? '#333c56');
             $sbAccordionCompact = filter_var(old('TYRO_DASHBOARD_SIDEBAR_ACCORDION_COMPACT', $settings['TYRO_DASHBOARD_SIDEBAR_ACCORDION_COMPACT'] ?? false), FILTER_VALIDATE_BOOLEAN);
+            $sbLogo = old('TYRO_DASHBOARD_SIDEBAR_LOGO', $settings['TYRO_DASHBOARD_SIDEBAR_LOGO'] ?? null);
         @endphp
         <div class="vtabs-panel" id="vtab-sidebar-colors">
             <div class="card">
                 <div class="card-header" style="display:flex;align-items:center;justify-content:space-between;gap:1rem;">
-                    <h3 class="card-title">Sidebar Colors</h3>
+                    <h3 class="card-title">Sidebar Options</h3>
                     <div style="display:flex;align-items:center;gap:0.5rem;">
                         <button type="button" onclick="confirmResetSbColors()" class="btn btn-secondary btn-sm">Reset to Default</button>
                         <button type="submit" form="systemSettingsForm" class="btn btn-primary btn-sm section-save-button">Save</button>
@@ -1984,6 +1985,28 @@
                                 </div>
                             </div>
                         </div>
+
+                        <div class="form-group" style="margin-bottom:0;">
+                            <x-media-picker
+                                name="TYRO_DASHBOARD_SIDEBAR_LOGO"
+                                :value="$sbLogo"
+                                preview="true"
+                                preview-position="left"
+                                preview-width="36px"
+                                preview-height="36px"
+                                circle="true"
+                                button="primary"
+                                button-text="Choose Sidebar Logo"
+                                label="Sidebar Logo"
+                                width="100%"
+                            />
+                            <p class="form-hint">Custom logo image shown in the sidebar header. When not set, the default icon and app name are shown.</p>
+                        </div>
+                    </div>
+
+                    <div class="sys-settings-surface">
+                        <h4 class="sys-settings-surface-title">Sidebar Colors</h4>
+                        <p class="sys-settings-surface-description">Customize the sidebar color scheme.</p>
 
                         <div class="branding-theme-grid">
                             <div class="branding-theme-color">
