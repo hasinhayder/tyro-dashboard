@@ -187,9 +187,9 @@
     .sidebar-expand-btn {
         display: none;
         position: absolute;
-        top: 50%;
+        top: 0.75rem;
         left: 50%;
-        transform: translate(-50%, -50%);
+        transform: translateX(-50%);
         background: transparent;
         border: none;
         color: var(--sidebar-foreground, var(--muted-foreground));
