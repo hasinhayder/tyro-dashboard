@@ -110,6 +110,30 @@
         height: 2.5rem;
     }
 
+    .tyro-media-picker-control.size-medium .tyro-media-picker-input,
+    .tyro-media-picker-control.size-medium .tyro-media-picker-actions .btn {
+        height: 2.25rem;
+        font-size: 0.8125rem;
+    }
+
+    .tyro-media-picker-control.size-medium .tyro-media-picker-button svg,
+    .tyro-media-picker-control.size-medium .tyro-media-picker-delete svg {
+        width: 0.875rem;
+        height: 0.875rem;
+    }
+
+    .tyro-media-picker-control.size-small .tyro-media-picker-input,
+    .tyro-media-picker-control.size-small .tyro-media-picker-actions .btn {
+        height: 2rem;
+        font-size: 0.75rem;
+    }
+
+    .tyro-media-picker-control.size-small .tyro-media-picker-button svg,
+    .tyro-media-picker-control.size-small .tyro-media-picker-delete svg {
+        width: 0.75rem;
+        height: 0.75rem;
+    }
+
     .tyro-media-picker-actions {
         display: flex;
         align-items: center;

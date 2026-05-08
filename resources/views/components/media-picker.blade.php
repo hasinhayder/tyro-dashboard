@@ -8,6 +8,7 @@
     'label' => null,
     'width' => '550px',
     'button' => 'secondary',
+    'size' => 'default',
     'preview' => false,
     'preview_position' => null,
     'previewPosition' => null,
@@ -23,6 +24,7 @@
     $fieldValue = $name ? old($name, $value) : $value;
     $outputMode = in_array((string) $output, ['original', 'thumb', 'webp', 'select'], true) ? (string) $output : 'webp';
     $buttonStyle = in_array((string) $button, ['primary', 'secondary', 'ghost', 'outline', 'outline-btn', 'danger', 'success'], true) ? (string) $button : 'secondary';
+    $pickerSize = in_array((string) $size, ['default', 'medium', 'small'], true) ? (string) $size : 'default';
     $showPreview = filter_var($preview, FILTER_VALIDATE_BOOL);
     $rawPreviewPosition = $preview_position ?? $previewPosition ?? $attributes->get('preview_position') ?? $attributes->get('preview-position') ?? 'top';
     $rawPreviewWidth = $preview_width ?? $previewWidth ?? $attributes->get('preview_width') ?? $attributes->get('preview-width') ?? '100px';
@@ -46,7 +48,7 @@
     @endif
 
     <div
-        class="tyro-media-picker-control {{ $showPreview ? 'has-preview preview-'.$previewPosition : '' }}"
+        class="tyro-media-picker-control size-{{ $pickerSize }} {{ $showPreview ? 'has-preview preview-'.$previewPosition : '' }}"
         style="width: {{ $width }};"
         data-tyro-media-preview-position="{{ $previewPosition }}"
     >

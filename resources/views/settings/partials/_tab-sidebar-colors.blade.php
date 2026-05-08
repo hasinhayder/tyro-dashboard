@@ -57,13 +57,13 @@
                                 :value="$sbLogo"
                                 preview="true"
                                 preview-position="left"
-                                preview-width="76px"
-                                preview-height="76px"
+                                preview-width="70px"
+                                preview-height="70px"
                                 circle="true"
                                 button="primary"
-                                button-text="Choose Sidebar Logo"
-                                label="Sidebar Logo"
+                                button-text="Select Logo"
                                 width="100%"
+                                size="medium"
                             />
                         </div>
                     </div>
