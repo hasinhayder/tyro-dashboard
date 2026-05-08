@@ -245,16 +245,14 @@ $mediaUploadUrl = route(\HasinHayder\TyroDashboard\Support\DashboardRoute::name(
                 }
 
                 const previewUrl = item.thumbnail_url || item.webp_url || item.url || '';
-                const outputMode = currentOutputMode();
                 const actionLabel = itemMatchesCurrentValue(item) ? 'Selected' : 'Use this image';
-                const modeLabel = outputMode === 'thumb' ? 'Thumb' : (outputMode === 'webp' ? 'WebP' : 'Original');
                 const metaText = item.webp_size || item.size || item.original_size || getExtension(item.filename);
 
                 card.innerHTML = `
                     <div class="tyro-media-item-preview">
                         <img src="${escapeHtml(previewUrl)}" alt="${escapeHtml(item.alt_text || item.filename || 'Media image')}" loading="lazy">
                         <div class="tyro-media-item-overlay">
-                            <span class="tyro-media-item-badge">${escapeHtml(modeLabel)}</span>
+                            <span class="tyro-media-item-badge">Thumb</span>
                             <span class="tyro-media-item-action">${escapeHtml(actionLabel)}</span>
                         </div>
                     </div>
@@ -377,12 +375,6 @@ $mediaUploadUrl = route(\HasinHayder\TyroDashboard\Support\DashboardRoute::name(
         searchInput.addEventListener('input', () => {
             window.clearTimeout(searchTimer);
             searchTimer = window.setTimeout(() => loadMedia(false), 350);
-        });
-
-        outputSelect.addEventListener('change', () => {
-            if (activeInput?.dataset.tyroMediaOutput === 'select') {
-                loadMedia(false);
-            }
         });
 
         uploadInput.addEventListener('change', uploadFile);
