@@ -17,9 +17,12 @@ class MediaPicker extends Component {
         public string $width = '550px',
         public string $button = 'secondary',
         public bool|string $preview = false,
-        public string $preview_position = 'top',
-        public string $preview_width = '100px',
+        public ?string $preview_position = null,
+        public ?string $previewPosition = null,
+        public ?string $preview_width = null,
+        public ?string $previewWidth = null,
         public ?string $preview_height = null,
+        public ?string $previewHeight = null,
     ) {}
 
     public function render(): View {

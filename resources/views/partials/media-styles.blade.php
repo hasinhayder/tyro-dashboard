@@ -20,6 +20,15 @@
         align-items: flex-start;
     }
 
+    .tyro-media-picker-control.has-preview .tyro-media-picker-button {
+        order: 1;
+    }
+
+    .tyro-media-picker-control.has-preview.preview-top .tyro-media-picker-preview,
+    .tyro-media-picker-control.has-preview.preview-left .tyro-media-picker-preview {
+        order: 0;
+    }
+
     .tyro-media-picker-control.has-preview.preview-bottom .tyro-media-picker-preview {
         order: 2;
     }
@@ -37,15 +46,29 @@
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        min-width: 4rem;
-        min-height: 4rem;
+        min-width: 0;
+        min-height: 0;
         overflow: hidden;
         border: 1px solid var(--border);
         border-radius: 0.75rem;
         background: var(--muted);
         color: var(--muted-foreground);
+        cursor: pointer;
         font-size: 0.75rem;
         text-align: center;
+    }
+
+    .tyro-media-picker-preview:focus-visible {
+        outline: 2px solid color-mix(in srgb, var(--primary) 70%, white);
+        outline-offset: 2px;
+    }
+
+    .tyro-media-picker-preview:not([style*="width"]) {
+        width: 100px;
+    }
+
+    .tyro-media-picker-preview:not(.has-fixed-height) {
+        min-height: 4rem;
     }
 
     .tyro-media-picker-preview img {
@@ -53,6 +76,28 @@
         width: 100%;
         height: 100%;
         object-fit: cover;
+    }
+
+    .tyro-media-picker-preview:not(.has-fixed-height) img {
+        height: auto;
+    }
+
+    .tyro-media-picker-preview-placeholder {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        height: 100%;
+        min-height: inherit;
+        color: color-mix(in srgb, var(--muted-foreground) 70%, transparent);
+        background:
+            linear-gradient(135deg, color-mix(in srgb, var(--muted) 70%, white), var(--muted)),
+            var(--muted);
+    }
+
+    .tyro-media-picker-preview-placeholder svg {
+        width: min(42%, 2rem);
+        height: min(42%, 2rem);
     }
 
     .tyro-media-picker-input {

@@ -394,6 +394,16 @@ $mediaUploadUrl = route(\HasinHayder\TyroDashboard\Support\DashboardRoute::name(
         });
 
         document.addEventListener('keydown', (event) => {
+            const trigger = event.target.closest?.('[data-tyro-media-picker-trigger]');
+            if (trigger && (event.key === 'Enter' || event.key === ' ' || event.key === 'Spacebar')) {
+                event.preventDefault();
+                const input = document.getElementById(trigger.dataset.inputId);
+                if (input) {
+                    openForInput(input);
+                }
+                return;
+            }
+
             if (event.key === 'Escape' && modal.classList.contains('open')) {
                 close();
             }

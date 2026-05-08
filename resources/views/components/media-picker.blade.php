@@ -9,9 +9,12 @@
     'width' => '550px',
     'button' => 'secondary',
     'preview' => false,
-    'preview_position' => 'top',
-    'preview_width' => '100px',
+    'preview_position' => null,
+    'previewPosition' => null,
+    'preview_width' => null,
+    'previewWidth' => null,
     'preview_height' => null,
+    'previewHeight' => null,
 ])
 
 @php
@@ -20,17 +23,19 @@
     $outputMode = in_array((string) $output, ['original', 'thumb', 'webp', 'select'], true) ? (string) $output : 'webp';
     $buttonStyle = in_array((string) $button, ['primary', 'secondary', 'ghost', 'outline', 'outline-btn', 'danger', 'success'], true) ? (string) $button : 'secondary';
     $showPreview = filter_var($preview, FILTER_VALIDATE_BOOL);
-    $previewPosition = in_array((string) $preview_position, ['top', 'bottom', 'left', 'right'], true) ? (string) $preview_position : 'top';
+    $rawPreviewPosition = $preview_position ?? $previewPosition ?? $attributes->get('preview_position') ?? $attributes->get('preview-position') ?? 'top';
+    $rawPreviewWidth = $preview_width ?? $previewWidth ?? $attributes->get('preview_width') ?? $attributes->get('preview-width') ?? '100px';
+    $rawPreviewHeight = $preview_height ?? $previewHeight ?? $attributes->get('preview_height') ?? $attributes->get('preview-height');
+    $previewPosition = in_array((string) $rawPreviewPosition, ['top', 'bottom', 'left', 'right'], true) ? (string) $rawPreviewPosition : 'top';
     $previewStyles = [];
+    $previewHasFixedHeight = filled($rawPreviewHeight);
 
-    if ($preview_width) {
-        $previewStyles[] = 'width: '.$preview_width;
+    if ($rawPreviewWidth) {
+        $previewStyles[] = 'width: '.$rawPreviewWidth;
     }
 
-    if ($preview_height) {
-        $previewStyles[] = 'height: '.$preview_height;
-    } else {
-        $previewStyles[] = 'height: auto';
+    if ($previewHasFixedHeight) {
+        $previewStyles[] = 'height: '.$rawPreviewHeight;
     }
 @endphp
 
@@ -46,9 +51,14 @@
     >
         @if($showPreview)
             <div
-                class="tyro-media-picker-preview {{ filled($fieldValue) ? 'has-image' : '' }}"
-                style="{{ implode('; ', $previewStyles) }}"
+                class="tyro-media-picker-preview {{ filled($fieldValue) ? 'has-image' : '' }} {{ $previewHasFixedHeight ? 'has-fixed-height' : '' }}"
+                style="{{ implode('; ', $previewStyles) }};"
                 data-tyro-media-picker-preview
+                data-tyro-media-picker-trigger
+                data-input-id="{{ $fieldId }}"
+                role="button"
+                tabindex="0"
+                aria-label="Open media picker"
             >
                 <img
                     src="{{ $fieldValue }}"
@@ -56,7 +66,13 @@
                     data-tyro-media-picker-preview-img
                     style="{{ filled($fieldValue) ? '' : 'display:none;' }}"
                 >
-                <span data-tyro-media-picker-preview-empty style="{{ filled($fieldValue) ? 'display:none;' : '' }}">No media selected</span>
+                <span class="tyro-media-picker-preview-placeholder" data-tyro-media-picker-preview-empty style="{{ filled($fieldValue) ? 'display:none;' : '' }}" aria-label="No media selected">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+                        <rect x="3" y="5" width="18" height="14" rx="2" />
+                        <path stroke-linecap="round" stroke-linejoin="round" d="m7 15 3-3 2.5 2.5L15 12l2 3" />
+                        <circle cx="8.5" cy="9.5" r="1" />
+                    </svg>
+                </span>
             </div>
         @endif
 
