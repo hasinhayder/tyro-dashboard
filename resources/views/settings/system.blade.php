@@ -859,6 +859,27 @@
                             </div>
 
                             <div class="sys-settings-surface">
+                                <h4 class="sys-settings-surface-title">Branding Details</h4>
+                                <p class="sys-settings-surface-description">Custom logo and app branding for auth pages.</p>
+
+                                <div class="form-group" style="margin-bottom:0.85rem;">
+                                    <label for="TYRO_LOGIN_LOGO" class="form-label">Logo URL</label>
+                                    <input type="text" name="TYRO_LOGIN_LOGO" id="TYRO_LOGIN_LOGO" class="form-input" maxlength="500" value="{{ old('TYRO_LOGIN_LOGO', $settings['TYRO_LOGIN_LOGO']) }}">
+                                    <p class="form-hint">Custom logo shown on auth pages.</p>
+                                </div>
+                                <div class="form-group" style="margin-bottom:0.85rem;">
+                                    <label for="TYRO_LOGIN_LOGO_DARK" class="form-label">Logo URL (dark mode)</label>
+                                    <input type="text" name="TYRO_LOGIN_LOGO_DARK" id="TYRO_LOGIN_LOGO_DARK" class="form-input" maxlength="500" value="{{ old('TYRO_LOGIN_LOGO_DARK', $settings['TYRO_LOGIN_LOGO_DARK']) }}">
+                                    <p class="form-hint">Falls back to the light logo when not set.</p>
+                                </div>
+                                <div class="form-group" style="margin-bottom:0;">
+                                    <label for="TYRO_LOGIN_LOGO_HEIGHT" class="form-label">Logo height</label>
+                                    <input type="text" name="TYRO_LOGIN_LOGO_HEIGHT" id="TYRO_LOGIN_LOGO_HEIGHT" class="form-input" maxlength="20" value="{{ old('TYRO_LOGIN_LOGO_HEIGHT', $settings['TYRO_LOGIN_LOGO_HEIGHT']) }}">
+                                    <p class="form-hint">CSS value e.g. <code>32px</code>, <code>3rem</code>.</p>
+                                </div>
+                            </div>
+
+                            <div class="sys-settings-surface">
                                 <h4 class="sys-settings-surface-title">Redirects</h4>
                                 <p class="sys-settings-surface-description">Where users are sent after login/logout.</p>
 
@@ -1416,27 +1437,6 @@
                         </div>
 
                         <div class="sys-settings-grid">
-                            <div class="sys-settings-surface">
-                                <h4 class="sys-settings-surface-title">Branding Details</h4>
-                                <p class="sys-settings-surface-description">Custom logo and app branding for auth pages.</p>
-
-                                <div class="form-group" style="margin-bottom:0.85rem;">
-                                    <label for="TYRO_LOGIN_LOGO" class="form-label">Logo URL</label>
-                                    <input type="text" name="TYRO_LOGIN_LOGO" id="TYRO_LOGIN_LOGO" class="form-input" maxlength="500" value="{{ old('TYRO_LOGIN_LOGO', $settings['TYRO_LOGIN_LOGO']) }}">
-                                    <p class="form-hint">Custom logo shown on auth pages.</p>
-                                </div>
-                                <div class="form-group" style="margin-bottom:0.85rem;">
-                                    <label for="TYRO_LOGIN_LOGO_DARK" class="form-label">Logo URL (dark mode)</label>
-                                    <input type="text" name="TYRO_LOGIN_LOGO_DARK" id="TYRO_LOGIN_LOGO_DARK" class="form-input" maxlength="500" value="{{ old('TYRO_LOGIN_LOGO_DARK', $settings['TYRO_LOGIN_LOGO_DARK']) }}">
-                                    <p class="form-hint">Falls back to the light logo when not set.</p>
-                                </div>
-                                <div class="form-group" style="margin-bottom:0;">
-                                    <label for="TYRO_LOGIN_LOGO_HEIGHT" class="form-label">Logo height</label>
-                                    <input type="text" name="TYRO_LOGIN_LOGO_HEIGHT" id="TYRO_LOGIN_LOGO_HEIGHT" class="form-input" maxlength="20" value="{{ old('TYRO_LOGIN_LOGO_HEIGHT', $settings['TYRO_LOGIN_LOGO_HEIGHT']) }}">
-                                    <p class="form-hint">CSS value e.g. <code>32px</code>, <code>3rem</code>.</p>
-                                </div>
-                            </div>
-
                             <div class="sys-settings-surface">
                                 <h4 class="sys-settings-surface-title">Registration Details</h4>
                                 <p class="sys-settings-surface-description">Additional registration and login behaviour.</p>
