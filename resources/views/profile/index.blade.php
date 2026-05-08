@@ -24,39 +24,25 @@
         <div class="card-header">
             <h3 class="card-title">Profile Information</h3>
         </div>
-        <form action="{{ route($dashboardRoute::name('profile.update')) }}" method="POST" enctype="multipart/form-data" style="flex: 1; display: flex; flex-direction: column;">
+        <form action="{{ route($dashboardRoute::name('profile.update')) }}" method="POST" style="flex: 1; display: flex; flex-direction: column;">
             @csrf
             @method('PUT')
             <div class="card-body" style="flex: 1;">
                 @if((config('tyro-dashboard.features.profile_photo_upload') && method_exists($user, 'hasProfilePhotoColumn') && $user->hasProfilePhotoColumn()) || (config('tyro-dashboard.features.gravatar') && method_exists($user, 'hasGravatarColumn') && $user->hasGravatarColumn()))
                 <div class="form-group">
-                    <label class="form-label">Profile Photo</label>
-                    <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
-                        @if((method_exists($user, 'hasProfilePhotoColumn') && $user->hasProfilePhotoColumn() && $user->profile_photo_path) || (method_exists($user, 'hasGravatarColumn') && $user->hasGravatarColumn() && $user->use_gravatar && $user->email))
-                            <img src="{{ $user->profile_photo_url }}" alt="{{ $user->name }}" style="width: 64px; height: 64px; border-radius: 50%; object-fit: cover; border: 1px solid var(--border);">
-                        @else
-                            <div style="width: 64px; height: 64px; border-radius: 50%; background: var(--primary); color: var(--primary-foreground); display: flex; align-items: center; justify-content: center; font-size: 1.5rem; font-weight: 600;">
-                                {{ strtoupper(substr($user->name, 0, 1)) }}
-                            </div>
-                        @endif
-                        
-                        <div style="flex: 1;">
-                            @if(config('tyro-dashboard.features.profile_photo_upload') && method_exists($user, 'hasProfilePhotoColumn') && $user->hasProfilePhotoColumn())
-                                <input type="file" name="photo" class="form-input" style="padding: 0.5rem;" accept="image/*">
-                                <p class="form-hint">Allowed types: jpg, png, gif, webp. Max size: {{ config('tyro-dashboard.profile_photo.max_size', 10240) / 1024 }}MB.</p>
-                            @endif
-                        </div>
-                    </div>
-
-                    @if(method_exists($user, 'hasProfilePhotoColumn') && $user->hasProfilePhotoColumn() && $user->profile_photo_path)
-                        <div style="margin-bottom: 1rem;">
-                            <button type="button" class="btn btn-sm btn-ghost" style="color: var(--danger); padding: 0.25rem 0.5rem;" onclick="showDanger('Remove Photo', 'Are you sure you want to remove your profile photo?').then(confirmed => { if(confirmed) document.getElementById('delete-photo-form').submit(); })">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 14px; height: 14px; margin-right: 4px;">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                                </svg>
-                                Remove Photo
-                            </button>
-                        </div>
+                    @if(config('tyro-dashboard.features.profile_photo_upload') && method_exists($user, 'hasProfilePhotoColumn') && $user->hasProfilePhotoColumn())
+                        <x-media-picker
+                            name="profile_photo_url"
+                            :value="$user->profile_photo_path ? $user->profile_photo_url : null"
+                            preview="true"
+                            preview-position="left"
+                            preview-width="64px"
+                            preview-height="64px"
+                            button-text="Choose Photo"
+                            output="original"
+                            label="Profile Photo"
+                            width="100%"
+                        />
                     @endif
 
                     @if(config('tyro-dashboard.features.gravatar') && method_exists($user, 'hasGravatarColumn') && $user->hasGravatarColumn())
@@ -139,11 +125,6 @@
 </div>
 
     <!-- Two-Factor Authentication -->
-    <form id="delete-photo-form" action="{{ route($dashboardRoute::name('profile.photo.delete')) }}" method="POST" style="display: none;">
-    @csrf
-    @method('DELETE')
-</form>
-
 @if(config('tyro-login.two_factor.enabled'))
     <div class="card" style="margin-top: 1.5rem;">
         <div class="card-header">

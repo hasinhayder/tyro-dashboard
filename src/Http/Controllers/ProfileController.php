@@ -27,24 +27,28 @@ class ProfileController extends BaseController {
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email,'.$user->id],
-            'photo' => ['nullable', 'image', 'max:'.config('tyro-dashboard.profile_photo.max_size', 10240)],
+            'profile_photo_url' => ['nullable', 'string', 'max:2048'],
             'use_gravatar' => ['boolean'],
         ]);
 
-        if (isset($validated['photo']) && method_exists($user, 'hasProfilePhotoColumn') && $user->hasProfilePhotoColumn()) {
-            $user->updateProfilePhoto($validated['photo']);
+        if (method_exists($user, 'hasProfilePhotoColumn') && $user->hasProfilePhotoColumn()) {
+            if (array_key_exists('profile_photo_url', $validated)) {
+                if ($user->profile_photo_path && !filter_var($user->profile_photo_path, FILTER_VALIDATE_URL)) {
+                    Storage::disk(config('tyro-dashboard.profile_photo.disk', 'public'))->delete($user->profile_photo_path);
+                }
+                $user->profile_photo_path = $validated['profile_photo_url'] ?: null;
+            }
         }
 
         if (method_exists($user, 'hasGravatarColumn') && $user->hasGravatarColumn()) {
             if (array_key_exists('use_gravatar', $validated)) {
                 $user->use_gravatar = $validated['use_gravatar'];
             } else {
-                // Handle unchecked checkbox (it won't be in request)
                 $user->use_gravatar = false;
             }
         }
 
-        $user->fill(collect($validated)->except(['photo', 'use_gravatar'])->toArray());
+        $user->fill(collect($validated)->except(['profile_photo_url', 'use_gravatar'])->toArray());
 
         if ($user->isDirty('email')) {
             $user->email_verified_at = null;
