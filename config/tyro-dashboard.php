@@ -118,6 +118,7 @@ return [
         'profile_management' => true,
         'invitation_system' => env('TYRO_DASHBOARD_ENABLE_INVITATION', true),
         'audit_logs' => env('TYRO_DASHBOARD_ENABLE_AUDIT_LOGS', true),
+        'system_settings' => env('TYRO_DASHBOARD_ENABLE_SYSTEM_SETTINGS', true),
         'activity_log' => false, // Future feature
         'profile_photo_upload' => env('TYRO_DASHBOARD_ENABLE_PROFILE_PHOTO', false),
         'gravatar' => env('TYRO_DASHBOARD_ENABLE_GRAVATAR', false),
