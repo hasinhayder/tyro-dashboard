@@ -20,7 +20,7 @@
         align-items: flex-start;
     }
 
-    .tyro-media-picker-control.has-preview .tyro-media-picker-button {
+    .tyro-media-picker-control.has-preview .tyro-media-picker-actions {
         order: 1;
     }
 
@@ -105,12 +105,20 @@
         flex: 1;
     }
 
+    .tyro-media-picker-actions {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        flex-shrink: 0;
+    }
+
     .tyro-media-picker-button {
         flex-shrink: 0;
         white-space: nowrap;
     }
 
-    .tyro-media-picker-button svg {
+    .tyro-media-picker-button svg,
+    .tyro-media-picker-delete svg {
         width: 1rem;
         height: 1rem;
     }

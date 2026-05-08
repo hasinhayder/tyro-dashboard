@@ -302,6 +302,11 @@ $mediaUploadUrl = route(\HasinHayder\TyroDashboard\Support\DashboardRoute::name(
             updateActivePreview(item);
             activeInput.dispatchEvent(new Event('input', { bubbles: true }));
             activeInput.dispatchEvent(new Event('change', { bubbles: true }));
+
+            const field = activeInput.closest('[data-tyro-media-picker-field]');
+            const deleteBtn = field?.querySelector('[data-tyro-media-picker-delete]');
+            if (deleteBtn) deleteBtn.style.display = '';
+
             close();
         }
 
@@ -369,6 +374,27 @@ $mediaUploadUrl = route(\HasinHayder\TyroDashboard\Support\DashboardRoute::name(
         }
 
         document.addEventListener('click', (event) => {
+            const deleteBtn = event.target.closest('[data-tyro-media-picker-delete]');
+            if (deleteBtn) {
+                const input = document.getElementById(deleteBtn.dataset.inputId);
+                if (input) {
+                    input.value = '';
+                    input.dispatchEvent(new Event('input', { bubbles: true }));
+                    input.dispatchEvent(new Event('change', { bubbles: true }));
+
+                    const field = input.closest('[data-tyro-media-picker-field]');
+                    const preview = field?.querySelector('[data-tyro-media-picker-preview]');
+                    const previewImg = field?.querySelector('[data-tyro-media-picker-preview-img]');
+                    const previewEmpty = field?.querySelector('[data-tyro-media-picker-preview-empty]');
+
+                    if (preview) preview.classList.remove('has-image');
+                    if (previewImg) { previewImg.src = ''; previewImg.style.display = 'none'; }
+                    if (previewEmpty) previewEmpty.style.display = '';
+                    deleteBtn.style.display = 'none';
+                }
+                return;
+            }
+
             const trigger = event.target.closest('[data-tyro-media-picker-trigger]');
             if (trigger) {
                 const input = document.getElementById(trigger.dataset.inputId);

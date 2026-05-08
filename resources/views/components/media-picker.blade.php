@@ -87,17 +87,33 @@
             data-tyro-media-picker-input
             data-tyro-media-output="{{ $outputMode }}"
         >
-        <button
-            type="button"
-            class="btn btn-{{ $buttonStyle }} tyro-media-picker-button"
-            data-tyro-media-picker-trigger
-            data-input-id="{{ $fieldId }}"
-        >
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M4 16l4.586-4.586a2 2 0 0 1 2.828 0L16 16m-2-2 1.586-1.586a2 2 0 0 1 2.828 0L20 14m-6-6h.01M6 20h12a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2Z" />
-            </svg>
-            {{ $buttonText }}
-        </button>
+        <div class="tyro-media-picker-actions">
+            <button
+                type="button"
+                class="btn btn-{{ $buttonStyle }} tyro-media-picker-button"
+                data-tyro-media-picker-trigger
+                data-input-id="{{ $fieldId }}"
+            >
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M4 16l4.586-4.586a2 2 0 0 1 2.828 0L16 16m-2-2 1.586-1.586a2 2 0 0 1 2.828 0L20 14m-6-6h.01M6 20h12a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2Z" />
+                </svg>
+                {{ $buttonText }}
+            </button>
+            @if($showPreview)
+                <button
+                    type="button"
+                    class="btn btn-destructive tyro-media-picker-delete"
+                    data-tyro-media-picker-delete
+                    data-input-id="{{ $fieldId }}"
+                    style="{{ filled($fieldValue) ? '' : 'display:none;' }}"
+                >
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M3 6h18M8 6V4a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v2m3 0v12a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m5 4v6m4-6v6" />
+                    </svg>
+                    Remove
+                </button>
+            @endif
+        </div>
     </div>
 </div>
 
