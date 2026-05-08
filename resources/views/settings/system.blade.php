@@ -862,16 +862,31 @@
                                 <h4 class="sys-settings-surface-title">Branding Details</h4>
                                 <p class="sys-settings-surface-description">Custom logo and app branding for auth pages.</p>
 
-                                <div class="form-group" style="margin-bottom:0.85rem;">
-                                    <label for="TYRO_LOGIN_LOGO" class="form-label">Logo URL</label>
-                                    <input type="text" name="TYRO_LOGIN_LOGO" id="TYRO_LOGIN_LOGO" class="form-input" maxlength="500" value="{{ old('TYRO_LOGIN_LOGO', $settings['TYRO_LOGIN_LOGO']) }}">
-                                    <p class="form-hint">Custom logo shown on auth pages.</p>
-                                </div>
-                                <div class="form-group" style="margin-bottom:0.85rem;">
-                                    <label for="TYRO_LOGIN_LOGO_DARK" class="form-label">Logo URL (dark mode)</label>
-                                    <input type="text" name="TYRO_LOGIN_LOGO_DARK" id="TYRO_LOGIN_LOGO_DARK" class="form-input" maxlength="500" value="{{ old('TYRO_LOGIN_LOGO_DARK', $settings['TYRO_LOGIN_LOGO_DARK']) }}">
-                                    <p class="form-hint">Falls back to the light logo when not set.</p>
-                                </div>
+                                <x-media-picker
+                                    name="TYRO_LOGIN_LOGO"
+                                    :value="old('TYRO_LOGIN_LOGO', $settings['TYRO_LOGIN_LOGO'])"
+                                    preview="true"
+                                    preview-position="left"
+                                    preview-width="120px"
+                                    preview-height="auto"
+                                    button-text="Choose Logo"
+                                    label="Logo URL"
+                                    width="100%"
+                                />
+                                <p class="form-hint" style="margin-top:-0.5rem;margin-bottom:0.85rem;">Custom logo shown on auth pages.</p>
+
+                                <x-media-picker
+                                    name="TYRO_LOGIN_LOGO_DARK"
+                                    :value="old('TYRO_LOGIN_LOGO_DARK', $settings['TYRO_LOGIN_LOGO_DARK'])"
+                                    preview="true"
+                                    preview-position="left"
+                                    preview-width="120px"
+                                    preview-height="auto"
+                                    button-text="Choose Logo"
+                                    label="Logo URL (dark mode)"
+                                    width="100%"
+                                />
+                                <p class="form-hint" style="margin-top:-0.5rem;margin-bottom:0.85rem;">Falls back to the light logo when not set.</p>
                                 <div class="form-group" style="margin-bottom:0;">
                                     <label for="TYRO_LOGIN_LOGO_HEIGHT" class="form-label">Logo height</label>
                                     <input type="text" name="TYRO_LOGIN_LOGO_HEIGHT" id="TYRO_LOGIN_LOGO_HEIGHT" class="form-input" maxlength="20" value="{{ old('TYRO_LOGIN_LOGO_HEIGHT', $settings['TYRO_LOGIN_LOGO_HEIGHT']) }}">
