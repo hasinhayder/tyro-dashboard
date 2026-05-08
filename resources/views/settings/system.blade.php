@@ -2037,7 +2037,7 @@
                         </div>
                     </div>
 
-                    <div class="sys-settings-surface">
+                    <div class="sys-settings-surface" style="margin-bottom:1.25rem;">
                         <h4 class="sys-settings-surface-title">Sidebar Logo</h4>
                         <p class="sys-settings-surface-description">Custom logo image shown in the sidebar header. When not set, the default icon and app name are shown.</p>
 
