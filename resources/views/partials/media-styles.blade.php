@@ -1,7 +1,7 @@
 <style>
     .tyro-media-picker-field {
         display: grid;
-        gap: 0.5rem;
+        /* gap: 0.5rem; */
     }
 
     .tyro-media-picker-control {

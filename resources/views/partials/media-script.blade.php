@@ -185,6 +185,12 @@ $mediaUploadUrl = route(\HasinHayder\TyroDashboard\Support\DashboardRoute::name(
                 if (previewEmpty) {
                     previewEmpty.style.display = 'none';
                 }
+                previewImg.onerror = function () {
+                    this.style.display = 'none';
+                    this.parentElement.classList.remove('has-image');
+                    var pe = this.parentElement.querySelector('[data-tyro-media-picker-preview-empty]');
+                    if (pe) pe.style.display = '';
+                };
             }
         }
 

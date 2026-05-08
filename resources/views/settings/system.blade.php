@@ -869,6 +869,7 @@
                                     preview-position="left"
                                     preview-width="120px"
                                     preview-height="auto"
+                                    button="primary"
                                     button-text="Choose Logo"
                                     label="Logo URL"
                                     width="100%"
@@ -882,11 +883,12 @@
                                     preview-position="left"
                                     preview-width="120px"
                                     preview-height="auto"
+                                    button="primary"
                                     button-text="Choose Logo"
                                     label="Logo URL (dark mode)"
                                     width="100%"
                                 />
-                                <p class="form-hint" style="margin-top:-0.5rem;margin-bottom:0.85rem;">Falls back to the light logo when not set.</p>
+                                <!-- <p class="form-hint" style="margin-top:-0.5rem;margin-bottom:0.85rem;">Falls back to the light logo when not set.</p> -->
                                 <div class="form-group" style="margin-bottom:0;">
                                     <label for="TYRO_LOGIN_LOGO_HEIGHT" class="form-label">Logo height</label>
                                     <input type="text" name="TYRO_LOGIN_LOGO_HEIGHT" id="TYRO_LOGIN_LOGO_HEIGHT" class="form-input" maxlength="20" value="{{ old('TYRO_LOGIN_LOGO_HEIGHT', $settings['TYRO_LOGIN_LOGO_HEIGHT']) }}">

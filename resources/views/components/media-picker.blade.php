@@ -40,7 +40,7 @@
     }
 @endphp
 
-<div class="tyro-media-picker-field" data-tyro-media-picker-field style="margin-top:5px;">
+<div class="tyro-media-picker-field" data-tyro-media-picker-field style="margin-top:5px; margin-bottom:0.85rem;">
     @if($label)
         <label class="form-label" for="{{ $fieldId }}">{{ $label }}</label>
     @endif
@@ -66,6 +66,7 @@
                     alt=""
                     data-tyro-media-picker-preview-img
                     style="{{ filled($fieldValue) ? '' : 'display:none;' }}"
+                    onerror="this.style.display='none';var pe=this.parentElement.querySelector('[data-tyro-media-picker-preview-empty]');if(pe){pe.style.display='';}this.parentElement.classList.remove('has-image');"
                 >
                 <span class="tyro-media-picker-preview-placeholder {{ $circle ? 'circle' : '' }}" data-tyro-media-picker-preview-empty style="{{ filled($fieldValue) ? 'display:none;' : '' }}" aria-label="No media selected">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
