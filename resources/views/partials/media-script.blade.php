@@ -30,12 +30,10 @@ $mediaUploadUrl = route(\HasinHayder\TyroDashboard\Support\DashboardRoute::name(
                     <input type="text" id="tyroDashboardMediaPickerSearch" class="form-input" placeholder="Search images or filenames" autocomplete="off">
                 </label>
 
-                <span class="tyro-media-modal-count" id="tyroDashboardMediaPickerCount" style="display:none;">Loading library...</span>
             </div>
 
             <div class="tyro-media-modal-toolbar-right">
                 <label class="tyro-media-output-select-wrap" id="tyroDashboardMediaOutputWrap" hidden>
-                    <!-- <span>Output</span> -->
                     <select class="form-select tyro-media-output-select" id="tyroDashboardMediaOutputSelect">
                         <option value="webp" selected>WebP</option>
                         <option value="original">Original</option>
@@ -90,7 +88,6 @@ $mediaUploadUrl = route(\HasinHayder\TyroDashboard\Support\DashboardRoute::name(
         const modal = document.getElementById('tyroDashboardMediaPickerModal');
         const grid = document.getElementById('tyroDashboardMediaPickerGrid');
         const searchInput = document.getElementById('tyroDashboardMediaPickerSearch');
-        const countEl = document.getElementById('tyroDashboardMediaPickerCount');
         const loadMoreWrap = document.getElementById('tyroDashboardMediaPickerLoadMore');
         const uploadInput = document.getElementById('tyroDashboardMediaPickerUpload');
         const uploadStatus = document.getElementById('tyroDashboardMediaPickerUploadStatus');
@@ -204,8 +201,6 @@ $mediaUploadUrl = route(\HasinHayder\TyroDashboard\Support\DashboardRoute::name(
             if (!append) {
                 grid.innerHTML = stateMarkup('Loading media', 'Fetching your latest uploads.');
                 nextPageUrl = null;
-                countEl.style.display = '';
-                countEl.textContent = 'Loading library...';
             }
 
             try {
@@ -222,16 +217,8 @@ $mediaUploadUrl = route(\HasinHayder\TyroDashboard\Support\DashboardRoute::name(
                 renderItems(Array.isArray(json.data) ? json.data : [], append);
                 nextPageUrl = json.next_page_url || null;
                 loadMoreWrap.style.display = nextPageUrl ? '' : 'none';
-
-                if (typeof json.total === 'number') {
-                    countEl.textContent = `${json.total} image${json.total === 1 ? '' : 's'}`;
-                    countEl.style.display = '';
-                } else {
-                    countEl.style.display = 'none';
-                }
             } catch (error) {
                 grid.innerHTML = stateMarkup('Could not load media', 'Please try again in a moment.');
-                countEl.style.display = 'none';
                 loadMoreWrap.style.display = 'none';
             }
         }

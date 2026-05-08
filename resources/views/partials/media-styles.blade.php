@@ -128,8 +128,9 @@
 
     .tyro-media-output-select {
         width: 8rem;
-        min-height: 2.25rem;
-        padding: 0.35rem 0.8rem;
+        height: 2.5rem;
+        min-height: 2.5rem;
+        padding: 0 0.8rem;
         border-radius: 999px;
         background: rgba(255, 255, 255, 0.04);
         font-size: 0.78rem;
@@ -213,22 +214,11 @@
 
     .tyro-media-modal-search .form-input {
         width: 100%;
+        height: 2.5rem;
+        min-height: 2.5rem;
         padding-left: 2.6rem;
         border-radius: 999px;
         background: rgba(255, 255, 255, 0.04);
-    }
-
-    .tyro-media-modal-count {
-        display: inline-flex;
-        align-items: center;
-        min-height: 2.5rem;
-        padding: 0 0.95rem;
-        border: 1px solid rgba(255, 255, 255, 0.08);
-        border-radius: 999px;
-        background: rgba(255, 255, 255, 0.04);
-        color: var(--muted-foreground);
-        font-size: 0.8125rem;
-        white-space: nowrap;
     }
 
     .tyro-media-modal-body {
