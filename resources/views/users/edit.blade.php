@@ -68,15 +68,15 @@
                 </div>
 
                 <div class="form-group">
-                    <label class="form-label">Assign Roles</label>
-                    <div class="checkbox-list">
+                    <label class="form-label" style="margin-bottom: 0.75rem; display: block;">Assign Roles</label>
+                    <div class="role-grid">
                         @foreach($roles as $role)
-                        <label class="checkbox-item">
-                            <input type="checkbox" name="roles[]" value="{{ $role->id }}" class="checkbox-input" {{ in_array($role->id, old('roles', $editUser->roles->pluck('id')->toArray())) ? 'checked' : '' }}>
-                            <div class="checkbox-item-content">
-                                <div class="checkbox-item-title">{{ $role->name }}</div>
-                                <div class="checkbox-item-description">{{ $role->slug }}</div>
+                        <label class="role-card">
+                            <div class="role-card-header">
+                                <div class="role-title">{{ $role->name }}</div>
+                                <input type="checkbox" name="roles[]" value="{{ $role->id }}" class="role-checkbox" {{ in_array($role->id, old('roles', $editUser->roles->pluck('id')->toArray())) ? 'checked' : '' }}>
                             </div>
+                            <div class="role-desc">{{ $role->slug }}</div>
                         </label>
                         @endforeach
                     </div>
@@ -108,7 +108,14 @@
                         @endif
                     </div>
                     <div>
-                        <div style="font-weight: 600; color: var(--foreground);">{{ $editUser->name }}</div>
+                        <div style="font-weight: 600; color: var(--foreground); display: flex; align-items: center; gap: 0.5rem;">
+                            {{ $editUser->name }}
+                            @if(method_exists($editUser, 'isSuspended') && $editUser->isSuspended())
+                                <span class="badge badge-danger">Suspended</span>
+                            @else
+                                <span class="badge badge-success">Active</span>
+                            @endif
+                        </div>
                         <div style="font-size: 0.875rem; color: var(--muted-foreground);">Member since {{ $editUser->created_at->format('M d, Y') }}</div>
                         @if(method_exists($editUser, 'hasProfilePhotoColumn') && $editUser->hasProfilePhotoColumn() && $editUser->profile_photo_path)
                         <div style="margin-top: 0.5rem;">
@@ -127,22 +134,12 @@
                     </div>
                 </div>
 
-                <div style="padding: 1rem; background-color: var(--muted); border-radius: 0.5rem;">
-                    <div style="display: flex; justify-content: space-between; align-items: center;">
-                        <span style="font-size: 0.875rem; color: var(--muted-foreground);">Status</span>
-                        @if(method_exists($editUser, 'isSuspended') && $editUser->isSuspended())
-                            <span class="badge badge-danger">Suspended</span>
-                        @else
-                            <span class="badge badge-success">Active</span>
-                        @endif
-                    </div>
-                    @if(method_exists($editUser, 'isSuspended') && $editUser->isSuspended() && method_exists($editUser, 'getSuspensionReason') && $editUser->getSuspensionReason())
-                        <div style="margin-top: 0.75rem; padding-top: 0.75rem; border-top: 1px solid var(--border);">
-                            <span style="font-size: 0.75rem; color: var(--muted-foreground);">Suspension Reason:</span>
-                            <p style="font-size: 0.875rem; color: var(--muted-foreground); margin-top: 0.25rem;">{{ $editUser->getSuspensionReason() }}</p>
-                        </div>
-                    @endif
+                @if(method_exists($editUser, 'isSuspended') && $editUser->isSuspended() && method_exists($editUser, 'getSuspensionReason') && $editUser->getSuspensionReason())
+                <div style="padding: 1rem; background-color: color-mix(in srgb, var(--destructive), transparent 90%); border-radius: 0.5rem; margin-top: 1rem;">
+                    <span style="font-size: 0.75rem; color: var(--destructive); font-weight: 600;">Suspension Reason:</span>
+                    <p style="font-size: 0.875rem; color: var(--foreground); margin-top: 0.25rem;">{{ $editUser->getSuspensionReason() }}</p>
                 </div>
+                @endif
 
                 <!-- 2FA Status & Reset -->
                 @if(config('tyro-login.two_factor.enabled'))
@@ -167,11 +164,12 @@
                 </div>
                 @endif
 
-                <div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--border);">
+                <!-- Account Actions -->
+                <div style="margin-top: 1.5rem; padding-top: 1rem; border-top: 1px solid var(--border); display: flex; justify-content: flex-end;">
                     @if(method_exists($editUser, 'isSuspended') && $editUser->isSuspended())
                         <form action="{{ route($dashboardRoute::name('users.unsuspend'), $editUser->id) }}" method="POST">
                             @csrf
-                            <button type="submit" class="btn btn-success" style="width: 100%;">
+                            <button type="submit" class="btn btn-success">
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                                 </svg>
@@ -179,7 +177,7 @@
                             </button>
                         </form>
                     @elseif($editUser->id !== $user->id)
-                        <button type="button" class="btn btn-warning" style="width: 100%;" onclick="openSuspendModal()">
+                        <button type="button" class="btn btn-warning" onclick="openSuspendModal()">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636" />
                             </svg>
@@ -199,16 +197,18 @@
                 <p style="font-size: 0.875rem; color: var(--muted-foreground); margin-bottom: 1rem;">
                     Once you delete a user, there is no going back. Please be certain.
                 </p>
-                <form action="{{ route($dashboardRoute::name('users.destroy'), $editUser->id) }}" method="POST" id="delete-user-form">
-                    @csrf
-                    @method('DELETE')
-                    <button type="button" class="btn btn-danger" style="width: 100%;" onclick="event.preventDefault(); showDanger('Delete User', 'Are you sure you want to delete this user? This action cannot be undone.').then(confirmed => { if(confirmed) document.getElementById('delete-user-form').submit(); })">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                        </svg>
-                        Delete User
-                    </button>
-                </form>
+                <div style="display: flex; justify-content: flex-end;">
+                    <form action="{{ route($dashboardRoute::name('users.destroy'), $editUser->id) }}" method="POST" id="delete-user-form">
+                        @csrf
+                        @method('DELETE')
+                        <button type="button" class="btn btn-destructive" onclick="event.preventDefault(); showDanger('Delete User', 'Are you sure you want to delete this user? This action cannot be undone.').then(confirmed => { if(confirmed) document.getElementById('delete-user-form').submit(); })">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                            </svg>
+                            Delete User
+                        </button>
+                    </form>
+                </div>
             </div>
         </div>
         @endif
@@ -257,5 +257,59 @@
         openModal('suspendModal');
     }
 </script>
+@endpush
+
+@push('styles')
+<style>
+    .role-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+        gap: 0.75rem;
+    }
+    .role-card {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        padding: 0.75rem;
+        border: 1px solid var(--border);
+        border-radius: 0.5rem;
+        background-color: var(--card);
+        cursor: pointer;
+        transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        user-select: none;
+    }
+    .role-card:hover {
+        border-color: var(--primary);
+        box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.05);
+    }
+    .role-card:has(.role-checkbox:checked) {
+        border-color: color-mix(in srgb, var(--primary), transparent 50%);
+        background-color: color-mix(in srgb, var(--primary), transparent 96%);
+        box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--primary), transparent 50%);
+    }
+    .role-card-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-bottom: 0.25rem;
+    }
+    .role-title {
+        font-weight: 600;
+        font-size: 0.8125rem;
+        color: var(--foreground);
+    }
+    .role-checkbox {
+        width: 1rem;
+        height: 1rem;
+        border-radius: 4px;
+        border: 1px solid var(--border);
+        accent-color: var(--primary);
+        cursor: pointer;
+    }
+    .role-desc {
+        font-size: 0.75rem;
+        color: var(--muted-foreground);
+    }
+</style>
 @endpush
 @endsection

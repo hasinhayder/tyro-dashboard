@@ -64,15 +64,15 @@
             </div>
 
             <div class="form-group">
-                <label class="form-label">Assign Roles</label>
-                <div class="checkbox-list">
+                <label class="form-label" style="margin-bottom: 0.75rem; display: block;">Assign Roles</label>
+                <div class="role-grid">
                     @foreach($roles as $role)
-                    <label class="checkbox-item">
-                        <input type="checkbox" name="roles[]" value="{{ $role->id }}" class="checkbox-input" {{ in_array($role->id, old('roles', [])) ? 'checked' : '' }}>
-                        <div class="checkbox-item-content">
-                            <div class="checkbox-item-title">{{ $role->name }}</div>
-                            <div class="checkbox-item-description">{{ $role->slug }}</div>
+                    <label class="role-card">
+                        <div class="role-card-header">
+                            <div class="role-title">{{ $role->name }}</div>
+                            <input type="checkbox" name="roles[]" value="{{ $role->id }}" class="role-checkbox" {{ in_array($role->id, old('roles', [])) ? 'checked' : '' }}>
                         </div>
+                        <div class="role-desc">{{ $role->slug }}</div>
                     </label>
                     @endforeach
                 </div>
@@ -87,4 +87,58 @@
         </div>
     </form>
 </div>
+
+@push('styles')
+<style>
+    .role-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+        gap: 0.75rem;
+    }
+    .role-card {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        padding: 0.75rem;
+        border: 1px solid var(--border);
+        border-radius: 0.5rem;
+        background-color: var(--card);
+        cursor: pointer;
+        transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        user-select: none;
+    }
+    .role-card:hover {
+        border-color: var(--primary);
+        box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.05);
+    }
+    .role-card:has(.role-checkbox:checked) {
+        border-color: color-mix(in srgb, var(--primary), transparent 50%);
+        background-color: color-mix(in srgb, var(--primary), transparent 96%);
+        box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--primary), transparent 50%);
+    }
+    .role-card-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-bottom: 0.25rem;
+    }
+    .role-title {
+        font-weight: 600;
+        font-size: 0.8125rem;
+        color: var(--foreground);
+    }
+    .role-checkbox {
+        width: 1rem;
+        height: 1rem;
+        border-radius: 4px;
+        border: 1px solid var(--border);
+        accent-color: var(--primary);
+        cursor: pointer;
+    }
+    .role-desc {
+        font-size: 0.75rem;
+        color: var(--muted-foreground);
+    }
+</style>
+@endpush
 @endsection
