@@ -119,6 +119,8 @@ return [
         'invitation_system' => env('TYRO_DASHBOARD_ENABLE_INVITATION', true),
         'audit_logs' => env('TYRO_DASHBOARD_ENABLE_AUDIT_LOGS', true),
         'system_settings' => env('TYRO_DASHBOARD_ENABLE_SYSTEM_SETTINGS', true),
+        'show_roles_menu' => env('TYRO_DASHBOARD_SHOW_ROLES_MENU', true),
+        'show_privileges_menu' => env('TYRO_DASHBOARD_SHOW_PRIVILEGES_MENU', true),
         'activity_log' => false, // Future feature
         'profile_photo_upload' => env('TYRO_DASHBOARD_ENABLE_PROFILE_PHOTO', false),
         'gravatar' => env('TYRO_DASHBOARD_ENABLE_GRAVATAR', false),

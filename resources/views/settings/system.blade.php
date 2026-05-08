@@ -523,6 +523,70 @@
                                     <div class="sys-settings-toggle">
                                         <div class="sys-settings-toggle-top">
                                             <div>
+                                                <p class="sys-settings-toggle-title">Roles menu <span style="font-weight:normal">(<code>TYRO_DASHBOARD_SHOW_ROLES_MENU</code>)</span></p>
+                                                <p class="sys-settings-toggle-description">Displays the roles management menu in the administration sidebar.</p>
+                                            </div>
+                                            <div>
+                                                <input type="hidden" name="TYRO_DASHBOARD_SHOW_ROLES_MENU" value="0">
+                                                <label class="toggle-label">
+                                                    <input type="checkbox" name="TYRO_DASHBOARD_SHOW_ROLES_MENU" value="1" class="toggle-input" {{ old('TYRO_DASHBOARD_SHOW_ROLES_MENU', $settings['TYRO_DASHBOARD_SHOW_ROLES_MENU']) ? 'checked' : '' }}>
+                                                    <span class="toggle-slider"></span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="sys-settings-toggle">
+                                        <div class="sys-settings-toggle-top">
+                                            <div>
+                                                <p class="sys-settings-toggle-title">Privileges menu <span style="font-weight:normal">(<code>TYRO_DASHBOARD_SHOW_PRIVILEGES_MENU</code>)</span></p>
+                                                <p class="sys-settings-toggle-description">Displays the privileges management menu in the administration sidebar.</p>
+                                            </div>
+                                            <div>
+                                                <input type="hidden" name="TYRO_DASHBOARD_SHOW_PRIVILEGES_MENU" value="0">
+                                                <label class="toggle-label">
+                                                    <input type="checkbox" name="TYRO_DASHBOARD_SHOW_PRIVILEGES_MENU" value="1" class="toggle-input" {{ old('TYRO_DASHBOARD_SHOW_PRIVILEGES_MENU', $settings['TYRO_DASHBOARD_SHOW_PRIVILEGES_MENU']) ? 'checked' : '' }}>
+                                                    <span class="toggle-slider"></span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="sys-settings-toggle">
+                                        <div class="sys-settings-toggle-top">
+                                            <div>
+                                                <p class="sys-settings-toggle-title">Roles menu <span style="font-weight:normal">(<code>TYRO_DASHBOARD_SHOW_ROLES_MENU</code>)</span></p>
+                                                <p class="sys-settings-toggle-description">Displays the roles management menu in the administration sidebar.</p>
+                                            </div>
+                                            <div>
+                                                <input type="hidden" name="TYRO_DASHBOARD_SHOW_ROLES_MENU" value="0">
+                                                <label class="toggle-label">
+                                                    <input type="checkbox" name="TYRO_DASHBOARD_SHOW_ROLES_MENU" value="1" class="toggle-input" {{ old('TYRO_DASHBOARD_SHOW_ROLES_MENU', $settings['TYRO_DASHBOARD_SHOW_ROLES_MENU']) ? 'checked' : '' }}>
+                                                    <span class="toggle-slider"></span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="sys-settings-toggle">
+                                        <div class="sys-settings-toggle-top">
+                                            <div>
+                                                <p class="sys-settings-toggle-title">Privileges menu <span style="font-weight:normal">(<code>TYRO_DASHBOARD_SHOW_PRIVILEGES_MENU</code>)</span></p>
+                                                <p class="sys-settings-toggle-description">Displays the privileges management menu in the administration sidebar.</p>
+                                            </div>
+                                            <div>
+                                                <input type="hidden" name="TYRO_DASHBOARD_SHOW_PRIVILEGES_MENU" value="0">
+                                                <label class="toggle-label">
+                                                    <input type="checkbox" name="TYRO_DASHBOARD_SHOW_PRIVILEGES_MENU" value="1" class="toggle-input" {{ old('TYRO_DASHBOARD_SHOW_PRIVILEGES_MENU', $settings['TYRO_DASHBOARD_SHOW_PRIVILEGES_MENU']) ? 'checked' : '' }}>
+                                                    <span class="toggle-slider"></span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="sys-settings-toggle">
+                                        <div class="sys-settings-toggle-top">
+                                            <div>
                                                 <p class="sys-settings-toggle-title">Invitation system <span style="font-weight:normal">(<code>TYRO_DASHBOARD_ENABLE_INVITATION</code>)</span></p>
                                                 <p class="sys-settings-toggle-description">Allows admins to invite new users by email. Disabling this hides the invitation UI and prevents new invitations from being sent.</p>
                                             </div>
