@@ -165,12 +165,14 @@ Route::middleware('tyro-dashboard.admin')->group(function () {
 
 // Dynamic Resources (outside admin middleware - handles its own access control)
 // This route group handles all dynamic resources defined in config or via HasCrud trait
-Route::prefix('resources/{resource}')->name('resources.')->group(function () {
-    Route::get('/', [\HasinHayder\TyroDashboard\Http\Controllers\ResourceController::class, 'index'])->name('index');
-    Route::get('/create', [\HasinHayder\TyroDashboard\Http\Controllers\ResourceController::class, 'create'])->name('create');
-    Route::post('/', [\HasinHayder\TyroDashboard\Http\Controllers\ResourceController::class, 'store'])->name('store');
-    Route::get('/{id}', [\HasinHayder\TyroDashboard\Http\Controllers\ResourceController::class, 'show'])->name('show');
-    Route::get('/{id}/edit', [\HasinHayder\TyroDashboard\Http\Controllers\ResourceController::class, 'edit'])->name('edit');
-    Route::put('/{id}', [\HasinHayder\TyroDashboard\Http\Controllers\ResourceController::class, 'update'])->name('update');
-    Route::delete('/{id}', [\HasinHayder\TyroDashboard\Http\Controllers\ResourceController::class, 'destroy'])->name('destroy');
-});
+if (config('tyro-dashboard.features.show_resources_menu', true)) {
+    Route::prefix('resources/{resource}')->name('resources.')->group(function () {
+        Route::get('/', [\HasinHayder\TyroDashboard\Http\Controllers\ResourceController::class, 'index'])->name('index');
+        Route::get('/create', [\HasinHayder\TyroDashboard\Http\Controllers\ResourceController::class, 'create'])->name('create');
+        Route::post('/', [\HasinHayder\TyroDashboard\Http\Controllers\ResourceController::class, 'store'])->name('store');
+        Route::get('/{id}', [\HasinHayder\TyroDashboard\Http\Controllers\ResourceController::class, 'show'])->name('show');
+        Route::get('/{id}/edit', [\HasinHayder\TyroDashboard\Http\Controllers\ResourceController::class, 'edit'])->name('edit');
+        Route::put('/{id}', [\HasinHayder\TyroDashboard\Http\Controllers\ResourceController::class, 'update'])->name('update');
+        Route::delete('/{id}', [\HasinHayder\TyroDashboard\Http\Controllers\ResourceController::class, 'destroy'])->name('destroy');
+    });
+}
