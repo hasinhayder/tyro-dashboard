@@ -7,12 +7,14 @@
     'placeholder' => 'Select or paste a media URL',
     'label' => null,
     'width' => '550px',
+    'button' => 'secondary',
 ])
 
 @php
     $fieldId = $id ?: 'tyro-dashboard-media-picker-'.str_replace('.', '-', uniqid('', true));
     $fieldValue = $name ? old($name, $value) : $value;
     $outputMode = in_array((string) $output, ['original', 'thumb', 'webp', 'select'], true) ? (string) $output : 'webp';
+    $buttonStyle = in_array((string) $button, ['primary', 'secondary', 'ghost', 'outline', 'outline-btn', 'danger', 'success'], true) ? (string) $button : 'secondary';
 @endphp
 
 <div class="tyro-media-picker-field" data-tyro-media-picker-field style="margin-top:5px;">
@@ -34,7 +36,7 @@
         >
         <button
             type="button"
-            class="btn btn-secondary tyro-media-picker-button"
+            class="btn btn-{{ $buttonStyle }} tyro-media-picker-button"
             data-tyro-media-picker-trigger
             data-input-id="{{ $fieldId }}"
         >

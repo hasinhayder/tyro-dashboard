@@ -15,6 +15,7 @@ class MediaPicker extends Component {
         public string $placeholder = 'Select or paste a media URL',
         public ?string $label = null,
         public string $width = '550px',
+        public string $button = 'secondary',
     ) {}
 
     public function render(): View {
