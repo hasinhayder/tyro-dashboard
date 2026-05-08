@@ -242,8 +242,8 @@
     .sidebar-logo-img {
         width: 36px;
         height: 36px;
-        object-fit: contain;
-        border-radius: 8px;
+        object-fit: cover;
+        border-radius: 50%;
         flex-shrink: 0;
     }
 
