@@ -10,7 +10,7 @@ class MediaPicker extends Component {
         public ?string $name = null,
         public ?string $id = null,
         public ?string $value = null,
-        public string $output = 'original',
+        public string $output = 'webp',
         public string $buttonText = 'Select media',
         public string $placeholder = 'Select or paste a media URL',
         public ?string $label = null,

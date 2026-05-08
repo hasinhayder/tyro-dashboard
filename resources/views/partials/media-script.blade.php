@@ -1,6 +1,6 @@
 @php
-    $mediaPickerUrl = route(\HasinHayder\TyroDashboard\Support\DashboardRoute::name('media.picker'));
-    $mediaUploadUrl = route(\HasinHayder\TyroDashboard\Support\DashboardRoute::name('media.upload'));
+$mediaPickerUrl = route(\HasinHayder\TyroDashboard\Support\DashboardRoute::name('media.picker'));
+$mediaUploadUrl = route(\HasinHayder\TyroDashboard\Support\DashboardRoute::name('media.upload'));
 @endphp
 
 <div class="tyro-media-modal-overlay" id="tyroDashboardMediaPickerModal" aria-hidden="true">
@@ -12,22 +12,37 @@
                 <p class="tyro-media-modal-subtitle">Pick an image from your library. The selected URL will be inserted into the active field.</p>
             </div>
 
-            <button type="button" class="tyro-media-modal-close" data-tyro-media-picker-close aria-label="Close media picker">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
-                </svg>
-            </button>
+            <div class="tyro-media-modal-header-actions">
+                <button type="button" class="tyro-media-modal-close" data-tyro-media-picker-close aria-label="Close media picker">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
         </div>
 
         <div class="tyro-media-modal-toolbar">
-            <label class="tyro-media-modal-search" for="tyroDashboardMediaPickerSearch">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-4.35-4.35m1.85-5.15a7 7 0 1 1-14 0 7 7 0 0 1 14 0Z" />
-                </svg>
-                <input type="text" id="tyroDashboardMediaPickerSearch" class="form-input" placeholder="Search images or filenames" autocomplete="off">
-            </label>
+            <div class="tyro-media-modal-toolbar-left">
+                <label class="tyro-media-modal-search" for="tyroDashboardMediaPickerSearch">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-4.35-4.35m1.85-5.15a7 7 0 1 1-14 0 7 7 0 0 1 14 0Z" />
+                    </svg>
+                    <input type="text" id="tyroDashboardMediaPickerSearch" class="form-input" placeholder="Search images or filenames" autocomplete="off">
+                </label>
 
-            <span class="tyro-media-modal-count" id="tyroDashboardMediaPickerCount" style="display:none;">Loading library...</span>
+                <span class="tyro-media-modal-count" id="tyroDashboardMediaPickerCount" style="display:none;">Loading library...</span>
+            </div>
+
+            <div class="tyro-media-modal-toolbar-right">
+                <label class="tyro-media-output-select-wrap" id="tyroDashboardMediaOutputWrap" hidden>
+                    <!-- <span>Output</span> -->
+                    <select class="form-select tyro-media-output-select" id="tyroDashboardMediaOutputSelect">
+                        <option value="webp" selected>WebP</option>
+                        <option value="original">Original</option>
+                        <option value="thumb">Thumb</option>
+                    </select>
+                </label>
+            </div>
         </div>
 
         <div class="tyro-media-modal-body">
@@ -82,6 +97,8 @@
         const uploadProgress = document.getElementById('tyroDashboardMediaPickerUploadProgress');
         const uploadProgressFill = document.getElementById('tyroDashboardMediaPickerUploadProgressFill');
         const uploadProgressText = document.getElementById('tyroDashboardMediaPickerUploadProgressText');
+        const outputWrap = document.getElementById('tyroDashboardMediaOutputWrap');
+        const outputSelect = document.getElementById('tyroDashboardMediaOutputSelect');
 
         let activeInput = null;
         let nextPageUrl = null;
@@ -139,12 +156,31 @@
         }
 
         function currentOutputMode() {
-            return activeInput?.dataset.tyroMediaOutput || 'original';
+            const outputMode = activeInput?.dataset.tyroMediaOutput || 'original';
+
+            if (outputMode === 'select') {
+                return outputSelect?.value || 'webp';
+            }
+
+            return outputMode;
+        }
+
+        function syncOutputSelector() {
+            const shouldShow = activeInput?.dataset.tyroMediaOutput === 'select';
+
+            if (outputWrap) {
+                outputWrap.hidden = !shouldShow;
+            }
+
+            if (outputSelect) {
+                outputSelect.value = 'webp';
+            }
         }
 
         function openForInput(input) {
             activeInput = input;
             searchInput.value = '';
+            syncOutputSelector();
             modal.classList.add('open');
             modal.setAttribute('aria-hidden', 'false');
             loadMedia(false);
@@ -155,6 +191,7 @@
             modal.classList.remove('open');
             modal.setAttribute('aria-hidden', 'true');
             activeInput = null;
+            syncOutputSelector();
         }
 
         async function loadMedia(append) {
@@ -353,6 +390,12 @@
         searchInput.addEventListener('input', () => {
             window.clearTimeout(searchTimer);
             searchTimer = window.setTimeout(() => loadMedia(false), 350);
+        });
+
+        outputSelect.addEventListener('change', () => {
+            if (activeInput?.dataset.tyroMediaOutput === 'select') {
+                loadMedia(false);
+            }
         });
 
         uploadInput.addEventListener('change', uploadFile);

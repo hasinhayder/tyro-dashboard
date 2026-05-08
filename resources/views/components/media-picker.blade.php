@@ -2,7 +2,7 @@
     'name' => null,
     'id' => null,
     'value' => null,
-    'output' => 'original',
+    'output' => 'webp',
     'buttonText' => 'Select media',
     'placeholder' => 'Select or paste a media URL',
     'label' => null,
@@ -12,7 +12,7 @@
 @php
     $fieldId = $id ?: 'tyro-dashboard-media-picker-'.str_replace('.', '-', uniqid('', true));
     $fieldValue = $name ? old($name, $value) : $value;
-    $outputMode = in_array((string) $output, ['original', 'thumb', 'webp'], true) ? (string) $output : 'original';
+    $outputMode = in_array((string) $output, ['original', 'thumb', 'webp', 'select'], true) ? (string) $output : 'webp';
 @endphp
 
 <div class="tyro-media-picker-field" data-tyro-media-picker-field style="margin-top:5px;">

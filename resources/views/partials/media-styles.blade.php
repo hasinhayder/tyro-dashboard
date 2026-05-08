@@ -82,6 +82,8 @@
     }
 
     .tyro-media-modal-toolbar {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
         align-items: center;
         padding: 1rem 1.5rem;
         background: rgba(255, 255, 255, 0.025);
@@ -89,6 +91,50 @@
 
     .tyro-media-modal-copy {
         min-width: 0;
+    }
+
+    .tyro-media-modal-toolbar-left {
+        display: flex;
+        align-items: center;
+        gap: 0.9rem;
+        min-width: 0;
+    }
+
+    .tyro-media-modal-toolbar-right,
+    .tyro-media-modal-header-actions {
+        display: inline-flex;
+        align-items: center;
+        justify-content: flex-end;
+        gap: 0.65rem;
+        flex-shrink: 0;
+        margin-left: auto;
+    }
+
+    .tyro-media-output-select-wrap {
+        display: inline-flex;
+        align-items: center;
+        justify-content: flex-end;
+        gap: 0.65rem;
+        color: var(--muted-foreground);
+        font-size: 0.62rem;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+    }
+
+    .tyro-media-output-select-wrap[hidden] {
+        display: none !important;
+    }
+
+    .tyro-media-output-select {
+        width: 8rem;
+        min-height: 2.25rem;
+        padding: 0.35rem 0.8rem;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.04);
+        font-size: 0.78rem;
+        letter-spacing: 0;
+        text-transform: none;
     }
 
     .tyro-media-modal-eyebrow {
@@ -409,9 +455,24 @@
             padding-right: 1rem;
         }
 
-        .tyro-media-modal-header,
-        .tyro-media-modal-toolbar {
+        .tyro-media-modal-header {
             flex-direction: column;
+        }
+
+        .tyro-media-modal-toolbar {
+            grid-template-columns: 1fr;
+        }
+
+        .tyro-media-modal-toolbar-left {
+            width: 100%;
+            flex-direction: column;
+            align-items: stretch;
+        }
+
+        .tyro-media-modal-toolbar-right,
+        .tyro-media-modal-header-actions {
+            width: 100%;
+            justify-content: flex-end;
         }
 
         .tyro-media-modal-search {
