@@ -17,6 +17,8 @@
     'preview_height' => null,
     'previewHeight' => null,
     'circle' => false,
+    'full_url' => false,
+    'fullUrl' => null,
 ])
 
 @php
@@ -39,6 +41,14 @@
 
     if ($previewHasFixedHeight) {
         $previewStyles[] = 'height: '.$rawPreviewHeight;
+    }
+
+    $rawFullUrl = $fullUrl ?? $full_url ?? false;
+    $fullUrl = filter_var($rawFullUrl, FILTER_VALIDATE_BOOL);
+    if ($fullUrl) {
+        if ($fieldValue && !str_starts_with($fieldValue, 'http://') && !str_starts_with($fieldValue, 'https://')) {
+            $fieldValue = \Illuminate\Support\Facades\Storage::url($fieldValue);
+        }
     }
 
     $previewSrc = $fieldValue;
@@ -95,6 +105,7 @@
             autocomplete="off"
             data-tyro-media-picker-input
             data-tyro-media-output="{{ $outputMode }}"
+            data-tyro-media-full-url="{{ $fullUrl ? 'true' : 'false' }}"
         >
         <div class="tyro-media-picker-actions">
             <button

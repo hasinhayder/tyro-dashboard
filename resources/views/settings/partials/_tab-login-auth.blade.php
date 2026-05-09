@@ -62,6 +62,7 @@
                                     button-text="Choose Logo"
                                     label="Logo URL"
                                     width="100%"
+                                    full-url="true"
                                 />
                                 <p class="form-hint" style="margin-top:-0.5rem;margin-bottom:0.85rem;">Custom logo shown on auth pages.</p>
 
@@ -77,6 +78,7 @@
                                     button-text="Choose Logo"
                                     label="Logo URL (dark mode)"
                                     width="100%"
+                                    full-url="true"
                                 />
                                 <!-- <p class="form-hint" style="margin-top:-0.5rem;margin-bottom:0.85rem;">Falls back to the light logo when not set.</p> -->
                                 <div class="form-group" style="margin-bottom:0;">

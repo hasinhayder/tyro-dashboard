@@ -312,7 +312,9 @@ $storageBaseUrl = rtrim(\Illuminate\Support\Facades\Storage::disk('public')->url
                 return;
             }
 
-            activeInput.value = outputUrl(item, currentOutputMode());
+            const url = outputUrl(item, currentOutputMode());
+            const useFullUrl = activeInput.dataset.tyroMediaFullUrl === 'true';
+            activeInput.value = useFullUrl ? storageUrl(url) : url;
             updateActivePreview(item);
             activeInput.dispatchEvent(new Event('input', { bubbles: true }));
             activeInput.dispatchEvent(new Event('change', { bubbles: true }));
