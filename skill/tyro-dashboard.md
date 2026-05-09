@@ -622,6 +622,10 @@ The system settings UI at `/dashboard/settings/system` lets admins manage `.env`
 
 Enable/disable with `TYRO_DASHBOARD_ENABLE_SYSTEM_SETTINGS=true` in `.env` and `system_settings` feature toggle in config.
 
+### Add a New System Setting
+
+See the [System Settings Management](#system-settings-management) section above for the complete step-by-step guide covering all six touchpoints (config, gatherSettings, validation, booleanKeys, defaultValues, and the blade view tab partial).
+
 ### Enable Profile Photos
 
 1. Run migrations (adds `profile_photo_path` and `use_gravatar` columns)
@@ -691,7 +695,239 @@ protected function auditSafely(string $event, $auditable = null, ?array $oldValu
 - System settings page is admin-only and guarded by `features.system_settings` config and `tyro-dashboard.admin` middleware
 - Media uploads respect configured disk and directory; file type validation is enforced
 
-## Important Files to Know
+## System Settings Management
+
+The system settings page at `/dashboard/settings/system` provides an admin UI for managing `.env` configuration values across Tyro Dashboard, Tyro (RBAC), and Tyro Login. All settings are written directly to `.env` and persisted via `config:clear`. This section documents the architecture and the step-by-step process for adding new settings.
+
+### Architecture Overview
+
+The system settings flow works as follows:
+
+1. **On page load**, the controller's `gatherSettings()` method reads values from config (which reads from `.env`/defaults) and passes them to the view as `$settings['ENV_KEY']`.
+2. **On form submit**, an AJAX POST is sent to the `update()` method which validates, writes to `.env`, and runs `config:clear`.
+3. **Defaults-based pruning**: If a submitted value matches the `defaultValues()` entry for that key, the line is removed from `.env` entirely (so the config file's default takes effect).
+
+### Six Touchpoints to Add a New Setting
+
+Every new setting requires changes in exactly six locations:
+
+| # | Location | Responsibility |
+|---|----------|----------------|
+| 1 | `config/tyro-dashboard.php` | Wire the env var to a config key with a fallback default |
+| 2 | `SystemSettingsController::gatherSettings()` | Read the config value so the form is pre-populated |
+| 3 | `SystemSettingsController::update()` validation array | Validate the incoming value |
+| 4 | `SystemSettingsController::booleanKeys()` (if boolean) | Mark the key for true/false serialization |
+| 5 | `SystemSettingsController::defaultValues()` | Define the canonical default (used for pruning) |
+| 6 | `resources/views/settings/partials/_tab-*.blade.php` | Render the form field(s) in the appropriate tab |
+
+#### Step 1 — Config File (`config/tyro-dashboard.php`)
+
+Add an `env()` wrapper inside the appropriate config section. The second argument is the fallback default:
+
+```php
+// Inside an existing or new config section
+'my_feature' => env('TYRO_DASHBOARD_MY_FEATURE', false),
+```
+
+The env key **must** use the `TYRO_DASHBOARD_`, `TYRO_`, or `TYRO_LOGIN_` prefix to avoid clashes. Convention:
+- `TYRO_DASHBOARD_*` — dashboard-specific settings (branding, features, media keys)
+- `TYRO_*` — RBAC/tyro core settings
+- `TYRO_LOGIN_*` — authentication settings
+
+#### Step 2 — `gatherSettings()`
+
+Add a key-value pair to the array. The key is the **env variable name**, the value reads from the config path:
+
+```php
+'TYRO_DASHBOARD_MY_FEATURE' => config('tyro-dashboard.my_feature'),
+```
+
+#### Step 3 — `update()` Validation
+
+Add a validation rule to the `$request->validate()` array. Follow existing patterns:
+
+```php
+// String/text field
+'TYRO_DASHBOARD_MY_FEATURE' => 'nullable|string|max:255',
+
+// Boolean toggle
+'TYRO_DASHBOARD_MY_FEATURE' => 'nullable|boolean',
+
+// Select from list
+'TYRO_DASHBOARD_MY_FEATURE' => 'nullable|in:option_a,option_b,option_c',
+
+// Integer with bounds
+'TYRO_DASHBOARD_MY_FEATURE' => 'nullable|integer|min:0|max:100',
+```
+
+#### Step 4 — `booleanKeys()` (booleans only)
+
+If the setting is a boolean toggle, add its env key to the `booleanKeys()` array. This ensures the value is serialized as `"true"`/`"false"` in `.env` (not `"1"`/`"0"` or `"on"`).
+
+```php
+protected function booleanKeys(): array {
+    return [
+        // ... existing keys ...
+        'TYRO_DASHBOARD_MY_FEATURE',
+    ];
+}
+```
+
+#### Step 5 — `defaultValues()`
+
+Add the canonical default so the controller can prune lines that match it:
+
+```php
+'TYRO_DASHBOARD_MY_FEATURE' => false,
+```
+
+When the submitted value equals this default, the `.env` line is removed — keeping the config file clean and ensuring the config file's default always applies.
+
+#### Step 6 — Tab Partial Blade View
+
+Create a new tab partial at `resources/views/settings/partials/_tab-{name}.blade.php` or add fields to an existing one. Three form field patterns are used:
+
+**A) Text / number input:**
+```blade
+<div class="form-group">
+    <label for="TYRO_DASHBOARD_MY_FEATURE" class="form-label">Label (TYRO_DASHBOARD_MY_FEATURE)</label>
+    <input type="text" name="TYRO_DASHBOARD_MY_FEATURE" id="TYRO_DASHBOARD_MY_FEATURE"
+           class="form-input" maxlength="255"
+           value="{{ old('TYRO_DASHBOARD_MY_FEATURE', $settings['TYRO_DASHBOARD_MY_FEATURE']) }}">
+    <p class="form-hint">Description of what this setting does.</p>
+</div>
+```
+
+Use `type="password"` for API keys or secrets. Use `type="number"` with `min`/`max` for numeric fields.
+
+**B) Boolean toggle:**
+```blade
+<div class="sys-settings-toggle">
+    <div class="sys-settings-toggle-top">
+        <div>
+            <p class="sys-settings-toggle-title">Title <span style="font-weight:normal">(<code>TYRO_DASHBOARD_MY_FEATURE</code>)</span></p>
+            <p class="sys-settings-toggle-description">Description of the toggle.</p>
+        </div>
+        <div>
+            <input type="hidden" name="TYRO_DASHBOARD_MY_FEATURE" value="0">
+            <label class="toggle-label">
+                <input type="checkbox" name="TYRO_DASHBOARD_MY_FEATURE" value="1" class="toggle-input"
+                       {{ old('TYRO_DASHBOARD_MY_FEATURE', $settings['TYRO_DASHBOARD_MY_FEATURE']) ? 'checked' : '' }}>
+                <span class="toggle-slider"></span>
+            </label>
+        </div>
+    </div>
+</div>
+```
+
+The hidden input with `value="0"` ensures an unchecked checkbox still sends `0` (not nothing). The `toggle-input`/`toggle-slider` CSS classes render the shadcn-style switch.
+
+**C) Select dropdown:**
+```blade
+<div class="form-group">
+    <label for="TYRO_DASHBOARD_MY_FEATURE" class="form-label">Label (TYRO_DASHBOARD_MY_FEATURE)</label>
+    <select name="TYRO_DASHBOARD_MY_FEATURE" id="TYRO_DASHBOARD_MY_FEATURE" class="form-select">
+        <option value="option_a" {{ old('TYRO_DASHBOARD_MY_FEATURE', $settings['TYRO_DASHBOARD_MY_FEATURE']) === 'option_a' ? 'selected' : '' }}>Option A</option>
+        <option value="option_b" {{ old('TYRO_DASHBOARD_MY_FEATURE', $settings['TYRO_DASHBOARD_MY_FEATURE']) === 'option_b' ? 'selected' : '' }}>Option B</option>
+    </select>
+</div>
+```
+
+### Registering a New Tab
+
+If the setting belongs in a **new tab** (rather than an existing one), two additional files must be updated:
+
+1. **`resources/views/settings/system.blade.php`** — Add a sidebar button and the partial include:
+   ```blade
+   {{-- Sidebar button (line ~36-78) --}}
+   <button class="vtabs-item" data-vtab="my-tab" type="button">
+       <svg viewBox="0 0 24 24" ...>{{-- 16px SVG icon --}}</svg>
+       My Tab
+   </button>
+
+   {{-- Content include (line ~81-89) --}}
+   @include('settings.partials._tab-my-tab')
+   ```
+
+2. **New partial file** — Create `resources/views/settings/partials/_tab-my-tab.blade.php` using the patterns above. Follow the existing wrapper structure:
+   ```blade
+   {{-- My Tab --}}
+   <div class="vtabs-panel" id="vtab-my-tab">
+       <div class="card">
+           <div class="card-header" style="display:flex;align-items:center;justify-content:space-between;gap:1rem;">
+               <h3 class="card-title">My Tab</h3>
+               <button type="submit" form="systemSettingsForm" class="btn btn-primary btn-sm section-save-button">Save</button>
+           </div>
+           <div class="card-body">
+               <div class="sys-settings-section-intro">
+                   <div class="sys-settings-section-copy">
+                       <h4 class="sys-settings-section-heading">Section heading</h4>
+                       <p class="sys-settings-section-description">Description. All values are written to <code>.env</code>.</p>
+                   </div>
+                   <span class="sys-settings-section-badge">.env</span>
+               </div>
+               <div class="sys-settings-grid">
+                   {{-- fields go here --}}
+               </div>
+           </div>
+       </div>
+   </div>
+   ```
+
+### Conditional Field Visibility
+
+When a toggle controls whether other fields are relevant, wire it in `resources/views/settings/partials/_scripts.blade.php`:
+
+1. Give the container element an `id` attribute.
+2. Add a `{ toggle, target }` pair to the `pairs` array in the "Conditional Field Visibility" IIFE (line ~320-357):
+   ```js
+   { toggle: 'TYRO_DASHBOARD_MY_FEATURE', target: 'my-feature-details-surface' },
+   ```
+3. In the blade view, wrap the conditional fields in:
+   ```blade
+   <div id="my-feature-details-surface">
+       {{-- fields that depend on the toggle being checked --}}
+   </div>
+   ```
+
+### Existing Tab Reference
+
+| Tab ID (`data-vtab`) | Partial File | JS Pairs Entry |
+|---|---|---|
+| `dashboard` | `_tab-dashboard.blade.php` | — |
+| `login-auth` | `_tab-login-auth.blade.php` | — |
+| `rbac` | `_tab-rbac.blade.php` | `tyro_audit_retention_group` (audit enabled) |
+| `login-auth-advanced` | `_tab-login-auth-advanced.blade.php` | `otp-details-surface`, `twofa-details-surface`, `social-details-surface`, `lockout-details-surface`, `captcha-details-surface` |
+| `rbac-advanced` | `_tab-rbac-advanced.blade.php` | — |
+| `sidebar-colors` | `_tab-sidebar-colors.blade.php` | — |
+| `admin-bar-colors` | `_tab-admin-bar-colors.blade.php` | — |
+| `dashboard-colors` | `_tab-dashboard-colors.blade.php` | — |
+| `media` | `_tab-media.blade.php` | — |
+
+### Adding a Setting with a New Config Section
+
+If the setting requires a **new config section** (e.g. `config('tyro-dashboard.my_section.setting')`), also update the `config/tyro-dashboard.php` file to add the full section:
+
+```php
+/*
+|--------------------------------------------------------------------------
+| My Section
+|--------------------------------------------------------------------------
+|
+| Description of what this section controls.
+|
+*/
+'my_section' => [
+    'setting' => env('TYRO_DASHBOARD_MY_SECTION_SETTING', 'default_value'),
+],
+```
+
+Then in `gatherSettings()`:
+```php
+'TYRO_DASHBOARD_MY_SECTION_SETTING' => config('tyro-dashboard.my_section.setting'),
+```
+
+### Important Files to Know
 
 | File | Purpose |
 |------|---------|
