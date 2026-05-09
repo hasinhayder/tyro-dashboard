@@ -27,23 +27,15 @@ class Media extends Model {
     }
 
     public function getUrlAttribute(): string {
-        return Storage::disk($this->disk)->url($this->path);
+        return $this->path;
     }
 
     public function getWebpUrlAttribute(): ?string {
-        if (! $this->webp_path) {
-            return null;
-        }
-
-        return Storage::disk($this->disk)->url($this->webp_path);
+        return $this->webp_path;
     }
 
     public function getThumbnailUrlAttribute(): string {
-        if ($this->thumbnail_path) {
-            return Storage::disk($this->disk)->url($this->thumbnail_path);
-        }
-
-        return $this->url;
+        return $this->thumbnail_path ?? $this->path;
     }
 
     public static function thumbnailUrlFrom(?string $urlOrPath): ?string {

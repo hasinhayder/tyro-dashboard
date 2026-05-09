@@ -1,6 +1,7 @@
 @php
 $mediaPickerUrl = route(\HasinHayder\TyroDashboard\Support\DashboardRoute::name('media.picker'));
 $mediaUploadUrl = route(\HasinHayder\TyroDashboard\Support\DashboardRoute::name('media.upload'));
+$storageBaseUrl = rtrim(\Illuminate\Support\Facades\Storage::disk('public')->url(''), '/');
 @endphp
 
 <div class="tyro-media-modal-overlay" id="tyroDashboardMediaPickerModal" aria-hidden="true">
@@ -84,6 +85,7 @@ $mediaUploadUrl = route(\HasinHayder\TyroDashboard\Support\DashboardRoute::name(
 
         const mediaPickerUrl = @json($mediaPickerUrl);
         const mediaUploadUrl = @json($mediaUploadUrl);
+        const storageBaseUrl = @json($storageBaseUrl);
         const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '';
         const modal = document.getElementById('tyroDashboardMediaPickerModal');
         const grid = document.getElementById('tyroDashboardMediaPickerGrid');
@@ -118,6 +120,12 @@ $mediaUploadUrl = route(\HasinHayder\TyroDashboard\Support\DashboardRoute::name(
         function getExtension(filename) {
             const parts = String(filename || '').split('.');
             return parts.length > 1 ? parts.pop().toUpperCase() : 'IMAGE';
+        }
+
+        function storageUrl(path) {
+            if (!path) return '';
+            if (path.startsWith('http://') || path.startsWith('https://')) return path;
+            return storageBaseUrl + '/' + path.replace(/^\//, '');
         }
 
         function normalizeUrl(url) {
@@ -176,7 +184,7 @@ $mediaUploadUrl = route(\HasinHayder\TyroDashboard\Support\DashboardRoute::name(
                 return;
             }
 
-            const previewUrl = item.thumbnail_url || item.webp_url || item.url || activeInput.value || '';
+            const previewUrl = storageUrl(item.thumbnail_url || item.webp_url || item.url || activeInput.value || '');
 
             if (previewUrl) {
                 previewImg.src = previewUrl;
@@ -276,7 +284,7 @@ $mediaUploadUrl = route(\HasinHayder\TyroDashboard\Support\DashboardRoute::name(
                     card.classList.add('is-selected');
                 }
 
-                const previewUrl = item.thumbnail_url || item.webp_url || item.url || '';
+                const previewUrl = storageUrl(item.thumbnail_url || item.webp_url || item.url || '');
                 const actionLabel = itemMatchesCurrentValue(item) ? 'Selected' : 'Use this image';
                 const metaText = item.webp_size || item.size || item.original_size || getExtension(item.filename);
 

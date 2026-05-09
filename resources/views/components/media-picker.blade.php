@@ -40,6 +40,11 @@
     if ($previewHasFixedHeight) {
         $previewStyles[] = 'height: '.$rawPreviewHeight;
     }
+
+    $previewSrc = $fieldValue;
+    if ($fieldValue && !str_starts_with($fieldValue, 'http://') && !str_starts_with($fieldValue, 'https://')) {
+        $previewSrc = \Illuminate\Support\Facades\Storage::url($fieldValue);
+    }
 @endphp
 
 <div class="tyro-media-picker-field" data-tyro-media-picker-field style="margin-top:5px; margin-bottom:0.85rem;">
@@ -64,7 +69,7 @@
                 aria-label="Open media picker"
             >
                 <img
-                    src="{{ $fieldValue }}"
+                    src="{{ $previewSrc }}"
                     alt=""
                     data-tyro-media-picker-preview-img
                     style="{{ filled($fieldValue) ? '' : 'display:none;' }}"

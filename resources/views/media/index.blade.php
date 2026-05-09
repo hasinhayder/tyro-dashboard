@@ -1052,9 +1052,9 @@ $authUserId = auth()->id();
 <div class="media-grid" id="mediaGrid">
     @foreach($media as $file)
     <div class="media-card" id="media-{{ $file->id }}" data-media-entry>
-        <div class="media-card-figure" @if($file->is_image) data-lightbox-trigger data-image-src="{{ $file->url }}" data-image-alt="{{ $file->alt_text ?: $file->filename }}" data-image-name="{{ $file->filename }}" data-image-meta="{{ $file->formatted_size }} · {{ strtoupper(pathinfo($file->filename, PATHINFO_EXTENSION)) }}" role="button" tabindex="0" aria-label="Preview {{ $file->alt_text ?: $file->filename }}" title="Preview image" @endif>
+        <div class="media-card-figure" @if($file->is_image) data-lightbox-trigger data-image-src="{{ Storage::url($file->url) }}" data-image-alt="{{ $file->alt_text ?: $file->filename }}" data-image-name="{{ $file->filename }}" data-image-meta="{{ $file->formatted_size }} · {{ strtoupper(pathinfo($file->filename, PATHINFO_EXTENSION)) }}" role="button" tabindex="0" aria-label="Preview {{ $file->alt_text ?: $file->filename }}" title="Preview image" @endif>
             @if($file->is_image)
-                <img src="{{ $file->thumbnail_url }}" alt="{{ $file->alt_text ?: $file->filename }}" class="media-card-thumb" loading="lazy">
+                <img src="{{ Storage::url($file->thumbnail_url) }}" alt="{{ $file->alt_text ?: $file->filename }}" class="media-card-thumb" loading="lazy">
                 <div class="media-card-overlay">
                     <div class="media-card-badges">
                         <span class="media-card-badge">Image</span>
@@ -1109,7 +1109,7 @@ $authUserId = auth()->id();
             </div>
             @endif
             <div class="media-card-actions">
-                <a href="{{ $file->url }}" target="_blank" rel="noopener noreferrer"
+                <a href="{{ Storage::url($file->url) }}" target="_blank" rel="noopener noreferrer"
                         class="btn btn-secondary"
                         title="View in new tab">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -1126,7 +1126,7 @@ $authUserId = auth()->id();
                 </a>
                 @endif
                 <button type="button" class="btn btn-secondary"
-                        onclick="copyUrl('{{ $file->url }}', this)"
+                        onclick="copyUrl('{{ Storage::url($file->url) }}', this)"
                         title="Copy URL">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M13.19 8.688a4.5 4.5 0 0 1 1.242 7.244l-4.5 4.5a4.5 4.5 0 0 1-6.364-6.364l1.757-1.757m13.35-.622 1.757-1.757a4.5 4.5 0 0 0-6.364-6.364l-4.5 4.5a4.5 4.5 0 0 0 1.242 7.244"/>
@@ -1146,7 +1146,7 @@ $authUserId = auth()->id();
                 @if($file->is_image)
                 <button type="button" class="btn btn-secondary cr-edit-btn"
                         data-media-id="{{ $file->id }}"
-                        data-url="{{ e($file->url) }}"
+                        data-url="{{ e(Storage::url($file->url)) }}"
                         data-filename="{{ e($file->filename) }}"
                         title="Crop or Resize">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -1188,9 +1188,9 @@ $authUserId = auth()->id();
             <tr id="media-{{ $file->id }}" data-media-entry>
                 <td>
                     <div class="media-table-file">
-                        <div class="media-table-thumb" @if($file->is_image) data-lightbox-trigger data-image-src="{{ $file->url }}" data-image-alt="{{ $file->alt_text ?: $file->filename }}" data-image-name="{{ $file->filename }}" data-image-meta="{{ $file->formatted_size }} · {{ strtoupper(pathinfo($file->filename, PATHINFO_EXTENSION)) }}" role="button" tabindex="0" aria-label="Preview {{ $file->alt_text ?: $file->filename }}" title="Preview image" @endif>
+                        <div class="media-table-thumb" @if($file->is_image) data-lightbox-trigger data-image-src="{{ Storage::url($file->url) }}" data-image-alt="{{ $file->alt_text ?: $file->filename }}" data-image-name="{{ $file->filename }}" data-image-meta="{{ $file->formatted_size }} · {{ strtoupper(pathinfo($file->filename, PATHINFO_EXTENSION)) }}" role="button" tabindex="0" aria-label="Preview {{ $file->alt_text ?: $file->filename }}" title="Preview image" @endif>
                             @if($file->is_image)
-                                <img src="{{ $file->thumbnail_url }}" alt="{{ $file->alt_text ?: $file->filename }}" loading="lazy">
+                                <img src="{{ Storage::url($file->thumbnail_url) }}" alt="{{ $file->alt_text ?: $file->filename }}" loading="lazy">
                             @else
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="width:28px;height:28px;">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m2.25 0H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
@@ -1251,7 +1251,7 @@ $authUserId = auth()->id();
                             </svg>
                         </button>
                         @endif
-                        <a href="{{ $file->url }}" target="_blank" rel="noopener noreferrer"
+                        <a href="{{ Storage::url($file->url) }}" target="_blank" rel="noopener noreferrer"
                             class="btn btn-secondary"
                             title="View in new tab">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -1268,7 +1268,7 @@ $authUserId = auth()->id();
                         </a>
                         @endif
                         <button type="button" class="btn btn-secondary"
-                            onclick="copyUrl('{{ $file->url }}', this)"
+                            onclick="copyUrl('{{ Storage::url($file->url) }}', this)"
                             title="Copy URL">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M13.19 8.688a4.5 4.5 0 0 1 1.242 7.244l-4.5 4.5a4.5 4.5 0 0 1-6.364-6.364l1.757-1.757m13.35-.622 1.757-1.757a4.5 4.5 0 0 0-6.364-6.364l-4.5 4.5a4.5 4.5 0 0 0 1.242 7.244"/>
@@ -1288,7 +1288,7 @@ $authUserId = auth()->id();
                         @if($file->is_image)
                         <button type="button" class="btn btn-secondary cr-edit-btn"
                             data-media-id="{{ $file->id }}"
-                            data-url="{{ e($file->url) }}"
+                            data-url="{{ e(Storage::url($file->url)) }}"
                             data-filename="{{ e($file->filename) }}"
                             title="Crop or Resize">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
