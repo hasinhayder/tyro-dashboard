@@ -1,9 +1,14 @@
 <aside class="sidebar" id="sidebar">
     <div class="sidebar-header">
         <a href="{{ route($dashboardRoute::name('index')) }}" class="sidebar-logo">
-            @php $sidebarLogo = config('tyro-dashboard.branding.sidebar_logo'); @endphp
+            @php
+                $sidebarLogo = config('tyro-dashboard.branding.sidebar_logo');
+                $sidebarLogoSrc = $sidebarLogo && !str_starts_with($sidebarLogo, 'http://') && !str_starts_with($sidebarLogo, 'https://')
+                    ? \Illuminate\Support\Facades\Storage::url($sidebarLogo)
+                    : $sidebarLogo;
+            @endphp
             @if($sidebarLogo)
-                <img src="{{ $sidebarLogo }}" alt="{{ $branding['app_name'] ?? config('app.name', 'Laravel') }}" class="sidebar-logo-img">
+                <img src="{{ $sidebarLogoSrc }}" alt="{{ $branding['app_name'] ?? config('app.name', 'Laravel') }}" class="sidebar-logo-img">
             @else
                 <div class="sidebar-logo-icon">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
