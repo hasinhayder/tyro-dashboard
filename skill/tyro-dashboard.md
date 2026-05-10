@@ -19,7 +19,6 @@ When generating code:
 Tyro Dashboard is a comprehensive Laravel package (`hasinhayder/tyro-dashboard`) that provides a complete admin & user dashboard with RBAC, user management, and dynamic CRUD interfaces. It is built on top of **Tyro** (RBAC framework) and **Tyro Login** (authentication system).
 
 - **Package**: `hasinhayder/tyro-dashboard`
-- **Version**: `1.31.0`
 - **Namespace**: `HasinHayder\TyroDashboard`
 - **Source**: `src/`
 - **Views**: `resources/views/`
