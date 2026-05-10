@@ -1,5 +1,19 @@
 # Tyro Dashboard - AI Agent Skill
 
+## AI Agent Notes
+
+This package is:
+- Blade-first
+- convention-heavy
+- configuration-driven
+- route-prefix aware
+- RBAC-sensitive
+
+When generating code:
+- prefer extending existing systems
+- avoid introducing parallel abstractions
+- reuse DashboardRoute and HasCrud conventions
+
 ## Overview
 
 Tyro Dashboard is a comprehensive Laravel package (`hasinhayder/tyro-dashboard`) that provides a complete admin & user dashboard with RBAC, user management, and dynamic CRUD interfaces. It is built on top of **Tyro** (RBAC framework) and **Tyro Login** (authentication system).
@@ -582,6 +596,18 @@ Additional Service Provider registrations:
 - Use `self::SUCCESS` / `self::FAILURE` in commands
 - Use `DashboardRoute::name()` for all route references
 - Use `auditSafely()` wrapper for all audit logging to prevent failures from breaking UI
+
+## File Modification Guidelines
+
+- Prefer minimal diffs. Change only what's needed for the task.
+- Preserve existing formatting and style — do not reformat or restructure code.
+- Do not rewrite entire files unnecessarily. Extend or append instead.
+- Extend existing Blade sections (`@section`, `@push`, `@stack`) rather than duplicating layouts.
+- Reuse existing partials and components before creating new ones.
+- Follow surrounding code style exactly (indentation, spacing, naming, brace placement).
+- Preserve comments unless they are obsolete or contradict the change.
+- Avoid renaming public methods, CSS classes, or Blade sections unless explicitly requested.
+- When adding new routes, use `DashboardRoute::name()` — never hardcode route name prefixes.
 
 ## Common Tasks for Agents
 
