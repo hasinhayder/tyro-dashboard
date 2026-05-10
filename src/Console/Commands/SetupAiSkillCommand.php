@@ -20,11 +20,12 @@ class SetupAiSkillCommand extends Command {
      * Mapping of AI agents to their target skill file paths.
      */
     protected array $agentTargets = [
-        'kilo' => '.kilo/skill/tyro-dashboard.md',
-        'claude' => '.claude/CLAUDE.md',
-        'github copilot' => '.github/copilot-instructions.md',
-        'codex' => '.codex/instructions.md',
-        'gemini' => '.gemini/instructions.md',
+        'kilo' => '.kilo/skills/tyro-dashboard/SKILL.md',
+        'claude' => '.claude/skills/tyro-dashboard/SKILL.md',
+        'github copilot' => '.github/skills/tyro-dashboard/SKILL.md',
+        'codex' => '.codex/skills/tyro-dashboard/SKILL.md',
+        'gemini' => '.gemini/skills/tyro-dashboard/SKILL.md',
+        'laravel boost' => '.ai/skills/tyro-dashboard/SKILL.md',
     ];
 
     /**

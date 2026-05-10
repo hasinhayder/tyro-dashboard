@@ -34,7 +34,8 @@ Which AI agent would you like to install the skill for?
   [2] github copilot
   [3] codex
   [4] gemini
-  [5] all
+  [5] laravel boost
+  [6] all
 ```
 
 Select your agent (or `all`) and the skill file will be copied to the correct location automatically.
@@ -45,38 +46,42 @@ If you prefer, copy `tyro-dashboard.md` manually to your agent's expected path:
 
 | AI Agent | Target Path |
 |----------|-------------|
-| **Kilo** | `.kilo/skill/tyro-dashboard.md` |
-| **Claude** | `.claude/CLAUDE.md` |
-| **GitHub Copilot** | `.github/copilot-instructions.md` |
-| **Codex** | `.codex/instructions.md` |
-| **Gemini** | `.gemini/instructions.md` |
+| **Kilo** | `.kilo/skills/tyro-dashboard/SKILL.md` |
+| **Claude** | `.claude/skills/tyro-dashboard/SKILL.md` |
+| **GitHub Copilot** | `.github/skills/tyro-dashboard/SKILL.md` |
+| **Codex** | `.codex/skills/tyro-dashboard/SKILL.md` |
+| **Gemini** | `.gemini/skills/tyro-dashboard/SKILL.md` |
+| **Laravel Boost** | `.ai/skills/tyro-dashboard/SKILL.md` |
 
 Create the parent directory if it doesn't exist, then copy the file:
 
 ```bash
-mkdir -p .kilo/skill
-cp vendor/hasinhayder/tyro-dashboard/skill/tyro-dashboard.md .kilo/skill/tyro-dashboard.md
+mkdir -p .kilo/skills/tyro-dashboard
+cp vendor/hasinhayder/tyro-dashboard/skill/tyro-dashboard.md .kilo/skills/tyro-dashboard/SKILL.md
 ```
 
 ## Agent-Specific Notes
 
 ### Kilo
-- Reads `.kilo/skill/*.md` files automatically when working in the project.
+- Reads `.kilo/skills/*/SKILL.md` files automatically when working in the project.
 - No additional configuration needed after copying the file.
 
 ### Claude (Claude Code / Claude Desktop)
-- Reads `.claude/CLAUDE.md` at the project root.
+- Reads `.claude/skills/*/SKILL.md` files at the project root.
 - Restart Claude or run `/refresh` after placing the file.
 
 ### GitHub Copilot
-- Reads `.github/copilot-instructions.md` when generating code in VS Code, JetBrains, or Neovim.
+- Reads `.github/skills/*/SKILL.md` files when using the new Copilot skills system.
 - Ensure the file is committed to your repo for the best experience across machines.
 
 ### Codex (OpenAI)
-- Reads `.codex/instructions.md` when using the Codex CLI or IDE integrations.
+- Reads `.codex/skills/*/SKILL.md` files when using Codex CLI or IDE integrations.
 
 ### Gemini (Google)
-- Reads `.gemini/instructions.md` when using Gemini Code Assist or similar tools.
+- Reads `.gemini/skills/*/SKILL.md` files when using Gemini Code Assist or similar tools.
+
+### Laravel Boost
+- Reads `.ai/skills/*/SKILL.md` files. Run `php artisan boost:update` to install custom skills alongside Boost's built-ins.
 
 ## What the Skill Enables
 
@@ -112,7 +117,7 @@ Or manually copy the latest file from the vendor directory.
 **Agent doesn't seem to know about Tyro Dashboard?**
 - Verify the skill file exists at the correct path for your agent.
 - For Claude: run `/refresh` or restart.
-- For Copilot: ensure `.github/copilot-instructions.md` is in the repo root, not a subfolder.
+- For Copilot: ensure `.github/skills/tyro-dashboard/SKILL.md` is in the repo root.
 
 **Skill is outdated?**
 - Check `vendor/hasinhayder/tyro-dashboard/skill/tyro-dashboard.md` for the latest version.

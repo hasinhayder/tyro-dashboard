@@ -5,7 +5,7 @@
 Tyro Dashboard is a comprehensive Laravel package (`hasinhayder/tyro-dashboard`) that provides a complete admin & user dashboard with RBAC, user management, and dynamic CRUD interfaces. It is built on top of **Tyro** (RBAC framework) and **Tyro Login** (authentication system).
 
 - **Package**: `hasinhayder/tyro-dashboard`
-- **Version**: `1.20.0`
+- **Version**: `1.31.0`
 - **Namespace**: `HasinHayder\TyroDashboard`
 - **Source**: `src/`
 - **Views**: `resources/views/`
@@ -78,7 +78,7 @@ All commands use the `tyro-dashboard:` namespace.
 | `tyro-dashboard:install [--force]` | Interactive installer. Checks deps, publishes config/views, creates super user |
 | `tyro-dashboard:createsuperuser` | Create a superuser with admin role interactively |
 | `tyro-dashboard:version` | Display version, Laravel/PHP info, dependency status |
-| `tyro-dashboard:setup-ai-skill` | Install the AI skill file for Claude, Copilot, Codex, Gemini, or Kilo |
+| `tyro-dashboard:setup-ai-skill` | Install the AI skill file for Claude, Copilot, Codex, Gemini, Kilo, or Laravel Boost |
 
 ### Publishing Resources
 
