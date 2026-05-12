@@ -67,6 +67,7 @@
             }
 
             const compactMode = accordion.dataset.sidebarAccordionCompact === 'true';
+            const openSections = parseInt(accordion.dataset.sidebarAccordionOpenSections || '1', 10);
             const sections = Array.from(accordion.querySelectorAll('.sidebar-section'));
 
             sections.forEach((section, sectionIndex) => {
@@ -95,7 +96,7 @@
 
                 const contentId = `sidebar-section-content-${accordionIndex}-${sectionIndex}`;
                 const hasActiveLink = Boolean(content.querySelector('.sidebar-link.active'));
-                const shouldExpand = compactMode ? sectionIndex === 0 || hasActiveLink : true;
+                const shouldExpand = compactMode ? sectionIndex < openSections || hasActiveLink : true;
 
                 title.setAttribute('role', 'button');
                 title.setAttribute('tabindex', '0');

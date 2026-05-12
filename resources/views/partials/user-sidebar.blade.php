@@ -36,7 +36,8 @@
 
     <nav class="sidebar-nav sidebar-accordion"
         data-sidebar-accordion
-        data-sidebar-accordion-compact="{{ config('tyro-dashboard.branding.sidebar_accordion_compact', false) ? 'true' : 'false' }}">
+        data-sidebar-accordion-compact="{{ config('tyro-dashboard.branding.sidebar_accordion_compact', false) ? 'true' : 'false' }}"
+        data-sidebar-accordion-open-sections="{{ config('tyro-dashboard.branding.sidebar_accordion_open_sections', 1) }}">
         <!-- Main Menu -->
         <div class="sidebar-section">
             <div class="sidebar-section-title">Menu</div>

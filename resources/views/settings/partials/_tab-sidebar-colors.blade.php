@@ -7,6 +7,7 @@
             $sbAccentFg = old('TYRO_DASHBOARD_SIDEBAR_ACCENT_FOREGROUND', $settings['TYRO_DASHBOARD_SIDEBAR_ACCENT_FOREGROUND'] ?? '#171717');
             $sbHeaderBorder = old('TYRO_DASHBOARD_SIDEBAR_HEADER_BORDER', $settings['TYRO_DASHBOARD_SIDEBAR_HEADER_BORDER'] ?? '#333c56');
             $sbAccordionCompact = filter_var(old('TYRO_DASHBOARD_SIDEBAR_ACCORDION_COMPACT', $settings['TYRO_DASHBOARD_SIDEBAR_ACCORDION_COMPACT'] ?? false), FILTER_VALIDATE_BOOLEAN);
+            $sbOpenSections = old('TYRO_DASHBOARD_SIDEBAR_ACCORDION_OPEN_SECTIONS', $settings['TYRO_DASHBOARD_SIDEBAR_ACCORDION_OPEN_SECTIONS'] ?? 1);
             $sbLogo = old('TYRO_DASHBOARD_SIDEBAR_LOGO', $settings['TYRO_DASHBOARD_SIDEBAR_LOGO'] ?? null);
         @endphp
         <div class="vtabs-panel" id="vtab-sidebar-colors">
@@ -44,6 +45,15 @@
                                     </div>
                                 </div>
                             </div>
+                        </div>
+
+                        <div class="form-group" style="margin-top:1rem;">
+                            <label for="sb_open_sections" class="form-label">Default open sections (TYRO_DASHBOARD_SIDEBAR_ACCORDION_OPEN_SECTIONS)</label>
+                            <input type="number" name="TYRO_DASHBOARD_SIDEBAR_ACCORDION_OPEN_SECTIONS" id="sb_open_sections"
+                                   class="form-input" min="0" max="50"
+                                   value="{{ old('TYRO_DASHBOARD_SIDEBAR_ACCORDION_OPEN_SECTIONS', $sbOpenSections) }}"
+                                   style="max-width:120px;">
+                            <p class="form-hint">Number of sidebar sections that stay open by default (0 = all collapsed). The section with an active link always stays open.</p>
                         </div>
                     </div>
 
