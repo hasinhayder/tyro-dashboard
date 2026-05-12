@@ -19,7 +19,7 @@ class VersionCommand extends Command {
      * Execute the console command.
      */
     public function handle(): int {
-        $version = '1.31.0'; // AI skill paths updated to skills/*/SKILL.md convention, Laravel Boost support added
+        $version = '1.31.1'; // Fixed duplicate TYRO_DASHBOARD_SIDEBAR_ACCORDION_COMPACT field causing save failures
 
         $this->info('');
         $this->info('  ╔════════════════════════════════════════╗');
@@ -70,6 +70,7 @@ class VersionCommand extends Command {
 }
 
 // Changelog
+// 1.31.1 - Fixed duplicate TYRO_DASHBOARD_SIDEBAR_ACCORDION_COMPACT form field in Dashboard tab causing save failures (field now only in Sidebar tab)
 // 1.31.0 - AI skill paths updated to skills/*/SKILL.md convention, Laravel Boost support added
 // 1.30.0 - Settings Editor, Dashboard color branding, Media Gallery and media picker
 // 1.20.0 - AI skill setup command (tyro-dashboard:setup-ai-skill) for installing project context to Claude, Copilot, Codex, Gemini, and Kilo agents
