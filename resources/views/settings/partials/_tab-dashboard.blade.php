@@ -39,7 +39,7 @@
 
                             <div class="sys-settings-surface">
                                 <h4 class="sys-settings-surface-title">Collapsible Sidebar</h4>
-                                <p class="sys-settings-surface-description">Toggle collapsible sidebar, compact accordion mode, and disable example sections.</p>
+                                <p class="sys-settings-surface-description">Toggle collapsible sidebar and disable example sections.</p>
 
                                 <div class="sys-settings-toggles" style="margin-bottom:0;">
                                     <div class="sys-settings-toggle">
@@ -52,22 +52,6 @@
                                                 <input type="hidden" name="TYRO_DASHBOARD_COLLAPSIBLE_SIDEBAR" value="0">
                                                 <label class="toggle-label">
                                                     <input type="checkbox" name="TYRO_DASHBOARD_COLLAPSIBLE_SIDEBAR" value="1" class="toggle-input" {{ old('TYRO_DASHBOARD_COLLAPSIBLE_SIDEBAR', $settings['TYRO_DASHBOARD_COLLAPSIBLE_SIDEBAR']) ? 'checked' : '' }}>
-                                                    <span class="toggle-slider"></span>
-                                                </label>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="sys-settings-toggle">
-                                        <div class="sys-settings-toggle-top">
-                                            <div>
-                                                <p class="sys-settings-toggle-title">Compact accordion mode <span style="font-weight:normal">(<code>TYRO_DASHBOARD_SIDEBAR_ACCORDION_COMPACT</code>)</span></p>
-                                                <p class="sys-settings-toggle-description">When enabled, sidebar sections use a compact accordion style. The Home section stays open while other sections can be collapsed.</p>
-                                            </div>
-                                            <div>
-                                                <input type="hidden" name="TYRO_DASHBOARD_SIDEBAR_ACCORDION_COMPACT" value="0">
-                                                <label class="toggle-label">
-                                                    <input type="checkbox" name="TYRO_DASHBOARD_SIDEBAR_ACCORDION_COMPACT" value="1" class="toggle-input" {{ old('TYRO_DASHBOARD_SIDEBAR_ACCORDION_COMPACT', $settings['TYRO_DASHBOARD_SIDEBAR_ACCORDION_COMPACT']) ? 'checked' : '' }}>
                                                     <span class="toggle-slider"></span>
                                                 </label>
                                             </div>
