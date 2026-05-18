@@ -57,6 +57,7 @@ Route::prefix('profile')->name('profile')->group(function () {
     Route::put('/update', [ProfileController::class, 'update'])->name('.update');
     Route::put('/password', [ProfileController::class, 'updatePassword'])->name('.password');
     Route::delete('/photo', [ProfileController::class, 'deletePhoto'])->name('.photo.delete');
+    Route::post('/2fa/setup', [ProfileController::class, 'setup2FA'])->name('.2fa.setup');
     Route::delete('/2fa/reset', [ProfileController::class, 'reset2FA'])->name('.2fa.reset');
 });
 

@@ -136,10 +136,9 @@
                 <p style="margin-bottom: 1rem; color: var(--muted-foreground);">
                     Two-factor authentication is currently <strong>enabled</strong> for your account.
                 </p>
-                <form action="{{ route($dashboardRoute::name('profile.2fa.reset')) }}" method="POST" id="reset-profile-2fa-form">
+                <form action="{{ route($dashboardRoute::name('profile.2fa.setup')) }}" method="POST" id="setup-profile-2fa-form">
                     @csrf
-                    @method('DELETE')
-                    <button type="button" class="btn btn-warning" onclick="event.preventDefault(); showConfirm('Reset 2FA', 'Are you sure you want to reset your 2FA? You will need to set it up again.').then(confirmed => { if(confirmed) document.getElementById('reset-profile-2fa-form').submit(); })">
+                    <button type="button" class="btn btn-warning" onclick="event.preventDefault(); showConfirm('Reset 2FA', 'Are you sure you want to reset your 2FA? You will need to set it up again.').then(confirmed => { if(confirmed) document.getElementById('setup-profile-2fa-form').submit(); })">
                         Reset 2FA Configuration
                     </button>
                 </form>
@@ -147,8 +146,10 @@
                 <p style="margin-bottom: 1rem; color: var(--muted-foreground);">
                     Two-factor authentication is currently <strong>disabled</strong> for your account.
                 </p>
-                
-                <button type="button" class="btn btn-secondary" disabled>Reset 2FA Configuration</button>
+                <form method="POST" action="{{ route($dashboardRoute::name('profile.2fa.setup')) }}">
+                    @csrf
+                    <button type="submit" class="btn btn-primary">Setup 2FA</button>
+                </form>
             @endif
         </div>
     </div>

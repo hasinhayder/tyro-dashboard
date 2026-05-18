@@ -5,6 +5,8 @@ namespace HasinHayder\TyroDashboard\Http\Controllers;
 use HasinHayder\Tyro\Support\TyroAudit;
 use HasinHayder\TyroDashboard\Support\DashboardRoute;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules\Password;
 
@@ -106,6 +108,28 @@ class ProfileController extends BaseController {
         return redirect()
             ->route(DashboardRoute::name('profile'))
             ->with('success', 'Two-factor authentication has been reset.');
+    }
+
+    /**
+     * Initiate 2FA setup from the profile page.
+     */
+    public function setup2FA(Request $request) {
+        $user = Auth::user();
+
+        if ($user->two_factor_secret || $user->two_factor_confirmed_at) {
+            $user->forceFill([
+                'two_factor_secret' => null,
+                'two_factor_recovery_codes' => null,
+                'two_factor_confirmed_at' => null,
+            ])->save();
+        }
+
+        $cookieName = 'tyro_2fa_ignore_' . $user->id;
+
+        $request->session()->put('url.intended', route(DashboardRoute::name('profile')));
+
+        return redirect()->to(route('tyro-login.two-factor.setup'))
+            ->withCookie(Cookie::forget($cookieName));
     }
 
     /**
