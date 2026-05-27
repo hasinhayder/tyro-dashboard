@@ -19,7 +19,7 @@ class VersionCommand extends Command {
      * Execute the console command.
      */
     public function handle(): int {
-        $version = '1.33.0'; // Initiate 2FA setup flow directly from the dashboard profile page
+        $version = '1.34.0'; // Media library copy URL modal with Original, WebP, and Thumbnail options
 
         $this->info('');
         $this->info('  ╔════════════════════════════════════════╗');
@@ -70,6 +70,7 @@ class VersionCommand extends Command {
 }
 
 // Changelog
+// 1.34.0 - Media library copy URL modal with options to copy Original, WebP, or Thumbnail URL
 // 1.33.0 - Initiate 2FA setup flow directly from the dashboard profile page (reuses tyro-login setup wizard via POST profile/2fa/setup, clears ignore cookie, sets url.intended for return)
 // 1.32.0 - Added TYRO_DASHBOARD_SIDEBAR_ACCORDION_OPEN_SECTIONS setting (configurable number of default open sidebar sections)
 // 1.31.1 - Fixed duplicate TYRO_DASHBOARD_SIDEBAR_ACCORDION_COMPACT form field in Dashboard tab causing save failures (field now only in Sidebar tab)

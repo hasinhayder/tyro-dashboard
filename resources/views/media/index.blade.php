@@ -1126,7 +1126,7 @@ $authUserId = auth()->id();
                 </a>
                 @endif
                 <button type="button" class="btn btn-secondary"
-                        onclick="copyUrl('{{ Storage::url($file->url) }}', this)"
+                        onclick="showCopyUrlModal('{{ url(Storage::url($file->url)) }}', '{{ $file->webp_url ? url(Storage::url($file->webp_url)) : '' }}', '{{ url(Storage::url($file->thumbnail_url)) }}')"
                         title="Copy URL">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M13.19 8.688a4.5 4.5 0 0 1 1.242 7.244l-4.5 4.5a4.5 4.5 0 0 1-6.364-6.364l1.757-1.757m13.35-.622 1.757-1.757a4.5 4.5 0 0 0-6.364-6.364l-4.5 4.5a4.5 4.5 0 0 0 1.242 7.244"/>
@@ -1268,7 +1268,7 @@ $authUserId = auth()->id();
                         </a>
                         @endif
                         <button type="button" class="btn btn-secondary"
-                            onclick="copyUrl('{{ Storage::url($file->url) }}', this)"
+                            onclick="showCopyUrlModal('{{ url(Storage::url($file->url)) }}', '{{ $file->webp_url ? url(Storage::url($file->webp_url)) : '' }}', '{{ url(Storage::url($file->thumbnail_url)) }}')"
                             title="Copy URL">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M13.19 8.688a4.5 4.5 0 0 1 1.242 7.244l-4.5 4.5a4.5 4.5 0 0 1-6.364-6.364l1.757-1.757m13.35-.622 1.757-1.757a4.5 4.5 0 0 0-6.364-6.364l-4.5 4.5a4.5 4.5 0 0 0 1.242 7.244"/>
@@ -1545,6 +1545,38 @@ $authUserId = auth()->id();
     <div class="progress-bar-track"><div class="progress-bar-fill" id="uploadProgressBar"></div></div>
 </div>
 
+<!-- Copy URL Modal -->
+<div id="copyUrlModal" class="modal-overlay">
+    <div class="modal-container">
+        <div class="modal-content-wrapper">
+            <div class="modal-body">
+                <div class="modal-body-inner">
+                    <div class="modal-icon info">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M13.19 8.688a4.5 4.5 0 0 1 1.242 7.244l-4.5 4.5a4.5 4.5 0 0 1-6.364-6.364l1.757-1.757m13.35-.622 1.757-1.757a4.5 4.5 0 0 0-6.364-6.364l-4.5 4.5a4.5 4.5 0 0 0 1.242 7.244"/>
+                        </svg>
+                    </div>
+                    <div class="modal-text-content">
+                        <h2 class="modal-title">Copy URL</h2>
+                        <p class="modal-message">Which URL would you like to copy?</p>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer" style="flex-direction: column; gap: 0.5rem;">
+                <button type="button" class="btn btn-modal-confirm" style="width: 100%;" onclick="copySelectedUrl('original')">Original</button>
+                <button type="button" class="btn btn-modal-confirm" id="copyUrlWebpBtn" style="width: 100%;" onclick="copySelectedUrl('webp')">WebP</button>
+                <button type="button" class="btn btn-modal-confirm" style="width: 100%;" onclick="copySelectedUrl('thumbnail')">Thumbnail</button>
+                <button type="button" class="btn btn-modal-cancel" style="width: 100%;" onclick="closeCopyUrlModal()">Cancel</button>
+            </div>
+        </div>
+        <button type="button" class="modal-close" onclick="closeCopyUrlModal()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+        </button>
+    </div>
+</div>
+
 <!-- Copy toast -->
 <div class="copy-toast" id="copyToast">URL copied to clipboard!</div>
 </div>
@@ -1660,9 +1692,31 @@ $authUserId = auth()->id();
     }
 
     // ── Copy URL ──────────────────────────────────────────────────────
-    function copyUrl(url) {
+    let copyUrlData = {};
+
+    function showCopyUrlModal(originalUrl, webpUrl, thumbnailUrl) {
+        copyUrlData = { original: originalUrl, webp: webpUrl, thumbnail: thumbnailUrl };
+        const modal = document.getElementById('copyUrlModal');
+        const webpBtn = document.getElementById('copyUrlWebpBtn');
+        webpBtn.style.display = webpUrl ? 'block' : 'none';
+        modal.classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeCopyUrlModal() {
+        const modal = document.getElementById('copyUrlModal');
+        modal.classList.remove('active');
+        document.body.style.overflow = '';
+        copyUrlData = {};
+    }
+
+    function copySelectedUrl(type) {
+        const url = copyUrlData[type];
+        if (!url) return;
+
         navigator.clipboard.writeText(url).then(() => {
             showCopyToast('URL copied to the clipboard!');
+            closeCopyUrlModal();
         }).catch(() => {
             showAlert('Could not copy the URL automatically. Please copy it from the media item.', 'Copy Failed', {
                 variant: 'info',
@@ -1677,6 +1731,20 @@ $authUserId = auth()->id();
         t.classList.add('show');
         setTimeout(() => t.classList.remove('show'), 2000);
     }
+
+    // Close copy URL modal on overlay click
+    document.getElementById('copyUrlModal').addEventListener('click', function(event) {
+        if (event.target === this) {
+            closeCopyUrlModal();
+        }
+    });
+
+    // Close copy URL modal on escape key
+    document.addEventListener('keydown', function(event) {
+        if (event.key === 'Escape' && document.getElementById('copyUrlModal').classList.contains('active')) {
+            closeCopyUrlModal();
+        }
+    });
 
     // ── Delete ────────────────────────────────────────────────────────
     async function deleteMedia(id, btn) {
