@@ -17,15 +17,23 @@ class SetupAiSkillCommand extends Command {
     protected $description = 'Install the Tyro Dashboard AI skill for your preferred agent (Claude, Copilot, Codex, Gemini, Kilo)';
 
     /**
-     * Mapping of AI agents to their target skill file paths.
+     * Universal agents.md skill discovery location.
+     *
+     * Always installed alongside the agent-specific directory so any
+     * agent that follows the agents.md convention can find the skill.
+     */
+    public const UNIVERSAL_SKILL_DIR = '.agents/skills/tyro-dashboard';
+
+    /**
+     * Mapping of AI agents to their agent-specific target skill directory.
      */
     protected array $agentTargets = [
-        'kilo' => '.kilo/skills/tyro-dashboard/SKILL.md',
-        'claude' => '.claude/skills/tyro-dashboard/SKILL.md',
-        'github copilot' => '.github/skills/tyro-dashboard/SKILL.md',
-        'codex' => '.codex/skills/tyro-dashboard/SKILL.md',
-        'gemini' => '.gemini/skills/tyro-dashboard/SKILL.md',
-        'laravel boost' => '.ai/skills/tyro-dashboard/SKILL.md',
+        'kilo' => '.kilo/skills/tyro-dashboard',
+        'claude' => '.claude/skills/tyro-dashboard',
+        'github copilot' => '.github/skills/tyro-dashboard',
+        'codex' => '.codex/skills/tyro-dashboard',
+        'gemini' => '.gemini/skills/tyro-dashboard',
+        'laravel boost' => '.ai/skills/tyro-dashboard',
     ];
 
     /**
@@ -40,8 +48,8 @@ class SetupAiSkillCommand extends Command {
 
         $sourcePath = $this->getSourceSkillPath();
 
-        if (! file_exists($sourcePath)) {
-            $this->error('   ✗ Source skill file not found: '.$sourcePath);
+        if (! is_dir($sourcePath)) {
+            $this->error('   ✗ Source skill directory not found: '.$sourcePath);
 
             return self::FAILURE;
         }
@@ -55,64 +63,113 @@ class SetupAiSkillCommand extends Command {
             0
         );
 
-        if ($choice === 'all') {
-            $installed = 0;
-            foreach (array_keys($this->agentTargets) as $agent) {
-                if ($this->installForAgent($agent, $sourcePath)) {
-                    $installed++;
-                }
+        $selectedAgents = $choice === 'all'
+            ? array_keys($this->agentTargets)
+            : [$choice];
+
+        $ok = true;
+
+        // Phase 1: install to each selected agent's specific discovery directory.
+        foreach ($selectedAgents as $agent) {
+            $relativePath = $this->agentTargets[$agent] ?? null;
+
+            if (! $relativePath) {
+                $this->warn("   ⚠ Unknown agent: {$agent}");
+                $ok = false;
+                continue;
             }
-            $this->info('');
-            $this->info("  ✓ Skill installed for {$installed} agent(s).");
-        } else {
-            if ($this->installForAgent($choice, $sourcePath)) {
-                $this->info('');
-                $this->info('  ✓ Skill installed successfully.');
-            } else {
-                return self::FAILURE;
+
+            if (! $this->installTo(base_path($relativePath), $sourcePath, $agent.': '.$relativePath)) {
+                $ok = false;
             }
+        }
+
+        // Phase 2: install to the universal agents.md discovery directory exactly once.
+        if (! $this->installTo(base_path(self::UNIVERSAL_SKILL_DIR), $sourcePath, 'universal: '.self::UNIVERSAL_SKILL_DIR)) {
+            $ok = false;
         }
 
         $this->info('');
 
-        return self::SUCCESS;
+        return $ok ? self::SUCCESS : self::FAILURE;
     }
 
     /**
-     * Install the skill file for a specific agent.
+     * Install the skill directory at a specific target path.
+     *
+     * Strategy: stage the new contents in a sibling temp directory,
+     * back up any existing target, then swap. If anything fails partway
+     * the existing target can be restored from the backup.
      */
-    protected function installForAgent(string $agent, string $sourcePath): bool {
-        $relativePath = $this->agentTargets[$agent] ?? null;
+    protected function installTo(string $targetPath, string $sourcePath, string $label): bool {
+        $filesystem = new Filesystem;
 
-        if (! $relativePath) {
-            $this->warn("   ⚠ Unknown agent: {$agent}");
+        if (! is_dir($targetPath)) {
+            $filesystem->makeDirectory($targetPath, 0755, true);
+            $this->info("   ✓ Created directory: {$targetPath}");
+        }
+
+        $staging = $targetPath.'.__installing__';
+        $backup = $targetPath.'.__backup__';
+
+        // Defensive: clear any stale staging/backup from a previous failed run.
+        if (is_dir($staging)) {
+            $filesystem->deleteDirectory($staging);
+        }
+        if (is_dir($backup)) {
+            $filesystem->deleteDirectory($backup);
+        }
+
+        if (! $filesystem->copyDirectory($sourcePath, $staging)) {
+            $this->error("   ✗ Failed to stage skill files for {$label}");
+            $filesystem->deleteDirectory($staging);
 
             return false;
         }
 
-        $targetPath = base_path($relativePath);
-        $targetDir = dirname($targetPath);
+        // Back up the existing target by renaming the directory itself,
+        // which is atomic on the same filesystem.
+        if (! @rename($targetPath, $backup)) {
+            // Rename can fail if $targetPath == $backup (shouldn't happen) or
+            // on some cross-device moves. Fall back to copy + delete.
+            if (is_dir($targetPath) && ! $filesystem->copyDirectory($targetPath, $backup)) {
+                $this->error("   ✗ Failed to back up existing install for {$label}");
+                $filesystem->deleteDirectory($staging);
 
-        // Create target directory if it doesn't exist
-        if (! is_dir($targetDir)) {
-            $filesystem = new Filesystem;
-            $filesystem->makeDirectory($targetDir, 0755, true);
-            $this->info("   ✓ Created directory: {$targetDir}");
+                return false;
+            }
+            if (is_dir($targetPath)) {
+                $filesystem->deleteDirectory($targetPath);
+            }
         }
 
-        // Copy the skill file
-        $content = file_get_contents($sourcePath);
-        file_put_contents($targetPath, $content);
+        // Move the staged install into place.
+        if (! @rename($staging, $targetPath)) {
+            $this->error("   ✗ Failed to move staged install into place for {$label}; restoring backup");
+            if (is_dir($targetPath)) {
+                $filesystem->deleteDirectory($targetPath);
+            }
+            @rename($backup, $targetPath);
+            $filesystem->deleteDirectory($staging);
 
-        $this->info("   ✓ Installed for {$agent}: {$relativePath}");
+            return false;
+        }
+
+        // Success — discard the backup.
+        $filesystem->deleteDirectory($backup);
+        $this->info("   ✓ Installed {$label}");
 
         return true;
     }
 
     /**
-     * Get the source skill file path within the package.
+     * Get the source skill directory within the package.
+     *
+     * The source lives at `skills/tyro-dashboard/` (capital SKILL.md)
+     * as of the 1.31.0 layout. The old `skill/tyro-dashboard.md` file
+     * is no longer authoritative.
      */
     protected function getSourceSkillPath(): string {
-        return __DIR__.'/../../../skill/tyro-dashboard.md';
+        return __DIR__.'/../../../skills/tyro-dashboard';
     }
 }

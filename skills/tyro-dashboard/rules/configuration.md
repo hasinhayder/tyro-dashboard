@@ -1,0 +1,93 @@
+# Configuration
+
+## Core Principle
+
+Configuration is the face of the framework for non-developers. When an admin sets `TYRO_DASHBOARD_APP_NAME` and nothing changes, they lose trust in the entire framework. Every configurable value must be reliable, predictable, and complete.
+
+## The Config File
+
+`config/tyro-dashboard.php` is the single source of truth for all framework configuration.
+
+### Structure
+- Every config key gets an `env()` call with a sensible default
+- Boolean config values use actual booleans: `env('KEY', true)` — never string booleans
+- Default values are the most common, least surprising choice
+- Config is organized into logical sections: `routes`, `admin_roles`, `branding`, `admin_bar`, `features`, `protected`, `widgets`, `notifications`, `uploads`, `profile_photo`, `resources`, `resource_ui`, `disable_examples`, `media`
+
+### Adding a Config Key
+1. Add the key to `config/tyro-dashboard.php` with an `env()` default
+2. Add the default value to `SystemSettingsController::defaultValues()`
+3. If boolean, add the key name to `SystemSettingsController::booleanKeys()`
+4. Add a validation rule to `SystemSettingsController::update()`
+5. Add the field to the appropriate settings tab partial in `resources/views/settings/partials/`
+
+### Removing a Config Key
+1. Deprecate in version 1.N: support both old and new keys
+2. Trigger a deprecation warning when the old key is used
+3. Remove in version 2.0
+
+## `.env` Variables
+
+### Naming Convention
+- `TYRO_DASHBOARD_*` for dashboard settings
+- `TYRO_*` for core RBAC settings (defined in `config/tyro.php`)
+- `TYRO_LOGIN_*` for auth settings (defined in `config/tyro-login.php`)
+- Cross-package prefix collisions are not allowed — each package owns its prefix
+
+### Persistence
+- `SystemSettingsController::update()` writes to `.env` via `file_get_contents()` / `file_put_contents()`
+- After writing, `Artisan::call('config:clear')` runs to refresh config cache
+- Default values are stripped from `.env` on save — only non-default values persist
+- Boolean values serialize as `"true"` / `"false"` strings in `.env`
+- The `.env` file must be writable by the web server process — this is a deployment consideration documented in installation
+
+## Feature Flags
+
+### Available Flags
+True feature flags live under `config('tyro-dashboard.features.*')`:
+- `user_management`, `role_management`, `privilege_management`
+- `settings_management`, `profile_management`
+- `invitation_system`, `audit_logs`, `system_settings`
+- `show_roles_menu`, `show_privileges_menu`, `show_resources_menu`
+- `profile_photo_upload`, `gravatar`
+
+### Closely-Related Top-Level Toggles (NOT under `features.*`)
+A few boolean toggles are at the top level of the config file, NOT under `features.*`. Do not move them under `features` and do not read them as `config('tyro-dashboard.features.collapsible_sidebar')` — they live at the top level:
+- `config('tyro-dashboard.collapsible_sidebar')` — enable/disable the collapsible sidebar UI (default: `true`)
+- `config('tyro-dashboard.disable_examples')` — hide the "Examples" sidebar section and disable example routes in production (default: `false`)
+
+### Dual Gating
+Every feature flag under `features.*` must gate BOTH the UI visibility AND the route registration. Never gate one without the other:
+- Disabling `audit_logs` hides the sidebar link AND prevents audit route registration
+- Disabling `system_settings` hides the settings link AND prevents settings route registration
+- Disabling `show_roles_menu` hides the roles link but the roles routes remain active (admin can still manage roles if they know the URL) — this is intentional: `show_*_menu` flags are visibility-only, not access-control flags
+
+### Adding a Feature Flag
+1. Add the config key under `features`
+2. Gate the sidebar link in the appropriate partial
+3. Gate the route registration in `routes/web.php`
+4. Gate any event listeners in the service provider
+
+## Dashboard Colors
+
+Dashboard colors use separate persistence from `.env`:
+
+- **Storage:** `storage/app/dashboard-colors.json` via `DashboardColors` static class
+- **Format:** JSON with `light` and `dark` keys, each containing CSS custom property definitions with `hex` and `alpha`
+- **Loading:** `DashboardColors::load()` reads JSON; returns defaults if file doesn't exist
+- **Saving:** `DashboardColors::save(array)` writes JSON; creates directory if needed
+- **Color format:** `{hex: "#09090b", alpha: 100}` — hex string with alpha integer (0-100)
+- **Conversion:** `DashboardColors::hexAlphaToRgba(string $hex, int $alpha)` produces CSS `rgba(r, g, b, a)`
+
+### Color Variables (per theme)
+`--background`, `--foreground`, `--card`, `--card-foreground`, `--popover`, `--popover-foreground`, `--primary`, `--primary-foreground`, `--secondary`, `--secondary-foreground`, `--muted`, `--muted-foreground`, `--accent`, `--accent-foreground`, `--destructive`, `--destructive-foreground`, `--border`, `--input`, `--ring`, `--success`, `--success-foreground`, `--warning`, `--warning-foreground`, `--info`, `--info-foreground`, `--danger`, `--danger-foreground`, `--chart-1` through `--chart-5`, `--sidebar`, `--sidebar-foreground`, `--sidebar-primary`, `--sidebar-primary-foreground`, `--sidebar-accent`, `--sidebar-accent-foreground`, `--sidebar-border`, `--sidebar-ring`
+
+## Settings UI
+
+`SystemSettingsController` provides the web-based `.env` editor:
+
+- `gatherSettings()` reads ~140 config values from `tyro-dashboard`, `tyro`, `tyro-login` namespaces
+- `update()` validates, saves dashboard colors, writes `.env`, clears config cache
+- Settings view uses vertical tabs with partials per tab in `settings/partials/`
+- Form submission is AJAX with JSON response and toast notifications
+- The settings route is behind `tyro-dashboard.admin` middleware
