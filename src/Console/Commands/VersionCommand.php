@@ -19,7 +19,7 @@ class VersionCommand extends Command {
      * Execute the console command.
      */
     public function handle(): int {
-        $version = '1.35.0'; // AI skill rules audit: corrected boot sequence, audit signatures, cache keys, color counts, route gating, controller docs, middleware fallbacks, JS system docs, field guessing pipeline
+        $version = '1.35.1'; // AI skill rules audit: corrected boot sequence, audit signatures, cache keys, color counts, route gating, controller docs, middleware fallbacks, JS system docs, field guessing pipeline
 
         $this->info('');
         $this->info('  ╔════════════════════════════════════════╗');
@@ -70,6 +70,7 @@ class VersionCommand extends Command {
 }
 
 // Changelog
+// 1.35.1 - AI skill fine tuning
 // 1.35.0 - AI skill rules audit: corrected boot sequence, audit signatures, cache keys, color counts, route gating, controller docs, middleware fallbacks, JS system docs, field guessing pipeline
 // 1.34.1 - AI skill documentation corrections (typo fixes, session key, command names, feature-flag classification)
 // 1.34.0 - Media library copy URL modal with options to copy Original, WebP, or Thumbnail URL
