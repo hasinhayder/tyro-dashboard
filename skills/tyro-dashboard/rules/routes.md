@@ -38,19 +38,23 @@ Route::prefix(config('tyro-dashboard.routes.prefix', 'dashboard'))
 
 ### Public (All Authenticated Users)
 - Dashboard home: `GET /` → `DashboardController@index`
-- Profile: `GET/PUT/DELETE /profile/*` → `ProfileController`
-- User invitations: `GET/POST /invitations` → `InvitationController`
-- Leave impersonation: `POST /leave-impersonation` → `UserController`
-- Media library: All `/media/*` routes
-- Dynamic resources: `GET|POST|PUT|DELETE /resources/{resource}/*`
+- Profile: `GET/PUT /profile`, `POST /profile/photo`, `DELETE /profile/photo` → `ProfileController`
+- Profile 2FA: `GET /profile/2fa/reset`, `GET /profile/2fa/setup` → `ProfileController`
+- User invitations: `GET/POST /invitations/*` → `InvitationController`
+- Leave impersonation: `POST /leave-impersonation` → `UserController@leaveImpersonation`
+- Media library: `GET /media`, `POST /media/upload`, `POST /media/crop-resize`, `POST /media/{id}/rename`, `POST /media/{id}/alt`, `DELETE /media/{id}` → `MediaController`
+- Media stock photos: `GET /media/search`, `POST /media/import`, `GET /media/picker`, `POST /media/starred`, `DELETE /media/starred/{id}` → `MediaController`
+- Dynamic resources: `GET|POST|PUT|DELETE /resources/{resource}/*` → `ResourceController`
 
 ### Admin-Only (tyro-dashboard.admin middleware)
-- Users CRUD: `/users/*`
-- Roles CRUD: `/roles/*`
-- Privileges CRUD: `/privileges/*`
-- Admin invitations: `/invitations/admin/*`
-- Audit logs: `/audits/*`
-- System settings: `/settings/system/*`
+- Users CRUD: `GET /users`, `GET|POST /users/create`, `GET|PUT /users/{id}/edit`, `DELETE /users/{id}` → `UserController`
+- Users special: `POST /users/{id}/suspend`, `POST /users/{id}/unsuspend`, `POST /users/{id}/login-as`, `POST /users/{id}/reset-2fa`, `DELETE /users/{id}/photo` → `UserController`/`ProfileController`
+- Users show: `GET /users/{id}` redirects to `users.edit`
+- Roles CRUD: `/roles/*` plus `DELETE /roles/{id}/users/{userId}` → `RoleController`
+- Privileges CRUD: `/privileges/*` plus `DELETE /privileges/{id}/roles/{roleId}` → `PrivilegeController`
+- Admin invitations: `GET|POST /invitations/admin/*` → `InvitationController`
+- Audit logs: `GET /audits`, `GET /audits/{id}`, `GET /audits/export`, `POST /audits/bulk-destroy`, `POST /audits/flush` → `AuditController`
+- System settings: `GET|PUT /settings/system`, `POST /settings/system/clear-cache` → `SystemSettingsController`
 
 ### Dynamic Resources (Own Access Control)
 - Resources are NOT behind `tyro-dashboard.admin` middleware
@@ -76,12 +80,18 @@ Feature gating must match the sidebar gating exactly. If a feature's route is re
 ## Example/Demo Routes
 
 ```php
-if (app()->environment() !== 'production' || !config('tyro-dashboard.disable_examples')) {
+if (! config('tyro-dashboard.disable_examples', false) && ! app()->environment('production')) {
     // example routes
 }
 ```
 
-Demo routes must never be accessible in production environments. The `disable_examples` config provides a manual override.
+Demo routes are NEVER accessible in production regardless of config — both conditions must be true (config not disabled AND not in production). The `disable_examples` config provides an additional manual override for non-production environments.
+
+Example routes include:
+- `GET /components` → `ComponentsController` (UI component showcase)
+- `GET /widgets` → `WidgetsController` (interactive widget examples)
+- `GET /examples/widgets/xkcd/{id?}`, `/stocks/{symbol}`, `/fx/{base}`, `/flights` → same-origin proxy endpoints for third-party APIs (avoids CORS)
+- `GET /x-components` → `XComponentsController` (only registered when `hasinhayder/tyro-dashboard-components` package is installed)
 
 ## Route Model Binding
 

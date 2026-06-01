@@ -10,9 +10,10 @@ Middleware is the first line of defense for route protection. Wrong registration
 **Class:** `HasinHayder\TyroDashboard\Http\Middleware\EnsureIsAdmin`
 
 ### Behavior
-- Checks `auth()->user()->tyroRoleSlugs()` intersects with `config('tyro-dashboard.admin_roles')`
-- On failure: redirects to dashboard with error flash message
+- If user is not authenticated: redirects to login using a three-step fallback chain: `tyro-login.login` route → `login` route → `/login` path
+- If user is authenticated but not admin: checks `auth()->user()->tyroRoleSlugs()` intersects with `config('tyro-dashboard.admin_roles')`, redirects to dashboard with error flash message
 - Does not throw an exception — admin panel access failures are UX issues (user is already authenticated), not security violations
+- Also checks for the `*` wildcard role which grants admin access
 
 ### Route Application
 - Applied to route groups, not individual routes
@@ -25,9 +26,10 @@ Middleware is the first line of defense for route protection. Wrong registration
 **Registration:** Pushed to `web` middleware group
 
 ### Behavior
-- Checks for `session('impersonator_id')` on logout requests
-- If present: redirects to `leave-impersonation` route instead of logging out
+- Checks for `$request->routeIs('tyro-login.logout')` AND `session('impersonator_id')` on every request
+- If both conditions are met: redirects to `leave-impersonation` route instead of logging out
 - Must execute on EVERY request to intercept logout
+- **Coupling note:** The middleware hardcodes a dependency on the `tyro-login.logout` route name from `hasinhayder/tyro-login`. If that package changes its route name, the impersonation system breaks silently. This coupling is unavoidable but must be documented.
 
 ### Why Web Group
 - Pushing to `web` group ensures the middleware runs on all web routes, not just dashboard routes

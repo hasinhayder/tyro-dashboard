@@ -10,9 +10,12 @@ Support classes are the glue between config, views, and controllers. Wrong route
 Manages route name prefixing so controllers and views never hardcode route name strings.
 
 ### Public API
+- `DashboardRoute::prefix()` — returns the normalized route name prefix from config (with trailing dot)
+- `DashboardRoute::legacyPrefix()` — returns the hardcoded legacy prefix `tyro-dashboard.` (with trailing dot)
 - `DashboardRoute::name(string $name)` — generates a full route name with the configured prefix
+- `DashboardRoute::pattern(string $pattern)` — generates a full route pattern (like `name()` but defaults to `*` for route pattern matching)
 - `DashboardRoute::translate(string $name)` — resolves missing named routes between legacy and current prefixes
-- `DashboardRoute::normalizePrefix(string $prefix)` — ensures trailing dot
+- `DashboardRoute::normalizePrefix(?string $prefix)` — ensures trailing dot, handles null/empty
 
 ### Usage
 ```php
@@ -40,7 +43,7 @@ Manages the shadcn/ui theme color palette, stored as JSON separately from `.env`
 - Each color: `{ "hex": "#09090b", "alpha": 100 }`
 
 ### Public API
-- `DashboardColors::defaults()` — returns all 48 color definitions (24 light + 24 dark)
+- `DashboardColors::defaults()` — returns all 50 color definitions (25 light + 25 dark)
 - `DashboardColors::load()` — reads JSON, returns arrays with defaults fallback
 - `DashboardColors::save(array $data)` — writes JSON, creates directory if needed
 - `DashboardColors::form()` — merges saved overrides with defaults for the settings form
@@ -61,13 +64,17 @@ Manages the shadcn/ui theme color palette, stored as JSON separately from `.env`
 ### Purpose
 Provides both config-driven and programmatic admin bar activation.
 
+### Location
+`src/Services/AdminNotice.php` under namespace `HasinHayder\TyroDashboard\Services`
+
 ### Public API
 - `AdminNotice::show(string $message, ?string $bgColor, ?string $textColor, ?string $align)` — programmatic activation
-- `AdminNotice::message()` — current message (config or programmatic)
-- `AdminNotice::backgroundColor()` — current background color
-- `AdminNotice::textColor()` — current text color
-- `AdminNotice::alignment()` — current alignment
-- `AdminNotice::height()` — current height
+- `AdminNotice::hasNotice()` — returns true if programmatic notice is set OR config-driven bar is enabled with a message
+- `AdminNotice::getMessage()` — current message (programmatic or config fallback); strips all tags except `<p><a><b><i><s><u><span>`
+- `AdminNotice::getBgColor()` — current background color (programmatic or config fallback)
+- `AdminNotice::getTextColor()` — current text color (programmatic or config fallback)
+- `AdminNotice::getAlign()` — current alignment (programmatic or config fallback)
+- `AdminNotice::getHeight()` — current height (from config only)
 
 ### Activation Modes
 - **Config-driven:** `config('tyro-dashboard.admin_bar.enabled')` — persistent from `.env`
@@ -81,7 +88,7 @@ Provides both config-driven and programmatic admin bar activation.
 
 ## Adding a New Support Class
 
-1. Place in `src/Support/` under `HasinHayder\TyroDashboard\Support`
+1. Place in `src/Support/` under `HasinHayder\TyroDashboard\Support` (for pure utility classes with no HTTP context) or `src/Services/` under `HasinHayder\TyroDashboard\Services` (for service classes that may hold request-scoped state)
 2. Use static methods where instantiation is unnecessary
 3. Do not depend on HTTP context unless explicitly passed
 4. Document the public API — support classes are often used by consumers

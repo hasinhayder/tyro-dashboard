@@ -12,7 +12,18 @@ Configuration is the face of the framework for non-developers. When an admin set
 - Every config key gets an `env()` call with a sensible default
 - Boolean config values use actual booleans: `env('KEY', true)` — never string booleans
 - Default values are the most common, least surprising choice
-- Config is organized into logical sections: `routes`, `admin_roles`, `branding`, `admin_bar`, `features`, `protected`, `widgets`, `notifications`, `uploads`, `profile_photo`, `resources`, `resource_ui`, `disable_examples`, `media`
+- Config is organized into logical sections: `routes`, `admin_roles`, `user_model`, `pagination`, `branding`, `admin_bar`, `collapsible_sidebar`, `features`, `protected`, `widgets`, `notifications`, `uploads`, `profile_photo`, `resources`, `resource_ui`, `disable_examples`, `media`
+
+### Notable Config Keys
+- `user_model` — resolves the Eloquent user class; fallback chain: `TYRO_DASHBOARD_USER_MODEL` → `config('tyro.models.user')` → `App\Models\User`
+- `pagination.users`, `pagination.roles`, `pagination.privileges` — per-resource pagination limits (default: 15)
+- `branding.logo` — app logo URL (nullable)
+- `branding.favicon` — favicon URL (nullable)
+- `branding.sidebar_logo` — separate sidebar logo (nullable)
+- `branding.logo_height` — logo height in CSS units (default: `32px`)
+- `resource_ui.show_global_errors` — show global validation error banner (default: true)
+- `resource_ui.show_field_errors` — show per-field validation errors (default: true)
+- `notifications.show_flash_messages` — enable/disable flash message display (default: true)
 
 ### Adding a Config Key
 1. Add the key to `config/tyro-dashboard.php` with an `env()` default
@@ -50,6 +61,7 @@ True feature flags live under `config('tyro-dashboard.features.*')`:
 - `invitation_system`, `audit_logs`, `system_settings`
 - `show_roles_menu`, `show_privileges_menu`, `show_resources_menu`
 - `profile_photo_upload`, `gravatar`
+- `activity_log` (future feature, currently `false` — not yet implemented)
 
 ### Closely-Related Top-Level Toggles (NOT under `features.*`)
 A few boolean toggles are at the top level of the config file, NOT under `features.*`. Do not move them under `features` and do not read them as `config('tyro-dashboard.features.collapsible_sidebar')` — they live at the top level:
@@ -80,7 +92,7 @@ Dashboard colors use separate persistence from `.env`:
 - **Conversion:** `DashboardColors::hexAlphaToRgba(string $hex, int $alpha)` produces CSS `rgba(r, g, b, a)`
 
 ### Color Variables (per theme)
-`--background`, `--foreground`, `--card`, `--card-foreground`, `--popover`, `--popover-foreground`, `--primary`, `--primary-foreground`, `--secondary`, `--secondary-foreground`, `--muted`, `--muted-foreground`, `--accent`, `--accent-foreground`, `--destructive`, `--destructive-foreground`, `--border`, `--input`, `--ring`, `--success`, `--success-foreground`, `--warning`, `--warning-foreground`, `--info`, `--info-foreground`, `--danger`, `--danger-foreground`, `--chart-1` through `--chart-5`, `--sidebar`, `--sidebar-foreground`, `--sidebar-primary`, `--sidebar-primary-foreground`, `--sidebar-accent`, `--sidebar-accent-foreground`, `--sidebar-border`, `--sidebar-ring`
+`--background`, `--foreground`, `--card`, `--card-foreground`, `--popover`, `--popover-foreground`, `--primary`, `--primary-foreground`, `--secondary`, `--secondary-foreground`, `--muted`, `--muted-foreground`, `--accent`, `--accent-foreground`, `--destructive`, `--destructive-foreground`, `--border`, `--input`, `--ring`, `--success`, `--success-foreground`, `--warning`, `--warning-foreground`, `--info`, `--info-foreground`, `--danger`
 
 ## Settings UI
 

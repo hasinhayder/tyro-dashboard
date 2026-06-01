@@ -9,29 +9,34 @@ The service provider is the single most important file in the framework. It is t
 The boot sequence order is fixed. Changing it breaks the dependency chain.
 
 ```
-register()            — mergeConfigFrom
-registerViews()       — loadViewsFrom, Blade::component, Blade::anonymousComponentPath
-registerRoutes()      — Route::group with prefix and middleware
+register()              — mergeConfigFrom
+registerPublishing()    — $this->publishes() for asset tags
+loadMigrationsFrom()    — database migrations
+registerRoutes()        — Route::group with prefix and middleware
+registerViews()         — loadViewsFrom, Blade::component, Blade::anonymousComponentPath, View::addLocation
 registerViewComposers() — view()->composer() for data sharing
-registerMiddleware()  — alias, web group push
-registerCommands()    — $this->commands([...])
-registerEventListeners() — Event::listen() for Login/Logout
-registerPublishing()  — $this->publishes() for asset tags
-loadMigrationsFrom()  — database migrations
+registerMiddleware()    — alias, web group push
+registerCommands()      — $this->commands([...])
+registerEventListeners()— Event::listen() for Login/Logout
 ```
 
 ### Why This Order
-- `registerViews()` must run before `registerRoutes()` — routes reference views by namespace
-- `registerRoutes()` must run before `registerMiddleware()` — routes reference middleware aliases
-- `registerViewComposers()` must not depend on services registered later
-- `registerMiddleware()` must run before any request that uses the middleware
-- `registerPublishing()` is last because it depends on views and config being registered
+- `registerPublishing()` and `loadMigrationsFrom()` run first — they are registration-only operations with no runtime dependencies
+- `registerRoutes()` loads route definitions before view registration (routes reference views by namespace string, resolved lazily at request time)
+- `registerViews()` registers the view namespace and Blade components needed for rendering
+- `registerViewComposers()` runs after views are registered — composers attach to resolved view names
+- `registerMiddleware()` registers aliases and web group pushes, needed before any incoming request
+- `registerCommands()` runs late — commands are only needed in console mode
+- `registerEventListeners()` runs last — listeners are event-driven, not boot-dependent
 
 ## View Registration
 
 - `loadViewsFrom(__DIR__.'/../../resources/views', 'tyro-dashboard')` registers the view namespace
-- `Blade::component('tyro-dashboard-media-picker', MediaPicker::class)` registers class-based components
+- `Blade::component(MediaPicker::class, 'tyro-dashboard-media-picker')` registers class-based components
+- `Blade::component(MediaPicker::class, 'tyro-dashbaord-media-picker')` registers legacy misspelled alias
 - `Blade::anonymousComponentPath(__DIR__.'/../../resources/views/components', 'tyro-dashboard')` registers anonymous components
+- `Blade::anonymousComponentPath(__DIR__.'/../../resources/views/components', 'tyro-dashbaord')` registers legacy misspelled anonymous namespace
+- `View::addLocation(__DIR__.'/../../resources/views')` adds the package views directory as a general view location so non-namespaced references (e.g. `vendor.pagination.tyro`) resolve within the package
 - **Legacy misspellings** (`tyro-dashbaord-media-picker` and `tyro-dashbaord` anonymous-component namespace) are also registered for backward compatibility with consumers from before the spelling was corrected. Do not add more legacy aliases. The complete list of public-API legacy aliases lives in `rules/public-api-surface.md` under "Legacy Aliases".
 
 ## Middleware Registration
@@ -42,16 +47,16 @@ loadMigrationsFrom()  — database migrations
 
 ## View Composers
 
-- `view()->composer('*', ...)` shares global data: `$user` (auth user), `$dashboardRoute` (DashboardRoute instance)
-- `view()->composer('tyro-dashboard::partials.admin-sidebar', ...)` shares sidebar-specific data: `$allResources`, `$adminMenuItems`, `$commonMenuItems`
-- `view()->composer('tyro-dashboard::partials.user-sidebar', ...)` shares user sidebar data: `$allResources`, `$userMenuItems`, `$commonMenuItems`
+- `view()->composer(['tyro-dashboard::*', 'dashboard.*'], ...)` shares global data: `$user` (auth user), `$dashboardRoute` (DashboardRoute class)
+- `view()->composer(['tyro-dashboard::partials.admin-sidebar', 'tyro-dashboard::partials.user-sidebar'], ...)` shares resources: `$allResources` (filtered by user role)
+- `view()->composer(['tyro-dashboard::partials.admin-sidebar', 'tyro-dashboard::partials.user-sidebar'], ...)` shares menu items: `$adminMenuItems`, `$commonMenuItems`, `$userMenuItems` (from config, only set if not already present in view data)
 - Composers read data from config and the authenticated user — they never mutate state
 
 ## Event Listeners
 
-- `Event::listen(Login::class, fn(Login $event) => ...)` audits `user.login`
-- `Event::listen(Logout::class, fn(Logout $event) => ...)` audits `user.logout`
-- Listeners are feature-gated: wrapped in `if (config('tyro-dashboard.features.audit_logs'))`
+- `Event::listen(Login::class, fn(Login $event) => ...)` audits `user.login` via `TyroAudit::log('user.login', $user, null, ['email' => $user->email])`
+- `Event::listen(Logout::class, fn(Logout $event) => ...)` audits `user.logout` via `TyroAudit::log('user.logout', $user, null, ['email' => $user->email])`
+- Listeners are feature-gated: wrapped in `if (config('tyro-dashboard.features.audit_logs'))` and `class_exists(TyroAudit::class)`
 - Listeners must be lightweight — one `TyroAudit::log()` call only
 
 ## Publishing
@@ -79,7 +84,7 @@ The service provider scans for CRUD resources:
 
 ## Anti-Patterns
 
-- **Registering routes before views.** Routes will fail with "View not found."
+- **Registering routes before views.** Routes will fail with "View not found." (Note: current code registers routes before views, but this works because route definitions reference views by namespace string which is resolved lazily at request time.)
 - **Registering middleware after routes.** Middleware alias won't be found.
 - **Using view composers that depend on services not yet registered.** Composer failure is silent — the variable is simply null.
 - **Duplicating registration from sibling packages.** Tyro Core middleware is registered by Tyro Core. Do not re-register.
@@ -87,36 +92,16 @@ The service provider scans for CRUD resources:
 
 ## Setup AI Skill Command
 
-`tyro-dashboard:setup-ai-skill` copies the canonical skill directory (`skills/tyro-dashboard/` containing `SKILL.md` + `rules/`) from the package into the consumer app's base path under agent-specific discovery directories plus a universal location.
+`tyro-dashboard:setup-ai-skill` copies the canonical skill directory (`skills/tyro-dashboard/` containing `SKILL.md` + `rules/`) from the package into agent-specific discovery directories. Full documentation is in `rules/artisan-commands.md`.
 
 ### Source Path
 - Source is the package directory: `vendor/hasinhayder/tyro-dashboard/skills/tyro-dashboard/`
-- Resolved via `__DIR__.'/../../../skills/tyro-dashboard'` — this is correct for both the in-repo package and the published `vendor/hasinhayder/tyro-dashboard/` layout because Composer preserves the relative directory structure
+- Resolved via `__DIR__.'/../../../skills/tyro-dashboard'` — correct for both in-repo and published Composer layouts
 - It is a directory copy, not a single file copy — rule files are included
 
-### Target Directories
-Each agent installs into its own discovery directory. Additionally, the universal `UNIVERSAL_SKILL_DIR` constant (`.agents/skills/tyro-dashboard/`) is **always** installed exactly once, regardless of whether the user picks a single agent or `all`. This avoids redundant rewrites and keeps the universal location authoritative:
-- `.kilo/skills/tyro-dashboard/` — Kilo
-- `.claude/skills/tyro-dashboard/` — Claude
-- `.github/skills/tyro-dashboard/` — GitHub Copilot
-- `.codex/skills/tyro-dashboard/` — Codex
-- `.gemini/skills/tyro-dashboard/` — Gemini
-- `.ai/skills/tyro-dashboard/` — Laravel Boost
-- `.agents/skills/tyro-dashboard/` — universal agents.md discovery (always)
+### Registration
+- The command class is `HasinHayder\TyroDashboard\Console\Commands\SetupAiSkillCommand`
+- Registered in `registerCommands()` alongside all other artisan commands
+- Console-only (guarded by `$this->app->runningInConsole()`)
 
-### Install Strategy
-- The new skill contents are staged in a sibling `.__installing__` directory
-- The existing target directory is renamed to `.__backup__` (atomic on the same filesystem; falls back to copy+delete cross-device)
-- The staged directory is renamed into the target's place
-- On any failure, the backup is restored and the staging dir is cleaned
-- On success, the backup is discarded
-
-This guarantees the target directory is never left in a partially-wiped state, and a previous install can be recovered if the new copy fails.
-
-### Trade-offs and Consumer Guidance
-- The install wipes the entire target directory before recopying. Any file the consumer placed inside `.kilo/skills/tyro-dashboard/`, `.claude/skills/tyro-dashboard/`, etc. will be removed on the next run.
-- This is intentional: it prevents stale rule files from previous framework versions from lingering and conflicting with the new version.
-- Consumers who need to keep custom files should place them in a **sibling** directory (e.g., `.kilo/skills/tyro-dashboard-notes/`) rather than inside the target directory itself.
-- The `tyro-dashboard:update` command follows the same update-safety principle for published views (never overwrites consumer overrides) — but for the AI skill files, where the framework is the authoritative owner, a clean replace is the only safe option.
-
-When modifying the agent list, target paths, or source path, update this section in the same commit.
+When modifying the agent list, target paths, or source path, update both this section and `rules/artisan-commands.md` in the same commit.

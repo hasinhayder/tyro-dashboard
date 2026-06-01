@@ -11,6 +11,7 @@ Models and migrations are the data foundation of the framework. Wrong schema dec
 - `uploader()` → `BelongsTo` configurable user model
 - Accessors: `url`, `webp_url`, `thumbnail_url`, `formatted_size`, `is_image`
 - Static helpers: `thumbnailUrlFrom()`, `webpUrlFrom()` — both accept nullable and return nullable
+- URL resolution logic in static helpers: if input is an absolute URL, strips `/storage/` prefix to extract the relative path, then queries `tyro_media` by path. If no matching record found, `thumbnailUrlFrom()` returns the original URL and `webpUrlFrom()` returns null
 
 ### StarredImportImage (`tyro_starred_import_images`)
 - `$fillable`: `user_id`, `star_key`, `provider`, `external_id`, `alt`, `author`, `thumb_url`, `preview_url`, `download_url`, `download_location`, `source_url`, `payload`, `starred_at`

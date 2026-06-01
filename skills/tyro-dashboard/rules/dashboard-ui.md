@@ -11,9 +11,7 @@ All visual design is expressed through CSS custom properties defined in `shadcn-
 
 - Colors: `--background`, `--foreground`, `--card`, `--popover`, `--primary`, `--secondary`, `--muted`, `--accent`, `--destructive`, `--border`, `--input`, `--ring`
 - Semantic: `--success`, `--warning`, `--info`, `--danger`
-- Sidebar: `--sidebar`, `--sidebar-foreground`, `--sidebar-primary`, `--sidebar-accent`, `--sidebar-border`, `--sidebar-ring`
 - Layout: `--radius`, `--card-shadow`
-- Charts: `--chart-1` through `--chart-5`
 
 Each color has a `-foreground` variant for text contrast.
 
@@ -102,3 +100,40 @@ Sidebar config colors from `config('tyro-dashboard.branding.*')` use `!important
 - System font fallback stack
 - Font loading is in the `<head>` of each layout
 - CDN URL is configurable for consumers who want to self-host
+
+## JavaScript Client-Side System
+
+The `scripts.blade.php` partial contains ~460 lines of vanilla JavaScript managing the entire client-side UI.
+
+### Theme Management
+- `toggleTheme()` — flips `light`/`dark` class on `<html>`, persists to `localStorage('tyro-dashboard-theme')`
+- System preference detection via `prefers-color-scheme` media query as fallback
+- OS-level changes are listened to only when no explicit user preference is stored
+
+### Sidebar
+- Collapse/expand with localStorage persistence of collapsed state
+- Accordion sections with compact mode (`sidebar_accordion_compact`)
+- Open sections count controlled by `sidebar_accordion_open_sections` config
+- Mobile: hamburger toggle with overlay
+
+### Global Modal
+- `showModal(options)` — generic modal with title, message, type, confirm/cancel callbacks
+- Variants: `showConfirm()`, `showAlert()`, `showSuccess()`, `showDanger()`, `showInfo()`, `showPrompt()`
+- `confirmDelete(url, message)` — convenience wrapper for destructive confirmations
+- Escape key and overlay click dismissal
+- Focus trap within modal
+
+### Toast Notifications
+- `showToast(message, type, duration)` — creates a toast notification element
+- `dismissToast(element)` — removes a toast with animation
+- Types: `success`, `error`, `warning`, `info`
+- Auto-dismiss respects `config('tyro-dashboard.notifications.auto_dismiss_seconds')`
+- Legacy alert auto-dismiss (for backward-compatible notification mode)
+
+### Vertical Tabs
+- Tab switching with localStorage persistence
+- Used in settings page sidebar navigation
+
+### User Dropdown
+- Click-toggle dropdown in topbar
+- Click-outside-to-close behavior

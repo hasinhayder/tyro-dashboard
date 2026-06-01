@@ -7,12 +7,12 @@ The settings system is the bridge between developers (who understand `.env`) and
 ## SystemSettingsController
 
 ### index() — Read
-- `gatherSettings()` reads ~140 config values from three namespaces: `tyro-dashboard`, `tyro`, `tyro-login`
+- `gatherSettings()` reads ~160 config values from three namespaces: `tyro-dashboard`, `tyro`, `tyro-login`
 - Returns values keyed by their `.env` variable names
 - Passes to the settings Blade view
 
 ### update() — Write
-1. Validate all ~140 form fields against per-field rules (string, boolean, integer, regex for hex colors, `in:` for enums)
+1. Validate all ~160 form fields against per-field rules (string, boolean, integer, regex for hex colors, `in:` for enums)
 2. Process `dashboard_colors` separately via `DashboardColors::save()`
 3. Open `.env` via `file_get_contents(base_path('.env'))`
 4. For each submitted value:
@@ -23,12 +23,12 @@ The settings system is the bridge between developers (who understand `.env`) and
 6. Return JSON response
 
 ### Boolean Handling
-- `booleanKeys()` returns an array of 53 boolean `.env` key names
+- `booleanKeys()` returns an array of 55 boolean `.env` key names
 - Boolean values serialize as `"true"` / `"false"` strings in `.env`
 - Form fields for booleans are checkboxes (checked = true, unchecked = false)
 
 ### Default Values
-- `defaultValues()` returns hardcoded defaults for all ~140 env vars
+- `defaultValues()` returns hardcoded defaults for all ~160 env vars
 - If submitted value equals the default, the key is removed from `.env`
 - This keeps `.env` readable — only customized values appear
 

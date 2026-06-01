@@ -10,11 +10,10 @@ Event listeners run on every login and logout. A slow or failing listener degrad
 ```php
 Event::listen(Login::class, function (Login $event) {
     if (!config('tyro-dashboard.features.audit_logs')) return;
-    TyroAudit::log('user.login', [
-        'user_id' => $event->user->id,
-        'ip' => request()->ip(),
-        'user_agent' => request()->userAgent(),
-    ]);
+    $user = $event->user;
+    if ($user && class_exists(TyroAudit::class)) {
+        TyroAudit::log('user.login', $user, null, ['email' => $user->email ?? 'unknown']);
+    }
 });
 ```
 
@@ -22,11 +21,10 @@ Event::listen(Login::class, function (Login $event) {
 ```php
 Event::listen(Logout::class, function (Logout $event) {
     if (!config('tyro-dashboard.features.audit_logs')) return;
-    TyroAudit::log('user.logout', [
-        'user_id' => $event->user->id,
-        'ip' => request()->ip(),
-        'user_agent' => request()->userAgent(),
-    ]);
+    $user = $event->user;
+    if ($user && class_exists(TyroAudit::class)) {
+        TyroAudit::log('user.logout', $user, null, ['email' => $user->email ?? 'unknown']);
+    }
 });
 ```
 

@@ -104,6 +104,7 @@ The media system handles user files — the most irreplaceable data in most appl
 - `circle` — circular preview
 - `full_url` — return full URL vs relative path
 - `label` — form label text
+- `size` — `default`, `medium`, or `small`
 
 ### Behavior
 - Clicking opens the media picker modal
@@ -134,6 +135,7 @@ The media system handles user files — the most irreplaceable data in most appl
 ## Access Control
 - All authenticated users can access the media library
 - Delete permission: admins and editors can delete any media; regular users can only delete their own
+- **Impersonation scoping:** When an admin is impersonating another user (`session('impersonator_id')` exists), they see only the impersonated user's media, not all media. This prevents accidental exposure of other users' files during impersonation sessions.
 - Access control is in the controller, not middleware — media routes are not behind admin middleware
 
 ## Cache Flushing

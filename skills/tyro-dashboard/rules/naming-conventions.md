@@ -73,7 +73,7 @@ Consistent naming makes the codebase navigable. A developer familiar with one co
 
 ### Cache Keys
 - Prefixed with package namespace: `tyro:user-{id}:roles`, `tyro:user-{id}:privileges`
-- Tyro Dashboard cache: `tyro-dashboard:resource-fields:{class}:{hash}`
+- Tyro Dashboard cache: `tyro_dashboard_fields_{md5}_{hash}`, `tyro_dashboard_hash_{md5}`
 - Tyro Login cache: `tyro-login:otp:{userId}`, `tyro-login:lockout-attempts:{ip}`
 
 ### Session Keys

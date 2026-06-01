@@ -10,7 +10,6 @@ Blade templates are the most customized part of any Laravel framework. Section n
 - `app.blade.php` — Role-aware layout. Checks `@hasanyrole('admin', 'superadmin')` to include admin sidebar for admins, user sidebar for non-admins. Includes impersonation banner. Used by the main dashboard page.
 - `admin.blade.php` — Always renders admin sidebar. No impersonation banner. Used by admin-only pages (users, roles, privileges, settings, audits).
 - `user.blade.php` — Always renders user sidebar. Used by user-facing pages.
-
 ### Layout Structure
 ```
 <html>
@@ -51,6 +50,36 @@ All partials live in `partials/` and have a single responsibility:
 - Views are loaded from the package with namespace `tyro-dashboard::`
 - Consumer applications override views by placing files at `resources/views/vendor/tyro-dashboard/`
 - Laravel's standard view override takes priority — never implement custom resolution
+
+## View Directory Structure
+
+```
+resources/views/
+├── layouts/          — app, admin, user layouts
+├── partials/         — reusable partials (12 files)
+├── components/       — anonymous Blade components (media-picker)
+├── dashboard/        — admin and user dashboard home pages
+├── users/            — user CRUD views (index, create, edit, show)
+├── roles/            — role CRUD views
+├── privileges/       — privilege CRUD views
+├── settings/         — settings layout and partials/
+│   └── partials/     — 11 tab partials + scripts + styles
+├── audits/           — audit log views (index, show)
+├── media/            — media library views
+├── profile/          — profile edit, photo, 2FA views
+├── invitations/      — invitation acceptance views
+├── resources/        — dynamic resource CRUD views (index, create, edit, show)
+├── examples/         — example/demo component showcase
+└── errors/           — error views (invitation-maintenance, missing-invitation-tables)
+```
+
+### Settings Tab Partials
+Located in `resources/views/settings/partials/`, prefixed with underscore:
+`_tab-dashboard`, `_tab-login-auth`, `_tab-rbac`, `_tab-login-auth-advanced`, `_tab-rbac-advanced`, `_tab-sidebar-colors`, `_tab-admin-bar-colors`, `_tab-dashboard-colors`, `_tab-media`, `_scripts`, `_styles`
+
+### Error Views
+- `errors/invitation-maintenance.blade.php` — shown to non-admin users when invitation tables are missing ("system under maintenance")
+- `errors/missing-invitation-tables.blade.php` — shown to admin users with migration instructions
 
 ## Section & Stack Names
 

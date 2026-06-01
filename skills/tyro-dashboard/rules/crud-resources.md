@@ -136,9 +136,10 @@ Merges with auto-detected fields. Only specified fields are changed. Unspecified
 - Unrecognized errors → generic message (never raw SQL)
 
 ## Field Caching
-- Cache key: `hasinhayder:tyro-dashboard:resource-fields:{modelClass}:{fillableHash}`
-- TTL: 6 hours
-- Invalidation: `tyro-dashboard:clear-cache` command or automatic on fillable change
+- Cache key: `tyro_dashboard_fields_{md5(modelClass)}_{fillableHash}`
+- Hash tracking key: `tyro_dashboard_hash_{md5(modelClass)}` — stores current fillable hash
+- TTL: 6 hours (21600 seconds)
+- Invalidation: `tyro-dashboard:clear-cache` command, `HasCrud::clearFieldCache()`, or automatic on fillable change
 - The cache stores the complete generated field config array
 
 ## Resource Access Control
