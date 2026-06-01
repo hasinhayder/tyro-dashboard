@@ -92,12 +92,12 @@ The service provider scans for CRUD resources:
 
 ## Setup AI Skill Command
 
-`tyro-dashboard:setup-ai-skill` copies the canonical skill directory (`skills/tyro-dashboard/` containing `SKILL.md` + `rules/`) from the package into agent-specific discovery directories. Full documentation is in `rules/artisan-commands.md`.
+`tyro-dashboard:setup-ai-skill` copies the canonical skill directory (`skills/tyro-dashboard/` containing `SKILL.md` + `rules/`) from the package into `.agents/skills/tyro-dashboard`. Agent-specific discovery directories symlink there by default, or receive physical copies when `--copy` is passed. Existing targets require confirmation unless `--force` is passed. Full documentation is in `rules/artisan-commands.md`.
 
 ### Source Path
 - Source is the package directory: `vendor/hasinhayder/tyro-dashboard/skills/tyro-dashboard/`
 - Resolved via `__DIR__.'/../../../skills/tyro-dashboard'` — correct for both in-repo and published Composer layouts
-- It is a directory copy, not a single file copy — rule files are included
+- The universal install is a directory copy, not a single file copy — rule files are included
 
 ### Registration
 - The command class is `HasinHayder\TyroDashboard\Console\Commands\SetupAiSkillCommand`

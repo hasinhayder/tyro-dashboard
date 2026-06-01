@@ -10,7 +10,8 @@ class SetupAiSkillCommand extends Command {
      * The name and signature of the console command.
      */
     protected $signature = 'tyro-dashboard:setup-ai-skill
-                            {--copy : Use physical copies instead of symlinks for vendor-specific agent directories}';
+                            {--copy : Use physical copies instead of symlinks for vendor-specific agent directories}
+                            {--force : Replace existing skill directories without confirmation}';
 
     /**
      * The console command description.
@@ -30,12 +31,12 @@ class SetupAiSkillCommand extends Command {
      * Mapping of AI agents to their vendor-specific target skill directory.
      */
     protected array $agentTargets = [
-        'kilo'           => '.kilo/skills/tyro-dashboard',
-        'claude'         => '.claude/skills/tyro-dashboard',
+        'kilo' => '.kilo/skills/tyro-dashboard',
+        'claude' => '.claude/skills/tyro-dashboard',
         'github copilot' => '.github/skills/tyro-dashboard',
-        'codex'          => '.codex/skills/tyro-dashboard',
-        'gemini'         => '.gemini/skills/tyro-dashboard',
-        'laravel boost'  => '.ai/skills/tyro-dashboard',
+        'codex' => '.codex/skills/tyro-dashboard',
+        'gemini' => '.gemini/skills/tyro-dashboard',
+        'laravel boost' => '.ai/skills/tyro-dashboard',
     ];
 
     /**
@@ -48,7 +49,7 @@ class SetupAiSkillCommand extends Command {
         $this->info('  ╚════════════════════════════════════════╝');
         $this->info('');
 
-        $useCopy  = (bool) $this->option('copy');
+        $useCopy = (bool) $this->option('copy');
         $sourcePath = $this->getSourceSkillPath();
 
         if (! is_dir($sourcePath)) {
@@ -70,12 +71,34 @@ class SetupAiSkillCommand extends Command {
             ? array_keys($this->agentTargets)
             : [$choice];
 
+        $selectedPaths = array_map(
+            fn (string $agent): string => base_path($this->agentTargets[$agent]),
+            $selectedAgents
+        );
+        $replaceTargets = $this->existingTargets([
+            base_path(self::UNIVERSAL_SKILL_DIR),
+            ...$selectedPaths,
+        ]);
+
+        if ($replaceTargets !== [] && ! $this->option('force')) {
+            $this->warn('   Existing AI skill install targets will be replaced:');
+            foreach ($replaceTargets as $path) {
+                $this->line('   - '.$path);
+            }
+
+            if (! $this->confirm('Continue replacing these targets?', false)) {
+                $this->warn('   Setup cancelled.');
+
+                return self::FAILURE;
+            }
+        }
+
         $ok = true;
 
         // Phase 1: always install a PHYSICAL copy into the universal .agents directory.
         $universalPath = base_path(self::UNIVERSAL_SKILL_DIR);
         if (! $this->installPhysicalCopy($universalPath, $sourcePath, 'universal: '.self::UNIVERSAL_SKILL_DIR)) {
-            $ok = false;
+            return self::FAILURE;
         }
 
         // Phase 2: create symlinks (or physical copies with --copy) in each vendor-specific directory.
@@ -85,6 +108,7 @@ class SetupAiSkillCommand extends Command {
             if (! $relativePath) {
                 $this->warn("   ⚠ Unknown agent: {$agent}");
                 $ok = false;
+
                 continue;
             }
 
@@ -112,21 +136,25 @@ class SetupAiSkillCommand extends Command {
     /**
      * Install a physical copy of the skill directory at the target path.
      *
-     * Removes any existing target (symlink or directory) before copying.
+     * Stages the copy first, then swaps it into place.
      */
     protected function installPhysicalCopy(string $targetPath, string $sourcePath, string $label): bool {
         $filesystem = new Filesystem;
-
-        // Remove any existing target (symlink or directory).
-        $this->removeExisting($targetPath, $filesystem);
-
         $parentDir = dirname($targetPath);
-        if (! is_dir($parentDir)) {
-            $filesystem->makeDirectory($parentDir, 0755, true);
+        $stagingPath = $this->temporaryPath($targetPath, 'installing');
+
+        $this->removeExisting($stagingPath, $filesystem);
+        $this->ensureDirectory($parentDir, $filesystem);
+
+        if (! $filesystem->copyDirectory($sourcePath, $stagingPath)) {
+            $this->removeExisting($stagingPath, $filesystem);
+            $this->error("   ✗ Failed to copy skill files for {$label}");
+
+            return false;
         }
 
-        if (! $filesystem->copyDirectory($sourcePath, $targetPath)) {
-            $this->error("   ✗ Failed to copy skill files for {$label}");
+        if (! $this->swapIntoPlace($stagingPath, $targetPath, $filesystem)) {
+            $this->error("   ✗ Failed to replace skill files for {$label}");
 
             return false;
         }
@@ -139,23 +167,26 @@ class SetupAiSkillCommand extends Command {
     /**
      * Create a relative symlink from $targetPath pointing to $universalPath.
      *
-     * Removes any existing target (symlink or directory) before linking.
+     * Creates the link at a staging path first, then swaps it into place.
      */
     protected function installSymlink(string $targetPath, string $universalPath, string $label): bool {
         $filesystem = new Filesystem;
-
-        // Remove any existing target (symlink or directory).
-        $this->removeExisting($targetPath, $filesystem);
-
         $parentDir = dirname($targetPath);
-        if (! is_dir($parentDir)) {
-            $filesystem->makeDirectory($parentDir, 0755, true);
-        }
+        $stagingPath = $this->temporaryPath($targetPath, 'installing');
 
+        $this->removeExisting($stagingPath, $filesystem);
+        $this->ensureDirectory($parentDir, $filesystem);
         $relativeUniversal = $this->relativePath($parentDir, $universalPath);
 
-        if (! @symlink($relativeUniversal, $targetPath)) {
+        if (! @symlink($relativeUniversal, $stagingPath)) {
+            $this->removeExisting($stagingPath, $filesystem);
             $this->error("   ✗ Failed to create symlink for {$label}");
+
+            return false;
+        }
+
+        if (! $this->swapIntoPlace($stagingPath, $targetPath, $filesystem)) {
+            $this->error("   ✗ Failed to replace symlink for {$label}");
 
             return false;
         }
@@ -163,6 +194,51 @@ class SetupAiSkillCommand extends Command {
         $this->info("   ✓ Installed (symlink → {$relativeUniversal}) {$label}");
 
         return true;
+    }
+
+    /**
+     * Swap a staged path into place while preserving the previous target on failure.
+     */
+    protected function swapIntoPlace(string $stagingPath, string $targetPath, Filesystem $filesystem): bool {
+        $backupPath = $this->temporaryPath($targetPath, 'backup');
+
+        $this->removeExisting($backupPath, $filesystem);
+
+        if ($this->targetExists($targetPath) && ! @rename($targetPath, $backupPath)) {
+            $this->removeExisting($stagingPath, $filesystem);
+
+            return false;
+        }
+
+        if (@rename($stagingPath, $targetPath)) {
+            $this->removeExisting($backupPath, $filesystem);
+
+            return true;
+        }
+
+        if ($this->targetExists($backupPath)) {
+            @rename($backupPath, $targetPath);
+        }
+
+        $this->removeExisting($stagingPath, $filesystem);
+
+        return false;
+    }
+
+    /**
+     * Build a sibling temporary path for staged installs and backups.
+     */
+    protected function temporaryPath(string $targetPath, string $suffix): string {
+        return dirname($targetPath).'/.'.basename($targetPath).'.__'.$suffix.'__';
+    }
+
+    /**
+     * Ensure a directory exists.
+     */
+    protected function ensureDirectory(string $path, Filesystem $filesystem): void {
+        if (! is_dir($path)) {
+            $filesystem->makeDirectory($path, 0755, true);
+        }
     }
 
     /**
@@ -177,14 +253,34 @@ class SetupAiSkillCommand extends Command {
     }
 
     /**
+     * Determine whether a target exists, including symlinks.
+     */
+    protected function targetExists(string $path): bool {
+        return is_link($path) || file_exists($path);
+    }
+
+    /**
+     * Return install targets that already exist.
+     *
+     * @param  array<int, string>  $paths
+     * @return array<int, string>
+     */
+    protected function existingTargets(array $paths): array {
+        return array_values(array_filter(
+            array_unique($paths),
+            fn (string $path): bool => $this->targetExists($path)
+        ));
+    }
+
+    /**
      * Compute a relative path from $from (directory) to $to (directory).
      */
     protected function relativePath(string $from, string $to): string {
         $fromParts = explode('/', rtrim($from, '/'));
-        $toParts   = explode('/', rtrim($to, '/'));
+        $toParts = explode('/', rtrim($to, '/'));
 
         $commonLength = 0;
-        $maxCommon    = min(count($fromParts), count($toParts));
+        $maxCommon = min(count($fromParts), count($toParts));
 
         for ($i = 0; $i < $maxCommon; $i++) {
             if ($fromParts[$i] === $toParts[$i]) {
@@ -194,7 +290,7 @@ class SetupAiSkillCommand extends Command {
             }
         }
 
-        $upCount  = count($fromParts) - $commonLength;
+        $upCount = count($fromParts) - $commonLength;
         $relative = str_repeat('../', $upCount).implode('/', array_slice($toParts, $commonLength));
 
         return $relative ?: '.';

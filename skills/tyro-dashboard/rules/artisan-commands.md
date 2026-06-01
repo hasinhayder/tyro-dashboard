@@ -48,14 +48,15 @@ Artisan commands are often the first interaction a developer has with the framew
 
 ## Setup AI Skill Command
 
-`tyro-dashboard:setup-ai-skill` copies the canonical skill directory (`skills/tyro-dashboard/` containing `SKILL.md` + `rules/`) from the package into the consumer app's base path under agent-specific discovery directories plus a universal location.
+`tyro-dashboard:setup-ai-skill` copies the canonical skill directory (`skills/tyro-dashboard/` containing `SKILL.md` + `rules/`) from the package into the consumer app's base path under the universal `.agents/` discovery directory. Agent-specific discovery directories symlink to that universal copy by default, or receive physical copies when `--copy` is passed.
 
 ### Interactive Flow
 1. Displays a branded header
 2. Validates source skill directory exists at `vendor/hasinhayder/tyro-dashboard/skills/tyro-dashboard/`
 3. Prompts: `$this->choice()` — pick one agent or `all`
-4. Installs to each selected agent's discovery directory
-5. Always installs to the universal `.agents/skills/tyro-dashboard/` directory exactly once
+4. Always installs a physical copy to the universal `.agents/skills/tyro-dashboard/` directory exactly once
+5. Installs to each selected agent's discovery directory as a symlink to `.agents` by default, or as a physical copy with `--copy`
+6. If install targets already exist, confirms before replacement unless `--force` is passed
 
 ### Supported Agents
 | Agent | Target Directory |
@@ -68,19 +69,21 @@ Artisan commands are often the first interaction a developer has with the framew
 | Laravel Boost | `.ai/skills/tyro-dashboard/` |
 | Universal (always) | `.agents/skills/tyro-dashboard/` |
 
-### Install Strategy (Atomic Swap)
-1. Stage new contents in sibling `.__installing__` temp directory
-2. Rename existing target to `.__backup__` (atomic on same filesystem; falls back to copy+delete cross-device)
+### Install Strategy (Staged Swap)
+1. Stage new contents in a sibling `.<target>.__installing__` temp path
+2. Rename existing target to sibling `.<target>.__backup__`
 3. Rename staged directory into target's place
 4. On failure: restore backup, clean staging dir
 5. On success: discard backup
 
-This guarantees the target directory is never left in a partially-wiped state.
+This prevents delete-first replacement from leaving the target directory partially wiped if staging fails.
 
 ### Consumer Guidance
 - The install **wipes and replaces** the entire target directory — any custom files placed inside will be removed
 - This is intentional: prevents stale rule files from previous framework versions from conflicting with new versions
 - Consumers needing custom additions should place them in a **sibling** directory (e.g., `.kilo/skills/tyro-dashboard-custom/`)
+- Use `--copy` when the environment cannot use symlinks or when each agent needs an independent physical copy
+- Use `--force` for non-interactive replacement of existing install targets
 
 ## Command Implementation Rules
 
