@@ -1,9 +1,9 @@
 ---
 name: tyro-dashboard
-description: Use for Tyro Dashboard framework or app integration work: admin pages, routes, sidebar/menu changes, settings, CRUD resources, Blade overrides, RBAC, media, plugins, service providers, public APIs, and upgrade-safe framework maintenance for hasinhayder/tyro-dashboard, hasinhayder/tyro, tyro-login, or Laravel apps consuming Tyro Dashboard.
-version: 2.1.0
-target: hasinhayder/tyro-dashboard ^1.34
-peers: Filament, Nova, Orchid, Backpack
+description: "Use for Tyro Dashboard framework or app integration work: admin pages, routes, sidebar/menu changes, settings, CRUD resources, Blade overrides, RBAC, media, plugins, service providers, public APIs, and upgrade-safe framework maintenance for hasinhayder/tyro-dashboard, hasinhayder/tyro, tyro-login, or Laravel apps consuming Tyro Dashboard."
+version: 2.1.1
+target: "hasinhayder/tyro-dashboard ^1.34"
+peers: "Filament, Nova, Orchid, Backpack"
 ---
 
 # Tyro Dashboard Agent Guide

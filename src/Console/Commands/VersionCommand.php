@@ -19,7 +19,7 @@ class VersionCommand extends Command {
      * Execute the console command.
      */
     public function handle(): int {
-        $version = '1.35.2'; // AI skill setup installs universal .agents copy with vendor symlinks
+        $version = '1.35.3'; // AI skill YAML frontmatter quoting fix
 
         $this->info('');
         $this->info('  ╔════════════════════════════════════════╗');
@@ -70,6 +70,7 @@ class VersionCommand extends Command {
 }
 
 // Changelog
+// 1.35.3 - AI skill YAML frontmatter quoting fix
 // 1.35.2 - AI skill setup now installs a universal .agents copy, vendor-specific symlinks by default, --copy physical installs, --force non-interactive replacement, and staged swaps for safer updates
 // 1.35.1 - AI skill fine tuning and new rules
 // 1.35.0 - AI skill rules audit: corrected boot sequence, audit signatures, cache keys, color counts, route gating, controller docs, middleware fallbacks, JS system docs, field guessing pipeline
