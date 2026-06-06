@@ -10,8 +10,7 @@ class SetupAiSkillCommand extends Command {
      * The name and signature of the console command.
      */
     protected $signature = 'tyro-dashboard:setup-ai-skill
-                            {--copy : Use physical copies instead of symlinks for vendor-specific agent directories}
-                            {--force : Replace existing skill directories without confirmation}';
+                            {--copy : Use physical copies instead of symlinks for vendor-specific agent directories}';
 
     /**
      * The console command description.
@@ -71,26 +70,20 @@ class SetupAiSkillCommand extends Command {
             ? array_keys($this->agentTargets)
             : [$choice];
 
-        $selectedPaths = array_map(
-            fn (string $agent): string => base_path($this->agentTargets[$agent]),
-            $selectedAgents
-        );
-        $replaceTargets = $this->existingTargets([
-            base_path(self::UNIVERSAL_SKILL_DIR),
-            ...$selectedPaths,
-        ]);
+        $replaceTargets = $this->existingTargets(array_merge(
+            [base_path(self::UNIVERSAL_SKILL_DIR)],
+            array_map(
+                fn (string $agent): string => base_path($this->agentTargets[$agent]),
+                $selectedAgents
+            )
+        ));
 
-        if ($replaceTargets !== [] && ! $this->option('force')) {
+        if ($replaceTargets !== []) {
             $this->warn('   Existing AI skill install targets will be replaced:');
             foreach ($replaceTargets as $path) {
                 $this->line('   - '.$path);
             }
-
-            if (! $this->confirm('Continue replacing these targets?', false)) {
-                $this->warn('   Setup cancelled.');
-
-                return self::FAILURE;
-            }
+            $this->line('');
         }
 
         $ok = true;
