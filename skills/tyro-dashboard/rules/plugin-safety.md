@@ -8,7 +8,7 @@ Every extension point is a contract. A framework without plugin safety becomes a
 
 ### View Publishing
 - **Granular tags are mandatory.** A plugin that publishes `tyro-dashboard-views-admin` must not be broken because the framework changed the user sidebar. Never collapse tags.
-- **Tag names are public API.** `tyro-dashboard-config`, `tyro-dashboard-views`, `tyro-dashboard-views-admin`, `tyro-dashboard-views-user`, `tyro-dashboard-styles`, `tyro-dashboard-scripts`, `tyro-dashboard-theme`
+- **Tag names are public API.** `tyro-dashboard-config`, `tyro-dashboard-views`, `tyro-dashboard-views-admin`, `tyro-dashboard-views-user`, `tyro-dashboard-sidebar`, `tyro-dashboard-essentials`, `tyro-dashboard-styles`, `tyro-dashboard-scripts`, `tyro-dashboard-theme`
 - **Published views survive updates.** The `tyro-dashboard:update` command touches package-original files only. Published files in `resources/views/vendor/tyro-dashboard/` are never overwritten.
 - **View override precedence is Laravel's standard.** Published views take priority over package views. Do not implement custom view resolution — it breaks consumer expectations.
 

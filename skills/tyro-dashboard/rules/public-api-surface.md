@@ -43,7 +43,7 @@ Every public and protected method, every config key, every route name, every Bla
 - The impersonation key is stored unnamespaced as `impersonator_id` (legacy from before namespacing was introduced) — do not add a `tyro-dashboard.` prefix when adding new session keys; the new convention is flat, package-distinguishing names (e.g. `impersonator_id`, `flash_message`, not `tyro-dashboard.flash_message`)
 
 ### Publishable Asset Tags
-- `tyro-dashboard-config`, `tyro-dashboard-views`, `tyro-dashboard-views-admin`, `tyro-dashboard-views-user`, `tyro-dashboard-styles`, `tyro-dashboard-scripts`, `tyro-dashboard-theme`, `tyro-dashboard` are public API
+- `tyro-dashboard-config`, `tyro-dashboard-views`, `tyro-dashboard-views-admin`, `tyro-dashboard-views-user`, `tyro-dashboard-sidebar`, `tyro-dashboard-essentials`, `tyro-dashboard-styles`, `tyro-dashboard-scripts`, `tyro-dashboard-theme`, `tyro-dashboard` are public API
 - Adding a new tag is safe
 - Renaming or removing a tag is a breaking change — consumer deployment scripts depend on them
 

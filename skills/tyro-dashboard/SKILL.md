@@ -60,6 +60,11 @@ Typical package/framework locations:
 - Traits/concerns: `src/Concerns`, `src/Traits`
 - Controllers/resources: `src/Http`, `src/Resources`
 
+Common publish tags:
+
+- `tyro-dashboard-sidebar`: publishes `partials/admin-sidebar.blade.php` and `partials/user-sidebar.blade.php` only.
+- `tyro-dashboard-essentials`: publishes dashboard shell partials (`admin-bar`, sidebars, `topbar`) plus `resources/views/dashboard`.
+
 ## Recipes
 
 ### Add an app-level admin page

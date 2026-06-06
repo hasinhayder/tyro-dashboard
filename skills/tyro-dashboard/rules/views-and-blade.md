@@ -110,6 +110,8 @@ Changing any of these names breaks every consumer-published layout.
 - `tyro-dashboard-views` — All views
 - `tyro-dashboard-views-admin` — Admin-only views
 - `tyro-dashboard-views-user` — User-facing views
+- `tyro-dashboard-sidebar` — Admin and user sidebar partials only
+- `tyro-dashboard-essentials` — Dashboard shell partials plus the `dashboard` view directory
 - `tyro-dashboard-styles` — `styles.blade.php` and `shadcn-theme.blade.php`
 - `tyro-dashboard-scripts` — `scripts.blade.php`
 - `tyro-dashboard-theme` — `shadcn-theme.blade.php` only

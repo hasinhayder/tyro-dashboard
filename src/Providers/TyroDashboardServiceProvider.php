@@ -355,6 +355,21 @@ class TyroDashboardServiceProvider extends ServiceProvider {
             $viewsPath.'/profile' => resource_path('views/vendor/tyro-dashboard/profile'),
         ], 'tyro-dashboard-views-user');
 
+        // Publish sidebar partials only
+        $this->publishes([
+            $viewsPath.'/partials/admin-sidebar.blade.php' => resource_path('views/vendor/tyro-dashboard/partials/admin-sidebar.blade.php'),
+            $viewsPath.'/partials/user-sidebar.blade.php' => resource_path('views/vendor/tyro-dashboard/partials/user-sidebar.blade.php'),
+        ], 'tyro-dashboard-sidebar');
+
+        // Publish dashboard shell views only
+        $this->publishes([
+            $viewsPath.'/partials/admin-bar.blade.php' => resource_path('views/vendor/tyro-dashboard/partials/admin-bar.blade.php'),
+            $viewsPath.'/partials/admin-sidebar.blade.php' => resource_path('views/vendor/tyro-dashboard/partials/admin-sidebar.blade.php'),
+            $viewsPath.'/partials/topbar.blade.php' => resource_path('views/vendor/tyro-dashboard/partials/topbar.blade.php'),
+            $viewsPath.'/partials/user-sidebar.blade.php' => resource_path('views/vendor/tyro-dashboard/partials/user-sidebar.blade.php'),
+            $viewsPath.'/dashboard' => resource_path('views/vendor/tyro-dashboard/dashboard'),
+        ], 'tyro-dashboard-essentials');
+
         // Publish styles
         $this->publishes([
             $viewsPath.'/partials/shadcn-theme.blade.php' => resource_path('views/vendor/tyro-dashboard/partials/shadcn-theme.blade.php'),

@@ -65,6 +65,7 @@ registerEventListeners()— Event::listen() for Login/Logout
 - `$this->publishes([config => config_path], 'tyro-dashboard-config')` for config
 - `$this->publishes([views => resource_path], 'tyro-dashboard-views')` for all views
 - Granular tags split by audience: `tyro-dashboard-views-admin`, `tyro-dashboard-views-user`
+- Focused view tags: `tyro-dashboard-sidebar` for sidebar partials and `tyro-dashboard-essentials` for dashboard shell partials plus dashboard views
 - Asset tags split by type: `tyro-dashboard-styles`, `tyro-dashboard-scripts`, `tyro-dashboard-theme`
 - Umbrella tag `tyro-dashboard` publishes everything
 

@@ -7,8 +7,10 @@ Extensibility determines whether Tyro Dashboard is a platform or a product. A pl
 ## Extension Mechanisms
 
 ### View Publishing
-- **Granularity is mandatory.** Eight publishable tags: `tyro-dashboard-config`, `tyro-dashboard-views`, `tyro-dashboard-views-admin`, `tyro-dashboard-views-user`, `tyro-dashboard-styles`, `tyro-dashboard-scripts`, `tyro-dashboard-theme`, `tyro-dashboard`
+- **Granularity is mandatory.** Ten publishable tags: `tyro-dashboard-config`, `tyro-dashboard-views`, `tyro-dashboard-views-admin`, `tyro-dashboard-views-user`, `tyro-dashboard-sidebar`, `tyro-dashboard-essentials`, `tyro-dashboard-styles`, `tyro-dashboard-scripts`, `tyro-dashboard-theme`, `tyro-dashboard`
 - A consumer who only wants to change the admin sidebar must not be forced to publish all admin views
+- Use `tyro-dashboard-sidebar` for only admin/user sidebar partials
+- Use `tyro-dashboard-essentials` for dashboard shell partials plus the `dashboard` view directory
 - Tags are registered in `TyroDashboardServiceProvider::registerPublishing()` via `$this->publishes()`
 - Tag names are part of the public API — changing one breaks deployment scripts
 

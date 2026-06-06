@@ -19,7 +19,7 @@ class VersionCommand extends Command {
      * Execute the console command.
      */
     public function handle(): int {
-        $version = '1.35.4'; // AI skill YAML frontmatter quoting fix
+        $version = '1.36.0'; // Added sidebar and essentials publish targets
 
         $this->info('');
         $this->info('  ╔════════════════════════════════════════╗');
@@ -70,6 +70,7 @@ class VersionCommand extends Command {
 }
 
 // Changelog
+// 1.36.0 - Added tyro-dashboard:publish --sidebar and --dashboard options with tyro-dashboard-sidebar and tyro-dashboard-essentials publish tags
 // 1.35.4 - AI skill YAML frontmatter quoting fix
 // 1.35.2 - AI skill setup now installs a universal .agents copy, vendor-specific symlinks by default, --copy physical installs, --force non-interactive replacement, and staged swaps for safer updates
 // 1.35.1 - AI skill fine tuning and new rules

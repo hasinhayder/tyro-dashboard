@@ -17,6 +17,8 @@ class PublishCommand extends Command {
                             {--views : Publish all views}
                             {--user : Publish user views only}
                             {--admin : Publish admin views only}
+                            {--sidebar : Publish sidebar partials only}
+                            {--dashboard : Publish dashboard shell views only}
                             {--config : Publish config only}';
 
     /**
@@ -36,7 +38,7 @@ class PublishCommand extends Command {
         $this->info('');
 
         // If specific flags are provided, process them
-        if ($this->option('all') || $this->option('style') || $this->option('views') || $this->option('user') || $this->option('admin') || $this->option('config')) {
+        if ($this->option('all') || $this->option('style') || $this->option('views') || $this->option('user') || $this->option('admin') || $this->option('sidebar') || $this->option('dashboard') || $this->option('config')) {
             $this->processFlags();
 
             return self::SUCCESS;
@@ -52,6 +54,8 @@ class PublishCommand extends Command {
                 'All views',
                 'Admin views only',
                 'User views only',
+                'Sidebar partials only',
+                'Dashboard shell views only',
                 'Cancel',
             ],
             0
@@ -75,6 +79,12 @@ class PublishCommand extends Command {
                 break;
             case 'User views only':
                 $this->publishTag('tyro-dashboard-views-user', 'User views');
+                break;
+            case 'Sidebar partials only':
+                $this->publishTag('tyro-dashboard-sidebar', 'Sidebar partials');
+                break;
+            case 'Dashboard shell views only':
+                $this->publishTag('tyro-dashboard-essentials', 'Dashboard shell views');
                 break;
             case 'Cancel':
                 $this->info('Operation cancelled.');
@@ -112,6 +122,14 @@ class PublishCommand extends Command {
 
         if ($this->option('user')) {
             $this->publishTag('tyro-dashboard-views-user', 'User views');
+        }
+
+        if ($this->option('sidebar')) {
+            $this->publishTag('tyro-dashboard-sidebar', 'Sidebar partials');
+        }
+
+        if ($this->option('dashboard')) {
+            $this->publishTag('tyro-dashboard-essentials', 'Dashboard shell views');
         }
     }
 
