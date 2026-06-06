@@ -15,7 +15,7 @@ The media system handles user files — the most irreplaceable data in most appl
 
 ### Storage
 - Disk: configurable via `config('tyro-dashboard.uploads.disk')` (default: `public`)
-- Directory: configurable via `config('tyro-dashboard.uploads.directory')` (default: `media`)
+- Directory: configurable via `config('tyro-dashboard.uploads.directory')` (default: `uploads`)
 - Naming: MD5 hash of `uniqid('', true)` + original extension
 - URLs generated via `Storage::disk($disk)->url($path)` — consumer apps handle URL resolution
 

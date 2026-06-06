@@ -9,21 +9,34 @@ Configuration is the face of the framework for non-developers. When an admin set
 `config/tyro-dashboard.php` is the single source of truth for all framework configuration.
 
 ### Structure
-- Every config key gets an `env()` call with a sensible default
-- Boolean config values use actual booleans: `env('KEY', true)` — never string booleans
+- User-facing runtime settings get an `env()` call with a sensible default.
+- Framework constants, fixed arrays, and package extension points may stay hardcoded when they are not intended for `.env` editing, such as `routes.middleware`, `routes.name_prefix`, `admin_roles`, `pagination`, `protected`, `widgets`, `resources`, `profile_photo.allowed_types`, and `profile_photo.auto_delete_on_user_delete`.
+- Boolean env-backed config values use actual booleans or explicit boolean casting when needed: `env('KEY', true)` or `filter_var(env('KEY', false), FILTER_VALIDATE_BOOLEAN)` — never string booleans.
 - Default values are the most common, least surprising choice
 - Config is organized into logical sections: `routes`, `admin_roles`, `user_model`, `pagination`, `branding`, `admin_bar`, `collapsible_sidebar`, `features`, `protected`, `widgets`, `notifications`, `uploads`, `profile_photo`, `resources`, `resource_ui`, `disable_examples`, `media`
 
 ### Notable Config Keys
-- `user_model` — resolves the Eloquent user class; fallback chain: `TYRO_DASHBOARD_USER_MODEL` → `config('tyro.models.user')` → `App\Models\User`
+- `routes.prefix` — configurable URL prefix via `TYRO_DASHBOARD_PREFIX` (default: `dashboard`)
+- `routes.middleware` — fixed package middleware array (`web`, `auth`); change only with public API review
+- `routes.name_prefix` — fixed package default (`tyro-dashboard.`); route generation should still go through `DashboardRoute`
+- `user_model` — config default comes from `TYRO_DASHBOARD_USER_MODEL`, defaulting to `App\Models\User`; `BaseController::getUserModel()` still falls back to `config('tyro.models.user')` for older integrations
 - `pagination.users`, `pagination.roles`, `pagination.privileges` — per-resource pagination limits (default: 15)
+- `branding.app_name` — dashboard app name; default follows `APP_NAME` then `Laravel`
 - `branding.logo` — app logo URL (nullable)
 - `branding.favicon` — favicon URL (nullable)
 - `branding.sidebar_logo` — separate sidebar logo (nullable)
 - `branding.logo_height` — logo height in CSS units (default: `32px`)
+- `branding.sidebar_*` — sidebar color and accordion settings persisted through dashboard env settings
+- `admin_bar.*` — persistent admin notice-bar settings
+- `uploads.disk`, `uploads.directory`, `uploads.auto_delete_on_resource_delete` — resource upload defaults
+- `profile_photo.*` — profile image processing defaults
 - `resource_ui.show_global_errors` — show global validation error banner (default: true)
 - `resource_ui.show_field_errors` — show per-field validation errors (default: true)
 - `notifications.show_flash_messages` — enable/disable flash message display (default: true)
+- `notifications.notification_style` — `legacy` or `toast` (default: `legacy`)
+- `notifications.toast_position` — `top-right` or `bottom-right` (default: `bottom-right`)
+- `media.max_size` — media upload limit in KB (default: `10240`)
+- `media.api_keys.*` — stock image provider API keys for Freepik, Pexels, Unsplash, and Pixabay
 
 ### Adding a Config Key
 1. Add the key to `config/tyro-dashboard.php` with an `env()` default
@@ -31,6 +44,9 @@ Configuration is the face of the framework for non-developers. When an admin set
 3. If boolean, add the key name to `SystemSettingsController::booleanKeys()`
 4. Add a validation rule to `SystemSettingsController::update()`
 5. Add the field to the appropriate settings tab partial in `resources/views/settings/partials/`
+6. Add the key to `SystemSettingsController::gatherSettings()` so the settings UI reads the saved value
+
+If the key is package-only and not exposed in the settings UI, document that choice in the relevant rule file and do not add unused settings-controller plumbing.
 
 ### Removing a Config Key
 1. Deprecate in version 1.N: support both old and new keys
@@ -47,7 +63,7 @@ Configuration is the face of the framework for non-developers. When an admin set
 
 ### Persistence
 - `SystemSettingsController::update()` writes to `.env` via `file_get_contents()` / `file_put_contents()`
-- After writing, `Artisan::call('config:clear')` runs to refresh config cache
+- After writing, `Artisan::call('config:clear')` is attempted to refresh config cache
 - Default values are stripped from `.env` on save — only non-default values persist
 - Boolean values serialize as `"true"` / `"false"` strings in `.env`
 - The `.env` file must be writable by the web server process — this is a deployment consideration documented in installation
@@ -67,6 +83,13 @@ True feature flags live under `config('tyro-dashboard.features.*')`:
 A few boolean toggles are at the top level of the config file, NOT under `features.*`. Do not move them under `features` and do not read them as `config('tyro-dashboard.features.collapsible_sidebar')` — they live at the top level:
 - `config('tyro-dashboard.collapsible_sidebar')` — enable/disable the collapsible sidebar UI (default: `true`)
 - `config('tyro-dashboard.disable_examples')` — hide the "Examples" sidebar section and disable example routes in production (default: `false`)
+
+Other related booleans live in their own sections and should stay there:
+- `config('tyro-dashboard.branding.sidebar_accordion_compact')`
+- `config('tyro-dashboard.admin_bar.enabled')`
+- `config('tyro-dashboard.notifications.show_flash_messages')`
+- `config('tyro-dashboard.uploads.auto_delete_on_resource_delete')`
+- `config('tyro-dashboard.profile_photo.auto_delete_on_user_delete')`
 
 ### Dual Gating
 Every feature flag under `features.*` must gate BOTH the UI visibility AND the route registration. Never gate one without the other:
@@ -98,8 +121,8 @@ Dashboard colors use separate persistence from `.env`:
 
 `SystemSettingsController` provides the web-based `.env` editor:
 
-- `gatherSettings()` reads ~140 config values from `tyro-dashboard`, `tyro`, `tyro-login` namespaces
-- `update()` validates, saves dashboard colors, writes `.env`, clears config cache
+- `gatherSettings()` reads ~160 config values from `tyro-dashboard`, `tyro`, `tyro-login` namespaces
+- `update()` validates, saves dashboard colors, writes `.env`, and attempts to clear config cache
 - Settings view uses vertical tabs with partials per tab in `settings/partials/`
 - Form submission is AJAX with JSON response and toast notifications
 - The settings route is behind `tyro-dashboard.admin` middleware

@@ -19,7 +19,7 @@ The settings system is the bridge between developers (who understand `.env`) and
    - If `null`: remove the line from `.env`
    - If matches hardcoded default: remove from `.env` (keeps file clean)
    - Otherwise: write `KEY="value"` to `.env` (update existing or append)
-5. Run `Artisan::call('config:clear')`
+5. Attempt `Artisan::call('config:clear')`; the save response still succeeds if cache clearing throws
 6. Return JSON response
 
 ### Boolean Handling
@@ -89,4 +89,5 @@ Fields that depend on a parent toggle use JavaScript to show/hide. OTP fields ar
 - This is a deployment consideration — document it
 - If `.env` is not writable, the save fails and an error is returned
 - Never assume `.env` is writable — handle the error gracefully
-- After writing, `config:clear` must succeed or the save must report the failure
+- After writing, `config:clear` is attempted so the new values can be picked up without a manual cache clear
+- The explicit clear-cache endpoint reports `Config cache cleared.` on success and `Config clear skipped.` when Artisan throws

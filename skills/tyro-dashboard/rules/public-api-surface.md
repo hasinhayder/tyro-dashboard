@@ -78,7 +78,7 @@ These exist because the package name was misspelled in the first public release.
 
 Before adding anything to the public API:
 1. Is it a method? Document it with a docblock. Consider `@since` annotation.
-2. Is it a config key? Add it to `config/tyro-dashboard.php` with a default. Add it to `SystemSettingsController::defaultValues()`. Add it to `booleanKeys()` if boolean. Add validation in `update()`.
+2. Is it a config key? Add it to `config/tyro-dashboard.php` with a default. If exposed in settings, add it to `SystemSettingsController::defaultValues()`, add it to `booleanKeys()` if boolean, add validation in `update()`, and add it to `gatherSettings()`.
 3. Is it a route? Add it to `routes/web.php`. Ensure it has a route name.
 4. Is it a Blade directive? Register it in the service provider.
 

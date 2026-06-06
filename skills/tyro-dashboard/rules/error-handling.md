@@ -66,7 +66,8 @@ Service provider registration failures should log, not throw:
 
 ### Settings
 - `.env` file not writable → show clear error: "The .env file is not writable. Check file permissions."
-- `config:clear` fails → log error, show warning: "Settings saved but config cache could not be cleared. Run php artisan config:clear manually."
+- `config:clear` during settings save is best-effort; the current save response still succeeds if Artisan throws.
+- Explicit clear-cache action failure returns a non-fatal "Config clear skipped." JSON message.
 
 ### Stock Photo Import
 - Provider API down → surface: "Unable to search {provider}. Please try another provider or upload directly."

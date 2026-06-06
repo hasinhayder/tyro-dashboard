@@ -109,7 +109,7 @@ Common publish tags:
 3. Keep view section names stable.
 4. Avoid card-in-card layouts; use cards for actual panels/items.
 5. Check mobile wrapping for long labels, paths, and generated values.
-6. Read `rules/views-and-blade.md` and `rules/dashboard-ui.md` for framework UI.
+6. Read `rules/user-experience.md`, `rules/views-and-blade.md`, and `rules/dashboard-ui.md` for framework UI.
 
 ### Change framework package behavior
 
@@ -148,6 +148,7 @@ Load only the rule files needed for the task.
 - `rules/crud-resources.md`: resources, fields, relationships
 - `rules/media-management.md`: uploads, processing, stock photos, media picker
 - `rules/controllers.md`: base controllers, actions, audit safety, redirects
+- `rules/user-experience.md`: admin UX hierarchy, states, forms, tables, responsive behavior, accessibility
 - `rules/dashboard-ui.md`: CSS variables, theming, sidebar, admin bar, notifications
 - `rules/views-and-blade.md`: layouts, sections, partials, components
 - `rules/middleware.md`: admin/auth middleware, impersonation, order
