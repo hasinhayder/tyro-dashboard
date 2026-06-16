@@ -120,6 +120,35 @@
         outline: 2px solid color-mix(in srgb, var(--primary) 70%, white);
         outline-offset: -2px;
     }
+    .media-bulk-check {
+        width: 1.45rem;
+        height: 1.45rem;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 0.4rem;
+        background: color-mix(in srgb, var(--foreground) 72%, transparent);
+        border: 1px solid color-mix(in srgb, var(--background) 45%, transparent);
+        backdrop-filter: blur(8px);
+        flex-shrink: 0;
+    }
+    .media-card-actions > .media-bulk-check {
+        margin-right: auto;
+        background: color-mix(in srgb, var(--muted) 82%, var(--card));
+        border-color: var(--border);
+    }
+    .media-bulk-check input,
+    .media-table-select input {
+        width: 0.95rem;
+        height: 0.95rem;
+        margin: 0;
+        accent-color: var(--destructive);
+        cursor: pointer;
+    }
+    .media-table-select {
+        width: 3rem;
+        text-align: center;
+    }
     .media-card-thumb {
         width: 100%;
         height: 100%;
@@ -910,6 +939,15 @@
     @endphp
     {!! json_encode($dashboardMediaConfig) !!}
 </script>
+<form id="bulk-media-delete-form" action="{{ route($dashboardRoute::name('media.bulk-destroy')) }}" method="POST" style="display:none;">
+    @csrf
+    @method('DELETE')
+    @foreach(request()->except(['_token', '_method', 'selected_ids']) as $key => $value)
+        @if(is_scalar($value))
+            <input type="hidden" name="{{ $key }}" value="{{ $value }}">
+        @endif
+    @endforeach
+</form>
 <div class="page-header">
     <div class="page-header-row">
         </div>
@@ -922,6 +960,9 @@
                     <path stroke-linecap="round" stroke-linejoin="round" d="M12 16.5V9.75m0 0 3 3m-3-3-3 3M6.75 19.5a4.5 4.5 0 0 1-1.41-8.775 5.25 5.25 0 0 1 10.233-2.33 3 3 0 0 1 3.758 3.848A3.752 3.752 0 0 1 18 19.5H6.75Z" />
                 </svg>
                 Import Images
+            </button>
+            <button type="button" class="btn btn-destructive" id="bulk-media-delete-btn" onclick="submitBulkMediaDelete()" style="white-space:nowrap;display:none;">
+                Delete Selected
             </button>
         </div>
     </div>
@@ -944,7 +985,7 @@ function formatBytes(int $bytes): string {
     return round($bytes / 1048576, 1) . ' MB';
 }
 $adminRoles = config('tyro-dashboard.admin_roles', ['admin', 'super-admin']);
-$canDeleteMedia = !empty(array_intersect($adminRoles, auth()->user()?->tyroRoleSlugs() ?? []));
+$canDeleteMedia = !session()->has('impersonator_id') && !empty(array_intersect(array_merge($adminRoles, ['editor']), auth()->user()?->tyroRoleSlugs() ?? []));
 $authUserId = auth()->id();
 @endphp
 
@@ -1081,7 +1122,9 @@ $authUserId = auth()->id();
                     </svg>
                 </div>
                 <div class="media-card-overlay">
-                    <span class="media-card-badge">{{ strtoupper(pathinfo($file->filename, PATHINFO_EXTENSION) ?: strtok($file->mime_type, '/')) }}</span>
+                    <div class="media-card-badges">
+                        <span class="media-card-badge">{{ strtoupper(pathinfo($file->filename, PATHINFO_EXTENSION) ?: strtok($file->mime_type, '/')) }}</span>
+                    </div>
                 </div>
             @endif
         </div>
@@ -1109,6 +1152,11 @@ $authUserId = auth()->id();
             </div>
             @endif
             <div class="media-card-actions">
+                @if($canDeleteMedia || $file->user_id === $authUserId)
+                    <label class="media-bulk-check" title="Select {{ $file->filename }}">
+                        <input type="checkbox" class="media-bulk-checkbox" value="{{ $file->id }}" aria-label="Select {{ $file->filename }}">
+                    </label>
+                @endif
                 <a href="{{ Storage::url($file->url) }}" target="_blank" rel="noopener noreferrer"
                         class="btn btn-secondary"
                         title="View in new tab">
@@ -1174,6 +1222,9 @@ $authUserId = auth()->id();
     <table class="media-table">
         <thead>
             <tr>
+                <th scope="col" class="media-table-select">
+                    <input type="checkbox" id="select-all-media" aria-label="Select all media on this page">
+                </th>
                 <th scope="col">File</th>
                 <th scope="col">Type</th>
                 <th scope="col">Size</th>
@@ -1186,6 +1237,11 @@ $authUserId = auth()->id();
         <tbody>
             @foreach($media as $file)
             <tr id="media-{{ $file->id }}" data-media-entry>
+                <td class="media-table-select">
+                    @if($canDeleteMedia || $file->user_id === $authUserId)
+                        <input type="checkbox" class="media-bulk-checkbox" value="{{ $file->id }}" aria-label="Select {{ $file->filename }}">
+                    @endif
+                </td>
                 <td>
                     <div class="media-table-file">
                         <div class="media-table-thumb" @if($file->is_image) data-lightbox-trigger data-image-src="{{ Storage::url($file->url) }}" data-image-alt="{{ $file->alt_text ?: $file->filename }}" data-image-name="{{ $file->filename }}" data-image-meta="{{ $file->formatted_size }} · {{ strtoupper(pathinfo($file->filename, PATHINFO_EXTENSION)) }}" role="button" tabindex="0" aria-label="Preview {{ $file->alt_text ?: $file->filename }}" title="Preview image" @endif>
@@ -1747,11 +1803,45 @@ $authUserId = auth()->id();
     });
 
     // ── Delete ────────────────────────────────────────────────────────
+    function updateBulkMediaDeleteButtonState() {
+        const checkedCount = document.querySelectorAll('.media-bulk-checkbox:checked').length;
+        const button = document.getElementById('bulk-media-delete-btn');
+        if (button) {
+            button.style.display = checkedCount > 0 ? '' : 'none';
+            button.textContent = checkedCount > 0 ? `Delete Selected (${checkedCount})` : 'Delete Selected';
+        }
+
+        const selectAll = document.getElementById('select-all-media');
+        if (selectAll) {
+            const checkboxes = Array.from(document.querySelectorAll('.media-bulk-checkbox'));
+            selectAll.checked = checkboxes.length > 0 && checkboxes.every((checkbox) => checkbox.checked);
+            selectAll.indeterminate = checkboxes.some((checkbox) => checkbox.checked) && !selectAll.checked;
+        }
+    }
+
+    function submitBulkMediaDelete() {
+        const checked = Array.from(document.querySelectorAll('.media-bulk-checkbox:checked'));
+        if (!checked.length) return;
+
+        showDanger('Delete Selected Media', `Delete ${checked.length} selected media ${checked.length === 1 ? 'file' : 'files'}? This action cannot be undone.`)
+            .then((confirmed) => {
+                if (!confirmed) return;
+
+                const form = document.getElementById('bulk-media-delete-form');
+                form.querySelectorAll('input[name="selected_ids[]"]').forEach((input) => input.remove());
+                checked.forEach((checkbox) => {
+                    const input = document.createElement('input');
+                    input.type = 'hidden';
+                    input.name = 'selected_ids[]';
+                    input.value = checkbox.value;
+                    form.appendChild(input);
+                });
+                form.submit();
+            });
+    }
+
     async function deleteMedia(id, btn) {
-        const confirmed = await showConfirm('Delete File', 'Delete this file? This cannot be undone.', {
-            confirmText: 'Delete',
-            confirmClass: 'btn-destructive',
-        });
+        const confirmed = await showDanger('Delete File', 'Delete this file? This cannot be undone.');
         if (!confirmed) return;
 
         const originalContent = btn.innerHTML;
@@ -1766,7 +1856,10 @@ $authUserId = auth()->id();
             if (entry) {
                 entry.style.transition = 'opacity 0.3s';
                 entry.style.opacity = '0';
-                setTimeout(() => entry.remove(), 300);
+                setTimeout(() => {
+                    entry.remove();
+                    updateBulkMediaDeleteButtonState();
+                }, 300);
             }
         } else {
             btn.disabled = false;
@@ -1885,6 +1978,11 @@ $authUserId = auth()->id();
     }
 
     document.addEventListener('click', (event) => {
+        if (event.target.closest('.media-bulk-check, .media-table-select')) {
+            event.stopPropagation();
+            return;
+        }
+
         const trigger = event.target.closest('[data-lightbox-trigger]');
         if (!trigger) return;
         openMediaLightbox(trigger);
@@ -1896,6 +1994,25 @@ $authUserId = auth()->id();
         if (!trigger) return;
         event.preventDefault();
         openMediaLightbox(trigger);
+    });
+
+    document.addEventListener('DOMContentLoaded', function() {
+        document.querySelectorAll('.media-bulk-checkbox').forEach((checkbox) => {
+            checkbox.addEventListener('click', (event) => event.stopPropagation());
+            checkbox.addEventListener('change', updateBulkMediaDeleteButtonState);
+        });
+
+        const selectAll = document.getElementById('select-all-media');
+        if (selectAll) {
+            selectAll.addEventListener('change', function() {
+                document.querySelectorAll('.media-bulk-checkbox').forEach((checkbox) => {
+                    checkbox.checked = this.checked;
+                });
+                updateBulkMediaDeleteButtonState();
+            });
+        }
+
+        updateBulkMediaDeleteButtonState();
     });
 
     lightbox?.addEventListener('click', (event) => {

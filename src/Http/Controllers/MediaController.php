@@ -4,7 +4,9 @@ namespace HasinHayder\TyroDashboard\Http\Controllers;
 
 use HasinHayder\TyroDashboard\Models\Media;
 use HasinHayder\TyroDashboard\Models\StarredImportImage;
+use HasinHayder\TyroDashboard\Support\DashboardRoute;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Http;
@@ -424,15 +426,56 @@ class MediaController extends BaseController {
 
     public function destroy(Media $media): JsonResponse {
         $user = auth()->user();
-        $isImpersonating = session()->has('impersonator_id');
-        $isEditorOrAbove = ! $isImpersonating && ! empty(array_intersect(
-            ['admin', 'super-admin', 'editor'],
-            $user->tyroRoleSlugs()
-        ));
-        if (! $isEditorOrAbove && $media->user_id !== $user->id) {
+        if (! $this->canDeleteMedia($media, $user)) {
             abort(403, 'You can only delete media you have uploaded.');
         }
 
+        $this->deleteMediaRecord($media);
+        $this->flushMediaCache();
+
+        return response()->json(['success' => true]);
+    }
+
+    public function bulkDestroy(Request $request): RedirectResponse {
+        $validated = $request->validate([
+            'selected_ids' => ['required', 'array', 'min:1'],
+            'selected_ids.*' => ['integer'],
+        ]);
+
+        $user = auth()->user();
+        $query = Media::query()->whereIn('id', $validated['selected_ids']);
+
+        if (! $this->canDeleteAnyMedia($user)) {
+            $query->where('user_id', $user->id);
+        }
+
+        $deletedCount = 0;
+        $query->get()->each(function (Media $media) use (&$deletedCount) {
+            $this->deleteMediaRecord($media);
+            $deletedCount++;
+        });
+
+        if ($deletedCount > 0) {
+            $this->flushMediaCache();
+        }
+
+        return redirect()
+            ->route(DashboardRoute::name('media'), $request->except(['_token', '_method', 'selected_ids']))
+            ->with('success', "Deleted {$deletedCount} media ".($deletedCount === 1 ? 'file' : 'files').'.');
+    }
+
+    private function canDeleteMedia(Media $media, $user): bool {
+        return $this->canDeleteAnyMedia($user) || $media->user_id === $user->id;
+    }
+
+    private function canDeleteAnyMedia($user): bool {
+        return ! session()->has('impersonator_id') && ! empty(array_intersect(
+            ['admin', 'super-admin', 'editor'],
+            $user?->tyroRoleSlugs() ?? []
+        ));
+    }
+
+    private function deleteMediaRecord(Media $media): void {
         Storage::disk($media->disk)->delete($media->path);
         if ($media->webp_path) {
             Storage::disk($media->disk)->delete($media->webp_path);
@@ -441,10 +484,6 @@ class MediaController extends BaseController {
             Storage::disk($media->disk)->delete($media->thumbnail_path);
         }
         $media->delete();
-
-        $this->flushMediaCache();
-
-        return response()->json(['success' => true]);
     }
 
     public function storeStarredImage(Request $request): JsonResponse {
