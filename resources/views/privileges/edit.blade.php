@@ -201,6 +201,12 @@
             <p class="page-description">Update privilege information and role assignments.</p>
         </div>
         <div style="display: flex; gap: 10px;">
+            <a href="{{ route($dashboardRoute::name('privileges.index')) }}" class="btn btn-secondary">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                </svg>
+                Back to Privileges
+            </a>
             <form action="{{ route($dashboardRoute::name('privileges.destroy'), $privilege->id) }}" method="POST" style="display: inline;" id="delete-privilege-edit-form">
                 @csrf
                 @method('DELETE')
@@ -211,12 +217,6 @@
                     Delete Privilege
                 </button>
             </form>
-            <a href="{{ route($dashboardRoute::name('privileges.index')) }}" class="btn btn-secondary">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-                </svg>
-                Back to Privileges
-            </a>
         </div>
     </div>
 </div>

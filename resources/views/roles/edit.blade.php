@@ -201,6 +201,12 @@
             <p class="page-description">Update role information and privileges.</p>
         </div>
         <div style="display: flex; gap: 10px;">
+            <a href="{{ route($dashboardRoute::name('roles.index')) }}" class="btn btn-secondary">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                </svg>
+                Back to Roles
+            </a>
             @if(!in_array($role->slug, $protectedRoles))
             <form action="{{ route($dashboardRoute::name('roles.destroy'), $role->id) }}" method="POST" style="display: inline;" id="delete-role-edit-form">
                 @csrf
@@ -213,12 +219,6 @@
                 </button>
             </form>
             @endif
-            <a href="{{ route($dashboardRoute::name('roles.index')) }}" class="btn btn-secondary">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-                </svg>
-                Back to Roles
-            </a>
         </div>
     </div>
 </div>
