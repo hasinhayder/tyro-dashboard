@@ -189,7 +189,7 @@ class PrivilegeController extends BaseController {
         }
 
         return redirect()
-            ->route(DashboardRoute::name('privileges.index'))
+            ->route(DashboardRoute::name('privileges.edit'), $privilege->id)
             ->with('success', 'Privilege updated successfully.');
     }
 

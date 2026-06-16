@@ -175,7 +175,7 @@ class RoleController extends BaseController {
         }
 
         return redirect()
-            ->route(DashboardRoute::name('roles.index'))
+            ->route(DashboardRoute::name('roles.edit'), $role->id)
             ->with('success', 'Role updated successfully.');
     }
 
