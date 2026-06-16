@@ -15,12 +15,18 @@
             <h1 class="page-title">Users</h1>
             <p class="page-description">Manage user accounts, roles, and permissions.</p>
         </div>
-        <a href="{{ route($dashboardRoute::name('users.create')) }}" class="btn btn-primary">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-            </svg>
-            Add User
-        </a>
+        <div style="display: flex; align-items: center; gap: 0.5rem;">
+            <form action="{{ route($dashboardRoute::name('users.bulk-destroy')) }}" method="POST" id="bulk-delete-form" style="display: inline;">
+                @csrf
+                <button type="button" class="btn btn-destructive" id="bulk-delete-btn" style="display: none;" onclick="event.preventDefault(); submitBulkDelete();">Delete Selected</button>
+            </form>
+            <a href="{{ route($dashboardRoute::name('users.create')) }}" class="btn btn-primary">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                </svg>
+                Add User
+            </a>
+        </div>
     </div>
 </div>
 
@@ -64,45 +70,53 @@
 <!-- Users Table -->
 <div class="card">
     @if($users->count())
-    <div class="table-container">
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>User</th>
-                    <th>Roles</th>
-                    <th>Status</th>
-                    <th>Joined</th>
-                    <th style="text-align: right;">Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach($users as $listUser)
-                <tr>
-                    <td>
-                        <a href="{{ route($dashboardRoute::name('users.edit'), $listUser->id) }}" class="user-cell" style="text-decoration: none;">
-                            <div class="user-cell-avatar" style="{{ ($listUser->profile_photo_path || $listUser->use_gravatar) ? 'background: none; padding: 0;' : '' }}">
-                                @if($listUser->profile_photo_path || ($listUser->use_gravatar && $listUser->email))
-                                    <img src="{{ $listUser->profile_photo_url }}" alt="{{ $listUser->name }}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">
-                                @else
-                                    {{ strtoupper(substr($listUser->name, 0, 1)) }}
-                                @endif
+        <div class="table-container">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th style="width: 42px;">
+                            <input type="checkbox" id="select-all-users">
+                        </th>
+                        <th>User</th>
+                        <th>Roles</th>
+                        <th>Status</th>
+                        <th>Joined</th>
+                        <th style="text-align: right;">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach($users as $listUser)
+                    <tr>
+                        <td>
+                            @if($listUser->id !== $user->id)
+                                <input type="checkbox" class="row-checkbox" name="selected_ids[]" value="{{ $listUser->id }}">
+                            @endif
+                        </td>
+                        <td>
+                            <a href="{{ route($dashboardRoute::name('users.edit'), $listUser->id) }}" class="user-cell" style="text-decoration: none;">
+                                <div class="user-cell-avatar" style="{{ ($listUser->profile_photo_path || $listUser->use_gravatar) ? 'background: none; padding: 0;' : '' }}">
+                                    @if($listUser->profile_photo_path || ($listUser->use_gravatar && $listUser->email))
+                                        <img src="{{ $listUser->profile_photo_url }}" alt="{{ $listUser->name }}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">
+                                    @else
+                                        {{ strtoupper(substr($listUser->name, 0, 1)) }}
+                                    @endif
+                                </div>
+                                <div class="user-cell-info">
+                                    <div class="user-cell-name">{{ $listUser->name }}</div>
+                                    <div class="user-cell-email">{{ $listUser->email }}</div>
+                                </div>
+                            </a>
+                        </td>
+                        <td>
+                            <div class="badge-list">
+                                @forelse($listUser->roles as $role)
+                                    <span class="badge badge-primary">{{ $role->name }}</span>
+                                @empty
+                                    <span class="badge badge-secondary">No roles</span>
+                                @endforelse
                             </div>
-                            <div class="user-cell-info">
-                                <div class="user-cell-name">{{ $listUser->name }}</div>
-                                <div class="user-cell-email">{{ $listUser->email }}</div>
-                            </div>
-                        </a>
-                    </td>
-                    <td>
-                        <div class="badge-list">
-                            @forelse($listUser->roles as $role)
-                                <span class="badge badge-primary">{{ $role->name }}</span>
-                            @empty
-                                <span class="badge badge-secondary">No roles</span>
-                            @endforelse
-                        </div>
-                    </td>
-                    <td>
+                        </td>
+                        <td>
                         @if(method_exists($listUser, 'isSuspended') && $listUser->isSuspended())
                             <span class="badge badge-danger">Suspended</span>
                         @else
@@ -160,7 +174,7 @@
                 @endforeach
             </tbody>
         </table>
-    </div>
+        </div>
 
     @if($users->hasPages())
     <div class="pagination">
@@ -225,13 +239,72 @@
         openModal('suspendModal');
     }
 
-    // Auto-focus search input and move cursor to end if search is present
+    function updateBulkDeleteButtonState() {
+        const checkedCount = document.querySelectorAll('.row-checkbox:checked').length;
+        const bulkDeleteBtn = document.getElementById('bulk-delete-btn');
+        if (bulkDeleteBtn) {
+            bulkDeleteBtn.style.display = checkedCount > 0 ? '' : 'none';
+        }
+    }
+
+    function submitBulkDelete() {
+        const checkedCount = document.querySelectorAll('.row-checkbox:checked').length;
+        if (checkedCount === 0) {
+            return;
+        }
+
+        showDanger('Delete Selected Users', `Are you sure you want to delete ${checkedCount} selected users? This action cannot be undone.`)
+            .then(confirmed => {
+                if (confirmed) {
+                    document.getElementById('bulk-delete-form').submit();
+                }
+            });
+    }
+
     document.addEventListener('DOMContentLoaded', function() {
         const searchInput = document.querySelector('input[name="search"]');
         if (searchInput && searchInput.value) {
             searchInput.focus();
             searchInput.setSelectionRange(searchInput.value.length, searchInput.value.length);
         }
+
+        const selectAll = document.getElementById('select-all-users');
+        const rowCheckboxes = document.querySelectorAll('.row-checkbox');
+        let lastCheckedIndex = -1;
+
+        function syncSelectAll() {
+            const allChecked = rowCheckboxes.length > 0 && Array.from(rowCheckboxes).every((input) => input.checked);
+            if (selectAll) {
+                selectAll.checked = allChecked;
+            }
+            updateBulkDeleteButtonState();
+        }
+
+        if (selectAll) {
+            selectAll.addEventListener('change', function () {
+                rowCheckboxes.forEach((checkbox) => {
+                    checkbox.checked = selectAll.checked;
+                });
+                updateBulkDeleteButtonState();
+            });
+        }
+
+        rowCheckboxes.forEach((checkbox, index) => {
+            checkbox.addEventListener('click', function (e) {
+                if (e.shiftKey && lastCheckedIndex !== -1) {
+                    const start = Math.min(lastCheckedIndex, index);
+                    const end = Math.max(lastCheckedIndex, index);
+                    const isChecked = checkbox.checked;
+                    for (let i = start; i <= end; i++) {
+                        rowCheckboxes[i].checked = isChecked;
+                    }
+                }
+                lastCheckedIndex = index;
+                syncSelectAll();
+            });
+        });
+
+        updateBulkDeleteButtonState();
     });
 </script>
 @endpush

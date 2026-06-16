@@ -91,6 +91,7 @@ Route::prefix('media')->name('media.')->group(function () {
 Route::middleware('tyro-dashboard.admin')->group(function () {
     // User Management
     Route::prefix('users')->name('users.')->group(function () {
+        Route::post('/bulk-delete', [UserController::class, 'bulkDestroy'])->name('bulk-destroy');
         Route::get('/', [UserController::class, 'index'])->name('index');
         Route::get('/create', [UserController::class, 'create'])->name('create');
         Route::post('/', [UserController::class, 'store'])->name('store');

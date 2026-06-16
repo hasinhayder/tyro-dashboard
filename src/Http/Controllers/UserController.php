@@ -6,6 +6,7 @@ use HasinHayder\Tyro\Models\Role;
 use HasinHayder\Tyro\Support\PasswordRules;
 use HasinHayder\Tyro\Support\TyroAudit;
 use HasinHayder\TyroDashboard\Support\DashboardRoute;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Hash;
@@ -230,6 +231,34 @@ class UserController extends BaseController {
         return redirect()
             ->route(DashboardRoute::name('users.index'))
             ->with('success', 'User deleted successfully.');
+    }
+
+    /**
+     * Remove selected users in bulk.
+     */
+    public function bulkDestroy(Request $request): RedirectResponse {
+        $validated = $request->validate([
+            'selected_ids' => ['required', 'array', 'min:1'],
+            'selected_ids.*' => ['integer'],
+        ]);
+
+        $userModel = $this->getUserModel();
+        $currentUserId = auth()->id();
+        $protectedUsers = config('tyro-dashboard.protected.users', []);
+
+        $query = $userModel::query()->whereIn('id', $validated['selected_ids']);
+
+        // Exclude current user and protected users
+        $query->where('id', '!=', $currentUserId);
+        if (! empty($protectedUsers)) {
+            $query->whereNotIn('id', $protectedUsers);
+        }
+
+        $deletedCount = $query->delete();
+
+        return redirect()
+            ->route(DashboardRoute::name('users.index'))
+            ->with('success', "Deleted {$deletedCount} users.");
     }
 
     /**
