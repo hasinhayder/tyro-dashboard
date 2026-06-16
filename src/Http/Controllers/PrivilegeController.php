@@ -39,7 +39,10 @@ class PrivilegeController extends BaseController {
      * Show the form for creating a new privilege.
      */
     public function create() {
-        $roles = Role::all();
+        $roles = Role::query()
+            ->orderBy('slug')
+            ->orderBy('name')
+            ->get();
 
         return view('tyro-dashboard::privileges.create', $this->getViewData([
             'roles' => $roles,
@@ -107,7 +110,10 @@ class PrivilegeController extends BaseController {
      */
     public function edit($id) {
         $privilege = Privilege::with('roles')->findOrFail($id);
-        $roles = Role::all();
+        $roles = Role::query()
+            ->orderBy('slug')
+            ->orderBy('name')
+            ->get();
 
         return view('tyro-dashboard::privileges.edit', $this->getViewData([
             'privilege' => $privilege,

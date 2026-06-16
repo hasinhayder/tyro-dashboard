@@ -2,6 +2,189 @@
 
 @section('title', 'Edit Privilege')
 
+@push('styles')
+<style>
+    .role-assignment-table-wrap {
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        overflow-x: auto;
+        background: var(--card);
+    }
+
+    .role-assignment-table {
+        width: 100%;
+        min-width: 640px;
+        border-collapse: collapse;
+    }
+
+    .role-assignment-table th,
+    .role-assignment-table td {
+        padding: 1.125rem 1rem;
+        border-bottom: 1px solid var(--border);
+        text-align: left;
+        vertical-align: middle;
+    }
+
+    .role-assignment-table th {
+        color: var(--muted-foreground);
+        font-size: 0.75rem;
+        font-weight: 600;
+        letter-spacing: 0;
+        text-transform: uppercase;
+        background: var(--muted);
+    }
+
+    .role-assignment-table tbody tr:last-child td {
+        border-bottom: 0;
+    }
+
+    .role-assignment-table tbody tr:hover {
+        background: var(--accent);
+    }
+
+    .role-assignment-table tbody tr:has(.role-assignment-check:checked) {
+        background: color-mix(in srgb, var(--primary) 10%, transparent);
+    }
+
+    .role-assignment-select-cell {
+        width: 3.25rem;
+        text-align: center;
+        padding-right: 0.25rem;
+    }
+
+    .role-assignment-toggle {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--foreground);
+        font-size: 0.875rem;
+        font-weight: 500;
+        cursor: pointer;
+        user-select: none;
+    }
+
+    .role-assignment-check {
+        width: 1rem;
+        height: 1rem;
+        margin: 0;
+        accent-color: var(--primary);
+    }
+
+    .role-assignment-name {
+        font-weight: 600;
+        color: var(--foreground);
+    }
+
+    .role-assignment-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+        margin-bottom: 0.875rem;
+    }
+
+    .role-assignment-section {
+        margin-top: 1rem;
+    }
+
+    .role-assignment-header .form-label {
+        margin-bottom: 0;
+    }
+
+    .role-assignment-search {
+        width: min(100%, 22rem);
+    }
+
+    .role-assignment-slug {
+        display: inline-block;
+        max-width: 100%;
+        padding: 0.2rem 0.45rem;
+        border-radius: calc(var(--radius) - 2px);
+        background: var(--muted);
+        color: var(--muted-foreground);
+        font-size: 0.8125rem;
+        overflow-wrap: anywhere;
+    }
+
+    .role-assignment-sr-only {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+        border: 0;
+    }
+
+    .role-assignment-empty-row[hidden],
+    .role-assignment-row[hidden] {
+        display: none;
+    }
+
+    .role-assignment-empty-cell {
+        color: var(--muted-foreground);
+        text-align: center;
+    }
+
+    @media (max-width: 720px) {
+        .role-assignment-table {
+            min-width: 0;
+        }
+
+        .role-assignment-header {
+            align-items: stretch;
+            flex-direction: column;
+            gap: 0.625rem;
+        }
+
+        .role-assignment-search {
+            width: 100%;
+        }
+
+        .role-assignment-table thead {
+            display: none;
+        }
+
+        .role-assignment-table,
+        .role-assignment-table tbody,
+        .role-assignment-table tr,
+        .role-assignment-table td {
+            display: block;
+            width: 100%;
+        }
+
+        .role-assignment-table tr {
+            border-bottom: 1px solid var(--border);
+        }
+
+        .role-assignment-table tbody tr:last-child {
+            border-bottom: 0;
+        }
+
+        .role-assignment-table td {
+            border-bottom: 0;
+            padding: 0.9rem 1.15rem;
+        }
+
+        .role-assignment-select-cell {
+            width: 100%;
+            padding-bottom: 0.25rem;
+        }
+
+        .role-assignment-name-cell {
+            padding-top: 0.25rem;
+            padding-bottom: 0.35rem;
+        }
+
+        .role-assignment-slug-cell {
+            padding-top: 0.35rem;
+        }
+    }
+</style>
+@endpush
+
 @section('breadcrumb')
 <a href="{{ route($dashboardRoute::name('index')) }}">Dashboard</a>
 <span class="breadcrumb-separator">/</span>
@@ -38,10 +221,10 @@
     </div>
 </div>
 
-<div class="card">
-    <form action="{{ route($dashboardRoute::name('privileges.update'), $privilege->id) }}" method="POST">
-        @csrf
-        @method('PUT')
+<form action="{{ route($dashboardRoute::name('privileges.update'), $privilege->id) }}" method="POST">
+    @csrf
+    @method('PUT')
+    <div class="card">
         <div class="card-body">
             <div class="form-row">
                 <div class="form-group">
@@ -71,22 +254,55 @@
                     <span class="form-error">{{ $message }}</span>
                 @enderror
             </div>
+        </div>
+    </div>
 
+    <div class="card role-assignment-section">
+        <div class="card-body">
             <div class="form-group">
-                <label class="form-label">Assign to Roles</label>
                 @if($roles->count())
-                <div class="checkbox-list">
-                    @foreach($roles as $role)
-                    <label class="checkbox-item">
-                        <input type="checkbox" name="roles[]" value="{{ $role->id }}" class="checkbox-input" {{ in_array($role->id, old('roles', $privilege->roles->pluck('id')->toArray())) ? 'checked' : '' }}>
-                        <div class="checkbox-item-content">
-                            <div class="checkbox-item-title">{{ $role->name }}</div>
-                            <div class="checkbox-item-description">{{ $role->slug }}</div>
-                        </div>
-                    </label>
-                    @endforeach
+                @php
+                    $selectedRoles = old('roles', $privilege->roles->pluck('id')->toArray());
+                    $selectedRoles = array_map('intval', $selectedRoles);
+                @endphp
+                <div class="role-assignment-header">
+                    <label class="form-label">Assign to Roles</label>
+                    <label for="roleAssignmentSearch" class="role-assignment-sr-only">Search roles</label>
+                    <input type="search" id="roleAssignmentSearch" class="form-input role-assignment-search" placeholder="Search roles..." autocomplete="off" data-assignment-search data-target-table="roleAssignmentTable">
+                </div>
+                <div class="role-assignment-table-wrap">
+                    <table class="role-assignment-table" id="roleAssignmentTable">
+                        <thead>
+                            <tr>
+                                <th scope="col"><span class="role-assignment-sr-only">Assigned</span></th>
+                                <th scope="col">Role</th>
+                                <th scope="col">Slug</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach($roles as $role)
+                            <tr class="role-assignment-row" data-search-text="{{ strtolower($role->name.' '.$role->slug) }}">
+                                <td class="role-assignment-select-cell">
+                                    <label class="role-assignment-toggle">
+                                        <input type="checkbox" name="roles[]" value="{{ $role->id }}" class="role-assignment-check" aria-label="Assign to {{ $role->name }} role" {{ in_array((int) $role->id, $selectedRoles, true) ? 'checked' : '' }}>
+                                    </label>
+                                </td>
+                                <td class="role-assignment-name-cell">
+                                    <div class="role-assignment-name">{{ $role->name }}</div>
+                                </td>
+                                <td class="role-assignment-slug-cell">
+                                    <code class="role-assignment-slug">{{ $role->slug }}</code>
+                                </td>
+                            </tr>
+                            @endforeach
+                            <tr class="role-assignment-empty-row" hidden>
+                                <td colspan="3" class="role-assignment-empty-cell">No roles match your search.</td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
                 @else
+                <label class="form-label">Assign to Roles</label>
                 <div class="alert alert-info">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -105,6 +321,37 @@
             <button type="submit" class="btn btn-primary">Save Changes</button>
             <a href="{{ route($dashboardRoute::name('privileges.index')) }}" class="btn btn-secondary">Cancel</a>
         </div>
-    </form>
-</div>
+    </div>
+</form>
 @endsection
+
+@push('scripts')
+<script>
+    document.querySelectorAll('[data-assignment-search]').forEach((input) => {
+        const table = document.getElementById(input.dataset.targetTable);
+        if (! table) {
+            return;
+        }
+
+        const rows = Array.from(table.querySelectorAll('tbody tr[data-search-text]'));
+        const emptyRow = table.querySelector('tbody tr:not([data-search-text])');
+
+        input.addEventListener('input', () => {
+            const query = input.value.trim().toLowerCase();
+            let visibleCount = 0;
+
+            rows.forEach((row) => {
+                const visible = row.dataset.searchText.includes(query);
+                row.hidden = ! visible;
+                if (visible) {
+                    visibleCount++;
+                }
+            });
+
+            if (emptyRow) {
+                emptyRow.hidden = visibleCount > 0;
+            }
+        });
+    });
+</script>
+@endpush

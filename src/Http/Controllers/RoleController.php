@@ -41,7 +41,10 @@ class RoleController extends BaseController {
      * Show the form for creating a new role.
      */
     public function create() {
-        $privileges = Privilege::all();
+        $privileges = Privilege::query()
+            ->orderBy('slug')
+            ->orderBy('name')
+            ->get();
 
         return view('tyro-dashboard::roles.create', $this->getViewData([
             'privileges' => $privileges,
@@ -104,7 +107,10 @@ class RoleController extends BaseController {
      */
     public function edit($id) {
         $role = Role::with('privileges')->findOrFail($id);
-        $privileges = Privilege::all();
+        $privileges = Privilege::query()
+            ->orderBy('slug')
+            ->orderBy('name')
+            ->get();
         $protectedRoles = config('tyro-dashboard.protected.roles', []);
 
         return view('tyro-dashboard::roles.edit', $this->getViewData([
