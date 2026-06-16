@@ -248,15 +248,24 @@
     }
 
     function submitBulkDelete() {
-        const checkedCount = document.querySelectorAll('.row-checkbox:checked').length;
-        if (checkedCount === 0) {
+        const checked = document.querySelectorAll('.row-checkbox:checked');
+        if (checked.length === 0) {
             return;
         }
 
-        showDanger('Delete Selected Users', `Are you sure you want to delete ${checkedCount} selected users? This action cannot be undone.`)
+        showDanger('Delete Selected Users', `Are you sure you want to delete ${checked.length} selected users? This action cannot be undone.`)
             .then(confirmed => {
                 if (confirmed) {
-                    document.getElementById('bulk-delete-form').submit();
+                    const form = document.getElementById('bulk-delete-form');
+                    form.querySelectorAll('input[name="selected_ids[]"]').forEach(el => el.remove());
+                    checked.forEach(cb => {
+                        const input = document.createElement('input');
+                        input.type = 'hidden';
+                        input.name = 'selected_ids[]';
+                        input.value = cb.value;
+                        form.appendChild(input);
+                    });
+                    form.submit();
                 }
             });
     }
