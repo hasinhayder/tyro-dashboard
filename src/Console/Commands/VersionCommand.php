@@ -19,7 +19,7 @@ class VersionCommand extends Command {
      * Execute the console command.
      */
     public function handle(): int {
-        $version = '1.37.0'; // Role and privilege editor UX improvements
+        $version = '1.38.0'; // Bulk delete for users
 
         $this->info('');
         $this->info('  ╔════════════════════════════════════════╗');
@@ -70,6 +70,7 @@ class VersionCommand extends Command {
 }
 
 // Changelog
+// 1.38.0 - Bulk delete for users with select-all and individual checkbox selection
 // 1.37.0 - Improved role and privilege editors with sorted assignments, searchable assignment tables, clearer section layout, consistent header actions, and same-page redirects after updates
 // 1.36.2 - AI skill rule updates for UI/UX guidance, shadcn theming discipline, and current configuration documentation
 // 1.36.1 - AI skill setup now always refreshes existing target directories with the latest package skill files
