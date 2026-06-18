@@ -40,7 +40,8 @@
         justify-content: flex-end;
     }
     .cp-actions .action-btn.action-btn-danger { color: var(--destructive, #ef4444) !important; }
-    .cp-actions .action-btn.action-btn-primary { color: var(--primary, #2563eb) !important; }
+    .cp-actions .action-btn.action-btn-primary { color: #16a34a !important; }
+    .cp-actions .action-btn.action-btn-primary:hover { background-color: rgba(22, 163, 74, 0.12) !important; }
     .cp-actions .action-btn.action-btn-success { color: var(--success, #22c55e) !important; cursor: default; }
     .cp-actions .action-btn.action-btn-danger svg,
     .cp-actions .action-btn.action-btn-primary svg,
@@ -272,6 +273,10 @@
                     .then(function (ok) { if (ok) handle(post(routes.restore, { identifier: identifier }), 'Checkpoint restored.', btn); });
                 break;
             case 'delete':
+                if (btn.getAttribute('data-cp-locked') === '1') {
+                    showToast('The checkpoint is locked, so it cannot be deleted. Please unlock it first.', 'error');
+                    return;
+                }
                 showDanger('Delete Checkpoint', 'Permanently delete "' + name + '"? This cannot be undone.', { confirmText: 'Delete' })
                     .then(function (ok) { if (ok) handle(post(routes.delete, { identifier: identifier }), 'Checkpoint deleted.', btn); });
                 break;

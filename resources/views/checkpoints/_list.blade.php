@@ -74,7 +74,7 @@
                                         <path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
                                     </svg>
                                 </button>
-                                <button type="button" class="action-btn action-btn-danger" title="{{ $cp['locked'] ? 'Locked — unlock first' : 'Delete' }}" data-cp-action="delete" data-cp-id="{{ $identifier }}" data-cp-name="{{ $name }}" @if($cp['locked']) disabled @endif>
+                                <button type="button" class="action-btn action-btn-danger" title="{{ $cp['locked'] ? 'Locked — unlock first' : 'Delete' }}" data-cp-action="delete" data-cp-id="{{ $identifier }}" data-cp-name="{{ $name }}" data-cp-locked="{{ $cp['locked'] ? '1' : '0' }}">
                                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                         <path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
                                     </svg>

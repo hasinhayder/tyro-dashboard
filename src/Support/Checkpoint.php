@@ -2,9 +2,10 @@
 
 namespace HasinHayder\TyroDashboard\Support;
 
+use HasinHayder\TyroCheckpoint\Exceptions\CheckpointException;
+use HasinHayder\TyroCheckpoint\Services\CheckpointService;
 use HasinHayder\TyroCheckpoint\TyroCheckpointServiceProvider;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Artisan;
 
 /**
  * Bridge to the optional "hasinhayder/tyro-checkpoint" development package.
@@ -12,8 +13,9 @@ use Illuminate\Support\Facades\Artisan;
  * Tyro Checkpoint is local-dev only and stores its metadata in
  * storage/tyro-checkpoints/checkpoints.json. This class reads that file
  * directly for listing/checkpoint metadata and delegates all database-touching
- * operations (create, restore, delete, encrypt, flush) to the package's Artisan
- * commands so the snapshot files are always handled by the package itself.
+ * operations (create, restore, delete, encrypt, flush) to the package's
+ * CheckpointService so they work during HTTP requests (the package only
+ * registers its Artisan commands in console context).
  */
 class Checkpoint {
     /**
@@ -21,6 +23,22 @@ class Checkpoint {
      */
     public function isAvailable(): bool {
         return class_exists(TyroCheckpointServiceProvider::class);
+    }
+
+    /**
+     * Resolve the package's CheckpointService (bound unconditionally by the
+     * package provider, so it works in HTTP requests unlike its Artisan commands).
+     */
+    protected function service(): ?CheckpointService {
+        if (! class_exists(CheckpointService::class)) {
+            return null;
+        }
+
+        try {
+            return app(CheckpointService::class);
+        } catch (\Throwable $e) {
+            return null;
+        }
     }
 
     /**
@@ -60,43 +78,88 @@ class Checkpoint {
     }
 
     /**
-     * Create a new checkpoint via the Artisan command.
-     * Returns the command exit code.
+     * Create a new checkpoint via the package service.
+     * Returns 0 on success, non-zero on failure.
      */
     public function create(?string $name, ?string $note = null, bool $encrypt = false): int {
-        $params = ['--silent' => true];
-        if (filled($name)) {
-            $params['name'] = $this->sanitizeName($name);
-        }
-        if (filled($note)) {
-            $params['--note'] = $note;
-        }
-        if ($encrypt) {
-            $params['--encrypt'] = true;
+        $service = $this->service();
+        if (! $service) {
+            return 1;
         }
 
-        return Artisan::call('tyro-checkpoint:create', $params);
+        try {
+            $cleanName = filled($name) ? $this->sanitizeName($name) : null;
+            $service->create($cleanName, filled($note) ? $note : null, $encrypt);
+
+            return 0;
+        } catch (\Throwable $e) {
+            return 1;
+        }
     }
 
     /**
-     * Restore a checkpoint via the Artisan command.
+     * Restore a checkpoint via the package service.
      */
     public function restore(string $idOrName): int {
-        return Artisan::call('tyro-checkpoint:restore', ['identifier' => $idOrName, '--force' => true]);
+        $service = $this->service();
+        if (! $service) {
+            return 1;
+        }
+
+        try {
+            $service->restore($idOrName, true);
+
+            return 0;
+        } catch (\Throwable $e) {
+            return 1;
+        }
     }
 
     /**
-     * Delete a checkpoint via the Artisan command.
+     * Delete a checkpoint via the package service.
      */
     public function delete(string $idOrName): int {
-        return Artisan::call('tyro-checkpoint:delete', ['identifier' => $idOrName]);
+        $service = $this->service();
+        if (! $service) {
+            return 1;
+        }
+
+        try {
+            $service->delete($idOrName);
+
+            return 0;
+        } catch (CheckpointException $e) {
+            return 1;
+        } catch (\Throwable $e) {
+            return 1;
+        }
     }
 
     /**
-     * Delete all unlocked checkpoints via the Artisan command.
+     * Delete all unlocked checkpoints via the package service.
+     * Locked checkpoints are preserved.
      */
     public function flush(): int {
-        return Artisan::call('tyro-checkpoint:flush', ['--force' => true]);
+        $service = $this->service();
+        if (! $service) {
+            return 1;
+        }
+
+        $failed = 0;
+        foreach ($this->all() as $cp) {
+            if (! empty($cp['locked'])) {
+                continue;
+            }
+
+            $identifier = (string) $cp['id'] !== '0' ? (string) $cp['id'] : $cp['name'];
+            try {
+                $service->delete($identifier);
+            } catch (\Throwable $e) {
+                $failed++;
+            }
+        }
+
+        return $failed === 0 ? 0 : 1;
     }
 
     /**
@@ -165,10 +228,21 @@ class Checkpoint {
     }
 
     /**
-     * Encrypt an existing checkpoint in place via the Artisan command.
+     * Encrypt an existing checkpoint in place via the package service.
      */
     public function encrypt(string $idOrName): int {
-        return Artisan::call('tyro-checkpoint:encrypt', ['identifier' => $idOrName]);
+        $service = $this->service();
+        if (! $service) {
+            return 1;
+        }
+
+        try {
+            $service->encrypt($idOrName);
+
+            return 0;
+        } catch (\Throwable $e) {
+            return 1;
+        }
     }
 
     /**
