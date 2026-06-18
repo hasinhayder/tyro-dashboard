@@ -54,6 +54,12 @@
                     </svg>
                     My Profile
                 </a>
+                <a href="{{ config('app.url') }}" target="_blank" rel="noopener noreferrer" class="dropdown-item">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                    </svg>
+                    Frontend
+                </a>
                 <div class="dropdown-divider"></div>
                 @if(session('impersonator_id'))
                     <form action="{{ route($dashboardRoute::name('leave-impersonation')) }}" method="POST" style="margin: 0;">
