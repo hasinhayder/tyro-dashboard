@@ -1,6 +1,7 @@
 <?php
 
 use HasinHayder\TyroDashboard\Http\Controllers\AuditController;
+use HasinHayder\TyroDashboard\Http\Controllers\CheckpointController;
 use HasinHayder\TyroDashboard\Http\Controllers\ComponentsController;
 use HasinHayder\TyroDashboard\Http\Controllers\DashboardController;
 use HasinHayder\TyroDashboard\Http\Controllers\InvitationController;
@@ -158,6 +159,21 @@ Route::middleware('tyro-dashboard.admin')->group(function () {
             Route::get('/', [SystemSettingsController::class, 'index'])->name('index');
             Route::post('/update', [SystemSettingsController::class, 'update'])->name('update');
             Route::post('/clear-config-cache', [SystemSettingsController::class, 'clearConfigCache'])->name('clear-config-cache');
+        });
+    }
+
+    // Checkpoints (Admin) - visual manager for hasinhayder/tyro-checkpoint
+    if (config('tyro-dashboard.features.checkpoints', true) && class_exists(\HasinHayder\TyroCheckpoint\TyroCheckpointServiceProvider::class)) {
+        Route::prefix('checkpoints')->name('checkpoints.')->group(function () {
+            Route::get('/', [CheckpointController::class, 'index'])->name('index');
+            Route::post('/', [CheckpointController::class, 'create'])->name('create');
+            Route::post('/restore', [CheckpointController::class, 'restore'])->name('restore');
+            Route::post('/delete', [CheckpointController::class, 'delete'])->name('delete');
+            Route::post('/flush', [CheckpointController::class, 'flush'])->name('flush');
+            Route::post('/note', [CheckpointController::class, 'note'])->name('note');
+            Route::post('/toggle-lock', [CheckpointController::class, 'toggleLock'])->name('toggle-lock');
+            Route::post('/toggle-flag', [CheckpointController::class, 'toggleFlag'])->name('toggle-flag');
+            Route::post('/encrypt', [CheckpointController::class, 'encrypt'])->name('encrypt');
         });
     }
 });

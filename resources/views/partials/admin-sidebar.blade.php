@@ -148,6 +148,15 @@
             </a>
             @endif
 
+            @if(config('tyro-dashboard.features.checkpoints', true) && class_exists(\HasinHayder\TyroCheckpoint\TyroCheckpointServiceProvider::class))
+            <a href="{{ route($dashboardRoute::name('checkpoints.index')) }}" class="sidebar-link {{ request()->routeIs($dashboardRoute::pattern('checkpoints.*')) ? 'active' : '' }}">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4" />
+                </svg>
+                Checkpoints
+            </a>
+            @endif
+
             @if(!empty($adminMenuItems))
                 @foreach($adminMenuItems as $item)
                     <a href="{{ route($item['route'] ?? '#') }}" class="sidebar-link {{ request()->routeIs($item['route'] ?? '') ? 'active' : '' }}">

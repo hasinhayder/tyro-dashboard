@@ -33,6 +33,8 @@ use Illuminate\Support\ServiceProvider;
 class TyroDashboardServiceProvider extends ServiceProvider {
     public function register(): void {
         $this->mergeConfigFrom(__DIR__.'/../../config/tyro-dashboard.php', 'tyro-dashboard');
+
+        $this->app->singleton(\HasinHayder\TyroDashboard\Support\Checkpoint::class);
     }
 
     public function boot(): void {
@@ -338,6 +340,7 @@ class TyroDashboardServiceProvider extends ServiceProvider {
             $viewsPath.'/users' => resource_path('views/vendor/tyro-dashboard/users'),
             $viewsPath.'/roles' => resource_path('views/vendor/tyro-dashboard/roles'),
             $viewsPath.'/privileges' => resource_path('views/vendor/tyro-dashboard/privileges'),
+            $viewsPath.'/checkpoints' => resource_path('views/vendor/tyro-dashboard/checkpoints'),
         ], 'tyro-dashboard-views-admin');
 
         // Publish user views only (user layout, user sidebar, user dashboard, profile)
