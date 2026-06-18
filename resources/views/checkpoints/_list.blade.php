@@ -16,7 +16,6 @@
                     <th>Note</th>
                     <th>Created</th>
                     <th>Size</th>
-                    <th>Status</th>
                     <th style="text-align: right;">Actions</th>
                 </tr>
             </thead>
@@ -49,48 +48,27 @@
                         <td>{{ \Illuminate\Support\Carbon::parse($cp['created_at'])->format('Y-m-d H:i:s') }}</td>
                         <td>{{ $cp['size_for_humans'] }}</td>
                         <td>
-                            <div class="badge-list">
-                                @if($cp['locked'])
-                                    <span class="badge badge-primary" title="Protected from flush/delete">Locked</span>
-                                @endif
-                                @if($cp['encrypted'])
-                                    <span class="badge badge-success" title="Encrypted at rest">Encrypted</span>
-                                @endif
-                                @if($cp['flagged'])
-                                    <span class="badge badge-warning" title="Flagged for attention">Flagged</span>
-                                @endif
-                            </div>
-                        </td>
-                        <td>
                             <div class="cp-actions action-buttons">
+                                <button type="button" class="action-btn @if($cp['encrypted']) action-btn-success @endif" title="{{ $cp['encrypted'] ? 'Encrypted' : 'Encrypt in place' }}" data-cp-action="{{ $cp['encrypted'] ? '' : 'encrypt' }}" data-cp-id="{{ $identifier }}" data-cp-name="{{ $name }}" @if($cp['encrypted']) disabled @endif>
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"/>
+                                    </svg>
+                                </button>
                                 <button type="button" class="action-btn" title="Edit note" data-cp-action="edit-note" data-cp-id="{{ $identifier }}" data-cp-name="{{ $name }}" data-cp-note="{{ $cp['note'] ?? '' }}">
                                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                         <path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
                                     </svg>
                                 </button>
-                                <button type="button" class="action-btn" title="{{ $cp['flagged'] ? 'Remove flag' : 'Flag for attention' }}" data-cp-action="toggle-flag" data-cp-id="{{ $identifier }}" data-cp-name="{{ $name }}">
+                                <button type="button" class="action-btn @if($cp['flagged']) action-btn-danger @endif" title="{{ $cp['flagged'] ? 'Remove flag' : 'Flag for attention' }}" data-cp-action="toggle-flag" data-cp-id="{{ $identifier }}" data-cp-name="{{ $name }}">
                                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                         <path stroke-linecap="round" stroke-linejoin="round" d="M3 21v-4m0 0V5a2 2 0 012-2h6.5l1 1H21l-3 6 3 6h-8.5l-1-1H5a2 2 0 00-2 2z"/>
                                     </svg>
                                 </button>
-                                <button type="button" class="action-btn" title="{{ $cp['locked'] ? 'Unlock' : 'Lock (prevent deletion)' }}" data-cp-action="toggle-lock" data-cp-id="{{ $identifier }}" data-cp-name="{{ $name }}">
-                                    @if($cp['locked'])
-                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M8 11V7a4 4 0 118 0m-4 8v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2z"/>
-                                        </svg>
-                                    @else
-                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M8 11V7a4 4 0 118 0M6 11h12a2 2 0 012 2v7a2 2 0 01-2 2H6a2 2 0 01-2-2v-7a2 2 0 012-2z"/>
-                                        </svg>
-                                    @endif
+                                <button type="button" class="action-btn @if($cp['locked']) action-btn-primary @endif" title="{{ $cp['locked'] ? 'Unlock' : 'Lock (prevent deletion)' }}" data-cp-action="toggle-lock" data-cp-id="{{ $identifier }}" data-cp-name="{{ $name }}">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+                                    </svg>
                                 </button>
-                                @if(! $cp['encrypted'])
-                                    <button type="button" class="action-btn" title="Encrypt in place" data-cp-action="encrypt" data-cp-id="{{ $identifier }}" data-cp-name="{{ $name }}">
-                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
-                                        </svg>
-                                    </button>
-                                @endif
                                 <button type="button" class="action-btn" title="Restore" data-cp-action="restore" data-cp-id="{{ $identifier }}" data-cp-name="{{ $name }}">
                                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                         <path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>

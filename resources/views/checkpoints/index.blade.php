@@ -39,6 +39,12 @@
         display: flex;
         justify-content: flex-end;
     }
+    .cp-actions .action-btn.action-btn-danger { color: var(--destructive, #ef4444) !important; }
+    .cp-actions .action-btn.action-btn-primary { color: var(--primary, #2563eb) !important; }
+    .cp-actions .action-btn.action-btn-success { color: var(--success, #22c55e) !important; cursor: default; }
+    .cp-actions .action-btn.action-btn-danger svg,
+    .cp-actions .action-btn.action-btn-primary svg,
+    .cp-actions .action-btn.action-btn-success svg { stroke: currentColor !important; }
 </style>
 @endpush
 

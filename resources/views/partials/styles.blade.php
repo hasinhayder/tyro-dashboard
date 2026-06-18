@@ -1640,9 +1640,32 @@
         color: var(--foreground);
     }
 
-    .action-btn-danger:hover {
+    .action-btn.action-btn-danger {
+        color: var(--destructive) !important;
+    }
+
+    .action-btn.action-btn-danger:hover {
         background-color: color-mix(in srgb, var(--destructive), transparent 90%);
-        color: var(--destructive);
+        color: var(--destructive) !important;
+    }
+
+    .action-btn.action-btn-primary {
+        color: var(--primary) !important;
+    }
+
+    .action-btn.action-btn-primary:hover {
+        background-color: color-mix(in srgb, var(--primary), transparent 90%);
+        color: var(--primary) !important;
+    }
+
+    .action-btn.action-btn-success {
+        color: var(--success) !important;
+        cursor: default;
+    }
+
+    .action-btn.action-btn-success:hover {
+        background-color: transparent;
+        color: var(--success) !important;
     }
 
     .action-btn svg {
