@@ -13,6 +13,7 @@
             <thead>
                 <tr>
                     <th>Checkpoint</th>
+                    <th>Driver</th>
                     <th>Note</th>
                     <th>Created</th>
                     <th>Size</th>
@@ -35,10 +36,10 @@
                                         <span class="badge badge-danger" title="Snapshot file is missing from disk">missing file</span>
                                     @endif
                                 </span>
-                                @if($cp['driver'] || $cp['database'])
-                                    <span class="cp-name-sub">{{ $cp['driver'] ?? 'sqlite' }}@if($cp['database']) · {{ $cp['database'] }}@endif</span>
-                                @endif
                             </div>
+                        </td>
+                        <td>
+                            <span class="cp-driver">{{ $cp['driver'] ?? 'sqlite' }}</span>
                         </td>
                         <td>
                             <span class="cp-note @if(! $cp['note']) cp-note-empty @endif" title="{{ $cp['note'] ?? '' }}">

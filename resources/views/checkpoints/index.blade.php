@@ -27,6 +27,11 @@
         color: var(--muted-foreground);
         font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
     }
+    .cp-table .cp-driver {
+        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+        font-size: 0.8rem;
+        color: var(--foreground);
+    }
     .cp-table .cp-note {
         font-size: 0.875rem;
         color: var(--foreground);
@@ -54,7 +59,7 @@
     <div class="page-header-row">
         <div>
             <h1 class="page-title">Checkpoints</h1>
-            <p class="page-description">Snapshot your database and restore it instantly. Powered by Tyro Checkpoint — local development only.</p>
+            <p class="page-description">Snapshot your database and restore it instantly. Powered by Tyro Checkpoint.</p>
         </div>
         <div id="cpFlushWrap" style="display: none;">
             <button type="button" class="btn btn-destructive" id="cpFlushBtn" data-cp-action="flush">
