@@ -65,10 +65,16 @@
 
                                     <div class="form-group" style="margin-bottom:0.85rem;">
                                         <label for="TYRO_LOGIN_VIDEO_OVERLAY_COLOR" class="form-label">Overlay color (TYRO_LOGIN_VIDEO_OVERLAY_COLOR)</label>
-                                        <input type="color" name="TYRO_LOGIN_VIDEO_OVERLAY_COLOR" id="TYRO_LOGIN_VIDEO_OVERLAY_COLOR"
-                                               class="form-input"
-                                               style="height:38px;padding:2px;cursor:pointer;"
-                                               value="{{ old('TYRO_LOGIN_VIDEO_OVERLAY_COLOR', $settings['TYRO_LOGIN_VIDEO_OVERLAY_COLOR']) }}">
+                                        <div style="display:flex;align-items:center;gap:0.5rem;">
+                                            <input type="color" name="TYRO_LOGIN_VIDEO_OVERLAY_COLOR" id="TYRO_LOGIN_VIDEO_OVERLAY_COLOR"
+                                                   value="{{ old('TYRO_LOGIN_VIDEO_OVERLAY_COLOR', $settings['TYRO_LOGIN_VIDEO_OVERLAY_COLOR']) }}"
+                                                   style="width:45px;height:45px;padding:2px;border:1px solid var(--input);border-radius:6px;cursor:pointer;background:var(--background);flex-shrink:0;"
+                                                   oninput="document.getElementById('TYRO_LOGIN_VIDEO_OVERLAY_COLOR_TEXT').value=this.value">
+                                            <input type="text" id="TYRO_LOGIN_VIDEO_OVERLAY_COLOR_TEXT"
+                                                   value="{{ old('TYRO_LOGIN_VIDEO_OVERLAY_COLOR', $settings['TYRO_LOGIN_VIDEO_OVERLAY_COLOR']) }}"
+                                                   class="form-input" maxlength="30" style="max-width:140px;height:45px;"
+                                                   oninput="syncOverlayColorPicker(this)">
+                                        </div>
                                         <p class="form-hint">Hex color drawn over the video (default #111827).</p>
                                     </div>
 

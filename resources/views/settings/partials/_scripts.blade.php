@@ -369,5 +369,13 @@ function confirmResetAllDcColors() {
         ytLayout.addEventListener('change', updateYoutubeVideo);
         updateYoutubeVideo();
     }
+
+    // Sync overlay color picker swatch from the hex text input
+    function syncOverlayColorPicker(input) {
+        var v = input.value.trim();
+        if (/^#[0-9a-fA-F]{6}$/.test(v)) {
+            document.getElementById('TYRO_LOGIN_VIDEO_OVERLAY_COLOR').value = v;
+        }
+    }
 })();
 </script>
