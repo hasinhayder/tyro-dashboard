@@ -19,7 +19,7 @@ class VersionCommand extends Command {
      * Execute the console command.
      */
     public function handle(): int {
-        $version = '1.40.0'; // Integration with Tyro Checkpoint in Tyro Dashboard, Frontend link in the dashboard user dropdown menu 
+        $version = '1.41.0'; // YouTube video auth layout option with configurable video URL, blur, overlay color, overlay opacity, and sound settings
 
         $this->info('');
         $this->info('  ╔════════════════════════════════════════╗');
@@ -70,6 +70,7 @@ class VersionCommand extends Command {
 }
 
 // Changelog
+// 1.41.0 - YouTube video auth layout option (TYRO_LOGIN_LAYOUT=youtube-video) with configurable YouTube URL, video blur, overlay color, overlay opacity, and sound toggle settings
 // 1.40.0 - Integration with Tyro Checkpoint in Tyro Dashboard: database checkpoint management page with create/restore/delete/rename/encrypt/flush/lock/flag/note, HTTP-context operation via the package service, dedicated driver column, redesigned Create Checkpoint section, and green locked-lock indicator. Frontend link in the dashboard user dropdown menu (opens the app's APP_URL in a new tab)
 // 1.39.0 - Bulk delete for media library grid and list views with dashboard modal confirmation
 // 1.38.0 - Bulk delete for users with select-all and individual checkbox selection
