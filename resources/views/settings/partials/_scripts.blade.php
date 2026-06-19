@@ -370,12 +370,40 @@ function confirmResetAllDcColors() {
         updateYoutubeVideo();
     }
 
-    // Sync overlay color picker swatch from the hex text input
-    function syncOverlayColorPicker(input) {
+    // Overlay color: reset-to-default + show/hide reset button
+    // These are exposed as globals so inline onclick/oninput handlers can call them.
+    window.toggleOverlayReset = function () {
+        var text = document.getElementById('TYRO_LOGIN_VIDEO_OVERLAY_COLOR_TEXT');
+        var reset = document.getElementById('TYRO_LOGIN_VIDEO_OVERLAY_COLOR_RESET');
+        if (!text || !reset) return;
+        var def = (reset.getAttribute('data-default') || '#111827').toLowerCase();
+        reset.style.display = text.value.trim().toLowerCase() === def ? 'none' : '';
+    };
+
+    window.resetOverlayColor = function () {
+        var picker = document.getElementById('TYRO_LOGIN_VIDEO_OVERLAY_COLOR');
+        var text = document.getElementById('TYRO_LOGIN_VIDEO_OVERLAY_COLOR_TEXT');
+        var reset = document.getElementById('TYRO_LOGIN_VIDEO_OVERLAY_COLOR_RESET');
+        var def = reset ? (reset.getAttribute('data-default') || '#111827') : '#111827';
+        if (picker) picker.value = def;
+        if (text) text.value = def;
+        window.toggleOverlayReset();
+    };
+
+    window.syncOverlayColorPicker = function (input) {
         var v = input.value.trim();
         if (/^#[0-9a-fA-F]{6}$/.test(v)) {
             document.getElementById('TYRO_LOGIN_VIDEO_OVERLAY_COLOR').value = v;
         }
+        window.toggleOverlayReset();
+    };
+
+    var overlayPicker = document.getElementById('TYRO_LOGIN_VIDEO_OVERLAY_COLOR');
+    var overlayText = document.getElementById('TYRO_LOGIN_VIDEO_OVERLAY_COLOR_TEXT');
+    if (overlayPicker && overlayText) {
+        overlayPicker.addEventListener('input', window.toggleOverlayReset);
+        overlayText.addEventListener('input', window.toggleOverlayReset);
+        window.toggleOverlayReset();
     }
 })();
 </script>

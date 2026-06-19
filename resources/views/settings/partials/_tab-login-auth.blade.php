@@ -69,11 +69,17 @@
                                             <input type="color" name="TYRO_LOGIN_VIDEO_OVERLAY_COLOR" id="TYRO_LOGIN_VIDEO_OVERLAY_COLOR"
                                                    value="{{ old('TYRO_LOGIN_VIDEO_OVERLAY_COLOR', $settings['TYRO_LOGIN_VIDEO_OVERLAY_COLOR']) }}"
                                                    style="width:45px;height:45px;padding:2px;border:1px solid var(--input);border-radius:6px;cursor:pointer;background:var(--background);flex-shrink:0;"
-                                                   oninput="document.getElementById('TYRO_LOGIN_VIDEO_OVERLAY_COLOR_TEXT').value=this.value">
+                                                   oninput="document.getElementById('TYRO_LOGIN_VIDEO_OVERLAY_COLOR_TEXT').value=this.value;toggleOverlayReset()">
                                             <input type="text" id="TYRO_LOGIN_VIDEO_OVERLAY_COLOR_TEXT"
                                                    value="{{ old('TYRO_LOGIN_VIDEO_OVERLAY_COLOR', $settings['TYRO_LOGIN_VIDEO_OVERLAY_COLOR']) }}"
                                                    class="form-input" maxlength="30" style="max-width:140px;height:45px;"
-                                                   oninput="syncOverlayColorPicker(this)">
+                                                   oninput="syncOverlayColorPicker(this);toggleOverlayReset()">
+                                            <button type="button" id="TYRO_LOGIN_VIDEO_OVERLAY_COLOR_RESET" data-default="#111827"
+                                                    class="branding-color-reset" title="Reset to default (#111827)"
+                                                    style="display:none;flex-shrink:0;"
+                                                    onclick="resetOverlayColor()">
+                                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px;"><path stroke-linecap="round" stroke-linejoin="round" d="M1 4v6h6M23 20v-6h-6"/><path stroke-linecap="round" stroke-linejoin="round" d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15"/></svg>
+                                            </button>
                                         </div>
                                         <p class="form-hint">Hex color drawn over the video (default #111827).</p>
                                     </div>
