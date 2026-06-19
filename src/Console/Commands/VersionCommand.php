@@ -19,7 +19,7 @@ class VersionCommand extends Command {
      * Execute the console command.
      */
     public function handle(): int {
-        $version = '1.40.0'; // Frontend link in user dropdown
+        $version = '1.40.0'; // Integration with Tyro Checkpoint in Tyro Dashboard, Frontend link in the dashboard user dropdown menu 
 
         $this->info('');
         $this->info('  ╔════════════════════════════════════════╗');
@@ -70,7 +70,7 @@ class VersionCommand extends Command {
 }
 
 // Changelog
-// 1.40.0 - Frontend link in the dashboard user dropdown menu (opens the app's APP_URL in a new tab)
+// 1.40.0 - Integration with Tyro Checkpoint in Tyro Dashboard: database checkpoint management page with create/restore/delete/rename/encrypt/flush/lock/flag/note, HTTP-context operation via the package service, dedicated driver column, redesigned Create Checkpoint section, and green locked-lock indicator. Frontend link in the dashboard user dropdown menu (opens the app's APP_URL in a new tab)
 // 1.39.0 - Bulk delete for media library grid and list views with dashboard modal confirmation
 // 1.38.0 - Bulk delete for users with select-all and individual checkbox selection
 // 1.37.0 - Improved role and privilege editors with sorted assignments, searchable assignment tables, clearer section layout, consistent header actions, and same-page redirects after updates
