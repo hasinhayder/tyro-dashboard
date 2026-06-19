@@ -32,6 +32,81 @@
         font-size: 0.8rem;
         color: var(--foreground);
     }
+    .cp-stats-grid .stat-card {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        padding: 1.25rem;
+    }
+    .cp-stats-grid .stat-icon {
+        width: 48px;
+        height: 48px;
+        flex-shrink: 0;
+        margin-bottom: 0;
+    }
+    .cp-stats-grid .stat-icon svg {
+        width: 24px;
+        height: 24px;
+    }
+    .cp-stats-grid .stat-content {
+        min-width: 0;
+    }
+    .cp-stats-grid .stat-value {
+        font-size: 1.5rem;
+    }
+    .cp-create-card .card-body { padding: 1.25rem; }
+    .cp-create-head {
+        display: flex;
+        align-items: center;
+        gap: 0.85rem;
+        margin-bottom: 1.25rem;
+    }
+    .cp-create-head .card-title { margin: 0; }
+    .cp-create-icon {
+        width: 42px;
+        height: 42px;
+        flex-shrink: 0;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: color-mix(in srgb, var(--primary, #2563eb), transparent 90%);
+        color: var(--primary, #2563eb);
+    }
+    .cp-create-icon svg { width: 22px; height: 22px; }
+    .cp-create-sub {
+        font-size: 0.8rem;
+        color: var(--muted-foreground);
+        margin: 0.2rem 0 0;
+    }
+    .cp-create-fields {
+        display: grid;
+        grid-template-columns: 1fr 2fr;
+        gap: 1rem;
+        margin-bottom: 1.25rem;
+    }
+    .cp-create-foot {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+        flex-wrap: wrap;
+        padding-top: 1rem;
+        border-top: 1px solid var(--border);
+    }
+    .cp-toggle {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 0.875rem;
+        color: var(--foreground);
+        cursor: pointer;
+        user-select: none;
+    }
+    .cp-toggle svg { width: 18px; height: 18px; color: var(--muted-foreground); }
+    @media (max-width: 640px) {
+        .cp-create-fields { grid-template-columns: 1fr; }
+    }
     .cp-table .cp-note {
         font-size: 0.875rem;
         color: var(--foreground);
@@ -83,7 +158,7 @@
         </div>
     </div>
 @else
-    <div class="stats-grid">
+    <div class="stats-grid cp-stats-grid">
         <div class="stat-card">
             <div class="stat-icon stat-icon-primary">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -125,32 +200,44 @@
         </div>
     </div>
 
-    <div class="card" style="margin-bottom: 1rem;">
-        <div class="card-header">
-            <h3 class="card-title">Create Checkpoint</h3>
-        </div>
+    <div class="card cp-create-card" style="margin-bottom: 1rem;">
         <div class="card-body">
             <form id="cpCreateForm">
                 @csrf
-                <div class="filters-bar" style="align-items: end;">
-                    <div class="form-group" style="margin: 0; flex: 1; min-width: 200px;">
+                <div class="cp-create-head">
+                    <div class="cp-create-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <h3 class="card-title">Create Checkpoint</h3>
+                        <p class="cp-create-sub">Snapshot the current database. Name and note are optional.</p>
+                    </div>
+                </div>
+                <div class="cp-create-fields">
+                    <div class="form-group" style="margin: 0;">
                         <label class="form-label" for="cpName">Name</label>
                         <input type="text" id="cpName" name="name" class="form-input" maxlength="100" placeholder="optional, e.g. before-seed">
                     </div>
-                    <div class="form-group" style="margin: 0; flex: 2; min-width: 260px;">
+                    <div class="form-group" style="margin: 0;">
                         <label class="form-label" for="cpNote">Note</label>
                         <input type="text" id="cpNote" name="note" class="form-input" maxlength="500" placeholder="optional description">
                     </div>
-                    <div class="form-group" style="margin: 0;">
-                        <label class="form-label" style="display: flex; align-items: center; gap: 0.5rem; font-weight: 400; cursor: pointer;">
-                            <input type="checkbox" id="cpEncrypt" name="encrypt" value="1" class="checkbox-input"> Encrypt
-                        </label>
-                    </div>
+                </div>
+                <div class="cp-create-foot">
+                    <label class="cp-toggle" for="cpEncrypt">
+                        <input type="checkbox" id="cpEncrypt" name="encrypt" value="1" class="checkbox-input">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+                        </svg>
+                        Encrypt this checkpoint
+                    </label>
                     <button type="submit" class="btn btn-primary" id="cpCreateBtn">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/>
                         </svg>
-                        Create
+                        Create Checkpoint
                     </button>
                 </div>
             </form>
