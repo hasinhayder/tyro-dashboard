@@ -27,6 +27,7 @@
                                         <option value="split-right" {{ old('TYRO_LOGIN_LAYOUT', $settings['TYRO_LOGIN_LAYOUT']) === 'split-right' ? 'selected' : '' }}>Split right</option>
                                         <option value="fullscreen" {{ old('TYRO_LOGIN_LAYOUT', $settings['TYRO_LOGIN_LAYOUT']) === 'fullscreen' ? 'selected' : '' }}>Fullscreen</option>
                                         <option value="card" {{ old('TYRO_LOGIN_LAYOUT', $settings['TYRO_LOGIN_LAYOUT']) === 'card' ? 'selected' : '' }}>Card</option>
+                                        <option value="youtube-video" {{ old('TYRO_LOGIN_LAYOUT', $settings['TYRO_LOGIN_LAYOUT']) === 'youtube-video' ? 'selected' : '' }}>YouTube video</option>
                                     </select>
                                 </div>
 
@@ -37,12 +38,65 @@
                                            value="{{ old('TYRO_LOGIN_APP_NAME', $settings['TYRO_LOGIN_APP_NAME']) }}">
                                 </div>
 
-                                <div class="form-group" style="margin-bottom:0;">
+                                <div class="form-group" id="background-image-field" style="margin-bottom:0;">
                                     <label for="TYRO_LOGIN_BACKGROUND_IMAGE" class="form-label">Background image URL (TYRO_LOGIN_BACKGROUND_IMAGE)</label>
                                     <input type="url" name="TYRO_LOGIN_BACKGROUND_IMAGE" id="TYRO_LOGIN_BACKGROUND_IMAGE"
                                            class="form-input" maxlength="500"
                                            value="{{ old('TYRO_LOGIN_BACKGROUND_IMAGE', $settings['TYRO_LOGIN_BACKGROUND_IMAGE']) }}">
                                     <p class="form-hint">Used for split and fullscreen layouts.</p>
+                                </div>
+
+                                <div id="youtube-video-details-surface">
+                                    <div class="form-group" style="margin-bottom:0.85rem;margin-top:0.85rem;">
+                                        <label for="TYRO_LOGIN_YOUTUBE_URL" class="form-label">YouTube video URL or ID (TYRO_LOGIN_YOUTUBE_URL)</label>
+                                        <input type="text" name="TYRO_LOGIN_YOUTUBE_URL" id="TYRO_LOGIN_YOUTUBE_URL"
+                                               class="form-input" maxlength="500"
+                                               value="{{ old('TYRO_LOGIN_YOUTUBE_URL', $settings['TYRO_LOGIN_YOUTUBE_URL']) }}">
+                                        <p class="form-hint">Full YouTube URL or 11-character video ID.</p>
+                                    </div>
+
+                                    <div class="form-group" style="margin-bottom:0.85rem;">
+                                        <label for="TYRO_LOGIN_VIDEO_BLUR" class="form-label">Video blur (TYRO_LOGIN_VIDEO_BLUR)</label>
+                                        <input type="text" name="TYRO_LOGIN_VIDEO_BLUR" id="TYRO_LOGIN_VIDEO_BLUR"
+                                               class="form-input" maxlength="20"
+                                               value="{{ old('TYRO_LOGIN_VIDEO_BLUR', $settings['TYRO_LOGIN_VIDEO_BLUR']) }}">
+                                        <p class="form-hint">CSS blur value applied to the background video (e.g. 4px).</p>
+                                    </div>
+
+                                    <div class="form-group" style="margin-bottom:0.85rem;">
+                                        <label for="TYRO_LOGIN_VIDEO_OVERLAY_COLOR" class="form-label">Overlay color (TYRO_LOGIN_VIDEO_OVERLAY_COLOR)</label>
+                                        <input type="color" name="TYRO_LOGIN_VIDEO_OVERLAY_COLOR" id="TYRO_LOGIN_VIDEO_OVERLAY_COLOR"
+                                               class="form-input"
+                                               style="height:38px;padding:2px;cursor:pointer;"
+                                               value="{{ old('TYRO_LOGIN_VIDEO_OVERLAY_COLOR', $settings['TYRO_LOGIN_VIDEO_OVERLAY_COLOR']) }}">
+                                        <p class="form-hint">Hex color drawn over the video (default #111827).</p>
+                                    </div>
+
+                                    <div class="form-group" style="margin-bottom:0.85rem;">
+                                        <label for="TYRO_LOGIN_VIDEO_OVERLAY_OPACITY" class="form-label">Overlay opacity (TYRO_LOGIN_VIDEO_OVERLAY_OPACITY)</label>
+                                        <input type="number" step="0.1" min="0" max="1" name="TYRO_LOGIN_VIDEO_OVERLAY_OPACITY" id="TYRO_LOGIN_VIDEO_OVERLAY_OPACITY"
+                                               class="form-input"
+                                               value="{{ old('TYRO_LOGIN_VIDEO_OVERLAY_OPACITY', $settings['TYRO_LOGIN_VIDEO_OVERLAY_OPACITY']) }}">
+                                        <p class="form-hint">Value between 0.0 (fully transparent) and 1.0 (fully opaque).</p>
+                                    </div>
+
+                                    <div class="form-group" style="margin-bottom:0;">
+                                        <div class="sys-settings-toggle">
+                                            <div class="sys-settings-toggle-top">
+                                                <div>
+                                                    <p class="sys-settings-toggle-title">Enable video sound <span style="font-weight:normal">(<code>TYRO_LOGIN_VIDEO_SOUND</code>)</span></p>
+                                                    <p class="sys-settings-toggle-description">Plays the YouTube video with sound when enabled.</p>
+                                                </div>
+                                                <div>
+                                                    <input type="hidden" name="TYRO_LOGIN_VIDEO_SOUND" value="0">
+                                                    <label class="toggle-label">
+                                                        <input type="checkbox" name="TYRO_LOGIN_VIDEO_SOUND" value="1" class="toggle-input" {{ old('TYRO_LOGIN_VIDEO_SOUND', $settings['TYRO_LOGIN_VIDEO_SOUND']) ? 'checked' : '' }}>
+                                                        <span class="toggle-slider"></span>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
 

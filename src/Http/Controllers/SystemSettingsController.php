@@ -69,7 +69,12 @@ class SystemSettingsController extends BaseController {
             'TYRO_LOGIN_PASSWORD_REQUIRE_SPECIAL_CHARS' => 'nullable|boolean',
             'TYRO_LOGIN_PASSWORD_CHECK_COMMON' => 'nullable|boolean',
 
-            'TYRO_LOGIN_LAYOUT' => 'nullable|in:centered,split-left,split-right,fullscreen,card',
+            'TYRO_LOGIN_LAYOUT' => 'nullable|in:centered,split-left,split-right,fullscreen,card,youtube-video',
+            'TYRO_LOGIN_YOUTUBE_URL' => 'nullable|string|max:500',
+            'TYRO_LOGIN_VIDEO_BLUR' => 'nullable|string|max:20',
+            'TYRO_LOGIN_VIDEO_OVERLAY_COLOR' => 'nullable|string|max:30',
+            'TYRO_LOGIN_VIDEO_OVERLAY_OPACITY' => 'nullable|numeric|min:0|max:1',
+            'TYRO_LOGIN_VIDEO_SOUND' => 'nullable|boolean',
             'TYRO_LOGIN_APP_NAME' => 'nullable|string|max:255',
             'TYRO_LOGIN_BACKGROUND_IMAGE' => 'nullable|string|max:500',
             'TYRO_LOGIN_LOGO' => 'nullable|string|max:500',
@@ -339,6 +344,7 @@ class SystemSettingsController extends BaseController {
             'TYRO_LOGIN_SOCIAL_SLACK',
             'TYRO_LOGIN_LOCKOUT_AUTO_REDIRECT',
             'TYRO_LOGIN_SHOW_ATTEMPTS_LEFT',
+            'TYRO_LOGIN_VIDEO_SOUND',
         ];
     }
 
@@ -394,6 +400,11 @@ class SystemSettingsController extends BaseController {
             'TYRO_LOGIN_PASSWORD_CHECK_COMMON' => config('tyro-login.password.check_common_passwords'),
 
             'TYRO_LOGIN_LAYOUT' => config('tyro-login.layout'),
+            'TYRO_LOGIN_YOUTUBE_URL' => env('TYRO_LOGIN_YOUTUBE_URL', 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'),
+            'TYRO_LOGIN_VIDEO_BLUR' => env('TYRO_LOGIN_VIDEO_BLUR', '4px'),
+            'TYRO_LOGIN_VIDEO_OVERLAY_COLOR' => env('TYRO_LOGIN_VIDEO_OVERLAY_COLOR', '#111827'),
+            'TYRO_LOGIN_VIDEO_OVERLAY_OPACITY' => env('TYRO_LOGIN_VIDEO_OVERLAY_OPACITY', 0.1),
+            'TYRO_LOGIN_VIDEO_SOUND' => env('TYRO_LOGIN_VIDEO_SOUND', false),
             'TYRO_LOGIN_APP_NAME' => config('tyro-login.branding.app_name'),
             'TYRO_LOGIN_BACKGROUND_IMAGE' => config('tyro-login.background_image'),
             'TYRO_LOGIN_LOGO' => config('tyro-login.branding.logo'),
@@ -573,6 +584,11 @@ class SystemSettingsController extends BaseController {
             'TYRO_LOGIN_PASSWORD_CHECK_COMMON' => false,
 
             'TYRO_LOGIN_LAYOUT' => 'centered',
+            'TYRO_LOGIN_YOUTUBE_URL' => 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
+            'TYRO_LOGIN_VIDEO_BLUR' => '4px',
+            'TYRO_LOGIN_VIDEO_OVERLAY_COLOR' => '#111827',
+            'TYRO_LOGIN_VIDEO_OVERLAY_OPACITY' => 0.1,
+            'TYRO_LOGIN_VIDEO_SOUND' => false,
             'TYRO_LOGIN_APP_NAME' => null,
             'TYRO_LOGIN_BACKGROUND_IMAGE' => 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=1920&q=80',
             'TYRO_LOGIN_LOGO' => null,

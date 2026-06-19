@@ -355,5 +355,19 @@ function confirmResetAllDcColors() {
         if (cr) cr.addEventListener('change', updateCaptcha);
         updateCaptcha();
     }
+
+    // YouTube video fields: show only when layout is youtube-video
+    var ytLayout = document.getElementById('TYRO_LOGIN_LAYOUT');
+    var ytSurface = document.getElementById('youtube-video-details-surface');
+    var bgField = document.getElementById('background-image-field');
+    if (ytLayout && ytSurface) {
+        function updateYoutubeVideo() {
+            var isYoutube = ytLayout.value === 'youtube-video';
+            ytSurface.style.display = isYoutube ? '' : 'none';
+            if (bgField) bgField.style.display = isYoutube ? 'none' : '';
+        }
+        ytLayout.addEventListener('change', updateYoutubeVideo);
+        updateYoutubeVideo();
+    }
 })();
 </script>

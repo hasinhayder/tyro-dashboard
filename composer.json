@@ -20,7 +20,7 @@
         "illuminate/view": "^12.0 || ^13.0",
         "illuminate/routing": "^12.0 || ^13.0",
         "hasinhayder/tyro": "^1.5",
-        "hasinhayder/tyro-login": "^2.4",
+        "hasinhayder/tyro-login": "^2.9",
         "intervention/image": "^4.0"
     },
     "require-dev": {
