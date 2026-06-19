@@ -216,6 +216,31 @@ class CheckpointController extends BaseController {
     }
 
     /**
+     * Rename a checkpoint.
+     */
+    public function rename(Request $request, Checkpoint $checkpoint): JsonResponse {
+        $this->requireAjax($request);
+        $this->guardUnavailable($checkpoint);
+
+        $data = $request->validate([
+            'identifier' => ['required', 'string', 'max:200'],
+            'name' => ['required', 'string', 'min:1', 'max:100'],
+        ]);
+
+        if (! $checkpoint->find($data['identifier'])) {
+            return $this->error('Checkpoint not found.', 404);
+        }
+
+        $newName = $checkpoint->rename($data['identifier'], $data['name']);
+
+        if ($newName === null) {
+            return $this->error('Invalid checkpoint name. Use letters, numbers, underscores, and hyphens only.', 422);
+        }
+
+        return $this->listResponse('Checkpoint renamed.');
+    }
+
+    /**
      * Build a JSON response containing the freshly rendered checkpoint list.
      */
     protected function listResponse(string $message): JsonResponse {

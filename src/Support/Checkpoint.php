@@ -163,6 +163,34 @@ class Checkpoint {
     }
 
     /**
+     * Rename a checkpoint (metadata-only).
+     * Returns the new name, or null if not found / invalid.
+     */
+    public function rename(string $idOrName, string $newName): ?string {
+        $newName = $this->sanitizeName($newName);
+        if ($newName === '') {
+            return null;
+        }
+
+        $result = null;
+
+        $this->mutate(function (Collection $items) use ($idOrName, $newName, &$result) {
+            foreach ($items as $key => $c) {
+                if ($this->matches($c, $idOrName)) {
+                    $items[$key] = array_merge($c, ['name' => $newName]);
+                    $result = $newName;
+
+                    return true;
+                }
+            }
+
+            return false;
+        });
+
+        return $result;
+    }
+
+    /**
      * Set/update the note for a checkpoint (metadata-only, no DB).
      */
     public function setNote(string $idOrName, ?string $note): bool {

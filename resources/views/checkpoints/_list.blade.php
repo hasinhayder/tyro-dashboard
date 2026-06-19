@@ -55,9 +55,14 @@
                                         <path stroke-linecap="round" stroke-linejoin="round" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"/>
                                     </svg>
                                 </button>
-                                <button type="button" class="action-btn" title="Edit note" data-cp-action="edit-note" data-cp-id="{{ $identifier }}" data-cp-name="{{ $name }}" data-cp-note="{{ $cp['note'] ?? '' }}">
+                                <button type="button" class="action-btn" title="Rename" data-cp-action="rename" data-cp-id="{{ $identifier }}" data-cp-name="{{ $name }}">
                                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                         <path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+                                    </svg>
+                                </button>
+                                <button type="button" class="action-btn" title="Edit note" data-cp-action="edit-note" data-cp-id="{{ $identifier }}" data-cp-name="{{ $name }}" data-cp-note="{{ $cp['note'] ?? '' }}">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M7 7h10M7 12h7m-7 5h10M4 4v16a1 1 0 001 1h14a1 1 0 001-1V4a1 1 0 00-1-1H5a1 1 0 00-1 1z"/>
                                     </svg>
                                 </button>
                                 <button type="button" class="action-btn @if($cp['flagged']) action-btn-danger @endif" title="{{ $cp['flagged'] ? 'Remove flag' : 'Flag for attention' }}" data-cp-action="toggle-flag" data-cp-id="{{ $identifier }}" data-cp-name="{{ $name }}">

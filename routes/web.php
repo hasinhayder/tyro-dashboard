@@ -171,6 +171,7 @@ Route::middleware('tyro-dashboard.admin')->group(function () {
             Route::post('/delete', [CheckpointController::class, 'delete'])->name('delete');
             Route::post('/flush', [CheckpointController::class, 'flush'])->name('flush');
             Route::post('/note', [CheckpointController::class, 'note'])->name('note');
+            Route::post('/rename', [CheckpointController::class, 'rename'])->name('rename');
             Route::post('/toggle-lock', [CheckpointController::class, 'toggleLock'])->name('toggle-lock');
             Route::post('/toggle-flag', [CheckpointController::class, 'toggleFlag'])->name('toggle-flag');
             Route::post('/encrypt', [CheckpointController::class, 'encrypt'])->name('encrypt');

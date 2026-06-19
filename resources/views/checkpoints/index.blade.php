@@ -62,18 +62,6 @@
         margin-bottom: 1.25rem;
     }
     .cp-create-head .card-title { margin: 0; }
-    .cp-create-icon {
-        width: 42px;
-        height: 42px;
-        flex-shrink: 0;
-        border-radius: 10px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        background-color: color-mix(in srgb, var(--primary, #2563eb), transparent 90%);
-        color: var(--primary, #2563eb);
-    }
-    .cp-create-icon svg { width: 22px; height: 22px; }
     .cp-create-sub {
         font-size: 0.8rem;
         color: var(--muted-foreground);
@@ -205,11 +193,6 @@
             <form id="cpCreateForm">
                 @csrf
                 <div class="cp-create-head">
-                    <div class="cp-create-icon">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/>
-                        </svg>
-                    </div>
                     <div>
                         <h3 class="card-title">Create Checkpoint</h3>
                         <p class="cp-create-sub">Snapshot the current database. Name and note are optional.</p>
@@ -262,6 +245,7 @@
         delete: '{{ route($dashboardRoute::name("checkpoints.delete")) }}',
         flush: '{{ route($dashboardRoute::name("checkpoints.flush")) }}',
         note: '{{ route($dashboardRoute::name("checkpoints.note")) }}',
+        rename: '{{ route($dashboardRoute::name("checkpoints.rename")) }}',
         toggleLock: '{{ route($dashboardRoute::name("checkpoints.toggle-lock")) }}',
         toggleFlag: '{{ route($dashboardRoute::name("checkpoints.toggle-flag")) }}',
         encrypt: '{{ route($dashboardRoute::name("checkpoints.encrypt")) }}'
@@ -392,6 +376,13 @@
                     .then(function (val) {
                         if (val === null) return;
                         handle(post(routes.note, { identifier: identifier, note: val }), 'Note saved.', btn);
+                    });
+                break;
+            case 'rename':
+                showPrompt('Rename Checkpoint', 'Enter a new name for "' + name + '". Only letters, numbers, underscores, and hyphens are allowed.', name, 'New name')
+                    .then(function (val) {
+                        if (val === null) return;
+                        handle(post(routes.rename, { identifier: identifier, name: val }), 'Checkpoint renamed.', btn);
                     });
                 break;
         }
