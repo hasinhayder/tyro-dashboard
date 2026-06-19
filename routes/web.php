@@ -175,6 +175,7 @@ Route::middleware('tyro-dashboard.admin')->group(function () {
             Route::post('/toggle-lock', [CheckpointController::class, 'toggleLock'])->name('toggle-lock');
             Route::post('/toggle-flag', [CheckpointController::class, 'toggleFlag'])->name('toggle-flag');
             Route::post('/encrypt', [CheckpointController::class, 'encrypt'])->name('encrypt');
+            Route::post('/generate-key', [CheckpointController::class, 'generateKey'])->name('generate-key');
         });
     }
 });

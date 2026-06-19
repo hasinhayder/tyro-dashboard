@@ -1,7 +1,3 @@
-@php
-    use Illuminate\Support\Carbon;
-@endphp
-
 @if(! empty($checkpoints))
 <div class="card">
     <div class="card-body" style="border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap;">
@@ -46,7 +42,7 @@
                                 {{ $cp['note'] ?: 'No note' }}
                             </span>
                         </td>
-                        <td>{{ \Illuminate\Support\Carbon::parse($cp['created_at'])->format('Y-m-d H:i:s') }}</td>
+                        <td>{{ \HasinHayder\TyroDashboard\Http\Controllers\CheckpointController::formatDate($cp['created_at'] ?? null) }}</td>
                         <td>{{ $cp['size_for_humans'] }}</td>
                         <td>
                             <div class="cp-actions action-buttons">

@@ -62,8 +62,19 @@ class CheckpointController extends BaseController {
             'identifier' => ['required', 'string', 'max:200'],
         ]);
 
-        if (! $checkpoint->find($data['identifier'])) {
+        $target = $checkpoint->find($data['identifier']);
+        if (! $target) {
             return $this->error('Checkpoint not found.', 404);
+        }
+
+        // Pre-flight: refuse to restore an encrypted checkpoint when the
+        // decryption key is missing. Otherwise the underlying service can
+        // leave the database in a partially-restored state.
+        if (! empty($target['encrypted']) && ! $this->encryptionKeySet()) {
+            return $this->error(
+                'Cannot restore: this checkpoint is encrypted but no TYRO_CHECKPOINT_ENCRYPTION_KEY is configured. Generate one first.',
+                422
+            );
         }
 
         $exit = $checkpoint->restore($data['identifier']);
@@ -216,6 +227,63 @@ class CheckpointController extends BaseController {
     }
 
     /**
+     * Generate the TYRO_CHECKPOINT_ENCRYPTION_KEY by appending a fresh
+     * 32-char value to the application's .env file. If a key already exists,
+     * refuse and ask the admin to regenerate from the CLI (replacing a key
+     * invalidates previously encrypted checkpoints).
+     *
+     * The `encryptionKeySet()` guard above catches the uncommented-key case
+     * (returns 409), so by the time we reach the file write, the .env either
+     * has no key line at all, or has one or more *commented* key lines
+     * (e.g. #TYRO_CHECKPOINT_ENCRYPTION_KEY=...) left as documentation.
+     * In both cases, appending a new uncommented line is correct: the
+     * commented lines are preserved as-is for reference.
+     */
+    public function generateKey(Request $request, Checkpoint $checkpoint): JsonResponse {
+        $this->requireAjax($request);
+        $this->guardUnavailable($checkpoint);
+
+        if ($this->encryptionKeySet()) {
+            return $this->error(
+                'An encryption key already exists. To regenerate, run `php artisan tyro-checkpoint:generate-key` from the CLI — the command will prompt you to confirm because replacing the key invalidates previously encrypted checkpoints.',
+                409
+            );
+        }
+
+        $envPath = base_path('.env');
+        if (! is_file($envPath) || ! is_writable($envPath)) {
+            return $this->error(
+                'Could not write to .env at '.$envPath.'. Add TYRO_CHECKPOINT_ENCRYPTION_KEY manually and refresh.',
+                500
+            );
+        }
+
+        $key = \Illuminate\Support\Str::random(32);
+        $line = 'TYRO_CHECKPOINT_ENCRYPTION_KEY="'.$key.'"';
+
+        try {
+            $content = (string) file_get_contents($envPath);
+            $content .= (str_ends_with($content, "\n") ? '' : "\n").$line."\n";
+
+            if (file_put_contents($envPath, $content) === false) {
+                return $this->error('Failed to write the encryption key to .env.', 500);
+            }
+        } catch (\Throwable $e) {
+            return $this->error('Failed to generate the encryption key: '.$e->getMessage(), 500);
+        }
+
+        if (function_exists('opcache_reset')) {
+            @opcache_reset();
+        }
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Encryption key generated. Reload the page before creating encrypted checkpoints.',
+            'encryptionKeySet' => $this->encryptionKeySet(),
+        ]);
+    }
+
+    /**
      * Rename a checkpoint.
      */
     public function rename(Request $request, Checkpoint $checkpoint): JsonResponse {
@@ -283,11 +351,17 @@ class CheckpointController extends BaseController {
     }
 
     /**
-     * Format an ISO timestamp for display.
+     * Format an ISO timestamp for display using the app's locale/timezone.
      */
-    public static function formatDate(string $iso): string {
+    public static function formatDate(?string $iso): string {
+        if ($iso === null || $iso === '') {
+            return '—';
+        }
+
         try {
-            return Carbon::parse($iso)->format('Y-m-d H:i:s');
+            return Carbon::parse($iso)
+                ->setTimezone(config('app.timezone'))
+                ->translatedFormat('M d, Y H:i');
         } catch (\Throwable $e) {
             return $iso ?: '—';
         }

@@ -35,8 +35,16 @@
     .cp-stats-grid .stat-card {
         display: flex;
         align-items: center;
+        justify-content: space-between;
         gap: 1rem;
         padding: 1.25rem;
+    }
+    .cp-stats-grid .stat-card-left {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        min-width: 0;
+        flex: 1 1 auto;
     }
     .cp-stats-grid .stat-icon {
         width: 48px;
@@ -169,22 +177,34 @@
                 <div class="stat-value" id="cpStatSize">{{ $totalSizeForHumans }}</div>
             </div>
         </div>
-        <div class="stat-card">
-            <div class="stat-icon stat-icon-success">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
-                </svg>
-            </div>
-            <div class="stat-content">
-                <div class="stat-label">Encryption Key</div>
-                <div class="stat-value" id="cpStatEncryption">
-                    @if($encryptionKeySet)
-                        <span class="badge badge-success">Configured</span>
-                    @else
-                        <span class="badge badge-secondary">Not set</span>
-                    @endif
+        <div class="stat-card" id="cpStatEncryptionCard">
+            <div class="stat-card-left">
+                <div class="stat-icon stat-icon-success">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+                    </svg>
+                </div>
+                <div class="stat-content">
+                    <div class="stat-label">Encryption Key</div>
+                    <div class="stat-value" id="cpStatEncryption">
+                        @if($encryptionKeySet)
+                            <span class="badge badge-success">Configured</span>
+                        @else
+                            <span class="badge badge-secondary">Not set</span>
+                        @endif
+                    </div>
                 </div>
             </div>
+            @if(! $encryptionKeySet)
+                <div class="stat-action" id="cpStatEncryptionAction">
+                    <button type="button" class="btn btn-outline" id="cpGenerateKeyBtn" data-cp-action="generate-key">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"/>
+                        </svg>
+                        Generate Key
+                    </button>
+                </div>
+            @endif
         </div>
     </div>
 
@@ -248,7 +268,8 @@
         rename: '{{ route($dashboardRoute::name("checkpoints.rename")) }}',
         toggleLock: '{{ route($dashboardRoute::name("checkpoints.toggle-lock")) }}',
         toggleFlag: '{{ route($dashboardRoute::name("checkpoints.toggle-flag")) }}',
-        encrypt: '{{ route($dashboardRoute::name("checkpoints.encrypt")) }}'
+        encrypt: '{{ route($dashboardRoute::name("checkpoints.encrypt")) }}',
+        generateKey: '{{ route($dashboardRoute::name("checkpoints.generate-key")) }}'
     };
 
     function formatBytes(b) {
@@ -281,6 +302,21 @@
         if (resp.totalSize !== undefined) {
             var s = document.getElementById('cpStatSize');
             if (s) s.textContent = formatBytes(resp.totalSize);
+        }
+        if (resp.encryptionKeySet !== undefined) {
+            var stat = document.getElementById('cpStatEncryption');
+            if (stat) {
+                stat.innerHTML = resp.encryptionKeySet
+                    ? '<span class="badge badge-success">Configured</span>'
+                    : '<span class="badge badge-secondary">Not set</span>';
+            }
+            // The button is only rendered server-side when no key is set;
+            // remove it from the DOM once a key exists, so the card no longer
+            // shows a "Generate" action.
+            var action = document.getElementById('cpStatEncryptionAction');
+            if (action && resp.encryptionKeySet) {
+                action.parentNode && action.parentNode.removeChild(action);
+            }
         }
         var flushWrap = document.getElementById('cpFlushWrap');
         if (flushWrap) {
@@ -384,6 +420,11 @@
                         if (val === null) return;
                         handle(post(routes.rename, { identifier: identifier, name: val }), 'Checkpoint renamed.', btn);
                     });
+                break;
+            case 'generate-key':
+                // If a key already exists, the controller will return 409; the
+                // handle() helper above will prompt the user to confirm and retry.
+                handle(post(routes.generateKey, {}), null, btn);
                 break;
         }
     });
