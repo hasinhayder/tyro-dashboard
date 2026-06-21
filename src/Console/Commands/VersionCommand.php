@@ -19,7 +19,7 @@ class VersionCommand extends Command {
      * Execute the console command.
      */
     public function handle(): int {
-        $version = '1.43.2'; // renamed TYRO_LOGIN_YOUTUBE_URL to TYRO_LOGIN_VIDEO_URL in settings controller and login-auth blade partial; updated default video URL
+        $version = '1.43.3'; // added TYRO_LOGIN_LOGO_BORDER_RADIUS setting to the Authentication tab branding details
 
         $this->info('');
         $this->info('  ╔════════════════════════════════════════╗');
@@ -70,6 +70,7 @@ class VersionCommand extends Command {
 }
 
 // Changelog
+// 1.43.3 - added TYRO_LOGIN_LOGO_BORDER_RADIUS setting to the Authentication tab branding details
 // 1.43.2 - renamed TYRO_LOGIN_YOUTUBE_URL to TYRO_LOGIN_VIDEO_URL in settings controller and login-auth blade partial; updated default video URL
 // 1.43.1 - tyro-dashboard:update-config now silently refreshes tyro and tyro-login configs (tyro:update-config, tyro-login:update-config) after publishing the dashboard config
 // 1.43.0 - Added tidal, animated birds, particle network, and aurora waves animated auth layouts to the Authentication settings tab: dropdown options, per-layout conditional detail surfaces, color pickers with reset-to-default, and full settings persistence (validation, gather reads, defaults, booleans)

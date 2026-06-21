@@ -319,10 +319,16 @@
                                     full-url="true"
                                 />
                                 <!-- <p class="form-hint" style="margin-top:-0.5rem;margin-bottom:0.85rem;">Falls back to the light logo when not set.</p> -->
-                                <div class="form-group" style="margin-bottom:0;">
+                                <div class="form-group" style="margin-bottom:0.85rem;">
                                     <label for="TYRO_LOGIN_LOGO_HEIGHT" class="form-label">Logo height (TYRO_LOGIN_LOGO_HEIGHT)</label>
                                     <input type="text" name="TYRO_LOGIN_LOGO_HEIGHT" id="TYRO_LOGIN_LOGO_HEIGHT" class="form-input" maxlength="20" value="{{ old('TYRO_LOGIN_LOGO_HEIGHT', $settings['TYRO_LOGIN_LOGO_HEIGHT']) }}">
                                     <p class="form-hint">CSS value e.g. <code>32px</code>, <code>3rem</code>.</p>
+                                </div>
+
+                                <div class="form-group" style="margin-bottom:0;">
+                                    <label for="TYRO_LOGIN_LOGO_BORDER_RADIUS" class="form-label">Logo border radius (TYRO_LOGIN_LOGO_BORDER_RADIUS)</label>
+                                    <input type="text" name="TYRO_LOGIN_LOGO_BORDER_RADIUS" id="TYRO_LOGIN_LOGO_BORDER_RADIUS" class="form-input" maxlength="20" value="{{ old('TYRO_LOGIN_LOGO_BORDER_RADIUS', $settings['TYRO_LOGIN_LOGO_BORDER_RADIUS']) }}">
+                                    <p class="form-hint">CSS value e.g. <code>8px</code>, <code>50%</code>. Use <code>0</code> for square.</p>
                                 </div>
                             </div>
 
