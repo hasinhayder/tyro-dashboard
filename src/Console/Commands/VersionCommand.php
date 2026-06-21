@@ -19,7 +19,7 @@ class VersionCommand extends Command {
      * Execute the console command.
      */
     public function handle(): int {
-        $version = '1.43.0'; // Added tidal, animated birds, particle network, and aurora waves animated auth layouts to the Authentication settings tab with per-layout config fields and color pickers
+        $version = '1.43.1'; // tyro-dashboard:update-config now silently refreshes tyro and tyro-login configs after publishing the dashboard config
 
         $this->info('');
         $this->info('  ╔════════════════════════════════════════╗');
@@ -70,6 +70,7 @@ class VersionCommand extends Command {
 }
 
 // Changelog
+// 1.43.1 - tyro-dashboard:update-config now silently refreshes tyro and tyro-login configs (tyro:update-config, tyro-login:update-config) after publishing the dashboard config
 // 1.43.0 - Added tidal, animated birds, particle network, and aurora waves animated auth layouts to the Authentication settings tab: dropdown options, per-layout conditional detail surfaces, color pickers with reset-to-default, and full settings persistence (validation, gather reads, defaults, booleans)
 // 1.42.0 - Checkpoint management improvements: pre-flight restore check that refuses encrypted snapshots without the matching encryption key, locale-aware checkpoint timestamps via Carbon::translatedFormat(), and a Generate Key UI action that appends a fresh 32-char key to .env
 // 1.41.0 - Animated/video auth layout backgrounds in settings: YouTube video, tidal, animated birds, particle network, and aurora waves layouts with per-layout config fields (video URL/blur/overlay/sound, tidal color/speed/bubbles, birds color, aurora color/speed/intensity, particle color/density/link distance/interactive), color pickers with reset-to-default, and conditional field visibility

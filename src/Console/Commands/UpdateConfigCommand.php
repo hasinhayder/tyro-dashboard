@@ -27,6 +27,9 @@ class UpdateConfigCommand extends Command {
             '--force' => true,
         ]);
 
+        $this->callSilent('tyro:update-config');
+        $this->callSilent('tyro-login:update-config');
+
         return self::SUCCESS;
     }
 }
