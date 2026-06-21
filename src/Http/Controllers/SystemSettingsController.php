@@ -70,7 +70,7 @@ class SystemSettingsController extends BaseController {
             'TYRO_LOGIN_PASSWORD_CHECK_COMMON' => 'nullable|boolean',
 
             'TYRO_LOGIN_LAYOUT' => 'nullable|in:centered,split-left,split-right,fullscreen,card,youtube-video,tidal,animated-birds,particle-network,aurora-waves',
-            'TYRO_LOGIN_YOUTUBE_URL' => 'nullable|string|max:500',
+            'TYRO_LOGIN_VIDEO_URL' => 'nullable|string|max:500',
             'TYRO_LOGIN_VIDEO_BLUR' => 'nullable|string|max:20',
             'TYRO_LOGIN_VIDEO_OVERLAY_COLOR' => 'nullable|string|max:30',
             'TYRO_LOGIN_VIDEO_OVERLAY_OPACITY' => 'nullable|numeric|min:0|max:1',
@@ -413,7 +413,7 @@ class SystemSettingsController extends BaseController {
             'TYRO_LOGIN_PASSWORD_CHECK_COMMON' => config('tyro-login.password.check_common_passwords'),
 
             'TYRO_LOGIN_LAYOUT' => config('tyro-login.layout'),
-            'TYRO_LOGIN_YOUTUBE_URL' => env('TYRO_LOGIN_YOUTUBE_URL', 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'),
+            'TYRO_LOGIN_VIDEO_URL' => env('TYRO_LOGIN_VIDEO_URL', 'https://www.youtube.com/watch?v=JFMY5NxXDhw&t=10'),
             'TYRO_LOGIN_VIDEO_BLUR' => env('TYRO_LOGIN_VIDEO_BLUR', '4px'),
             'TYRO_LOGIN_VIDEO_OVERLAY_COLOR' => env('TYRO_LOGIN_VIDEO_OVERLAY_COLOR', '#111827'),
             'TYRO_LOGIN_VIDEO_OVERLAY_OPACITY' => env('TYRO_LOGIN_VIDEO_OVERLAY_OPACITY', 0.1),
@@ -608,7 +608,7 @@ class SystemSettingsController extends BaseController {
             'TYRO_LOGIN_PASSWORD_CHECK_COMMON' => false,
 
             'TYRO_LOGIN_LAYOUT' => 'centered',
-            'TYRO_LOGIN_YOUTUBE_URL' => 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
+            'TYRO_LOGIN_VIDEO_URL' => 'https://www.youtube.com/watch?v=JFMY5NxXDhw&t=10',
             'TYRO_LOGIN_VIDEO_BLUR' => '4px',
             'TYRO_LOGIN_VIDEO_OVERLAY_COLOR' => '#111827',
             'TYRO_LOGIN_VIDEO_OVERLAY_OPACITY' => 0.1,

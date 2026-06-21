@@ -52,10 +52,10 @@
 
                                 <div id="youtube-video-details-surface">
                                     <div class="form-group" style="margin-bottom:0.85rem;margin-top:0.85rem;">
-                                        <label for="TYRO_LOGIN_YOUTUBE_URL" class="form-label">YouTube video URL or ID (TYRO_LOGIN_YOUTUBE_URL)</label>
-                                        <input type="text" name="TYRO_LOGIN_YOUTUBE_URL" id="TYRO_LOGIN_YOUTUBE_URL"
+                                        <label for="TYRO_LOGIN_VIDEO_URL" class="form-label">YouTube video URL or ID (TYRO_LOGIN_VIDEO_URL)</label>
+                                        <input type="text" name="TYRO_LOGIN_VIDEO_URL" id="TYRO_LOGIN_VIDEO_URL"
                                                class="form-input" maxlength="500"
-                                               value="{{ old('TYRO_LOGIN_YOUTUBE_URL', $settings['TYRO_LOGIN_YOUTUBE_URL']) }}">
+                                               value="{{ old('TYRO_LOGIN_VIDEO_URL', $settings['TYRO_LOGIN_VIDEO_URL']) }}">
                                         <p class="form-hint">Full YouTube URL or 11-character video ID.</p>
                                     </div>
 
