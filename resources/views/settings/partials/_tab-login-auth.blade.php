@@ -28,6 +28,10 @@
                                         <option value="fullscreen" {{ old('TYRO_LOGIN_LAYOUT', $settings['TYRO_LOGIN_LAYOUT']) === 'fullscreen' ? 'selected' : '' }}>Fullscreen</option>
                                         <option value="card" {{ old('TYRO_LOGIN_LAYOUT', $settings['TYRO_LOGIN_LAYOUT']) === 'card' ? 'selected' : '' }}>Card</option>
                                         <option value="youtube-video" {{ old('TYRO_LOGIN_LAYOUT', $settings['TYRO_LOGIN_LAYOUT']) === 'youtube-video' ? 'selected' : '' }}>YouTube video</option>
+                                        <option value="tidal" {{ old('TYRO_LOGIN_LAYOUT', $settings['TYRO_LOGIN_LAYOUT']) === 'tidal' ? 'selected' : '' }}>Tidal</option>
+                                        <option value="animated-birds" {{ old('TYRO_LOGIN_LAYOUT', $settings['TYRO_LOGIN_LAYOUT']) === 'animated-birds' ? 'selected' : '' }}>Animated birds</option>
+                                        <option value="particle-network" {{ old('TYRO_LOGIN_LAYOUT', $settings['TYRO_LOGIN_LAYOUT']) === 'particle-network' ? 'selected' : '' }}>Particle network</option>
+                                        <option value="aurora-waves" {{ old('TYRO_LOGIN_LAYOUT', $settings['TYRO_LOGIN_LAYOUT']) === 'aurora-waves' ? 'selected' : '' }}>Aurora waves</option>
                                     </select>
                                 </div>
 
@@ -69,15 +73,15 @@
                                             <input type="color" name="TYRO_LOGIN_VIDEO_OVERLAY_COLOR" id="TYRO_LOGIN_VIDEO_OVERLAY_COLOR"
                                                    value="{{ old('TYRO_LOGIN_VIDEO_OVERLAY_COLOR', $settings['TYRO_LOGIN_VIDEO_OVERLAY_COLOR']) }}"
                                                    style="width:45px;height:45px;padding:2px;border:1px solid var(--input);border-radius:6px;cursor:pointer;background:var(--background);flex-shrink:0;"
-                                                   oninput="document.getElementById('TYRO_LOGIN_VIDEO_OVERLAY_COLOR_TEXT').value=this.value;toggleOverlayReset()">
+                                                    oninput="document.getElementById('TYRO_LOGIN_VIDEO_OVERLAY_COLOR_TEXT').value=this.value;toggleTyroColorReset('TYRO_LOGIN_VIDEO_OVERLAY_COLOR')">
                                             <input type="text" id="TYRO_LOGIN_VIDEO_OVERLAY_COLOR_TEXT"
                                                    value="{{ old('TYRO_LOGIN_VIDEO_OVERLAY_COLOR', $settings['TYRO_LOGIN_VIDEO_OVERLAY_COLOR']) }}"
                                                    class="form-input" maxlength="30" style="max-width:140px;height:45px;"
-                                                   oninput="syncOverlayColorPicker(this);toggleOverlayReset()">
+                                                   oninput="syncTyroColorPicker('TYRO_LOGIN_VIDEO_OVERLAY_COLOR')">
                                             <button type="button" id="TYRO_LOGIN_VIDEO_OVERLAY_COLOR_RESET" data-default="#111827"
                                                     class="branding-color-reset" title="Reset to default (#111827)"
                                                     style="display:none;flex-shrink:0;"
-                                                    onclick="resetOverlayColor()">
+                                                    onclick="resetTyroColor('TYRO_LOGIN_VIDEO_OVERLAY_COLOR')">
                                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px;"><path stroke-linecap="round" stroke-linejoin="round" d="M1 4v6h6M23 20v-6h-6"/><path stroke-linecap="round" stroke-linejoin="round" d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15"/></svg>
                                             </button>
                                         </div>
@@ -103,6 +107,174 @@
                                                     <input type="hidden" name="TYRO_LOGIN_VIDEO_SOUND" value="0">
                                                     <label class="toggle-label">
                                                         <input type="checkbox" name="TYRO_LOGIN_VIDEO_SOUND" value="1" class="toggle-input" {{ old('TYRO_LOGIN_VIDEO_SOUND', $settings['TYRO_LOGIN_VIDEO_SOUND']) ? 'checked' : '' }}>
+                                                        <span class="toggle-slider"></span>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div id="tidal-details-surface">
+                                    <div class="form-group" style="margin-bottom:0.85rem;margin-top:0.85rem;">
+                                        <label for="TYRO_LOGIN_TIDAL_COLOR" class="form-label">Primary water color (TYRO_LOGIN_TIDAL_COLOR)</label>
+                                        <div style="display:flex;align-items:center;gap:0.5rem;">
+                                            <input type="color" name="TYRO_LOGIN_TIDAL_COLOR" id="TYRO_LOGIN_TIDAL_COLOR"
+                                                   value="{{ old('TYRO_LOGIN_TIDAL_COLOR', $settings['TYRO_LOGIN_TIDAL_COLOR']) }}"
+                                                   style="width:45px;height:45px;padding:2px;border:1px solid var(--input);border-radius:6px;cursor:pointer;background:var(--background);flex-shrink:0;"
+                                                   oninput="document.getElementById('TYRO_LOGIN_TIDAL_COLOR_TEXT').value=this.value;toggleTyroColorReset('TYRO_LOGIN_TIDAL_COLOR')">
+                                            <input type="text" id="TYRO_LOGIN_TIDAL_COLOR_TEXT"
+                                                   value="{{ old('TYRO_LOGIN_TIDAL_COLOR', $settings['TYRO_LOGIN_TIDAL_COLOR']) }}"
+                                                   class="form-input" maxlength="30" style="max-width:140px;height:45px;"
+                                                   oninput="syncTyroColorPicker('TYRO_LOGIN_TIDAL_COLOR')">
+                                            <button type="button" id="TYRO_LOGIN_TIDAL_COLOR_RESET" data-default="#1f7a8c"
+                                                    class="branding-color-reset" title="Reset to default (#1f7a8c)"
+                                                    style="display:none;flex-shrink:0;"
+                                                    onclick="resetTyroColor('TYRO_LOGIN_TIDAL_COLOR')">
+                                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px;"><path stroke-linecap="round" stroke-linejoin="round" d="M1 4v6h6M23 20v-6h-6"/><path stroke-linecap="round" stroke-linejoin="round" d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15"/></svg>
+                                            </button>
+                                        </div>
+                                        <p class="form-hint">Drives the water and sky/bubble tint (default #1f7a8c).</p>
+                                    </div>
+
+                                    <div class="form-group" style="margin-bottom:0.85rem;">
+                                        <label for="TYRO_LOGIN_TIDAL_SPEED" class="form-label">Wave speed (TYRO_LOGIN_TIDAL_SPEED)</label>
+                                        <input type="number" step="0.1" min="0" name="TYRO_LOGIN_TIDAL_SPEED" id="TYRO_LOGIN_TIDAL_SPEED"
+                                               class="form-input"
+                                               value="{{ old('TYRO_LOGIN_TIDAL_SPEED', $settings['TYRO_LOGIN_TIDAL_SPEED']) }}">
+                                        <p class="form-hint">Wave animation speed multiplier (default 1).</p>
+                                    </div>
+
+                                    <div class="form-group" style="margin-bottom:0;">
+                                        <div class="sys-settings-toggle">
+                                            <div class="sys-settings-toggle-top">
+                                                <div>
+                                                    <p class="sys-settings-toggle-title">Show rising bubbles <span style="font-weight:normal">(<code>TYRO_LOGIN_TIDAL_BUBBLES</code>)</span></p>
+                                                    <p class="sys-settings-toggle-description">Renders animated bubbles rising from the water.</p>
+                                                </div>
+                                                <div>
+                                                    <input type="hidden" name="TYRO_LOGIN_TIDAL_BUBBLES" value="0">
+                                                    <label class="toggle-label">
+                                                        <input type="checkbox" name="TYRO_LOGIN_TIDAL_BUBBLES" value="1" class="toggle-input" {{ old('TYRO_LOGIN_TIDAL_BUBBLES', $settings['TYRO_LOGIN_TIDAL_BUBBLES']) ? 'checked' : '' }}>
+                                                        <span class="toggle-slider"></span>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div id="animated-birds-details-surface">
+                                    <div class="form-group" style="margin-bottom:0;margin-top:0.85rem;">
+                                        <label for="TYRO_LOGIN_BIRDS_COLOR" class="form-label">Sky color (TYRO_LOGIN_BIRDS_COLOR)</label>
+                                        <div style="display:flex;align-items:center;gap:0.5rem;">
+                                            <input type="color" name="TYRO_LOGIN_BIRDS_COLOR" id="TYRO_LOGIN_BIRDS_COLOR"
+                                                   value="{{ old('TYRO_LOGIN_BIRDS_COLOR', $settings['TYRO_LOGIN_BIRDS_COLOR']) }}"
+                                                   style="width:45px;height:45px;padding:2px;border:1px solid var(--input);border-radius:6px;cursor:pointer;background:var(--background);flex-shrink:0;"
+                                                   oninput="document.getElementById('TYRO_LOGIN_BIRDS_COLOR_TEXT').value=this.value;toggleTyroColorReset('TYRO_LOGIN_BIRDS_COLOR')">
+                                            <input type="text" id="TYRO_LOGIN_BIRDS_COLOR_TEXT"
+                                                   value="{{ old('TYRO_LOGIN_BIRDS_COLOR', $settings['TYRO_LOGIN_BIRDS_COLOR']) }}"
+                                                   class="form-input" maxlength="30" style="max-width:140px;height:45px;"
+                                                   oninput="syncTyroColorPicker('TYRO_LOGIN_BIRDS_COLOR')">
+                                            <button type="button" id="TYRO_LOGIN_BIRDS_COLOR_RESET" data-default="#f7f2ec"
+                                                    class="branding-color-reset" title="Reset to default (#f7f2ec)"
+                                                    style="display:none;flex-shrink:0;"
+                                                    onclick="resetTyroColor('TYRO_LOGIN_BIRDS_COLOR')">
+                                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px;"><path stroke-linecap="round" stroke-linejoin="round" d="M1 4v6h6M23 20v-6h-6"/><path stroke-linecap="round" stroke-linejoin="round" d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15"/></svg>
+                                            </button>
+                                        </div>
+                                        <p class="form-hint">Drives the sky background and frosted form tint (default #f7f2ec).</p>
+                                    </div>
+                                </div>
+
+                                <div id="aurora-waves-details-surface">
+                                    <div class="form-group" style="margin-bottom:0.85rem;margin-top:0.85rem;">
+                                        <label for="TYRO_LOGIN_AURORA_COLOR" class="form-label">Base color (TYRO_LOGIN_AURORA_COLOR)</label>
+                                        <div style="display:flex;align-items:center;gap:0.5rem;">
+                                            <input type="color" name="TYRO_LOGIN_AURORA_COLOR" id="TYRO_LOGIN_AURORA_COLOR"
+                                                   value="{{ old('TYRO_LOGIN_AURORA_COLOR', $settings['TYRO_LOGIN_AURORA_COLOR']) }}"
+                                                   style="width:45px;height:45px;padding:2px;border:1px solid var(--input);border-radius:6px;cursor:pointer;background:var(--background);flex-shrink:0;"
+                                                   oninput="document.getElementById('TYRO_LOGIN_AURORA_COLOR_TEXT').value=this.value;toggleTyroColorReset('TYRO_LOGIN_AURORA_COLOR')">
+                                            <input type="text" id="TYRO_LOGIN_AURORA_COLOR_TEXT"
+                                                   value="{{ old('TYRO_LOGIN_AURORA_COLOR', $settings['TYRO_LOGIN_AURORA_COLOR']) }}"
+                                                   class="form-input" maxlength="30" style="max-width:140px;height:45px;"
+                                                   oninput="syncTyroColorPicker('TYRO_LOGIN_AURORA_COLOR')">
+                                            <button type="button" id="TYRO_LOGIN_AURORA_COLOR_RESET" data-default="#0b1020"
+                                                    class="branding-color-reset" title="Reset to default (#0b1020)"
+                                                    style="display:none;flex-shrink:0;"
+                                                    onclick="resetTyroColor('TYRO_LOGIN_AURORA_COLOR')">
+                                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px;"><path stroke-linecap="round" stroke-linejoin="round" d="M1 4v6h6M23 20v-6h-6"/><path stroke-linecap="round" stroke-linejoin="round" d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15"/></svg>
+                                            </button>
+                                        </div>
+                                        <p class="form-hint">Dark recommended - drives background and form tint (default #0b1020).</p>
+                                    </div>
+
+                                    <div class="form-group" style="margin-bottom:0.85rem;">
+                                        <label for="TYRO_LOGIN_AURORA_SPEED" class="form-label">Animation speed (TYRO_LOGIN_AURORA_SPEED)</label>
+                                        <input type="number" step="0.1" min="0" name="TYRO_LOGIN_AURORA_SPEED" id="TYRO_LOGIN_AURORA_SPEED"
+                                               class="form-input"
+                                               value="{{ old('TYRO_LOGIN_AURORA_SPEED', $settings['TYRO_LOGIN_AURORA_SPEED']) }}">
+                                        <p class="form-hint">Animation speed multiplier (default 1).</p>
+                                    </div>
+
+                                    <div class="form-group" style="margin-bottom:0;">
+                                        <label for="TYRO_LOGIN_AURORA_INTENSITY" class="form-label">Ribbon intensity (TYRO_LOGIN_AURORA_INTENSITY)</label>
+                                        <input type="number" step="0.1" min="0" max="1" name="TYRO_LOGIN_AURORA_INTENSITY" id="TYRO_LOGIN_AURORA_INTENSITY"
+                                               class="form-input"
+                                               value="{{ old('TYRO_LOGIN_AURORA_INTENSITY', $settings['TYRO_LOGIN_AURORA_INTENSITY']) }}">
+                                        <p class="form-hint">Ribbon intensity from 0 (faint) to 1 (vivid) (default 0.5).</p>
+                                    </div>
+                                </div>
+
+                                <div id="particle-network-details-surface">
+                                    <div class="form-group" style="margin-bottom:0.85rem;margin-top:0.85rem;">
+                                        <label for="TYRO_LOGIN_PARTICLE_COLOR" class="form-label">Base color (TYRO_LOGIN_PARTICLE_COLOR)</label>
+                                        <div style="display:flex;align-items:center;gap:0.5rem;">
+                                            <input type="color" name="TYRO_LOGIN_PARTICLE_COLOR" id="TYRO_LOGIN_PARTICLE_COLOR"
+                                                   value="{{ old('TYRO_LOGIN_PARTICLE_COLOR', $settings['TYRO_LOGIN_PARTICLE_COLOR']) }}"
+                                                   style="width:45px;height:45px;padding:2px;border:1px solid var(--input);border-radius:6px;cursor:pointer;background:var(--background);flex-shrink:0;"
+                                                   oninput="document.getElementById('TYRO_LOGIN_PARTICLE_COLOR_TEXT').value=this.value;toggleTyroColorReset('TYRO_LOGIN_PARTICLE_COLOR')">
+                                            <input type="text" id="TYRO_LOGIN_PARTICLE_COLOR_TEXT"
+                                                   value="{{ old('TYRO_LOGIN_PARTICLE_COLOR', $settings['TYRO_LOGIN_PARTICLE_COLOR']) }}"
+                                                   class="form-input" maxlength="30" style="max-width:140px;height:45px;"
+                                                   oninput="syncTyroColorPicker('TYRO_LOGIN_PARTICLE_COLOR')">
+                                            <button type="button" id="TYRO_LOGIN_PARTICLE_COLOR_RESET" data-default="#0f172a"
+                                                    class="branding-color-reset" title="Reset to default (#0f172a)"
+                                                    style="display:none;flex-shrink:0;"
+                                                    onclick="resetTyroColor('TYRO_LOGIN_PARTICLE_COLOR')">
+                                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px;"><path stroke-linecap="round" stroke-linejoin="round" d="M1 4v6h6M23 20v-6h-6"/><path stroke-linecap="round" stroke-linejoin="round" d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15"/></svg>
+                                            </button>
+                                        </div>
+                                        <p class="form-hint">Base color for dark mode (default #0f172a).</p>
+                                    </div>
+
+                                    <div class="form-group" style="margin-bottom:0.85rem;">
+                                        <label for="TYRO_LOGIN_PARTICLE_DENSITY" class="form-label">Particle density (TYRO_LOGIN_PARTICLE_DENSITY)</label>
+                                        <input type="number" step="1" min="0" name="TYRO_LOGIN_PARTICLE_DENSITY" id="TYRO_LOGIN_PARTICLE_DENSITY"
+                                               class="form-input"
+                                               value="{{ old('TYRO_LOGIN_PARTICLE_DENSITY', $settings['TYRO_LOGIN_PARTICLE_DENSITY']) }}">
+                                        <p class="form-hint">Nodes on a 1280x720 viewport, scales with area (default 80).</p>
+                                    </div>
+
+                                    <div class="form-group" style="margin-bottom:0.85rem;">
+                                        <label for="TYRO_LOGIN_PARTICLE_LINK_DISTANCE" class="form-label">Link distance (TYRO_LOGIN_PARTICLE_LINK_DISTANCE)</label>
+                                        <input type="number" step="1" min="0" name="TYRO_LOGIN_PARTICLE_LINK_DISTANCE" id="TYRO_LOGIN_PARTICLE_LINK_DISTANCE"
+                                               class="form-input"
+                                               value="{{ old('TYRO_LOGIN_PARTICLE_LINK_DISTANCE', $settings['TYRO_LOGIN_PARTICLE_LINK_DISTANCE']) }}">
+                                        <p class="form-hint">Max distance in pixels linking two nodes (default 130).</p>
+                                    </div>
+
+                                    <div class="form-group" style="margin-bottom:0;">
+                                        <div class="sys-settings-toggle">
+                                            <div class="sys-settings-toggle-top">
+                                                <div>
+                                                    <p class="sys-settings-toggle-title">React to mouse cursor <span style="font-weight:normal">(<code>TYRO_LOGIN_PARTICLE_INTERACTIVE</code>)</span></p>
+                                                    <p class="sys-settings-toggle-description">Nodes repel and link to the cursor when enabled.</p>
+                                                </div>
+                                                <div>
+                                                    <input type="hidden" name="TYRO_LOGIN_PARTICLE_INTERACTIVE" value="0">
+                                                    <label class="toggle-label">
+                                                        <input type="checkbox" name="TYRO_LOGIN_PARTICLE_INTERACTIVE" value="1" class="toggle-input" {{ old('TYRO_LOGIN_PARTICLE_INTERACTIVE', $settings['TYRO_LOGIN_PARTICLE_INTERACTIVE']) ? 'checked' : '' }}>
                                                         <span class="toggle-slider"></span>
                                                     </label>
                                                 </div>

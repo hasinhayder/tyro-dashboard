@@ -356,54 +356,80 @@ function confirmResetAllDcColors() {
         updateCaptcha();
     }
 
-    // YouTube video fields: show only when layout is youtube-video
+    // Layout surfaces: show the matching details surface and the background
+    // image field (only for image-based layouts) based on the selected layout.
     var ytLayout = document.getElementById('TYRO_LOGIN_LAYOUT');
-    var ytSurface = document.getElementById('youtube-video-details-surface');
+    var layoutSurfaces = {
+        'youtube-video': 'youtube-video-details-surface',
+        'tidal': 'tidal-details-surface',
+        'animated-birds': 'animated-birds-details-surface',
+        'particle-network': 'particle-network-details-surface',
+        'aurora-waves': 'aurora-waves-details-surface',
+    };
+    var imageLayouts = ['centered', 'split-left', 'split-right', 'fullscreen', 'card'];
     var bgField = document.getElementById('background-image-field');
-    if (ytLayout && ytSurface) {
-        function updateYoutubeVideo() {
-            var isYoutube = ytLayout.value === 'youtube-video';
-            ytSurface.style.display = isYoutube ? '' : 'none';
-            if (bgField) bgField.style.display = isYoutube ? 'none' : '';
+
+    function updateLayoutSurfaces() {
+        if (!ytLayout) return;
+        var current = ytLayout.value;
+        Object.keys(layoutSurfaces).forEach(function (layout) {
+            var el = document.getElementById(layoutSurfaces[layout]);
+            if (el) el.style.display = current === layout ? '' : 'none';
+        });
+        if (bgField) {
+            bgField.style.display = imageLayouts.indexOf(current) !== -1 ? '' : 'none';
         }
-        ytLayout.addEventListener('change', updateYoutubeVideo);
-        updateYoutubeVideo();
     }
 
-    // Overlay color: reset-to-default + show/hide reset button
-    // These are exposed as globals so inline onclick/oninput handlers can call them.
-    window.toggleOverlayReset = function () {
-        var text = document.getElementById('TYRO_LOGIN_VIDEO_OVERLAY_COLOR_TEXT');
-        var reset = document.getElementById('TYRO_LOGIN_VIDEO_OVERLAY_COLOR_RESET');
+    if (ytLayout) {
+        ytLayout.addEventListener('change', updateLayoutSurfaces);
+        updateLayoutSurfaces();
+    }
+
+    // Generic auth color picker helpers (keyBase = the TYRO_LOGIN_*_COLOR key).
+    // Elements: <keyBase> (color), <keyBase>_TEXT (hex text), <keyBase>_RESET (button).
+    window.toggleTyroColorReset = function (keyBase) {
+        var text = document.getElementById(keyBase + '_TEXT');
+        var reset = document.getElementById(keyBase + '_RESET');
         if (!text || !reset) return;
-        var def = (reset.getAttribute('data-default') || '#111827').toLowerCase();
+        var def = (reset.getAttribute('data-default') || '').toLowerCase();
         reset.style.display = text.value.trim().toLowerCase() === def ? 'none' : '';
     };
 
-    window.resetOverlayColor = function () {
-        var picker = document.getElementById('TYRO_LOGIN_VIDEO_OVERLAY_COLOR');
-        var text = document.getElementById('TYRO_LOGIN_VIDEO_OVERLAY_COLOR_TEXT');
-        var reset = document.getElementById('TYRO_LOGIN_VIDEO_OVERLAY_COLOR_RESET');
-        var def = reset ? (reset.getAttribute('data-default') || '#111827') : '#111827';
+    window.syncTyroColorPicker = function (keyBase) {
+        var text = document.getElementById(keyBase + '_TEXT');
+        var picker = document.getElementById(keyBase);
+        if (text && picker) {
+            var v = text.value.trim();
+            if (/^#[0-9a-fA-F]{6}$/.test(v)) picker.value = v;
+        }
+        window.toggleTyroColorReset(keyBase);
+    };
+
+    window.resetTyroColor = function (keyBase) {
+        var reset = document.getElementById(keyBase + '_RESET');
+        var def = reset ? (reset.getAttribute('data-default') || '') : '';
+        var picker = document.getElementById(keyBase);
+        var text = document.getElementById(keyBase + '_TEXT');
         if (picker) picker.value = def;
         if (text) text.value = def;
-        window.toggleOverlayReset();
+        window.toggleTyroColorReset(keyBase);
     };
 
-    window.syncOverlayColorPicker = function (input) {
-        var v = input.value.trim();
-        if (/^#[0-9a-fA-F]{6}$/.test(v)) {
-            document.getElementById('TYRO_LOGIN_VIDEO_OVERLAY_COLOR').value = v;
-        }
-        window.toggleOverlayReset();
-    };
-
-    var overlayPicker = document.getElementById('TYRO_LOGIN_VIDEO_OVERLAY_COLOR');
-    var overlayText = document.getElementById('TYRO_LOGIN_VIDEO_OVERLAY_COLOR_TEXT');
-    if (overlayPicker && overlayText) {
-        overlayPicker.addEventListener('input', window.toggleOverlayReset);
-        overlayText.addEventListener('input', window.toggleOverlayReset);
-        window.toggleOverlayReset();
-    }
+    // Initialize every auth color picker (reset button visibility + listeners).
+    var tyroColorKeys = [
+        'TYRO_LOGIN_VIDEO_OVERLAY_COLOR',
+        'TYRO_LOGIN_TIDAL_COLOR',
+        'TYRO_LOGIN_BIRDS_COLOR',
+        'TYRO_LOGIN_AURORA_COLOR',
+        'TYRO_LOGIN_PARTICLE_COLOR',
+    ];
+    tyroColorKeys.forEach(function (keyBase) {
+        var picker = document.getElementById(keyBase);
+        var text = document.getElementById(keyBase + '_TEXT');
+        if (picker) picker.addEventListener('input', function () { window.toggleTyroColorReset(keyBase); });
+        if (text) text.addEventListener('input', function () { window.toggleTyroColorReset(keyBase); });
+        window.toggleTyroColorReset(keyBase);
+    });
 })();
 </script>
