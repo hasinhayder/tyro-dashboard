@@ -16,6 +16,7 @@ class Media extends Component {
         public bool|string $circle = false,
         public ?string $alt = null,
         public string $loading = 'lazy',
+        public bool|string $showTitle = false,
     ) {}
 
     public function render(): View {
