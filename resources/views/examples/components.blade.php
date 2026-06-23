@@ -48,6 +48,7 @@
 @include('tyro-dashboard::examples.partials.components.tabs-section')
 @include('tyro-dashboard::examples.partials.components.form-and-richtext')
 @include('tyro-dashboard::examples.partials.components.recent-activity-table')
+@include('tyro-dashboard::examples.partials.components.ui-components')
 
 @push('scripts')
 @include('tyro-dashboard::examples.partials.components.scripts')

@@ -23,6 +23,7 @@ use HasinHayder\TyroDashboard\Console\Commands\VersionCommand;
 use HasinHayder\TyroDashboard\Http\Middleware\EnsureIsAdmin;
 use HasinHayder\TyroDashboard\Http\Middleware\HandleImpersonation;
 use HasinHayder\TyroDashboard\Support\DashboardRoute;
+use HasinHayder\TyroDashboard\View\Components\Media;
 use HasinHayder\TyroDashboard\View\Components\MediaPicker;
 use Illuminate\Routing\Router;
 use Illuminate\Support\Facades\Blade;
@@ -106,6 +107,7 @@ class TyroDashboardServiceProvider extends ServiceProvider {
         $this->loadViewsFrom(__DIR__.'/../../resources/views', 'tyro-dashboard');
         Blade::component(MediaPicker::class, 'tyro-dashboard-media-picker');
         Blade::component(MediaPicker::class, 'tyro-dashbaord-media-picker');
+        Blade::component(Media::class, 'tyro-dashboard-media');
         Blade::anonymousComponentPath(__DIR__.'/../../resources/views/components', 'tyro-dashboard');
         Blade::anonymousComponentPath(__DIR__.'/../../resources/views/components', 'tyro-dashbaord');
 
