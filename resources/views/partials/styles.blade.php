@@ -866,6 +866,51 @@
         border-bottom: none;
     }
 
+    /* Table Variants */
+    .table-striped tbody tr:nth-child(odd) td {
+        background-color: color-mix(in srgb, var(--muted) 50%, transparent);
+    }
+
+    .table-bordered {
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        overflow: hidden;
+    }
+
+    .table-bordered th,
+    .table-bordered td {
+        border-right: 1px solid var(--border);
+    }
+
+    .table-bordered th:last-child,
+    .table-bordered td:last-child {
+        border-right: none;
+    }
+
+    .table-compact th,
+    .table-compact td {
+        padding: 0.5rem 1rem;
+    }
+
+    .table-minimal th {
+        background: none;
+        font-weight: 600;
+        color: var(--foreground);
+        border-bottom-width: 2px;
+    }
+
+    .table-minimal td {
+        border-bottom-color: color-mix(in srgb, var(--border) 50%, transparent);
+    }
+
+    .table-minimal tbody tr:hover {
+        background: none;
+    }
+
+    .table-no-hover tbody tr:hover {
+        background: none;
+    }
+
     /* Buttons - shadcn style */
     .btn {
         display: inline-flex;
@@ -1962,6 +2007,11 @@
         font-size: 0.8125rem;
         color: var(--muted-foreground);
         margin-bottom: 1.5rem;
+    }
+
+    .font-mono {
+        font-family: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, monospace;
+        font-size: 0.8125rem;
     }
 
     /* User cell in tables */

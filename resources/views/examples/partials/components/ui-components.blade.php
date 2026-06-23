@@ -272,4 +272,112 @@
             <p class="page-description" style="margin:0;">Upload an image in the Media library to see <code>&lt;x-tyro-dashboard-media&gt;</code> rendered here.</p>
         @endif
     </x-tyro-dashboard::card>
+
+    {{-- Data Tables --}}
+    @php
+        $defaultTableData = collect([
+            ['name' => 'Alice Johnson', 'email' => 'alice@example.com', 'role' => 'Admin', 'status' => '<span class="badge badge-success">Active</span>'],
+            ['name' => 'Bob Smith', 'email' => 'bob@example.com', 'role' => 'Editor', 'status' => '<span class="badge badge-success">Active</span>'],
+            ['name' => 'Carol White', 'email' => 'carol@example.com', 'role' => 'Viewer', 'status' => '<span class="badge badge-warning">Invited</span>'],
+            ['name' => 'Dan Brown', 'email' => 'dan@example.com', 'role' => 'Editor', 'status' => '<span class="badge badge-danger">Suspended</span>'],
+        ]);
+    @endphp
+    <div style="margin-top: 1.5rem;">
+    <x-tyro-dashboard::data-table
+        title="Data Table (default, hover)"
+        description="Auto-generated from a collection with column definitions."
+        :collection="$defaultTableData"
+        :columns="[
+            ['key' => 'name', 'label' => 'Name'],
+            ['key' => 'email', 'label' => 'Email'],
+            ['key' => 'role', 'label' => 'Role'],
+            ['key' => 'status', 'label' => 'Status', 'align' => 'right'],
+        ]"
+    />
+
+    </div>
+
+    <div class="grid-2" style="margin-top: 1.5rem; margin-bottom: 1.5rem;">
+        <x-tyro-dashboard::data-table
+            title="Striped"
+            striped
+            :collection="collect([
+                ['item' => 'Alpha', 'value' => '$1,200'],
+                ['item' => 'Beta', 'value' => '$3,400'],
+                ['item' => 'Gamma', 'value' => '$2,100'],
+            ])"
+            :columns="['item' => 'Item', 'value' => 'Value']"
+        />
+
+        <x-tyro-dashboard::data-table
+            title="Bordered"
+            variant="bordered"
+            :collection="collect([
+                ['key' => 'APP_NAME', 'val' => 'Tyro Dashboard'],
+                ['key' => 'APP_ENV', 'val' => 'local'],
+                ['key' => 'APP_DEBUG', 'val' => 'true'],
+            ])"
+            :columns="[
+                ['key' => 'key', 'label' => 'Variable', 'class' => 'font-mono'],
+                ['key' => 'val', 'label' => 'Value', 'class' => 'font-mono'],
+            ]"
+        />
+    </div>
+
+    <div class="grid-2" style="margin-bottom: 1.5rem;">
+        <x-tyro-dashboard::data-table
+            title="Compact"
+            variant="compact"
+            :collection="collect([
+                ['name' => 'Page A', 'visits' => 1200],
+                ['name' => 'Page B', 'visits' => 3400],
+                ['name' => 'Page C', 'visits' => 2100],
+            ])"
+            :columns="[
+                ['key' => 'name', 'label' => 'Page'],
+                ['key' => 'visits', 'label' => 'Visits', 'align' => 'right'],
+            ]"
+        />
+
+        <x-tyro-dashboard::data-table
+            title="Minimal, No Hover"
+            variant="minimal"
+            :hover="false"
+            :collection="collect([
+                ['metric' => 'Uptime', 'value' => '99.97%'],
+                ['metric' => 'Errors', 'value' => '0.02%'],
+                ['metric' => 'Avg.', 'value' => '240ms'],
+            ])"
+            :columns="[
+                ['key' => 'metric', 'label' => 'Metric'],
+                ['key' => 'value', 'label' => 'Value', 'align' => 'right'],
+            ]"
+        />
+    </div>
+
+    <x-tyro-dashboard::data-table
+        title="Custom Slot (full table markup)"
+        description="Pass your own &lt;thead&gt; and &lt;tbody&gt; via the default slot."
+        :striped="true"
+    >
+        <thead>
+            <tr>
+                <th>Widget</th>
+                <th>Status</th>
+                <th style="text-align:right;">Price</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>Pro Plan</strong></td>
+                <td><span class="badge badge-success">Active</span></td>
+                <td style="text-align:right;">$29/mo</td>
+            </tr>
+            <tr>
+                <td><strong>Enterprise</strong></td>
+                <td><span class="badge badge-warning">Pending</span></td>
+                <td style="text-align:right;">$99/mo</td>
+            </tr>
+        </tbody>
+    </x-tyro-dashboard::data-table>
 </x-tyro-dashboard::card>
