@@ -1089,6 +1089,198 @@
     .tyro-select-lg .form-select { padding: 0.85rem 2.5rem 0.85rem 1rem; font-size: 1rem; }
     .tyro-select-lg.has-leading .form-select { padding-left: 2.75rem; }
 
+    /* Modern multi-select (chips + checkbox popover) */
+    .tyro-select-multi {
+        position: relative;
+        display: block;
+        width: 100%;
+    }
+
+    .tyro-multi-trigger {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 0.375rem;
+        min-height: 2.75rem;
+        width: 100%;
+        padding: 0.375rem 0.625rem;
+        font-size: 0.9375rem;
+        font-family: inherit;
+        line-height: 1.5;
+        color: var(--foreground);
+        background-color: var(--background);
+        border: 1px solid var(--input);
+        border-radius: 8px;
+        cursor: pointer;
+        text-align: left;
+        transition: border-color 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    .tyro-select-multi.is-open .tyro-multi-trigger,
+    .tyro-multi-trigger:focus-visible {
+        outline: none;
+        border-color: var(--ring);
+        box-shadow: 0 0 0 2px var(--muted);
+    }
+
+    .tyro-select-multi.is-disabled .tyro-multi-trigger {
+        opacity: 0.6;
+        background-color: var(--muted);
+        cursor: not-allowed;
+    }
+
+    .tyro-select-multi.is-invalid .tyro-multi-trigger { border-color: var(--destructive); }
+
+    .tyro-multi-placeholder {
+        color: var(--muted-foreground);
+    }
+
+    .tyro-multi-chips {
+        display: contents;
+    }
+
+    .tyro-multi-chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.25rem;
+        padding: 0.1875rem 0.125rem 0.1875rem 0.5rem;
+        background-color: var(--accent);
+        color: var(--foreground);
+        border: 1px solid var(--border);
+        border-radius: 9999px;
+        font-size: 0.8125rem;
+        font-weight: 500;
+        line-height: 1.4;
+    }
+
+    .tyro-multi-chip-remove {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 1.125rem;
+        height: 1.125rem;
+        padding: 0;
+        border: none;
+        border-radius: 9999px;
+        background-color: transparent;
+        color: var(--muted-foreground);
+        cursor: pointer;
+        transition: background-color 0.12s ease, color 0.12s ease;
+    }
+
+    .tyro-multi-chip-remove:hover {
+        background-color: var(--destructive);
+        color: var(--destructive-foreground);
+    }
+
+    .tyro-multi-chip-remove svg { width: 12px; height: 12px; }
+
+    .tyro-multi-count {
+        margin-left: auto;
+        font-size: 0.75rem;
+        color: var(--muted-foreground);
+        white-space: nowrap;
+    }
+
+    .tyro-multi-chevron {
+        flex-shrink: 0;
+        margin-left: 0.25rem;
+        color: var(--muted-foreground);
+        transition: transform 0.15s ease;
+    }
+    .tyro-multi-chevron svg { width: 16px; height: 16px; display: block; }
+    .tyro-select-multi.is-open .tyro-multi-chevron { transform: rotate(180deg); }
+
+    .tyro-multi-menu {
+        position: absolute;
+        z-index: 50;
+        top: calc(100% + 0.375rem);
+        left: 0;
+        right: 0;
+        max-height: 16rem;
+        overflow-y: auto;
+        padding: 0.375rem;
+        border: 1px solid var(--border);
+        border-radius: 0.625rem;
+        background-color: var(--popover, var(--card));
+        color: var(--popover-foreground, var(--foreground));
+        box-shadow: 0 10px 24px -6px rgb(0 0 0 / 0.18), 0 4px 8px -4px rgb(0 0 0 / 0.12);
+        opacity: 0;
+        visibility: hidden;
+        transform: translateY(-0.25rem) scale(0.98);
+        transform-origin: top;
+        transition: opacity 0.14s ease, transform 0.14s ease, visibility 0.14s;
+    }
+    .tyro-select-multi.is-open .tyro-multi-menu {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0) scale(1);
+    }
+
+    .tyro-multi-empty {
+        padding: 0.625rem;
+        font-size: 0.8125rem;
+        color: var(--muted-foreground);
+        text-align: center;
+    }
+
+    .tyro-multi-option {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        width: 100%;
+        padding: 0.5rem 0.625rem;
+        border-radius: 0.4375rem;
+        font-size: 0.875rem;
+        font-weight: 500;
+        cursor: pointer;
+        transition: background-color 0.12s ease;
+    }
+    .tyro-multi-option:hover { background-color: var(--accent); }
+
+    .tyro-multi-option input[type="checkbox"] {
+        width: 16px;
+        height: 16px;
+        accent-color: var(--primary);
+        flex-shrink: 0;
+    }
+
+    .tyro-multi-option-text { flex: 1; min-width: 0; }
+
+    .tyro-multi-option-check {
+        display: none;
+        color: var(--primary);
+        flex-shrink: 0;
+    }
+    .tyro-multi-option-check svg { width: 16px; height: 16px; }
+    .tyro-multi-option:has(input:checked) .tyro-multi-option-check { display: inline-flex; }
+
+    .tyro-multi-footer {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.5rem;
+        margin-top: 0.375rem;
+        padding-top: 0.5rem;
+        border-top: 1px solid var(--border);
+    }
+    .tyro-multi-footer button {
+        font-size: 0.8125rem;
+        font-weight: 600;
+        padding: 0.25rem 0.5rem;
+        border: none;
+        background: none;
+        color: var(--primary);
+        cursor: pointer;
+        border-radius: 6px;
+    }
+    .tyro-multi-footer button:hover { background-color: var(--accent); }
+    .tyro-multi-footer .tyro-multi-selected-count {
+        font-size: 0.75rem;
+        color: var(--muted-foreground);
+        font-weight: 500;
+    }
+
     .form-hint {
         font-size: 0.8125rem;
         color: var(--muted-foreground);
