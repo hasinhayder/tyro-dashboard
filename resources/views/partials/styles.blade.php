@@ -579,6 +579,96 @@
         color: var(--destructive);
     }
 
+    /* Modern dropdown menu component - shadcn style */
+    .tyro-dropdown {
+        position: relative;
+        display: inline-block;
+    }
+
+    .tyro-dropdown-trigger {
+        display: inline-flex;
+        cursor: pointer;
+    }
+
+    .tyro-dropdown-menu {
+        position: absolute;
+        z-index: 50;
+        min-width: 12rem;
+        margin-top: 0.5rem;
+        padding: 0.375rem;
+        border: 1px solid var(--border);
+        border-radius: 0.625rem;
+        background-color: var(--popover, var(--card));
+        color: var(--popover-foreground, var(--foreground));
+        box-shadow: 0 10px 24px -6px rgb(0 0 0 / 0.18), 0 4px 8px -4px rgb(0 0 0 / 0.12);
+        opacity: 0;
+        visibility: hidden;
+        transform: translateY(-0.25rem) scale(0.98);
+        transform-origin: top;
+        transition: opacity 0.14s ease, transform 0.14s ease, visibility 0.14s;
+    }
+
+    .tyro-dropdown[data-align="end"] .tyro-dropdown-menu {
+        right: 0;
+        transform-origin: top right;
+    }
+
+    .tyro-dropdown[data-align="start"] .tyro-dropdown-menu {
+        left: 0;
+        transform-origin: top left;
+    }
+
+    .tyro-dropdown[data-align="center"] .tyro-dropdown-menu {
+        left: 50%;
+        transform: translateX(-50%) translateY(-0.25rem) scale(0.98);
+        transform-origin: top center;
+    }
+
+    .tyro-dropdown.is-open .tyro-dropdown-menu {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0) scale(1);
+    }
+
+    .tyro-dropdown[data-align="center"].is-open .tyro-dropdown-menu {
+        transform: translateX(-50%) translateY(0) scale(1);
+    }
+
+    .tyro-dropdown-menu .dropdown-item {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        width: 100%;
+        padding: 0.5rem 0.625rem;
+        border: none;
+        background: none;
+        border-radius: 0.4375rem;
+        font-size: 0.875rem;
+        font-weight: 500;
+        color: inherit;
+        text-align: left;
+        text-decoration: none;
+        cursor: pointer;
+        transition: background-color 0.12s ease, color 0.12s ease;
+    }
+
+    .tyro-dropdown-menu .dropdown-item:hover,
+    .tyro-dropdown-menu .dropdown-item:focus-visible {
+        background-color: var(--accent);
+        outline: none;
+    }
+
+    .tyro-dropdown-menu .dropdown-item svg {
+        width: 16px;
+        height: 16px;
+        flex-shrink: 0;
+        opacity: 0.85;
+    }
+
+    .tyro-dropdown-menu .dropdown-divider {
+        margin: 0.3rem 0.125rem;
+    }
+
     /* Page Content */
     .page-content {
         padding: 2rem;
@@ -949,6 +1039,56 @@
         padding-right: 2rem;
     }
 
+    /* Modern select component wrapper */
+    .tyro-select {
+        position: relative;
+        display: block;
+        width: 100%;
+    }
+
+    .tyro-select-control {
+        position: relative;
+        display: flex;
+        align-items: center;
+    }
+
+    .tyro-select-control > .tyro-select-leading {
+        position: absolute;
+        left: 0.75rem;
+        display: inline-flex;
+        color: var(--muted-foreground);
+        pointer-events: none;
+    }
+
+    .tyro-select-control > .tyro-select-leading svg {
+        width: 18px;
+        height: 18px;
+    }
+
+    .tyro-select-control.has-leading .form-select {
+        padding-left: 2.5rem;
+    }
+
+    .tyro-select .form-select {
+        cursor: pointer;
+        padding-right: 2.5rem;
+        background-position: right 0.75rem center;
+    }
+
+    .tyro-select .form-select:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+        background-color: var(--muted);
+    }
+
+    .tyro-select-sm .form-select { padding: 0.4rem 2rem 0.4rem 0.75rem; font-size: 0.8125rem; }
+    .tyro-select-sm.has-leading .form-select { padding-left: 2.25rem; }
+    .tyro-select-sm .tyro-select-leading { left: 0.6rem; }
+    .tyro-select-sm .tyro-select-leading svg { width: 15px; height: 15px; }
+
+    .tyro-select-lg .form-select { padding: 0.85rem 2.5rem 0.85rem 1rem; font-size: 1rem; }
+    .tyro-select-lg.has-leading .form-select { padding-left: 2.75rem; }
+
     .form-hint {
         font-size: 0.8125rem;
         color: var(--muted-foreground);
@@ -1106,6 +1246,20 @@
     .toggle-input:checked + .toggle-slider:before {
         transform: translateX(20px);
     }
+
+    .toggle-input:checked + .toggle-slider.toggle-slider-primary { background-color: var(--primary); }
+    .toggle-input:checked + .toggle-slider.toggle-slider-success { background-color: var(--success); }
+    .toggle-input:checked + .toggle-slider.toggle-slider-warning { background-color: var(--warning); }
+    .toggle-input:checked + .toggle-slider.toggle-slider-danger { background-color: var(--destructive); }
+    .toggle-input:checked + .toggle-slider.toggle-slider-info { background-color: var(--info); }
+    .toggle-input:checked + .toggle-slider.toggle-slider-secondary { background-color: var(--secondary); }
+
+    .toggle-slider.toggle-slider-primary { background-color: color-mix(in srgb, var(--primary), transparent 70%); }
+    .toggle-slider.toggle-slider-success { background-color: color-mix(in srgb, var(--success), transparent 70%); }
+    .toggle-slider.toggle-slider-warning { background-color: color-mix(in srgb, var(--warning), transparent 70%); }
+    .toggle-slider.toggle-slider-danger { background-color: color-mix(in srgb, var(--destructive), transparent 70%); }
+    .toggle-slider.toggle-slider-info { background-color: color-mix(in srgb, var(--info), transparent 70%); }
+    .toggle-slider.toggle-slider-secondary { background-color: color-mix(in srgb, var(--secondary), transparent 60%); }
 
     .toggle-text {
         font-size: 0.9375rem;

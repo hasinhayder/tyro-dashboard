@@ -5,6 +5,7 @@
     'checked' => false,
     'disabled' => false,
     'label' => null,
+    'color' => 'default',
 ])
 
 @php
@@ -12,6 +13,8 @@
     $isDisabled = filter_var($disabled, FILTER_VALIDATE_BOOL);
     $toggleId = filled($id) ? $id : 'tyro-toggle-'.\Illuminate\Support\Str::random(8);
     $labelText = trim((string) ($label ?? ''));
+    $colorKey = in_array((string) $color, ['default', 'primary', 'success', 'warning', 'danger', 'info', 'secondary'], true) ? (string) $color : 'default';
+    $sliderClass = 'toggle-slider'.($colorKey !== 'default' ? ' toggle-slider-'.$colorKey : '');
     $wrapStyle = (string) ($attributes->get('style') ?? '');
     $passthrough = trim((string) $attributes->except(['style']));
 
@@ -42,7 +45,7 @@
 
 <label class="toggle-label" for="{{ $toggleId }}"{!! $labelAttrs !!}>
     <input type="checkbox" class="toggle-input" id="{{ $toggleId }}"{!! $inputAttrs !!}>
-    <span class="toggle-slider"></span>
+    <span class="{{ $sliderClass }}"></span>
     @if($labelText !== '')
         <span class="toggle-text">{{ $labelText }}</span>
     @endif

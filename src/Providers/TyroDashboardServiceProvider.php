@@ -116,7 +116,7 @@ class TyroDashboardServiceProvider extends ServiceProvider {
         // The aliases are re-registered in a booted() callback to guarantee
         // last-write-wins regardless of provider boot order.
         $this->app->booted(function () {
-            foreach (['alert', 'avatar', 'badge', 'card', 'progress', 'toggle'] as $component) {
+            foreach (['alert', 'avatar', 'badge', 'card', 'progress', 'select', 'toggle'] as $component) {
                 Blade::component("tyro-dashboard::components.{$component}", "tyro-dashboard::{$component}");
             }
         });

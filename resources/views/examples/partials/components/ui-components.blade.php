@@ -85,6 +85,18 @@
                     <x-tyro-dashboard::toggle name="dnd" checked />
                     <x-tyro-dashboard::badge variant="warning">no label, on</x-tyro-dashboard::badge>
                 </div>
+                <div style="display:flex; align-items:center; gap:1rem; flex-wrap:wrap; margin-top:0.25rem;">
+                    <x-tyro-dashboard::toggle name="c1" label="Primary" color="primary" checked />
+                    <x-tyro-dashboard::toggle name="c2" label="Success" color="success" checked />
+                    <x-tyro-dashboard::toggle name="c3" label="Warning" color="warning" checked />
+                    <x-tyro-dashboard::toggle name="c4" label="Danger" color="danger" checked />
+                    <x-tyro-dashboard::toggle name="c5" label="Info" color="info" checked />
+                </div>
+                <div style="display:flex; align-items:center; gap:1rem; flex-wrap:wrap;">
+                    <x-tyro-dashboard::toggle name="c6" label="Primary" color="primary" />
+                    <x-tyro-dashboard::toggle name="c7" label="Success" color="success" />
+                    <x-tyro-dashboard::toggle name="c8" label="Danger" color="danger" />
+                </div>
             </div>
         </x-tyro-dashboard::card>
 
@@ -99,6 +111,83 @@
                     <span class="toggle-text">Dark mode</span>
                     <x-tyro-dashboard::toggle name="dark_mode" />
                 </div>
+            </div>
+        </x-tyro-dashboard::card>
+    </div>
+
+    <div class="grid-2" style="margin-bottom: 1.5rem;">
+        <x-tyro-dashboard::card title="Dropdowns">
+            <div style="display:flex; gap:1rem; flex-wrap:wrap; align-items:flex-start;">
+                <x-tyro-dashboard::dropdown>
+                    <x-slot:trigger>
+                        <button type="button" class="btn btn-primary btn-sm">
+                            Actions
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;margin-left:0.25rem;"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+                        </button>
+                    </x-slot:trigger>
+                    <x-tyro-dashboard::dropdown-item icon='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>' href="#">Profile</x-tyro-dashboard::dropdown-item>
+                    <x-tyro-dashboard::dropdown-item icon='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317a2 2 0 013.35 0 2 2 0 003.05 1.276 2 2 0 012.79 2.79 2 2 0 001.276 3.05 2 2 0 010 3.35 2 2 0 00-1.276 3.05 2 2 0 01-2.79 2.79 2 2 0 00-3.05 1.276 2 2 0 01-3.35 0 2 2 0 00-3.05-1.276 2 2 0 01-2.79-2.79 2 2 0 00-1.276-3.05 2 2 0 010-3.35 2 2 0 001.276-3.05 2 2 0 012.79-2.79 2 2 0 003.05-1.276z"/><circle cx="12" cy="12" r="3"/></svg>' href="#">Settings</x-tyro-dashboard::dropdown-item>
+                    <x-tyro-dashboard::dropdown-item href="#">Billing (No Icon)</x-tyro-dashboard::dropdown-item>
+                    <x-tyro-dashboard::dropdown-divider />
+                    <x-tyro-dashboard::dropdown-item variant="danger" icon='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>'>Sign out</x-tyro-dashboard::dropdown-item>
+                </x-tyro-dashboard::dropdown>
+
+                <x-tyro-dashboard::dropdown align="end">
+                    <x-slot:trigger>
+                        <button type="button" class="btn btn-secondary btn-sm">Align end</button>
+                    </x-slot:trigger>
+                    <x-tyro-dashboard::dropdown-item>Open</x-tyro-dashboard::dropdown-item>
+                    <x-tyro-dashboard::dropdown-item>Duplicate</x-tyro-dashboard::dropdown-item>
+                    <x-tyro-dashboard::dropdown-divider />
+                    <x-tyro-dashboard::dropdown-item variant="danger">Delete</x-tyro-dashboard::dropdown-item>
+                </x-tyro-dashboard::dropdown>
+
+                <x-tyro-dashboard::dropdown align="center">
+                    <x-slot:trigger>
+                        <span class="badge badge-info" style="cursor:pointer;">Hover/Click</span>
+                    </x-slot:trigger>
+                    <x-tyro-dashboard::dropdown-item>Centered item</x-tyro-dashboard::dropdown-item>
+                    <x-tyro-dashboard::dropdown-item>Another</x-tyro-dashboard::dropdown-item>
+                </x-tyro-dashboard::dropdown>
+            </div>
+        </x-tyro-dashboard::card>
+
+        <x-tyro-dashboard::card title="Default Trigger">
+            <p class="page-description" style="margin:0 0 1rem;">Omit the trigger slot to get a default button. Click any dropdown below.</p>
+            <div style="display:flex; gap:1rem; flex-wrap:wrap;">
+                <x-tyro-dashboard::dropdown>
+                    <x-tyro-dashboard::dropdown-item>First</x-tyro-dashboard::dropdown-item>
+                    <x-tyro-dashboard::dropdown-item>Second</x-tyro-dashboard::dropdown-item>
+                </x-tyro-dashboard::dropdown>
+            </div>
+        </x-tyro-dashboard::card>
+    </div>
+
+    <div class="grid-2" style="margin-bottom: 1.5rem;">
+        <x-tyro-dashboard::card title="Selects">
+            <div style="display:flex; flex-direction:column; gap:1rem;">
+                <x-tyro-dashboard::select name="country" label="Country" placeholder="Choose a country" value="bd" :options="['us' => 'United States', 'bd' => 'Bangladesh', 'uk' => 'United Kingdom', 'ca' => 'Canada']" />
+
+                <x-tyro-dashboard::select name="role" label="Role" size="sm" icon='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>' :options="['admin' => 'Administrator', 'editor' => 'Editor', 'viewer' => 'Viewer']" hint="Controls what this user can access." />
+
+                <x-tyro-dashboard::select name="timezone" label="Timezone" required>
+                    <option value="" disabled hidden>Select…</option>
+                    <option value="utc">UTC</option>
+                    <option value="est" selected>EST (New York)</option>
+                    <option value="bst">BST (London)</option>
+                </x-tyro-dashboard::select>
+            </div>
+        </x-tyro-dashboard::card>
+
+        <x-tyro-dashboard::card title="Select States">
+            <div style="display:flex; flex-direction:column; gap:1rem;">
+                <x-tyro-dashboard::select name="large" label="Large size" size="lg" :options="['a' => 'Option A', 'b' => 'Option B']" />
+
+                <x-tyro-dashboard::select name="err" label="With error" variant="error" error="Please select a valid option." :options="['a' => 'Option A', 'b' => 'Option B']" />
+
+                <x-tyro-dashboard::select name="dis" label="Disabled" disabled :options="['a' => 'Option A', 'b' => 'Option B']" />
+
+                <x-tyro-dashboard::select name="tags" label="Multiple" multiple :value="['php', 'js']" :options="['php' => 'PHP', 'js' => 'JavaScript', 'go' => 'Go', 'rb' => 'Ruby']" />
             </div>
         </x-tyro-dashboard::card>
     </div>
