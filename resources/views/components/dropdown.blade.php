@@ -1,6 +1,7 @@
 @props([
     'align' => 'start',
     'id' => null,
+    'title' => 'Options',
 ])
 
 @php
@@ -11,6 +12,7 @@
     $extraClass = trim((string) ($attributes->get('class') ?? ''));
     $extraAttrs = trim((string) $attributes->except(['class', 'style']));
     $wrapStyle = trim((string) ($attributes->get('style') ?? ''));
+    $triggerLabel = trim((string) ($title ?? '')) !== '' ? trim((string) $title) : 'Options';
 
     $wrapperClass = trim('tyro-dropdown'.($extraClass !== '' ? ' '.$extraClass : ''));
     $wrapperAttrs = ' id="'.e($dropdownId).'" data-align="'.e($alignKey).'" data-dropdown';
@@ -28,7 +30,7 @@
             {!! $trigger !!}
         @else
             <button type="button" class="btn btn-secondary btn-sm">
-                Options
+                {{ $triggerLabel }}
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;margin-left:0.25rem;"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
             </button>
         @endif

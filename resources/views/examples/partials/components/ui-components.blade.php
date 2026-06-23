@@ -153,11 +153,18 @@
         </x-tyro-dashboard::card>
 
         <x-tyro-dashboard::card title="Default Trigger">
-            <p class="page-description" style="margin:0 0 1rem;">Omit the trigger slot to get a default button. Click any dropdown below.</p>
-            <div style="display:flex; gap:1rem; flex-wrap:wrap;">
+            <p class="page-description" style="margin:0 0 1rem;">Omit the trigger slot to get a default button. Use <code>title="…"</code> to change its label.</p>
+            <div style="display:flex; gap:1rem; flex-wrap:wrap; align-items:flex-start;">
                 <x-tyro-dashboard::dropdown>
                     <x-tyro-dashboard::dropdown-item>First</x-tyro-dashboard::dropdown-item>
                     <x-tyro-dashboard::dropdown-item>Second</x-tyro-dashboard::dropdown-item>
+                </x-tyro-dashboard::dropdown>
+
+                <x-tyro-dashboard::dropdown title="Export">
+                    <x-tyro-dashboard::dropdown-item onclick="alert('Exporting as CSV…')">Export as CSV</x-tyro-dashboard::dropdown-item>
+                    <x-tyro-dashboard::dropdown-item onclick="alert('Exporting as JSON…')">Export as JSON</x-tyro-dashboard::dropdown-item>
+                    <x-tyro-dashboard::dropdown-divider />
+                    <x-tyro-dashboard::dropdown-item variant="danger" onclick="alert('Cancelled export')">Cancel</x-tyro-dashboard::dropdown-item>
                 </x-tyro-dashboard::dropdown>
             </div>
         </x-tyro-dashboard::card>

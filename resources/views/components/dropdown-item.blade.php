@@ -25,4 +25,4 @@
     $typeAttr = filled($href) ? '' : ' type="button"';
 @endphp
 
-<{{ $tag }}{{ $hrefAttr }}{{ $typeAttr }} class="{{ $itemClass }}" role="menuitem"@if($extraAttrs !== '') {{ $extraAttrs }}@endif>{!! $inner !!}</{{ $tag }}>
+<{{ $tag }}{!! $hrefAttr !!}{!! $typeAttr !!} class="{{ $itemClass }}" role="menuitem"@if($extraAttrs !== '') {!! ' '.$extraAttrs !!}@endif>{!! $inner !!}</{{ $tag }}>
