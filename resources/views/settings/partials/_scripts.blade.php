@@ -323,6 +323,7 @@ function confirmResetAllDcColors() {
         { toggle: 'TYRO_LOGIN_SOCIAL_ENABLED', target: 'social-details-surface' },
         { toggle: 'TYRO_LOGIN_LOCKOUT_ENABLED', target: 'lockout-details-surface' },
         { toggle: 'TYRO_AUDIT_ENABLED', target: 'tyro_audit_retention_group' },
+        { toggle: 'TYRO_LOGIN_PASSKEYS_ENABLED', target: 'passkeys-details-surface' },
     ];
 
     function updateConditionalVisibility() {

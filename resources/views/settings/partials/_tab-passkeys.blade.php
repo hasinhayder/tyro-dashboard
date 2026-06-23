@@ -30,7 +30,7 @@
                                         <div>
                                             <input type="hidden" name="TYRO_LOGIN_PASSKEYS_ENABLED" value="0">
                                             <label class="toggle-label">
-                                                <input type="checkbox" name="TYRO_LOGIN_PASSKEYS_ENABLED" value="1" class="toggle-input" {{ old('TYRO_LOGIN_PASSKEYS_ENABLED', $settings['TYRO_LOGIN_PASSKEYS_ENABLED']) ? 'checked' : '' }}>
+                                                <input type="checkbox" name="TYRO_LOGIN_PASSKEYS_ENABLED" id="TYRO_LOGIN_PASSKEYS_ENABLED" value="1" class="toggle-input" {{ old('TYRO_LOGIN_PASSKEYS_ENABLED', $settings['TYRO_LOGIN_PASSKEYS_ENABLED']) ? 'checked' : '' }}>
                                                 <span class="toggle-slider"></span>
                                             </label>
                                         </div>
@@ -39,6 +39,7 @@
                             </div>
                         </div>
 
+                        <div id="passkeys-details-surface" class="sys-settings-grid">
                         <div class="sys-settings-surface">
                             <h4 class="sys-settings-surface-title">Login Page</h4>
                             <p class="sys-settings-surface-description">Labels shown on the passkey login button and the divider beneath it.</p>
@@ -145,6 +146,7 @@
                                 <p class="form-hint">ESM URL for the <code>@laravel/passkeys</code> client. Override to self-host.</p>
                             </div>
                         </div>
+                        </div><!-- /passkeys-details-surface -->
                     </div>
                 </div>
             </div>
