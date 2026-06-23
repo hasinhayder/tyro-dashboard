@@ -111,6 +111,16 @@ class TyroDashboardServiceProvider extends ServiceProvider {
         Blade::anonymousComponentPath(__DIR__.'/../../resources/views/components', 'tyro-dashboard');
         Blade::anonymousComponentPath(__DIR__.'/../../resources/views/components', 'tyro-dashbaord');
 
+        // Re-assert ownership of the components that ship in this package so a
+        // co-installed package cannot shadow them by aliasing "tyro-dashboard::<name>".
+        // The aliases are re-registered in a booted() callback to guarantee
+        // last-write-wins regardless of provider boot order.
+        $this->app->booted(function () {
+            foreach (['alert', 'avatar', 'badge', 'card', 'progress'] as $component) {
+                Blade::component("tyro-dashboard::components.{$component}", "tyro-dashboard::{$component}");
+            }
+        });
+
         // Also add as a general view location so non-namespaced references
         // (e.g. vendor.pagination.tyro) resolve within the package.
         View::addLocation(__DIR__.'/../../resources/views');
