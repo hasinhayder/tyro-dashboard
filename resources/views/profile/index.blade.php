@@ -193,8 +193,10 @@
                     <form method="POST" action="{{ route($dashboardRoute::name('profile.passkeys.destroy'), ['id' => $pk->getKey()]) }}" id="remove-passkey-form-{{ $pk->getKey() }}">
                         @csrf
                         @method('DELETE')
-                        <button type="button" class="btn btn-danger btn-sm" onclick="event.preventDefault(); showConfirm('Remove passkey', 'Are you sure you want to remove this passkey? You may be locked out if this is your only sign-in method.').then(confirmed => { if(confirmed) document.getElementById('remove-passkey-form-{{ $pk->getKey() }}').submit(); })">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:15px;height:15px;margin-right:0.3rem;vertical-align:middle;"><path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6M1 7h22M9 7V4a1 1 0 011-1h4a1 1 0 011 1v3"/></svg>
+                        <button type="button" class="btn btn-destructive" onclick="event.preventDefault(); showDanger('Remove Passkey', 'Are you sure you want to remove this passkey? You may be locked out if this is your only sign-in method.').then(confirmed => { if(confirmed) document.getElementById('remove-passkey-form-{{ $pk->getKey() }}').submit(); })">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                            </svg>
                             Remove
                         </button>
                     </form>
