@@ -116,6 +116,56 @@
     </div>
 
     <div class="grid-2" style="margin-bottom: 1.5rem;">
+        <x-tyro-dashboard::card title="Checkboxes">
+            <div style="display:flex; flex-direction:column; gap:1rem;">
+                <x-tyro-dashboard::checkbox name="cb_email_digest" label="Email digest" checked />
+                <x-tyro-dashboard::checkbox name="cb_two_factor" label="Two-factor auth" />
+                <x-tyro-dashboard::checkbox name="cb_maintenance" label="Maintenance mode" disabled />
+                <div style="display:flex; align-items:center; gap:0.75rem; flex-wrap:wrap;">
+                    <x-tyro-dashboard::checkbox name="cb_dnd" checked />
+                    <x-tyro-dashboard::badge variant="warning">no label, on</x-tyro-dashboard::badge>
+                </div>
+                <div style="display:flex; align-items:center; gap:1rem; flex-wrap:wrap; margin-top:0.25rem;">
+                    <x-tyro-dashboard::checkbox name="cb_c1" label="Primary" color="primary" checked />
+                    <x-tyro-dashboard::checkbox name="cb_c2" label="Success" color="success" checked />
+                    <x-tyro-dashboard::checkbox name="cb_c3" label="Warning" color="warning" checked />
+                    <x-tyro-dashboard::checkbox name="cb_c4" label="Danger" color="danger" checked />
+                    <x-tyro-dashboard::checkbox name="cb_c5" label="Info" color="info" checked />
+                </div>
+                <div style="display:flex; align-items:center; gap:1rem; flex-wrap:wrap;">
+                    <x-tyro-dashboard::checkbox name="cb_c6" label="Primary" color="primary" />
+                    <x-tyro-dashboard::checkbox name="cb_c7" label="Success" color="success" />
+                    <x-tyro-dashboard::checkbox name="cb_c8" label="Danger" color="danger" />
+                </div>
+            </div>
+        </x-tyro-dashboard::card>
+
+        <x-tyro-dashboard::card title="Checkbox Groups">
+            <div style="display:flex; flex-direction:column; gap:0.75rem;">
+                <x-tyro-dashboard::checkbox name="cb_feature_api" label="API access" color="primary" checked />
+                <x-tyro-dashboard::checkbox name="cb_feature_webhooks" label="Webhooks" color="success" />
+                <x-tyro-dashboard::checkbox name="cb_feature_exports" label="Bulk exports" color="warning" />
+                <x-tyro-dashboard::checkbox name="cb_feature_audit" label="Audit logging" color="info" checked />
+            </div>
+        </x-tyro-dashboard::card>
+    </div>
+
+    <div class="grid-2" style="margin-bottom: 1.5rem;">
+        <x-tyro-dashboard::card title="Indeterminate State">
+            <div style="display:flex; flex-direction:column; gap:1rem;">
+                <x-tyro-dashboard::checkbox name="cb_indet_default" label="Default indeterminate" indeterminate />
+                <div style="display:flex; align-items:center; gap:1rem; flex-wrap:wrap;">
+                    <x-tyro-dashboard::checkbox name="cb_indet_p" label="Primary" color="primary" indeterminate />
+                    <x-tyro-dashboard::checkbox name="cb_indet_s" label="Success" color="success" indeterminate />
+                    <x-tyro-dashboard::checkbox name="cb_indet_w" label="Warning" color="warning" indeterminate />
+                    <x-tyro-dashboard::checkbox name="cb_indet_d" label="Danger" color="danger" indeterminate />
+                    <x-tyro-dashboard::checkbox name="cb_indet_i" label="Info" color="info" indeterminate />
+                </div>
+            </div>
+        </x-tyro-dashboard::card>
+    </div>
+
+    <div class="grid-2" style="margin-bottom: 1.5rem;">
         <x-tyro-dashboard::card title="Dropdowns">
             <div style="display:flex; gap:1rem; flex-wrap:wrap; align-items:flex-start;">
                 <x-tyro-dashboard::dropdown>

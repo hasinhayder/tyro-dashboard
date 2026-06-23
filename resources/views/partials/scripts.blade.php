@@ -460,4 +460,9 @@
             }
         }
     });
+
+    // Initialize indeterminate checkboxes
+    document.querySelectorAll('input[type="checkbox"][data-indeterminate="true"]').forEach(function(checkbox) {
+        checkbox.indeterminate = true;
+    });
 </script>

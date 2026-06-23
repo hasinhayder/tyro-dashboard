@@ -1393,6 +1393,46 @@
         border-radius: 50%;
     }
 
+    .checkbox-input-primary:checked { background-color: var(--primary); border-color: var(--primary); }
+    .checkbox-input-success:checked { background-color: var(--success); border-color: var(--success); }
+    .checkbox-input-warning:checked { background-color: var(--warning); border-color: var(--warning); }
+    .checkbox-input-danger:checked { background-color: var(--destructive); border-color: var(--destructive); }
+    .checkbox-input-info:checked { background-color: var(--info); border-color: var(--info); }
+    .checkbox-input-secondary:checked { background-color: var(--secondary); border-color: var(--secondary); }
+
+    .checkbox-input:indeterminate { background-color: var(--foreground); border-color: var(--foreground); }
+    .checkbox-input:indeterminate::after {
+        content: '';
+        position: absolute;
+        left: 4px;
+        top: 8px;
+        width: 10px;
+        height: 2px;
+        border: none;
+        background: var(--background);
+        transform: none;
+    }
+
+    .checkbox-input-primary:indeterminate { background-color: var(--primary); border-color: var(--primary); }
+    .checkbox-input-success:indeterminate { background-color: var(--success); border-color: var(--success); }
+    .checkbox-input-warning:indeterminate { background-color: var(--warning); border-color: var(--warning); }
+    .checkbox-input-danger:indeterminate { background-color: var(--destructive); border-color: var(--destructive); }
+    .checkbox-input-info:indeterminate { background-color: var(--info); border-color: var(--info); }
+    .checkbox-input-secondary:indeterminate { background-color: var(--secondary); border-color: var(--secondary); }
+
+    .checkbox-label {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.625rem;
+        cursor: pointer;
+    }
+
+    .checkbox-text {
+        font-size: 0.9375rem;
+        font-weight: 500;
+        color: var(--foreground);
+    }
+
     /* Toggle Switch - shadcn style */
     .toggle-label {
         display: flex;
