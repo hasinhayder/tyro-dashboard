@@ -75,6 +75,34 @@
         </x-tyro-dashboard::card>
     </div>
 
+    <div class="grid-2" style="margin-bottom: 1.5rem;">
+        <x-tyro-dashboard::card title="Toggles">
+            <div style="display:flex; flex-direction:column; gap:1rem;">
+                <x-tyro-dashboard::toggle name="email_digest" label="Email digest" checked />
+                <x-tyro-dashboard::toggle name="two_factor" label="Two-factor auth" />
+                <x-tyro-dashboard::toggle name="maintenance" label="Maintenance mode" disabled />
+                <div style="display:flex; align-items:center; gap:0.75rem; flex-wrap:wrap;">
+                    <x-tyro-dashboard::toggle name="dnd" checked />
+                    <x-tyro-dashboard::badge variant="warning">no label, on</x-tyro-dashboard::badge>
+                </div>
+            </div>
+        </x-tyro-dashboard::card>
+
+        <x-tyro-dashboard::card title="Mixed Controls">
+            <div style="display:flex; flex-direction:column; gap:1rem;">
+                <x-tyro-dashboard::toggle name="sync" label="Auto-sync" checked />
+                <div style="display:flex; align-items:center; justify-content:space-between; gap:0.75rem;">
+                    <span class="toggle-text">Notifications</span>
+                    <x-tyro-dashboard::toggle name="notifications" checked />
+                </div>
+                <div style="display:flex; align-items:center; justify-content:space-between; gap:0.75rem;">
+                    <span class="toggle-text">Dark mode</span>
+                    <x-tyro-dashboard::toggle name="dark_mode" />
+                </div>
+            </div>
+        </x-tyro-dashboard::card>
+    </div>
+
     <x-tyro-dashboard::card title="Media">
         <x-slot:actions>
             <x-tyro-dashboard::badge variant="info">class-based</x-tyro-dashboard::badge>
