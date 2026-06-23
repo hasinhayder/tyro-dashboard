@@ -155,6 +155,58 @@
     </div>
     @endif
 
+@if($passkeysAvailable ?? false)
+<!-- Passkeys -->
+<div class="card" style="margin-top: 1.5rem;">
+    <div class="card-header" style="display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;">
+        <h3 class="card-title">Passkeys</h3>
+        <button type="button" class="btn btn-primary btn-sm" id="add-passkey-btn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;margin-right:0.35rem;vertical-align:middle;"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg>
+            Add passkey
+        </button>
+    </div>
+    <div class="card-body">
+        <p style="margin-bottom: 1rem; color: var(--muted-foreground);">
+            Passkeys let you sign in securely without a password, using your device's Face ID, Touch ID, or screen lock.
+        </p>
+
+        @forelse($passkeys as $pk)
+            <div class="profile-passkey-row" style="display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;padding:0.85rem 0;border-top:1px solid var(--border);">
+                <div style="display:flex;align-items:center;gap:0.75rem;min-width:0;">
+                    <span style="display:inline-flex;align-items:center;justify-content:center;width:38px;height:38px;flex-shrink:0;border-radius:50%;background:var(--muted);color:var(--foreground);">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:18px;height:18px;"><path stroke-linecap="round" stroke-linejoin="round" d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 11-7.778 7.778 5.5 5.5 0 017.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/></svg>
+                    </span>
+                    <div style="min-width:0;">
+                        <p style="font-weight:600;margin-bottom:0.15rem;word-break:break-word;">
+                            {{ $pk->name ?: 'Unnamed passkey' }}
+                            @if($pk->authenticator)
+                                <span class="badge badge-secondary" style="margin-left:0.35rem;">{{ $pk->authenticator }}</span>
+                            @endif
+                        </p>
+                        <p style="font-size:0.8rem;color:var(--muted-foreground);margin:0;">
+                            Added {{ $pk->created_at?->format('M j, Y') }}
+                            · {{ $pk->last_used_at ? 'Last used '.$pk->last_used_at->format('M j, Y') : 'Never used' }}
+                        </p>
+                    </div>
+                </div>
+                <div>
+                    <form method="POST" action="{{ route($dashboardRoute::name('profile.passkeys.destroy'), ['id' => $pk->getKey()]) }}" id="remove-passkey-form-{{ $pk->getKey() }}">
+                        @csrf
+                        @method('DELETE')
+                        <button type="button" class="btn btn-danger btn-sm" onclick="event.preventDefault(); showConfirm('Remove passkey', 'Are you sure you want to remove this passkey? You may be locked out if this is your only sign-in method.').then(confirmed => { if(confirmed) document.getElementById('remove-passkey-form-{{ $pk->getKey() }}').submit(); })">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:15px;height:15px;margin-right:0.3rem;vertical-align:middle;"><path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6M1 7h22M9 7V4a1 1 0 011-1h4a1 1 0 011 1v3"/></svg>
+                            Remove
+                        </button>
+                    </form>
+                </div>
+            </div>
+        @empty
+            <p id="profile-passkeys-empty" style="padding:0.85rem 0;color:var(--muted-foreground);">You don&rsquo;t have any passkeys yet.</p>
+        @endforelse
+    </div>
+</div>
+@endif
+
 <!-- Account Information -->
 <div class="card" style="margin-top: 1.5rem;">
     <div class="card-header">
@@ -194,3 +246,51 @@
     </div>
 </div>
 @endsection
+
+@push('scripts')
+@if($passkeysAvailable ?? false)
+<script type="module">
+    (function () {
+        var addBtn = document.getElementById('add-passkey-btn');
+        if (!addBtn) return;
+
+        var cdnUrl = @json($passkeyCdnUrl);
+        var PasskeysLib = null;
+
+        addBtn.addEventListener('click', async function () {
+            var original = addBtn.innerHTML;
+            try {
+                if (!PasskeysLib) {
+                    var mod = await import(cdnUrl);
+                    PasskeysLib = mod.Passkeys || mod.default;
+                }
+                if (!PasskeysLib || typeof PasskeysLib.isSupported !== 'function' || !PasskeysLib.isSupported()) {
+                    window.showToast && window.showToast('Passkeys are not supported in this browser.', 'error');
+                    return;
+                }
+                addBtn.disabled = true;
+                addBtn.textContent = 'Waiting…';
+                var label = (navigator.userAgentData && navigator.userAgentData.platform) || navigator.platform || 'This device';
+                await PasskeysLib.register({ name: label });
+                window.showToast && window.showToast('Passkey added successfully.', 'success');
+                setTimeout(function () { window.location.reload(); }, 700);
+            } catch (e) {
+                var name = (e && (e.name || (e.constructor && e.constructor.name))) || '';
+                if (name === 'UserCancelledError' || name === 'AbortError') {
+                    window.showToast && window.showToast('Passkey creation was cancelled.', 'error');
+                } else if (name === 'PasskeyExistsError' || name === 'InvalidStateError') {
+                    window.showToast && window.showToast('A passkey for this device already exists.', 'error');
+                } else if (name === 'NotSupportedError' || name === 'InvalidDomainError' || name === 'SecurityError') {
+                    window.showToast && window.showToast('Passkeys cannot be used here (requires HTTPS and a supported browser).', 'error');
+                } else {
+                    window.showToast && window.showToast((e && e.message) || 'Could not create the passkey. Please try again.', 'error');
+                }
+            } finally {
+                addBtn.disabled = false;
+                addBtn.innerHTML = original;
+            }
+        });
+    })();
+</script>
+@endif
+@endpush

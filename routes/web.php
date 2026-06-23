@@ -60,6 +60,11 @@ Route::prefix('profile')->name('profile')->group(function () {
     Route::delete('/photo', [ProfileController::class, 'deletePhoto'])->name('.photo.delete');
     Route::post('/2fa/setup', [ProfileController::class, 'setup2FA'])->name('.2fa.setup');
     Route::delete('/2fa/reset', [ProfileController::class, 'reset2FA'])->name('.2fa.reset');
+
+    // Passkey management (only when the passkeys feature is enabled and installed)
+    if (config('tyro-login.passkeys.enabled', false) && class_exists(\Laravel\Passkeys\Passkeys::class)) {
+        Route::delete('/passkeys/{id}', [ProfileController::class, 'destroyPasskey'])->name('.passkeys.destroy');
+    }
 });
 
 // Invitation/Referral System (all authenticated users)

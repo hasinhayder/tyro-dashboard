@@ -15,7 +15,20 @@ class ProfileController extends BaseController {
      * Display the profile page.
      */
     public function index(Request $request) {
-        return view('tyro-dashboard::profile.index', $this->getViewData());
+        $data = [];
+
+        if ($this->passkeysAvailable()) {
+            $user = $request->user();
+
+            $data['passkeysAvailable'] = true;
+            $data['passkeys'] = \Laravel\Passkeys\Passkey::query()
+                ->where('user_id', $user->getAuthIdentifier())
+                ->latest()
+                ->get();
+            $data['passkeyCdnUrl'] = config('tyro-login.passkeys.cdn_url', 'https://esm.sh/@laravel/passkeys');
+        }
+
+        return view('tyro-dashboard::profile.index', $this->getViewData($data));
     }
 
     /**
@@ -159,6 +172,44 @@ class ProfileController extends BaseController {
         }
 
         return back()->with('success', "{$user->name}'s profile photo removed.");
+    }
+
+    /**
+     * Delete one of the authenticated user's passkeys.
+     *
+     * The passkey is always scoped to the authenticated user, so a user can
+     * only remove their own passkeys. Delegation goes through the package's
+     * DeletePasskey action (which fires the PasskeyDeleted event) when present,
+     * falling back to a plain model delete.
+     */
+    public function destroyPasskey(Request $request, string $id) {
+        if (! $this->passkeysAvailable()) {
+            abort(404);
+        }
+
+        $user = $request->user();
+
+        $passkey = \Laravel\Passkeys\Passkey::query()
+            ->where('user_id', $user->getAuthIdentifier())
+            ->findOrFail($id);
+
+        if (class_exists(\Laravel\Passkeys\Actions\DeletePasskey::class)) {
+            app(\Laravel\Passkeys\Actions\DeletePasskey::class)($user, $passkey);
+        } else {
+            $passkey->delete();
+        }
+
+        return redirect()
+            ->route(DashboardRoute::name('profile'))
+            ->with('success', 'Passkey removed.');
+    }
+
+    /**
+     * Determine whether the passkeys feature is enabled and its package present.
+     */
+    protected function passkeysAvailable(): bool {
+        return config('tyro-login.passkeys.enabled', false)
+            && class_exists(\Laravel\Passkeys\Passkeys::class);
     }
 
     /**

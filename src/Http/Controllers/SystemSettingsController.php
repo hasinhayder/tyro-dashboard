@@ -211,6 +211,20 @@ class SystemSettingsController extends BaseController {
             'TYRO_DASHBOARD_UNSPLASH_ACCESS_KEY' => 'nullable|string|max:255',
             'TYRO_DASHBOARD_PIXABAY_KEY' => 'nullable|string|max:255',
             'TYRO_DASHBOARD_MEDIA_MAX_SIZE' => 'nullable|integer|min:1|max:1048576',
+
+            'TYRO_LOGIN_PASSKEYS_ENABLED' => 'nullable|boolean',
+            'TYRO_LOGIN_PASSKEYS_DIVIDER' => 'nullable|string|max:255',
+            'TYRO_LOGIN_PASSKEYS_LOGIN_BUTTON' => 'nullable|string|max:255',
+            'TYRO_LOGIN_PASSKEYS_SETUP_TITLE' => 'nullable|string|max:255',
+            'TYRO_LOGIN_PASSKEYS_SETUP_SUBTITLE' => 'nullable|string|max:500',
+            'TYRO_LOGIN_PASSKEYS_SETUP_BUTTON' => 'nullable|string|max:100',
+            'TYRO_LOGIN_PASSKEYS_ROUTE' => 'nullable|string|max:100',
+            'TYRO_LOGIN_PASSKEYS_REMOVE_ROUTE' => 'nullable|string|max:100',
+            'TYRO_LOGIN_PASSKEYS_REMOVE_TITLE' => 'nullable|string|max:255',
+            'TYRO_LOGIN_PASSKEYS_REMOVE_SUBTITLE' => 'nullable|string|max:500',
+            'TYRO_LOGIN_PASSKEYS_REMOVE_BUTTON' => 'nullable|string|max:100',
+            'TYRO_LOGIN_PASSKEYS_EMPTY_TEXT' => 'nullable|string|max:500',
+            'TYRO_LOGIN_PASSKEYS_CDN' => 'nullable|string|max:500',
         ]);
 
         $booleans = $this->booleanKeys();
@@ -359,6 +373,7 @@ class SystemSettingsController extends BaseController {
             'TYRO_LOGIN_VIDEO_SOUND',
             'TYRO_LOGIN_TIDAL_BUBBLES',
             'TYRO_LOGIN_PARTICLE_INTERACTIVE',
+            'TYRO_LOGIN_PASSKEYS_ENABLED',
         ];
     }
 
@@ -542,6 +557,20 @@ class SystemSettingsController extends BaseController {
             'TYRO_DASHBOARD_UNSPLASH_ACCESS_KEY' => config('tyro-dashboard.media.api_keys.unsplash'),
             'TYRO_DASHBOARD_PIXABAY_KEY' => config('tyro-dashboard.media.api_keys.pixabay'),
             'TYRO_DASHBOARD_MEDIA_MAX_SIZE' => config('tyro-dashboard.media.max_size'),
+
+            'TYRO_LOGIN_PASSKEYS_ENABLED' => config('tyro-login.passkeys.enabled', false),
+            'TYRO_LOGIN_PASSKEYS_DIVIDER' => config('tyro-login.passkeys.divider_text'),
+            'TYRO_LOGIN_PASSKEYS_LOGIN_BUTTON' => config('tyro-login.passkeys.login_button_text'),
+            'TYRO_LOGIN_PASSKEYS_SETUP_TITLE' => config('tyro-login.passkeys.setup_title'),
+            'TYRO_LOGIN_PASSKEYS_SETUP_SUBTITLE' => config('tyro-login.passkeys.setup_subtitle'),
+            'TYRO_LOGIN_PASSKEYS_SETUP_BUTTON' => config('tyro-login.passkeys.setup_button_text'),
+            'TYRO_LOGIN_PASSKEYS_ROUTE' => config('tyro-login.passkeys.route'),
+            'TYRO_LOGIN_PASSKEYS_REMOVE_ROUTE' => config('tyro-login.passkeys.remove_route'),
+            'TYRO_LOGIN_PASSKEYS_REMOVE_TITLE' => config('tyro-login.passkeys.remove_title'),
+            'TYRO_LOGIN_PASSKEYS_REMOVE_SUBTITLE' => config('tyro-login.passkeys.remove_subtitle'),
+            'TYRO_LOGIN_PASSKEYS_REMOVE_BUTTON' => config('tyro-login.passkeys.remove_button_text'),
+            'TYRO_LOGIN_PASSKEYS_EMPTY_TEXT' => config('tyro-login.passkeys.empty_text'),
+            'TYRO_LOGIN_PASSKEYS_CDN' => config('tyro-login.passkeys.cdn_url'),
         ];
     }
 
@@ -743,6 +772,20 @@ class SystemSettingsController extends BaseController {
             'TYRO_DASHBOARD_UNSPLASH_ACCESS_KEY' => null,
             'TYRO_DASHBOARD_PIXABAY_KEY' => null,
             'TYRO_DASHBOARD_MEDIA_MAX_SIZE' => 10240,
+
+            'TYRO_LOGIN_PASSKEYS_ENABLED' => false,
+            'TYRO_LOGIN_PASSKEYS_DIVIDER' => 'or continue with email',
+            'TYRO_LOGIN_PASSKEYS_LOGIN_BUTTON' => 'Sign in with a passkey',
+            'TYRO_LOGIN_PASSKEYS_SETUP_TITLE' => 'Create a Passkey',
+            'TYRO_LOGIN_PASSKEYS_SETUP_SUBTITLE' => 'Set up a passkey for faster, passwordless sign-in.',
+            'TYRO_LOGIN_PASSKEYS_SETUP_BUTTON' => 'Create passkey',
+            'TYRO_LOGIN_PASSKEYS_ROUTE' => 'passkeys-setup',
+            'TYRO_LOGIN_PASSKEYS_REMOVE_ROUTE' => 'remove-passkeys',
+            'TYRO_LOGIN_PASSKEYS_REMOVE_TITLE' => 'Your Passkeys',
+            'TYRO_LOGIN_PASSKEYS_REMOVE_SUBTITLE' => 'Review and remove the passkeys linked to your account.',
+            'TYRO_LOGIN_PASSKEYS_REMOVE_BUTTON' => 'Remove',
+            'TYRO_LOGIN_PASSKEYS_EMPTY_TEXT' => "You don't have any passkeys yet.",
+            'TYRO_LOGIN_PASSKEYS_CDN' => 'https://esm.sh/@laravel/passkeys',
         ];
     }
 }
