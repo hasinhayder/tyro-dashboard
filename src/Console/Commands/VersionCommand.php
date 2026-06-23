@@ -19,7 +19,7 @@ class VersionCommand extends Command {
      * Execute the console command.
      */
     public function handle(): int {
-        $version = '1.43.3'; // added TYRO_LOGIN_LOGO_BORDER_RADIUS setting to the Authentication tab branding details
+        $version = '1.44.0'; // Passkeys support: Passkeys system settings vtab (enable/disable + labels/route/CDN config) and a profile Passkeys card (list, add, remove)
 
         $this->info('');
         $this->info('  ╔════════════════════════════════════════╗');
@@ -70,6 +70,7 @@ class VersionCommand extends Command {
 }
 
 // Changelog
+// 1.44.0 - Passkeys support: new Passkeys system settings vtab (enable/disable toggle plus all label, route, and CDN config under TYRO_LOGIN_PASSKEYS_*) and a profile Passkeys card (list existing passkeys with authenticator/added/last-used, add a passkey via the @laravel/passkeys browser client, and remove a passkey with a destructive confirm) — gated on TYRO_LOGIN_PASSKEYS_ENABLED + laravel/passkeys for the profile UI/route, settings vtab always visible
 // 1.43.3 - added TYRO_LOGIN_LOGO_BORDER_RADIUS setting to the Authentication tab branding details
 // 1.43.2 - renamed TYRO_LOGIN_YOUTUBE_URL to TYRO_LOGIN_VIDEO_URL in settings controller and login-auth blade partial; updated default video URL
 // 1.43.1 - tyro-dashboard:update-config now silently refreshes tyro and tyro-login configs (tyro:update-config, tyro-login:update-config) after publishing the dashboard config
