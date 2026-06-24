@@ -190,17 +190,12 @@
                     </div>
                 </div>
                 <div style="display:flex;align-items:center;gap:0.5rem;flex-wrap:wrap;">
-                    <form method="POST" action="{{ route($dashboardRoute::name('profile.passkeys.rename'), ['id' => $pk->getKey()]) }}" id="rename-passkey-form-{{ $pk->getKey() }}">
-                        @csrf
-                        @method('PUT')
-                        <input type="hidden" name="name" id="rename-passkey-name-{{ $pk->getKey() }}" value="{{ $pk->name }}">
-                        <button type="button" class="btn btn-secondary btn-sm" onclick="event.preventDefault(); showPrompt('Rename Passkey', 'Enter a new name for this passkey.', document.getElementById('rename-passkey-name-{{ $pk->getKey() }}').value, 'Passkey name').then(value => { if (value && value.trim()) { document.getElementById('rename-passkey-name-{{ $pk->getKey() }}').value = value.trim(); document.getElementById('rename-passkey-form-{{ $pk->getKey() }}').submit(); } })">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;margin-right:0.35rem;vertical-align:middle;">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                            </svg>
-                            Rename
-                        </button>
-                    </form>
+                    <button type="button" class="btn btn-secondary btn-sm" onclick="openRenamePasskeyModal('{{ $pk->getKey() }}', {{ json_encode($pk->name ?: 'Unnamed passkey') }})">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;margin-right:0.35rem;vertical-align:middle;">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                        </svg>
+                        Rename
+                    </button>
                     <form method="POST" action="{{ route($dashboardRoute::name('profile.passkeys.destroy'), ['id' => $pk->getKey()]) }}" id="remove-passkey-form-{{ $pk->getKey() }}">
                         @csrf
                         @method('DELETE')
@@ -216,6 +211,37 @@
         @empty
             <p id="profile-passkeys-empty" style="padding:0.85rem 0;color:var(--muted-foreground);">You don&rsquo;t have any passkeys yet.</p>
         @endforelse
+    </div>
+</div>
+
+<!-- Rename Passkey Modal -->
+<div class="modal-overlay" id="renamePasskeyModal">
+    <div class="modal">
+        <div class="modal-header">
+            <h3 class="modal-title">Rename Passkey</h3>
+            <button type="button" class="modal-close" onclick="closeModal('renamePasskeyModal')">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
+        </div>
+        <form id="renamePasskeyForm" method="POST">
+            @csrf
+            @method('PUT')
+            <div class="modal-body">
+                <p style="margin-bottom: 1rem; color: var(--muted-foreground);">
+                    Enter a new name for <strong id="renamePasskeyCurrentName"></strong>.
+                </p>
+                <div class="form-group">
+                    <label for="renamePasskeyName" class="form-label">Passkey Name</label>
+                    <input type="text" id="renamePasskeyName" name="name" class="form-input" placeholder="Passkey name" maxlength="255" required>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" onclick="closeModal('renamePasskeyModal')">Cancel</button>
+                <button type="submit" class="btn btn-primary">Save</button>
+            </div>
+        </form>
     </div>
 </div>
 @endif
@@ -262,6 +288,18 @@
 
 @push('scripts')
 @if($passkeysAvailable ?? false)
+<script>
+    function openRenamePasskeyModal(passkeyId, currentName) {
+        var form = document.getElementById('renamePasskeyForm');
+        var actionTemplate = '{{ route($dashboardRoute::name('profile.passkeys.rename'), ['id' => '__ID__']) }}';
+        form.action = actionTemplate.replace('__ID__', passkeyId);
+        document.getElementById('renamePasskeyCurrentName').textContent = currentName || 'this passkey';
+        var input = document.getElementById('renamePasskeyName');
+        input.value = currentName && currentName !== 'Unnamed passkey' ? currentName : '';
+        openModal('renamePasskeyModal');
+        setTimeout(function () { input.focus(); input.select(); }, 50);
+    }
+</script>
 <script type="module">
     (function () {
         var addBtn = document.getElementById('add-passkey-btn');
