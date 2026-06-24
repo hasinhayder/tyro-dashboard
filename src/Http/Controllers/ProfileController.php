@@ -205,6 +205,38 @@ class ProfileController extends BaseController {
     }
 
     /**
+     * Rename one of the authenticated user's passkeys.
+     *
+     * The passkey is always scoped to the authenticated user, so a user can
+     * only rename their own passkeys.
+     */
+    public function renamePasskey(Request $request, string $id) {
+        if (! $this->passkeysAvailable()) {
+            abort(404);
+        }
+
+        $validated = $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+        ]);
+
+        $user = $request->user();
+
+        $passkey = \Laravel\Passkeys\Passkey::query()
+            ->where('user_id', $user->getAuthIdentifier())
+            ->findOrFail($id);
+
+        $oldName = $passkey->name;
+        $passkey->name = $validated['name'];
+        $passkey->save();
+
+        $this->auditSafely('user.passkey_renamed', $passkey, ['name' => $oldName], ['name' => $passkey->name]);
+
+        return redirect()
+            ->route(DashboardRoute::name('profile'))
+            ->with('success', 'Passkey renamed.');
+    }
+
+    /**
      * Determine whether the passkeys feature is enabled and its package present.
      */
     protected function passkeysAvailable(): bool {

@@ -189,7 +189,18 @@
                         </p>
                     </div>
                 </div>
-                <div>
+                <div style="display:flex;align-items:center;gap:0.5rem;flex-wrap:wrap;">
+                    <form method="POST" action="{{ route($dashboardRoute::name('profile.passkeys.rename'), ['id' => $pk->getKey()]) }}" id="rename-passkey-form-{{ $pk->getKey() }}">
+                        @csrf
+                        @method('PUT')
+                        <input type="hidden" name="name" id="rename-passkey-name-{{ $pk->getKey() }}" value="{{ $pk->name }}">
+                        <button type="button" class="btn btn-secondary btn-sm" onclick="event.preventDefault(); showPrompt('Rename Passkey', 'Enter a new name for this passkey.', document.getElementById('rename-passkey-name-{{ $pk->getKey() }}').value, 'Passkey name').then(value => { if (value && value.trim()) { document.getElementById('rename-passkey-name-{{ $pk->getKey() }}').value = value.trim(); document.getElementById('rename-passkey-form-{{ $pk->getKey() }}').submit(); } })">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;margin-right:0.35rem;vertical-align:middle;">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                            </svg>
+                            Rename
+                        </button>
+                    </form>
                     <form method="POST" action="{{ route($dashboardRoute::name('profile.passkeys.destroy'), ['id' => $pk->getKey()]) }}" id="remove-passkey-form-{{ $pk->getKey() }}">
                         @csrf
                         @method('DELETE')

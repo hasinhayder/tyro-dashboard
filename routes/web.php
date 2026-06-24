@@ -63,6 +63,7 @@ Route::prefix('profile')->name('profile')->group(function () {
 
     // Passkey management (only when the passkeys feature is enabled and installed)
     if (config('tyro-login.passkeys.enabled', false) && class_exists(\Laravel\Passkeys\Passkeys::class)) {
+        Route::put('/passkeys/{id}/rename', [ProfileController::class, 'renamePasskey'])->name('.passkeys.rename');
         Route::delete('/passkeys/{id}', [ProfileController::class, 'destroyPasskey'])->name('.passkeys.destroy');
     }
 });
