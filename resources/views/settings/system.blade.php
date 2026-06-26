@@ -81,7 +81,15 @@
             </div>
         </nav>
 
-        <div class="vtabs-content">
+        <div class="vtabs-content" id="settingsContent">
+            <div class="settings-search-bar">
+                <svg class="settings-search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+                <input type="text" id="settingsSearchInput" class="settings-search-input" placeholder="Search settings by name or key…" autocomplete="off" spellcheck="false" aria-label="Search settings">
+                <span class="settings-search-shortcut" id="settingsSearchShortcut">⌘K</span>
+                <button type="button" id="settingsSearchClear" class="settings-search-clear" aria-label="Clear search" tabindex="-1">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18"/><path d="M6 6l12 12"/></svg>
+                </button>
+            </div>
             @include('settings.partials._tab-dashboard')
             @include('settings.partials._tab-rbac')
             @include('settings.partials._tab-rbac-advanced')
@@ -92,6 +100,14 @@
             @include('settings.partials._tab-dashboard-colors')
             @include('settings.partials._tab-media')
             @include('settings.partials._tab-passkeys')
+
+            <div class="search-no-results" id="settingsNoResults">
+                <div class="search-no-results-inner">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/><line x1="8" y1="8" x2="14" y2="14"/></svg>
+                    <p class="search-no-results-title">No settings found</p>
+                    <p class="search-no-results-text">No settings match "<span id="settingsNoResultsTerm"></span>". Try a different search term.</p>
+                </div>
+            </div>
         </div>
     </div>
 

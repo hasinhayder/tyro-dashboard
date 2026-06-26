@@ -210,4 +210,108 @@
     color: var(--destructive);
     background: color-mix(in srgb, var(--destructive), transparent 90%);
 }
+
+/* ── Settings Search ─────────────────────────────────────────── */
+.settings-search-bar {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.55rem 0.85rem;
+    margin-bottom: 1rem;
+    border: 1px solid var(--border);
+    border-radius: 0.85rem;
+    background: var(--card);
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+.settings-search-bar:focus-within {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--primary) 15%, transparent);
+}
+.settings-search-icon {
+    flex-shrink: 0;
+    width: 18px;
+    height: 18px;
+    color: var(--muted-foreground);
+}
+.settings-search-input {
+    flex: 1;
+    min-width: 0;
+    border: none;
+    outline: none;
+    background: transparent;
+    color: var(--foreground);
+    font-size: 0.9rem;
+}
+.settings-search-input::placeholder { color: var(--muted-foreground); }
+.settings-search-shortcut {
+    flex-shrink: 0;
+    padding: 0.1rem 0.45rem;
+    border: 1px solid var(--border);
+    border-radius: 0.35rem;
+    background: var(--muted);
+    color: var(--muted-foreground);
+    font-size: 0.7rem;
+    font-weight: 600;
+    line-height: 1.4;
+}
+.settings-search-bar:focus-within .settings-search-shortcut { display: none; }
+.settings-search-clear {
+    display: none;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    width: 22px;
+    height: 22px;
+    border: none;
+    border-radius: 999px;
+    background: var(--muted);
+    color: var(--muted-foreground);
+    cursor: pointer;
+    transition: background 0.15s ease, color 0.15s ease;
+}
+.settings-search-clear.visible { display: flex; }
+.settings-search-clear:hover {
+    background: color-mix(in srgb, var(--destructive) 15%, var(--muted));
+    color: var(--destructive);
+}
+.settings-search-clear svg { width: 12px; height: 12px; }
+
+/* Search-active: show all matching panels stacked as results */
+.settings-search-active .vtabs-panel { display: block; }
+.settings-search-active .vtabs-panel.search-hidden { display: none; }
+.vtabs-item.search-hidden { display: none; }
+
+/* Highlight matching fields — appear then fade over 4s */
+@keyframes highlightFade {
+    0%   { background: color-mix(in srgb, var(--primary) 9%, transparent); box-shadow: inset 3px 0 0 0 var(--primary); }
+    65%  { background: color-mix(in srgb, var(--primary) 9%, transparent); box-shadow: inset 3px 0 0 0 var(--primary); }
+    100% { background: transparent; box-shadow: inset 3px 0 0 0 transparent; }
+}
+.form-group.search-highlight {
+    border-radius: 0.5rem;
+    padding-left: 0.6rem;
+    margin-left: -0.6rem;
+    animation: highlightFade 4s ease-out forwards;
+}
+@keyframes highlightCardFade {
+    0%   { border-color: color-mix(in srgb, var(--primary) 45%, var(--border)); box-shadow: inset 4px 0 0 0 var(--primary); }
+    65%  { border-color: color-mix(in srgb, var(--primary) 45%, var(--border)); box-shadow: inset 4px 0 0 0 var(--primary); }
+    100% { border-color: var(--border); box-shadow: inset 4px 0 0 0 transparent; }
+}
+.sys-settings-toggle.search-highlight,
+.sys-settings-surface.search-highlight,
+.branding-theme-color.search-highlight {
+    animation: highlightCardFade 4s ease-out forwards;
+}
+
+/* No-results state */
+.search-no-results { display: none; padding: 3rem 1rem; text-align: center; }
+.search-no-results.visible { display: block; }
+.search-no-results-inner { max-width: 28rem; margin: 0 auto; }
+.search-no-results svg { width: 40px; height: 40px; color: var(--muted-foreground); margin-bottom: 0.75rem; }
+.search-no-results-title { margin: 0 0 0.35rem; color: var(--foreground); font-size: 1rem; font-weight: 700; }
+.search-no-results-text { margin: 0; color: var(--muted-foreground); font-size: 0.875rem; line-height: 1.6; }
+@media (max-width: 900px) {
+    .settings-search-shortcut { display: none; }
+}
 </style>

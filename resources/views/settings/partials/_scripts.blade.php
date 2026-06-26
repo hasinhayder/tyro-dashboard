@@ -433,4 +433,150 @@ function confirmResetAllDcColors() {
         window.toggleTyroColorReset(keyBase);
     });
 })();
+
+// ── Settings Search ───────────────────────────────────────────
+(function () {
+    var content = document.getElementById('settingsContent');
+    var input = document.getElementById('settingsSearchInput');
+    var clearBtn = document.getElementById('settingsSearchClear');
+    var shortcut = document.getElementById('settingsSearchShortcut');
+    var noResults = document.getElementById('settingsNoResults');
+    var noResultsTerm = document.getElementById('settingsNoResultsTerm');
+    if (!content || !input) return;
+
+    var panels = Array.prototype.slice.call(content.querySelectorAll('.vtabs-panel'));
+    var searchableSelectors = [
+        '.form-label', '.form-hint',
+        '.sys-settings-toggle-title', '.sys-settings-toggle-description',
+        '.sys-settings-surface-title', '.sys-settings-surface-description',
+        '.sys-settings-section-heading', '.sys-settings-section-description',
+        '.card-title',
+        '.branding-theme-color-name', '.branding-theme-color-var'
+    ].join(', ');
+    var highlightContainers = '.form-group, .sys-settings-toggle, .sys-settings-surface, .branding-theme-color';
+    var debounceTimer = null;
+
+    function getSidebarItem(panelId) {
+        var key = panelId.replace(/^vtab-/, '');
+        return document.querySelector('.vtabs-item[data-vtab="' + key + '"]');
+    }
+
+    function clearHighlights() {
+        content.querySelectorAll('.search-highlight').forEach(function (el) {
+            el.classList.remove('search-highlight');
+        });
+    }
+
+    function resetAll() {
+        content.classList.remove('settings-search-active');
+        panels.forEach(function (p) { p.classList.remove('search-hidden'); });
+        document.querySelectorAll('.vtabs-item').forEach(function (it) {
+            it.classList.remove('search-hidden');
+        });
+        clearHighlights();
+        if (noResults) noResults.classList.remove('visible');
+        if (clearBtn) clearBtn.classList.remove('visible');
+        // Ensure exactly one panel stays active so normal vtabs view resumes.
+        if (!content.querySelector('.vtabs-panel.active') && panels.length) {
+            panels[0].classList.add('active');
+        }
+    }
+
+    function runSearch(rawTerm) {
+        var term = (rawTerm || '').trim().toLowerCase();
+        if (clearBtn) clearBtn.classList.toggle('visible', term.length > 0);
+
+        if (!term) { resetAll(); return; }
+
+        clearHighlights();
+        content.classList.add('settings-search-active');
+        var totalMatches = 0;
+        var firstMatchEl = null;
+        var panelState = [];
+
+        panels.forEach(function (panel) {
+            var matched = [];
+            panel.querySelectorAll(searchableSelectors).forEach(function (el) {
+                if (el.offsetParent === null) return;
+                if ((el.textContent || '').toLowerCase().indexOf(term) !== -1) {
+                    var container = el.closest(highlightContainers);
+                    if (container) matched.push(container);
+                    totalMatches++;
+                }
+            });
+            panelState.push({ panel: panel, item: getSidebarItem(panel.id), matched: matched });
+        });
+
+        panelState.forEach(function (st) {
+            st.matched.forEach(function (container) {
+                container.classList.add('search-highlight');
+                if (!firstMatchEl) firstMatchEl = container;
+            });
+            if (st.matched.length > 0) {
+                st.panel.classList.remove('search-hidden');
+                if (st.item) st.item.classList.remove('search-hidden');
+            } else {
+                st.panel.classList.add('search-hidden');
+                if (st.item) st.item.classList.add('search-hidden');
+            }
+        });
+
+        if (totalMatches === 0) {
+            if (noResults) {
+                if (noResultsTerm) noResultsTerm.textContent = rawTerm.trim();
+                noResults.classList.add('visible');
+            }
+        } else {
+            if (noResults) noResults.classList.remove('visible');
+            if (firstMatchEl) {
+                setTimeout(function () {
+                    firstMatchEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }, 50);
+            }
+        }
+    }
+
+    input.addEventListener('input', function () {
+        var val = input.value;
+        clearTimeout(debounceTimer);
+        debounceTimer = setTimeout(function () { runSearch(val); }, 150);
+    });
+
+    if (clearBtn) {
+        clearBtn.addEventListener('click', function () {
+            input.value = '';
+            runSearch('');
+            input.focus();
+        });
+    }
+
+    // During search, clicking a matching sidebar tab scrolls to its panel.
+    document.querySelectorAll('.vtabs-item[data-vtab]').forEach(function (item) {
+        item.addEventListener('click', function () {
+            if (!content.classList.contains('settings-search-active')) return;
+            var panel = document.getElementById('vtab-' + item.dataset.vtab);
+            if (panel) panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
+    });
+
+    // Keyboard shortcut: Ctrl+K / Cmd+K to focus search; Esc to clear.
+    document.addEventListener('keydown', function (e) {
+        if ((e.ctrlKey || e.metaKey) && (e.key === 'k' || e.key === 'K')) {
+            e.preventDefault();
+            input.focus();
+            input.select();
+            return;
+        }
+        if (e.key === 'Escape' && document.activeElement === input) {
+            input.value = '';
+            runSearch('');
+            input.blur();
+        }
+    });
+
+    // Show the platform-appropriate shortcut hint.
+    if (shortcut) {
+        shortcut.textContent = /Mac|iPhone|iPad/.test(navigator.platform) ? '⌘K' : 'Ctrl K';
+    }
+})();
 </script>
