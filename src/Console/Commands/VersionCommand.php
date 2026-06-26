@@ -19,7 +19,7 @@ class VersionCommand extends Command {
      * Execute the console command.
      */
     public function handle(): int {
-        $version = '1.46.0'; // Settings search feature with auto-fade highlighting, conditional-visibility-aware matching, and Ctrl+K shortcut
+        $version = '1.46.1'; // Minor UI Tweaks
 
         $this->info('');
         $this->info('  ╔════════════════════════════════════════╗');
@@ -70,6 +70,7 @@ class VersionCommand extends Command {
 }
 
 // Changelog
+// 1.46.1 - Minor UI Tweaks
 // 1.46.0 - Settings search feature with auto-fade highlighting, conditional-visibility-aware matching, and Ctrl+K shortcut
 // 1.45.0 - Introduced dashboard components. Passkeys rename feature.
 // 1.44.1 - Passkeys system settings vtab now collapses all label, route, and CDN config surfaces when the passkeys toggle (TYRO_LOGIN_PASSKEYS_ENABLED) is disabled, leaving only the feature toggle visible (reuses the settings conditional-visibility pattern)
