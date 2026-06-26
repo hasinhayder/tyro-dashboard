@@ -489,6 +489,11 @@ function confirmResetAllDcColors() {
         if (!term) { resetAll(); return; }
 
         clearHighlights();
+        // Unhide all panels before matching so offsetParent checks work correctly
+        panels.forEach(function (p) { p.classList.remove('search-hidden'); });
+        document.querySelectorAll('.vtabs-item').forEach(function (it) {
+            it.classList.remove('search-hidden');
+        });
         content.classList.add('settings-search-active');
         var totalMatches = 0;
         var firstMatchEl = null;

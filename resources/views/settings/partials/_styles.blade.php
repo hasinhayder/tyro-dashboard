@@ -213,25 +213,34 @@
 
 /* ── Settings Search ─────────────────────────────────────────── */
 .settings-search-bar {
+    position: relative;
     display: flex;
     align-items: center;
     gap: 0.6rem;
-    padding: 0.55rem 0.85rem;
-    margin-bottom: 1rem;
-    border: 1px solid var(--border);
-    border-radius: 0.85rem;
+    padding: 0.7rem 1rem;
+    margin-bottom: 1.25rem;
+    border: 1.5px solid var(--border);
+    border-radius: 1rem;
     background: var(--card);
-    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+    box-shadow: 0 1px 2px color-mix(in srgb, var(--foreground) 4%, transparent);
+    transition: border-color 0.2s ease, box-shadow 0.25s ease;
 }
 .settings-search-bar:focus-within {
     border-color: var(--primary);
-    box-shadow: 0 0 0 3px color-mix(in srgb, var(--primary) 15%, transparent);
+    box-shadow:
+        0 1px 2px color-mix(in srgb, var(--foreground) 4%, transparent),
+        0 0 0 3.5px color-mix(in srgb, var(--primary) 14%, transparent),
+        0 4px 12px color-mix(in srgb, var(--primary) 6%, transparent);
 }
 .settings-search-icon {
     flex-shrink: 0;
-    width: 18px;
-    height: 18px;
+    width: 20px;
+    height: 20px;
     color: var(--muted-foreground);
+    transition: color 0.2s ease;
+}
+.settings-search-bar:focus-within .settings-search-icon {
+    color: var(--primary);
 }
 .settings-search-input {
     flex: 1;
@@ -240,12 +249,18 @@
     outline: none;
     background: transparent;
     color: var(--foreground);
+    font-size: 0.92rem;
+    font-weight: 450;
+    letter-spacing: 0.005em;
+}
+.settings-search-input::placeholder {
+    color: color-mix(in srgb, var(--muted-foreground) 75%, transparent);
+    font-weight: 400;
     font-size: 0.9rem;
 }
-.settings-search-input::placeholder { color: var(--muted-foreground); }
 .settings-search-shortcut {
     flex-shrink: 0;
-    padding: 0.1rem 0.45rem;
+    padding: 0.15rem 0.5rem;
     border: 1px solid var(--border);
     border-radius: 0.35rem;
     background: var(--muted);
@@ -253,28 +268,45 @@
     font-size: 0.7rem;
     font-weight: 600;
     line-height: 1.4;
+    letter-spacing: 0.02em;
+    opacity: 0.85;
+    transition: opacity 0.2s ease, transform 0.15s ease;
 }
-.settings-search-bar:focus-within .settings-search-shortcut { display: none; }
+.settings-search-bar:focus-within .settings-search-shortcut {
+    opacity: 0;
+    transform: scale(0.92);
+    pointer-events: none;
+}
 .settings-search-clear {
     display: none;
     flex-shrink: 0;
     align-items: center;
     justify-content: center;
-    width: 22px;
-    height: 22px;
+    width: 24px;
+    height: 24px;
     border: none;
     border-radius: 999px;
-    background: var(--muted);
+    background: color-mix(in srgb, var(--muted-foreground) 10%, var(--card));
     color: var(--muted-foreground);
     cursor: pointer;
-    transition: background 0.15s ease, color 0.15s ease;
+    opacity: 0;
+    transform: scale(0.85);
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
-.settings-search-clear.visible { display: flex; }
+.settings-search-clear.visible {
+    display: flex;
+    opacity: 1;
+    transform: scale(1);
+}
 .settings-search-clear:hover {
-    background: color-mix(in srgb, var(--destructive) 15%, var(--muted));
+    background: color-mix(in srgb, var(--destructive) 14%, var(--muted));
     color: var(--destructive);
+    transform: scale(1.08);
 }
-.settings-search-clear svg { width: 12px; height: 12px; }
+.settings-search-clear:active {
+    transform: scale(0.95);
+}
+.settings-search-clear svg { width: 14px; height: 14px; }
 
 /* Search-active: show all matching panels stacked as results */
 .settings-search-active .vtabs-panel { display: block; }

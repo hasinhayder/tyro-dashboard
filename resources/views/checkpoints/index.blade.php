@@ -33,18 +33,26 @@
         color: var(--foreground);
     }
     .cp-stats-grid .stat-card {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: 1rem;
-        padding: 1.25rem;
+        display: flex !important;
+        flex-direction: row !important;
+        flex-wrap: nowrap !important;
+        align-items: center !important;
+        justify-content: space-between !important;
+        gap: 1rem !important;
+        padding: 1.25rem !important;
     }
     .cp-stats-grid .stat-card-left {
-        display: flex;
-        align-items: center;
-        gap: 1rem;
-        min-width: 0;
-        flex: 1 1 auto;
+        display: flex !important;
+        flex-direction: row !important;
+        align-items: center !important;
+        justify-content: flex-start !important;
+        gap: 1rem !important;
+        min-width: 0 !important;
+        flex: 1 1 auto !important;
+    }
+    .cp-stats-grid .stat-action {
+        flex-shrink: 0 !important;
+        margin-left: 1rem !important;
     }
     .cp-stats-grid .stat-icon {
         width: 48px;
@@ -57,7 +65,8 @@
         height: 24px;
     }
     .cp-stats-grid .stat-content {
-        min-width: 0;
+        min-width: 0 !important;
+        text-align: left !important;
     }
     .cp-stats-grid .stat-value {
         font-size: 1.5rem;
@@ -156,25 +165,29 @@
 @else
     <div class="stats-grid cp-stats-grid">
         <div class="stat-card">
-            <div class="stat-icon stat-icon-primary">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"/>
-                </svg>
-            </div>
-            <div class="stat-content">
-                <div class="stat-label">Total Checkpoints</div>
-                <div class="stat-value" id="cpStatCount">{{ count($checkpoints) }}</div>
+            <div class="stat-card-left">
+                <div class="stat-icon stat-icon-primary">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"/>
+                    </svg>
+                </div>
+                <div class="stat-content">
+                    <div class="stat-label">Total Checkpoints</div>
+                    <div class="stat-value" id="cpStatCount">{{ count($checkpoints) }}</div>
+                </div>
             </div>
         </div>
         <div class="stat-card">
-            <div class="stat-icon stat-icon-info">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4"/>
-                </svg>
-            </div>
-            <div class="stat-content">
-                <div class="stat-label">Disk Used</div>
-                <div class="stat-value" id="cpStatSize">{{ $totalSizeForHumans }}</div>
+            <div class="stat-card-left">
+                <div class="stat-icon stat-icon-info">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4"/>
+                    </svg>
+                </div>
+                <div class="stat-content">
+                    <div class="stat-label">Disk Used</div>
+                    <div class="stat-value" id="cpStatSize">{{ $totalSizeForHumans }}</div>
+                </div>
             </div>
         </div>
         <div class="stat-card" id="cpStatEncryptionCard">
