@@ -19,7 +19,7 @@ class VersionCommand extends Command {
      * Execute the console command.
      */
     public function handle(): int {
-        $version = '1.45.0'; // Introduced dashboard components. Passkeys rename feature.
+        $version = '1.46.0'; // Settings search feature with auto-fade highlighting, conditional-visibility-aware matching, and Ctrl+K shortcut
 
         $this->info('');
         $this->info('  ╔════════════════════════════════════════╗');
@@ -70,6 +70,7 @@ class VersionCommand extends Command {
 }
 
 // Changelog
+// 1.46.0 - Settings search feature with auto-fade highlighting, conditional-visibility-aware matching, and Ctrl+K shortcut
 // 1.45.0 - Introduced dashboard components. Passkeys rename feature.
 // 1.44.1 - Passkeys system settings vtab now collapses all label, route, and CDN config surfaces when the passkeys toggle (TYRO_LOGIN_PASSKEYS_ENABLED) is disabled, leaving only the feature toggle visible (reuses the settings conditional-visibility pattern)
 // 1.44.0 - Passkeys support: new Passkeys system settings vtab (enable/disable toggle plus all label, route, and CDN config under TYRO_LOGIN_PASSKEYS_*) and a profile Passkeys card (list existing passkeys with authenticator/added/last-used, add a passkey via the @laravel/passkeys browser client, and remove a passkey with a destructive confirm) — gated on TYRO_LOGIN_PASSKEYS_ENABLED + laravel/passkeys for the profile UI/route, settings vtab always visible
