@@ -320,8 +320,8 @@
     100% { background: transparent; box-shadow: inset 3px 0 0 0 transparent; }
 }
 .form-group.search-highlight {
-    border-radius: 0.5rem;
-    padding-left: 0.6rem;
+    border-radius: 0;
+    padding: 0.6rem;
     margin-left: -0.6rem;
     animation: highlightFade 4s ease-out forwards;
 }
