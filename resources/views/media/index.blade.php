@@ -1872,15 +1872,33 @@ $authUserId = auth()->id();
     }
 
     // ── Alt text ──────────────────────────────────────────────────────
-    let altTimer;
+    const altTimers = {};
+    const altSaved  = {};
     function saveAlt(id, value) {
-        clearTimeout(altTimer);
-        altTimer = setTimeout(async () => {
-            const fd = new FormData();
-            fd.append('_token', CSRF);
-            fd.append('_method', 'PATCH');
-            fd.append('alt_text', value);
-            await fetch(ALT_BASE + id + '/alt', { method: 'POST', body: fd });
+        if (altSaved[id] === value) return;
+
+        clearTimeout(altTimers[id]);
+        altTimers[id] = setTimeout(async () => {
+            try {
+                const res = await fetch(ALT_BASE + id + '/alt', {
+                    method: 'PATCH',
+                    body: JSON.stringify({ alt_text: value }),
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': CSRF,
+                        'Accept': 'application/json',
+                    },
+                });
+
+                if (!res.ok) {
+                    showAlert('Could not save the alt text. Please try again.', 'Save Failed', { variant: 'danger', confirmText: 'OK' });
+                    return;
+                }
+
+                altSaved[id] = value;
+            } catch {
+                showAlert('Network error. Please try again.', 'Save Failed', { variant: 'danger', confirmText: 'OK' });
+            }
         }, 600);
     }
 
@@ -1901,13 +1919,17 @@ $authUserId = auth()->id();
         // Re-attach the original extension transparently
         const newName = ext ? newDisplay + '.' + ext : newDisplay;
 
-        const fd = new FormData();
-        fd.append('_token', CSRF);
-        fd.append('_method', 'PATCH');
-        fd.append('filename', newName);
-
         try {
-            const res  = await fetch(RENAME_BASE + id + '/rename', { method: 'POST', body: fd, headers: { 'X-Requested-With': 'XMLHttpRequest' } });
+            const res  = await fetch(RENAME_BASE + id + '/rename', {
+                method: 'PATCH',
+                body: JSON.stringify({ filename: newName }),
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': CSRF,
+                    'Accept': 'application/json',
+                    'X-Requested-With': 'XMLHttpRequest',
+                },
+            });
             const json = await res.json();
             if (res.ok && json.success) {
                 const savedExt = json.filename.includes('.') ? json.filename.split('.').pop() : '';
