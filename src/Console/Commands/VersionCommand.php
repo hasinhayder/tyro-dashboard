@@ -19,7 +19,7 @@ class VersionCommand extends Command {
      * Execute the console command.
      */
     public function handle(): int {
-        $version = '1.46.1'; // Minor UI Tweaks
+        $version = '1.46.2'; // Invitation admin page fix
 
         $this->info('');
         $this->info('  ╔════════════════════════════════════════╗');
@@ -70,6 +70,7 @@ class VersionCommand extends Command {
 }
 
 // Changelog
+// 1.46.2 - Fixed admin invitation page crash when an invitation link's owner was deleted; orphaned links (owner deleted) are now excluded from the admin listing
 // 1.46.1 - Minor UI Tweaks
 // 1.46.0 - Settings search feature with auto-fade highlighting, conditional-visibility-aware matching, and Ctrl+K shortcut
 // 1.45.0 - Introduced dashboard components. Passkeys rename feature.
