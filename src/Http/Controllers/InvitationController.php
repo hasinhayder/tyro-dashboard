@@ -52,7 +52,9 @@ class InvitationController extends BaseController {
             abort(403, 'Unauthorized');
         }
 
-        $query = InvitationLink::with(['user', 'referrals']);
+        // Only list links whose owner still exists; orphaned links (owner deleted)
+        // are excluded so the admin table never shows "Deleted User" rows.
+        $query = InvitationLink::with(['user', 'referrals'])->has('user');
 
         // Search functionality
         if ($request->has('search') && $request->search) {
@@ -64,8 +66,12 @@ class InvitationController extends BaseController {
                 ->orWhere('email', 'like', "%{$search}%")
                 ->pluck('id');
 
-            $query->whereIn('user_id', $userIds)
-                ->orWhere('hash', 'like', "%{$search}%");
+            // Group the OR conditions so the `has('user')` filter above always
+            // applies (otherwise a matching hash would bypass it).
+            $query->where(function ($q) use ($userIds, $search) {
+                $q->whereIn('user_id', $userIds)
+                    ->orWhere('hash', 'like', "%{$search}%");
+            });
         }
 
         $links = $query->orderBy('created_at', 'desc')

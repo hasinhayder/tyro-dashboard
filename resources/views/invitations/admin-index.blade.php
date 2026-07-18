@@ -61,22 +61,27 @@
                 </thead>
                 <tbody>
                     @foreach($links as $link)
+                    @php $user = $link->user; @endphp
                     <tr>
                         <td>
                             <div class="user-cell">
-                                <div class="user-cell-avatar" style="{{ ($link->user->profile_photo_path || $link->user->use_gravatar) ? 'background: none; padding: 0;' : '' }}">
-                                    @if($link->user->profile_photo_path || ($link->user->use_gravatar && $link->user->email))
-                                        <img src="{{ $link->user->profile_photo_url }}" alt="{{ $link->user->name }}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">
-                                    @else
-                                        {{ strtoupper(substr($link->user->name ?? 'U', 0, 1)) }}
-                                    @endif
-                                </div>
+                                @if($user)
+                                    <div class="user-cell-avatar" style="{{ ($user->profile_photo_path || $user->use_gravatar) ? 'background: none; padding: 0;' : '' }}">
+                                        @if($user->profile_photo_path || ($user->use_gravatar && $user->email))
+                                            <img src="{{ $user->profile_photo_url }}" alt="{{ $user->name }}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">
+                                        @else
+                                            {{ strtoupper(substr($user->name ?? 'U', 0, 1)) }}
+                                        @endif
+                                    </div>
+                                @else
+                                    <div class="user-cell-avatar">U</div>
+                                @endif
                                 <div class="user-cell-info">
-                                    <div class="user-cell-name">{{ $link->user->name ?? 'Unknown' }}</div>
+                                    <div class="user-cell-name">{{ $user->name ?? 'Deleted User' }}</div>
                                 </div>
                             </div>
                         </td>
-                        <td>{{ $link->user->email ?? 'N/A' }}</td>
+                        <td>{{ $user->email ?? 'N/A' }}</td>
                         <td style="text-align: center;">
                             <span class="badge badge-primary">{{ $link->referrals->count() }}</span>
                         </td>
