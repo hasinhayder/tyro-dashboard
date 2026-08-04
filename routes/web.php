@@ -89,7 +89,7 @@ Route::prefix('media')->name('media.')->group(function () {
     Route::post('/starred-images', [MediaController::class, 'storeStarredImage'])->name('starred-images.store');
     Route::delete('/starred-images', [MediaController::class, 'destroyStarredImage'])->name('starred-images.destroy');
     Route::delete('/bulk-delete', [MediaController::class, 'bulkDestroy'])->name('bulk-destroy');
-    Route::post('/{media}/alt', [MediaController::class, 'updateAlt'])->name('alt');
+    Route::patch('/{media}/alt', [MediaController::class, 'updateAlt'])->name('alt');
     Route::patch('/{media}/rename', [MediaController::class, 'rename'])->name('rename');
     Route::post('/{media}/crop-resize', [MediaController::class, 'cropResize'])->name('crop-resize');
     Route::delete('/{media}', [MediaController::class, 'destroy'])->name('destroy')->where('media', '[0-9]+');
