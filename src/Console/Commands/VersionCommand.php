@@ -19,7 +19,7 @@ class VersionCommand extends Command {
      * Execute the console command.
      */
     public function handle(): int {
-        $version = '1.46.3'; // Config-driven admin roles fix (issue #8)
+        $version = '1.46.4'; // Media alt-text save fix (PR #7)
 
         $this->info('');
         $this->info('  ╔════════════════════════════════════════╗');
@@ -70,6 +70,7 @@ class VersionCommand extends Command {
 }
 
 // Changelog
+// 1.46.4 - fix(#7): Media Library alt-text field now saves correctly; alt route was POST-only so PATCH method spoofing returned a 405, and the alt/rename endpoints are now aligned on native PATCH
 // 1.46.3 - fix(#8): app layout now uses config('tyro-dashboard.admin_roles') for the @hasanyrole sidebar check, fixing the admin sidebar collapsing into the user sidebar for the super-admin role
 // 1.46.3 - fix(#6): disallow SVG uploads to prevent stored XSS
 // 1.46.3 - fix(#4): Media Library preview button now uses Storage::url() for correct image URLs
