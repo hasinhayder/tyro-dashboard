@@ -19,7 +19,7 @@ class VersionCommand extends Command {
      * Execute the console command.
      */
     public function handle(): int {
-        $version = '1.46.2'; // Invitation admin page fix
+        $version = '1.46.3'; // Config-driven admin roles fix (issue #8)
 
         $this->info('');
         $this->info('  ╔════════════════════════════════════════╗');
@@ -70,6 +70,9 @@ class VersionCommand extends Command {
 }
 
 // Changelog
+// 1.46.3 - fix(#8): app layout now uses config('tyro-dashboard.admin_roles') for the @hasanyrole sidebar check, fixing the admin sidebar collapsing into the user sidebar for the super-admin role
+// 1.46.3 - fix(#6): disallow SVG uploads to prevent stored XSS
+// 1.46.3 - fix(#4): Media Library preview button now uses Storage::url() for correct image URLs
 // 1.46.2 - Fixed admin invitation page crash when an invitation link's owner was deleted; orphaned links (owner deleted) are now excluded from the admin listing
 // 1.46.1 - Minor UI Tweaks
 // 1.46.0 - Settings search feature with auto-fade highlighting, conditional-visibility-aware matching, and Ctrl+K shortcut
