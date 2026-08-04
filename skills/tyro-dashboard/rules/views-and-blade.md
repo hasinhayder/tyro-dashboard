@@ -7,7 +7,7 @@ Blade templates are the most customized part of any Laravel framework. Section n
 ## Layout Hierarchy
 
 ### Three Layout Files
-- `app.blade.php` — Role-aware layout. Checks `@hasanyrole('admin', 'superadmin')` to include admin sidebar for admins, user sidebar for non-admins. Includes impersonation banner. Used by the main dashboard page.
+- `app.blade.php` — Role-aware layout. Checks `@hasanyrole(...config('tyro-dashboard.admin_roles'))` (default `admin`, `super-admin`) to include admin sidebar for admins, user sidebar for non-admins. Includes impersonation banner. Used by the main dashboard page.
 - `admin.blade.php` — Always renders admin sidebar. No impersonation banner. Used by admin-only pages (users, roles, privileges, settings, audits).
 - `user.blade.php` — Always renders user sidebar. Used by user-facing pages.
 ### Layout Structure
