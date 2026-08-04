@@ -1107,7 +1107,7 @@ $authUserId = auth()->id();
                         type="button"
                         class="media-card-preview"
                         data-lightbox-trigger
-                        data-image-src="{{ $file->url }}"
+                        data-image-src="{{ Storage::url($file->url) }}"
                         data-image-alt="{{ $file->alt_text ?: $file->filename }}"
                         data-image-name="{{ $file->filename }}"
                         data-image-meta="{{ $file->formatted_size }} · {{ strtoupper(pathinfo($file->filename, PATHINFO_EXTENSION)) }}"
@@ -1295,7 +1295,7 @@ $authUserId = auth()->id();
                             type="button"
                             class="btn btn-secondary"
                             data-lightbox-trigger
-                            data-image-src="{{ $file->url }}"
+                            data-image-src="{{ Storage::url($file->url) }}"
                             data-image-alt="{{ $file->alt_text ?: $file->filename }}"
                             data-image-name="{{ $file->filename }}"
                             data-image-meta="{{ $file->formatted_size }} · {{ strtoupper(pathinfo($file->filename, PATHINFO_EXTENSION)) }}"
