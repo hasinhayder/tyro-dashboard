@@ -34,6 +34,7 @@ A production-ready Laravel package that delivers a complete admin & user dashboa
   - [Admin Bar & Global Notices](#admin-bar--global-notices)
   - [Audit Trail & Compliance](#audit-trail--compliance)
   - [Security & Authorization](#security--authorization)
+  -[Grouping Resources & Adding Custom Links in Sidebar ](#-grouping-resources--adding-custom-links-in-sidebar)
 - [Installation](#installation)
 - [Invitation & Referral System](#invitationreferral-system)
 - [Use Cases](#use-cases)
@@ -64,6 +65,8 @@ Tyro Dashboard is a comprehensive Laravel package that eliminates the need to bu
 - **Security First** — Built-in authorization, protected resources, audit-ready
 
 ---
+
+
 
 ## Why Tyro Dashboard?
 
@@ -235,6 +238,52 @@ Instantly you get:
 For comprehensive field types, advanced configuration, real-world examples, and best practices:
 
 **[View Complete Documentation](http://hasinhayder.github.io/tyro-dashboard/doc.html)**
+
+
+## 📂 Grouping Resources & Adding Custom Links in Sidebar
+
+You can organize your sidebar into categorized sections by adding an optional `'group'` key to your resources in `config/tyro-dashboard.php`. 
+
+You can also add custom non-CRUD links (like custom pages, external apps, or POS registers) using the `'url'` or `'route'` keys.
+
+### Example Configuration:
+
+```php
+'resources' => [
+
+    // 1. Custom URL Link in "Display & POS" Group
+    'web_pos' => [
+        'group'  => 'Display & POS',  // Group Section Title
+        'title'  => 'Web POS Terminal',
+        'url'    => '/pos',          // Direct URL Path
+        'target' => '_blank',        // Opens in new tab
+        'icon'   => '<svg>...</svg>',
+    ],
+
+    // 2. Custom Named Route Link in "Display & POS" Group
+    'kds_chef' => [
+        'group'  => 'Display & POS',
+        'title'  => 'Chef Screen (KDS)',
+        'route'  => 'admin.kds.chef', // Named Laravel Route
+        'target' => '_blank',
+        'icon'   => '<svg>...</svg>',
+    ],
+
+    // 3. Standard CRUD Model in "Product & Inventory" Group
+    'products' => [
+        'group' => 'Product & Inventory',
+        'model' => 'App\Models\Product',
+        'title' => 'Products',
+        'roles' => ['admin', 'super-admin'],
+        'icon'  => '<svg>...</svg>',
+        'fields' => [
+            'name' => ['type' => 'text', 'label' => 'Product Name', 'rules' => 'required'],
+        ],
+    ],
+
+]
+```
+
 
 ### Separate Dashboards
 

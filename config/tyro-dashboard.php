@@ -225,22 +225,51 @@ return [
     //     //     ],
     //     // ],
     // ],
+    /*
+    |--------------------------------------------------------------------------
+    | Dynamic Resources (CRUDs & Custom Links)
+    |--------------------------------------------------------------------------
+    |
+    | Define your resources here to automatically generate CRUD interfaces
+    | and sidebar links.
+    |
+    | Supported Optional Properties:
+    | - 'group'  : (string) Sidebar category section header (e.g. 'Product & Inventory').
+    | - 'url'    : (string) Custom URL path (e.g. '/pos'). Overrides standard CRUD route.
+    | - 'route'  : (string) Named Laravel route (e.g. 'admin.kds.chef').
+    | - 'target' : (string) Link target attribute ('_blank' to open in a new tab, '_self' for same tab).
+    |
+    */
     'resources' => [
-        // 'posts' => [
-        //     'model' => 'App\Models\Post',
-        //     'title' => 'Posts',
-        //     'fields' => [
-        //         'title' => ['type' => 'text', 'label' => 'Title', 'rules' => 'required'],
-        //         'content' => ['type' => 'textarea', 'label' => 'Content'],
-        //         'category_id' => [
-        //             'type' => 'select',
-        //             'label' => 'Category',
-        //             'relationship' => 'category', // Name of the relationship method in Post model
-        //             'option_label' => 'name',
-        //         ],
-        //         'is_published' => ['type' => 'boolean', 'label' => 'Published'],
-        //     ],
-        // ],
+
+        // 🚀 Example 1: Custom URL Link inside a Group
+        'web_pos' => [
+            'group'  => 'Display & POS',
+            'title'  => 'Web POS Terminal',
+            'url'    => '/pos',
+            'target' => '_blank',
+            'icon'   => '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v12m-3-2.818l.879.559c.211.135.442.2.673.2.226 0 .453-.064.661-.19a1.122 1.122 0 00.465-.916c0-.528-.4-.954-.925-1.042l-.4-.067c-.525-.088-.925-.514-.925-1.042 0-.376.183-.728.497-.918a1.121 1.121 0 011.077-.14l.879.56M12 3v18" /></svg>',
+        ],
+        // 🚀 Example 2. Custom Named Route Link in "Display & POS" Group
+        'kds_chef' => [
+            'group'  => 'Display & POS',
+            'title'  => 'Chef Screen (KDS)',
+            'route'  => 'admin.kds.chef', // Named Laravel Route
+            'target' => '_blank',
+            'icon'   => '<svg>...</svg>',
+        ],
+        // 🚀 Example 3: Grouped Standard CRUD Resource
+        'categories' => [
+            'group' => 'Product & Inventory', // Group Name
+            'model' => 'App\Models\Category',
+            'title' => 'Categories',
+            'roles' => ['admin', 'super-admin'],
+            'icon'  => '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12.75V12A2.25 2.25 0 014.5 9.75h15A2.25 2.25 0 0121.75 12v.75m-8.69-6.44l-2.12-2.12a1.5 1.5 0 00-1.061-.44H4.5A2.25 2.25 0 002.25 6v12a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9a2.25 2.25 0 00-2.25-2.25h-5.379a1.5 1.5 0 01-1.06-.44z" /></svg>',
+            'fields' => [
+                'name' => ['type' => 'text', 'label' => 'Category Name', 'rules' => 'required|max:255', 'searchable' => true],
+            ],
+        ],
+
     ],
 
     /*
