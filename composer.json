@@ -1,6 +1,6 @@
 {
     "name": "hasinhayder/tyro-dashboard",
-    "description": "Tyro Dashboard - Beautiful admin dashboard for managing Tyro roles, privileges, users, and settings",
+    "description": "Powerful and feature-rich dashboard for Laravel 13 and 12. Comes with complete authentication, user management, roles and privilege management, media management and dynamic CRUD",
     "keywords": [
         "laravel",
         "dashboard",
