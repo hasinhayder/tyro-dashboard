@@ -176,6 +176,8 @@ php artisan tyro-dashboard:publish --config
 
 Key options in `config/tyro-dashboard.php`:
 
+> Most settings are driven by env vars (table below). Some are plain config arrays — e.g. `pagination` (users/roles/privileges/resources per page) and `protected` (roles and user IDs that cannot be deleted) — customize those directly in the published config file.
+
 | Env var | Default | Description |
 | --- | --- | --- |
 | `TYRO_DASHBOARD_PREFIX` | `dashboard` | URL prefix for the dashboard |
@@ -202,6 +204,11 @@ Key options in `config/tyro-dashboard.php`:
 | `TYRO_DASHBOARD_SIDEBAR_TEXT` | `null` | Sidebar text color |
 | `TYRO_DASHBOARD_SIDEBAR_PRIMARY` | `null` | Sidebar primary color |
 | `TYRO_DASHBOARD_SIDEBAR_ACCENT` | `null` | Sidebar accent color |
+| `TYRO_DASHBOARD_SIDEBAR_ACCENT_FOREGROUND` | `null` | Sidebar accent text color |
+| `TYRO_DASHBOARD_SIDEBAR_HEADER_BORDER` | `null` | Sidebar header border color |
+| `TYRO_DASHBOARD_SIDEBAR_ACCORDION_COMPACT` | `false` | Compact sidebar accordion sections |
+| `TYRO_DASHBOARD_SIDEBAR_ACCORDION_OPEN_SECTIONS` | `1` | Number of accordion sections open by default |
+| `TYRO_DASHBOARD_SIDEBAR_LOGO` | `null` | Sidebar logo URL (falls back to `TYRO_DASHBOARD_LOGO` behavior) |
 | `TYRO_DASHBOARD_UPLOAD_DISK` | `public` | Storage disk for resource uploads |
 | `TYRO_DASHBOARD_UPLOAD_DIRECTORY` | `uploads` | Storage directory for resource uploads |
 | `TYRO_DASHBOARD_AUTO_DELETE_UPLOADS` | `true` | Delete files when a resource is deleted |
@@ -213,6 +220,7 @@ Key options in `config/tyro-dashboard.php`:
 | `TYRO_DASHBOARD_PROFILE_PHOTO_WIDTH` | `400` | Profile photo width (px) |
 | `TYRO_DASHBOARD_PROFILE_PHOTO_HEIGHT` | `400` | Profile photo height (px) |
 | `TYRO_DASHBOARD_PROFILE_PHOTO_QUALITY` | `90` | Profile photo JPEG quality |
+| `TYRO_DASHBOARD_PROFILE_PHOTO_CROP` | `center` | Profile photo crop position: `top`, `center`, or `bottom` |
 | `TYRO_DASHBOARD_NOTIFICATION_STYLE` | `legacy` | Notification style: `legacy` or `toast` |
 | `TYRO_DASHBOARD_TOAST_POSITION` | `bottom-right` | Toast position: `top-right` or `bottom-right` |
 | `TYRO_DASHBOARD_DISABLE_EXAMPLES` | `false` | Disable example resources/pages |
