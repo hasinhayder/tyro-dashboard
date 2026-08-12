@@ -16,13 +16,14 @@ A production-ready Laravel package that delivers a complete admin & user dashboa
 
 ---
 
-**Tyro Dashboard** is a comprehensive admin panel package for Laravel 12 and 13, built on top of [Tyro](https://github.com/hasinhayder/tyro) (RBAC) and [Tyro Login](https://github.com/hasinhayder/tyro-login) (authentication). It gives you user management, role & privilege administration, separate admin/user dashboards, audit trails, and dynamic CRUD for your own models, all with a beautiful shadcn-based UI.
+**Tyro Dashboard** is a comprehensive admin panel package for Laravel 12 and 13, built on top of [Tyro](https://github.com/hasinhayder/tyro) (RBAC) and [Tyro Login](https://github.com/hasinhayder/tyro-login) (authentication). It gives you user management, role & privilege administration, separate admin/user dashboards, audit trails, dynamic CRUD for your own models, and a full media library — all with a beautiful shadcn-based UI.
 
 What would take 40-60 hours of development now takes minutes of configuration.
 
 ## Features
 
-- **User management**: full CRUD, search, suspension, 2FA, role assignment, impersonation
+- **User management**: full CRUD, search, suspension, 2FA, passkeys, role assignment
+- **Impersonation**: log in as any user to troubleshoot and verify features
 - **RBAC & privileges**: visual role and privilege management with protected roles
 - **Dynamic resource CRUD**: describe a model, get a complete admin interface
 - **Separate dashboards**: distinct admin and user experiences out of the box
@@ -30,6 +31,7 @@ What would take 40-60 hours of development now takes minutes of configuration.
 - **Admin bar**: global maintenance and announcement notices in seconds
 - **Invitation system**: referral links with automatic signup tracking
 - **Profile photos**: custom uploads or Gravatar
+- **Media library**: full media management, uploads, WebP conversion, thumbnails, stock photo search, and a reusable media picker
 - **Beautiful UI**: modern, responsive, shadcn components, dark/light themes
 - **Security first**: middleware checks, per-resource access, protected resources
 
@@ -125,6 +127,45 @@ Visit `/dashboard/resources/products` and you have a live admin interface with l
 
 Run `php artisan list tyro-dashboard` to see every available command.
 
+## UI Components
+
+Tyro Dashboard ships a library of shadcn-styled Blade components you can drop into any page immediately — no build step required. Use them with the `tyro-dashboard::` namespace, e.g. `<x-tyro-dashboard::card>`.
+
+| Component | Description |
+| --- | --- |
+| `<x-tyro-dashboard::alert>` | Contextual alert with icon; `variant` = `info`, `success`, `warning`, `error` |
+| `<x-tyro-dashboard::avatar>` | User avatar with photo/Gravatar fallback to initials; `size`, `user` |
+| `<x-tyro-dashboard::badge>` | Status badge; `variant` = `primary`, `success`, `warning`, `danger`, `secondary`, `info` |
+| `<x-tyro-dashboard::card>` | Card panel with `title`, `description`, `actions` and `footer` slots |
+| `<x-tyro-dashboard::checkbox>` | Styled checkbox with label and color variants; supports `indeterminate` |
+| `<x-tyro-dashboard::data-table>` | Table from a collection + columns with formatting, striped/hover/compact variants |
+| `<x-tyro-dashboard::dropdown>` | Dropdown menu with `trigger` slot, alignment, and items |
+| `<x-tyro-dashboard::dropdown-item>` | Dropdown item; `href`, `icon`, `variant` (incl. `danger`) |
+| `<x-tyro-dashboard::dropdown-divider>` | Divider for dropdown menus |
+| `<x-tyro-dashboard::page-header>` | Page title + description with an `actions` slot |
+| `<x-tyro-dashboard::progress>` | Progress bar with label and percent; `variant`, `height` |
+| `<x-tyro-dashboard::select>` | Select with searchable multi-select mode, placeholder, hint/error states |
+| `<x-tyro-dashboard::stat>` | Stat card with icon, value, label, change and trend (up/down) |
+| `<x-tyro-dashboard::toggle>` | Toggle switch with label and color variants |
+| `<x-tyro-dashboard::media>` | Renders media with WebP/thumbnail fallback, sizing, rounded/circle, lazy loading |
+| `<x-tyro-dashboard-media-picker>` | Media library picker for any form field (see Media Library) |
+
+Example:
+
+```blade
+<x-tyro-dashboard::card title="Monthly Report" description="Q3 performance">
+    <x-slot:actions>
+        <a href="#" class="btn btn-primary btn-sm">Export</a>
+    </x-slot:actions>
+
+    <div class="grid grid-cols-3 gap-4">
+        <x-tyro-dashboard::stat label="Revenue" value="$42,500" trend="up" change="+12%" />
+        <x-tyro-dashboard::stat label="Orders" value="1,204" variant="info" />
+        <x-tyro-dashboard::stat label="Refunds" value="38" variant="danger" trend="down" change="-3%" />
+    </div>
+</x-tyro-dashboard::card>
+```
+
 ## Configuration
 
 Publish and customize everything:
@@ -183,6 +224,26 @@ Key options in `config/tyro-dashboard.php`:
 | `TYRO_SHOW_GLOBAL_ERRORS` | `true` | Show global form errors |
 | `TYRO_SHOW_FIELD_ERRORS` | `true` | Show per-field form errors |
 
+### Updating the Config
+
+When you upgrade Tyro Dashboard, refresh your published config to pick up new keys and defaults:
+
+```bash
+php artisan tyro-dashboard:update-config
+```
+
+This force-publishes the latest `config/tyro-dashboard.php` and also refreshes the Tyro and Tyro Login configs. **It overwrites your published config**, so pass `--with-backup` to keep a timestamped copy first:
+
+```bash
+php artisan tyro-dashboard:update-config --with-backup
+```
+
+The backup is saved as `config/tyro-dashboard-backup-YYYY-MM-DD-HHMMSS.txt`. To update everything at once (styles, scripts, config, and published sidebar/flash-message overrides), run the full update command instead:
+
+```bash
+php artisan tyro-dashboard:update
+```
+
 ## Impersonation
 
 Admins can temporarily log in as any user from the user management interface, without affecting the user's session. Perfect for troubleshooting, customer support, and feature verification. Only admins can impersonate, and impersonation respects existing security controls (2FA, email verification, etc.).
@@ -218,6 +279,40 @@ php artisan storage:link
 ```
 
 Add the `HasProfilePhoto` trait to your User model, then enable uploads or Gravatar in `.env` (`TYRO_DASHBOARD_ENABLE_PROFILE_PHOTO=true` / `TYRO_DASHBOARD_ENABLE_GRAVATAR=true`).
+
+## Media Library
+
+Full media management from day one — every authenticated user gets a media library at `/dashboard/media` where they can upload, search, crop, resize, rename, and organize files.
+
+```bash
+php artisan migrate
+php artisan storage:link
+```
+
+### What you get
+
+- **Uploads with automatic processing**: every image gets a WebP variant and a 600px thumbnail (Intervention Image v3, GD or Imagick)
+- **Media picker**: a reusable `<x-tyro-dashboard-media-picker>` Blade component that works in any form — pick from the library or upload right from the field, with output options for original, WebP, or thumbnail
+- **Media display**: `<x-tyro-dashboard-media>` renders any media record with smart variant (WebP/thumbnail) fallback, sizing, rounding, and lazy loading
+- **`HasMedia` trait**: add to your `User` model to get `media()`, `mediaLibrary()`, `mediaUrl()`, `deleteMedia()` and more — programmatic access to the library
+- **Crop & resize**: visual Cropper.js selection with replace-in-place or create-a-new-file modes
+- **Stock photo search**: search and import from Unsplash, Pixabay, Freepik, and Pexels directly into your library (set your API keys in `.env`)
+- **Starred images**: save favorites from stock providers for quick access
+- **Bulk operations**: select and delete multiple files, plus per-file alt text and rename support
+- **Sensible access control**: all authenticated users can use the library; admins and editors can manage any file, regular users only their own
+
+### Configuration
+
+| Env var | Default | Description |
+| --- | --- | --- |
+| `TYRO_DASHBOARD_UPLOAD_DISK` | `public` | Storage disk for uploads |
+| `TYRO_DASHBOARD_UPLOAD_DIRECTORY` | `uploads` | Storage directory for uploads |
+| `TYRO_DASHBOARD_MEDIA_MAX_SIZE` | `10240` | Max upload size (KB) |
+| `TYRO_DASHBOARD_AUTO_DELETE_UPLOADS` | `true` | Delete files when a resource is deleted |
+| `TYRO_DASHBOARD_UNSPLASH_ACCESS_KEY` | `null` | Unsplash API key for stock photo search |
+| `TYRO_DASHBOARD_PIXABAY_KEY` | `null` | Pixabay API key for stock photo search |
+| `TYRO_DASHBOARD_FREEPIK_KEY` | `null` | Freepik API key for stock photo search |
+| `TYRO_DASHBOARD_PEXELS_KEY` | `null` | Pexels API key for stock photo search |
 
 ## Use Cases
 
