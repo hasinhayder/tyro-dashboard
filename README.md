@@ -4,11 +4,11 @@
 
 ### Build Powerful Admin Panels in Minutes, Not Weeks
 
-[![Packagist](https://img.shields.io/packagist/v/hasinhayder/tyro-dashboard?style=for-the-badge&logo=packagist&logoColor=white&label=Packagist)](https://packagist.org/packages/hasinhayder/tyro-dashboard) [![Laravel](https://img.shields.io/badge/Laravel-12.x-FF2D20?style=for-the-badge&logo=laravel)](https://laravel.com) [![Laravel](https://img.shields.io/badge/Laravel-13.x-FF2D20?style=for-the-badge&logo=laravel)](https://laravel.com) [![PHP](https://img.shields.io/badge/PHP-8.2+-777BB4?style=for-the-badge&logo=php)](https://php.net) [![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)](LICENSE)
+[![Packagist](https://img.shields.io/packagist/v/hasinhayder/tyro-dashboard?style=for-the-badge&logo=packagist&logoColor=white&label=Packagist)](https://packagist.org/packages/hasinhayder/tyro-dashboard) [![Laravel](https://img.shields.io/badge/Laravel-12.x-FF2D20?style=for-the-badge&logo=laravel)](https://laravel.com) [![Laravel](https://img.shields.io/badge/Laravel-13.x-FF2D20?style=for-the-badge&logo=laravel)](https://laravel.com) [![PHP](https://img.shields.io/badge/PHP-8.2+-777BB4?style=for-the-badge&logo=php)](https://php.net) [![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)](LICENSE) [![CLI Ready](https://img.shields.io/badge/CLI-Ready-2EA44F?style=for-the-badge&logo=terminal&logoColor=white)](https://github.com/hasinhayder/tyro-dashboard)
 
 **Stop building the same admin dashboard over and over.**
 
-A production-ready Laravel package that delivers a complete admin & user dashboard with RBAC, user management, and **magical dynamic CRUD** — all configured through a single file.
+A production-ready Laravel package that delivers a complete admin & user dashboard with RBAC, user management, and **magical dynamic CRUD**, all configured through a single file.
 
 [Full Documentation](http://hasinhayder.github.io/tyro-dashboard/doc.html) • [GitHub](https://github.com/hasinhayder/tyro-dashboard)
 
@@ -16,566 +16,234 @@ A production-ready Laravel package that delivers a complete admin & user dashboa
 
 ---
 
-## Table of Contents
+**Tyro Dashboard** is a comprehensive admin panel package for Laravel 12 and 13, built on top of [Tyro](https://github.com/hasinhayder/tyro) (RBAC) and [Tyro Login](https://github.com/hasinhayder/tyro-login) (authentication). It gives you user management, role & privilege administration, separate admin/user dashboards, audit trails, and dynamic CRUD for your own models, all with a beautiful shadcn-based UI.
 
-- [Overview](#overview)
-- [Key Features](#key-features)
-- [Why Tyro Dashboard?](#why-tyro-dashboard)
-- [Save Time, Focus on Your Product](#save-time-focus-on-your-product)
-- [Core Capabilities](#core-capabilities)
-  - [User Management](#user-management)
-  - [Role & Privilege Management](#role--privilege-management)
-  - [Dynamic Resource CRUD](#dynamic-resource-crud)
-  - [Separate Dashboards](#separate-dashboards)
-  - [Impersonation & User Debugging](#impersonation--user-debugging)
-  - [Admin Bar & Global Notices](#admin-bar--global-notices)
-  - [Audit Trail & Compliance](#audit-trail--compliance)
-  - [Security & Authorization](#security--authorization)
-- [Installation](#installation)
-- [Invitation & Referral System](#invitationreferral-system)
-- [Use Cases](#use-cases)
-- [Full Documentation](#full-documentation)
-- [License](#license)
+What would take 40-60 hours of development now takes minutes of configuration.
 
----
+## Features
 
-## Overview
+- **User management**: full CRUD, search, suspension, 2FA, role assignment, impersonation
+- **RBAC & privileges**: visual role and privilege management with protected roles
+- **Dynamic resource CRUD**: describe a model, get a complete admin interface
+- **Separate dashboards**: distinct admin and user experiences out of the box
+- **Audit trail**: searchable logs of all admin activities and resource changes
+- **Admin bar**: global maintenance and announcement notices in seconds
+- **Invitation system**: referral links with automatic signup tracking
+- **Profile photos**: custom uploads or Gravatar
+- **Beautiful UI**: modern, responsive, shadcn components, dark/light themes
+- **Security first**: middleware checks, per-resource access, protected resources
 
-Tyro Dashboard is a comprehensive Laravel package that eliminates the need to build repetitive admin panel features from scratch. Built on top of **Tyro** (RBAC framework) and **Tyro Login** (authentication system), it provides everything you need to manage users, roles, privileges, and custom resources through an intuitive web interface.
+## Requirements
 
-**What would take 40-60 hours of development now takes minutes of configuration.**
+- PHP 8.2+
+- Laravel 12 or 13
+- [Tyro](https://github.com/hasinhayder/tyro) package
+- [Tyro Login](https://github.com/hasinhayder/tyro-login) package
 
----
+## Installation
 
-## Key Features
+Get up and running in under 3 minutes:
 
-- **Complete User Management** — Full CRUD, 2FA, suspension, role assignment
-- **Role-Based Access Control** — Granular privileges with visual management
-- **Dynamic Resource CRUD** — Describe your model, get a full admin interface
-- **Separate Dashboards** — Admin and user experiences out of the box
-- **User Impersonation** — Debug user issues by securely logging in as them
-- **Audit Trail & Compliance** — Track all admin activities with searchable logs
-- **Beautiful UI** — Modern, responsive, built with shadcn components
-- **Admin Bar** — Deploy global maintenance or announcement notices in seconds
-- **Highly Configurable** — Publishable views, extensible controllers
-- **Security First** — Built-in authorization, protected resources, audit-ready
-
----
-
-## Why Tyro Dashboard?
-
-### For Development Teams
-
-| Problem | Solution |
-|---------|----------|
-| Spending 40-60 hours on every admin panel | **Minutes of configuration** |
-| Writing similar CRUD code across projects | **Declare once, reuse forever** |
-| Inconsistent implementations across teams | **Standardized patterns** |
-| Building user management from scratch | **Ready to use, day one** |
-
-### For Product Managers
-
-- **Faster Time-to-Market** — Launch features faster with pre-built admin
-- **Scalability Ready** — Built to handle growing user bases
-- **Feature Velocity** — Focus on business logic, not infrastructure
-- **Lower Maintenance** — Package updates benefit everyone
-
-### For Security Teams
-
-- Integrated with Tyro's battle-tested RBAC
-- Fine-grained role & privilege management
-- Suspension tracking, role changes logged
-- Leverages Laravel's security features
-
----
-
-## Save Time, Focus on Your Product
-
-Every hour spent building admin features is an hour not spent on your core product.
-
-### The Real Cost of Building From Scratch
-
-| Feature | Time to Build | With Tyro Dashboard | Time Saved |
-|---------|---------------|---------------------|------------|
-| User Management (CRUD, search, filters) | 12-16 hours | **0 minutes** | 12-16 hours |
-| Role & Privilege System | 8-12 hours | **0 minutes** | 8-12 hours |
-| Admin Dashboard UI | 6-10 hours | **0 minutes** | 6-10 hours |
-| Authentication & Authorization | 4-6 hours | **0 minutes** | 4-6 hours |
-| Resource CRUD (per resource) | 6-10 hours | **2 minutes** | 6-10 hours |
-| Form Validation & Error Handling | 3-5 hours | **0 minutes** | 3-5 hours |
-| **Total for First Project** | **40-60 hours** | **5 minutes** | **40-60 hours** |
-| **Each Additional Project** | **40-60 hours** | **5 minutes** | **40-60 hours** |
-
-### What You Can Do With the Time You Save
-
-**Instead of building admin panels for the 10th time, you could:**
-
-- Ship that feature your customers have been asking for
-- Refactor that technical debt you've been avoiding
-- Add the polish that makes your product stand out
-- Actually take that weekend off
-- Onboard 3 new team members in the time you'd spend training them on your custom admin code
-- Focus 100% on what makes your product unique
-
-### The Compound Effect
-
-```
-Without Tyro Dashboard:
-Project 1: 50 hours on admin
-Project 2: 50 hours on admin
-Project 3: 50 hours on admin
-Project 4: 50 hours on admin
-= 200 hours spent on repetitive work
-
-With Tyro Dashboard:
-Project 1: 5 minutes setup
-Project 2: 5 minutes setup
-Project 3: 5 minutes setup
-Project 4: 5 minutes setup
-= 20 minutes total
-= 199.67 hours saved
+```bash
+composer require hasinhayder/tyro-dashboard
+php artisan tyro-dashboard:install
 ```
 
-That's **5 full weeks** of work time you can invest in your core product.
+Then visit `/dashboard` in your browser. `tyro-dashboard:install` publishes the config, views, routes, and middleware for you.
 
-### Stop Reinventing the Wheel
+> **Note:** if you're updating to a version with the invitation system, run `php artisan migrate` to create the `invitation_links` and `invitation_referrals` tables.
 
-Your business isn't building user management systems. It's not building role-based access control. It's not building CRUD interfaces for the hundredth time.
+## Dynamic CRUD in 30 Seconds
 
-**Your business is whatever makes your product unique.**
+Add the `HasCrud` trait to your model:
 
-Tyro Dashboard handles the admin infrastructure so you can focus on what actually matters to your customers.
+```php
+use HasinHayder\TyroDashboard\Concerns\HasCrud;
 
----
+class Product extends Model
+{
+    use HasCrud;
+}
+```
 
-## Core Capabilities
-
-### User Management
-
-Complete user lifecycle management without writing a single line of frontend code:
-
-- Full CRUD operations with search & filtering
-- User suspension/unsuspension with reasons
-- Two-factor authentication (2FA) management
-- Email verification tracking
-- Role assignment and bulk operations
-- Self-suspension protection
-- Protected user configuration
-
-**What You Get**: A fully functional user management interface immediately after installation.
-
-### Role & Privilege Management
-
-Enterprise-grade permission system with visual relationship management:
-
-- Create and manage roles with ease
-- Define granular privileges
-- Many-to-many role-privilege relationships
-- Protected roles (prevent deletion of critical roles)
-- Visual role management interface
-- User-to-role assignment
-
-**Use Case**: Set up a multi-tenant system where each tenant has their own roles and permissions without touching code.
-
-### Dynamic Resource CRUD
-
-**The game-changing feature** — define your data model through configuration, and Tyro Dashboard automatically generates a complete, production-ready admin interface.
-
-#### What Is Dynamic Resource CRUD?
-
-Dynamic Resource CRUD is a declarative way to define how your data should be managed. Instead of writing controllers, views, routes, validation rules, and handling file uploads manually, you simply describe your model structure and field types in the configuration file. Tyro Dashboard then:
-
-- **Generates the UI** — Creates list views, forms, and detail pages automatically
-- **Handles validation** — Applies Laravel validation rules based on your configuration
-- **Manages relationships** — Supports belongsTo, hasMany, and other Eloquent relationships
-- **Processes files** — Handles file uploads and storage with configurable disks
-- **Enforces security** — Applies role-based access control per resource
-- **Provides search & sort** — Enables searching across fields and sorting columns
-
-#### How It Works
-
-Simply add your resource definition to `config/tyro-dashboard.php`:
+Then describe the resource in `config/tyro-dashboard.php`:
 
 ```php
 'resources' => [
     'products' => [
         'model' => App\Models\Product::class,
         'roles' => ['admin', 'manager'],
-        'readonly' => ['viewer'],
-        'upload_disk' => 'public',  // Optional: per-resource storage disk
-        'upload_directory' => 'products',  // Optional: per-resource directory
         'fields' => [
             'name' => ['type' => 'text', 'required' => true, 'searchable' => true],
             'price' => ['type' => 'number', 'required' => true, 'sortable' => true],
             'category_id' => ['type' => 'select', 'relationship' => 'category'],
-            'image' => ['type' => 'file'],  // File uploads use resource/global upload config
+            'image' => ['type' => 'file'],
             'is_active' => ['type' => 'checkbox', 'default' => true],
         ],
     ],
 ]
 ```
 
-Instantly you get:
-- List view with pagination
-- Search across multiple fields
-- Sortable columns
-- Create/Edit forms with validation
-- Delete operations
-- File upload handling
-- Relationship management
-- Role-based access control
+Visit `/dashboard/resources/products` and you have a live admin interface with list views, pagination, search, sortable columns, create/edit forms with validation, file uploads, relationships, and role-based access.
 
-**No frontend code. No API endpoints. No validation logic. Just configuration.**
+**No controllers. No views. No routes. No validation logic. Just configuration.**
 
-#### Learn More
+## CLI at a glance
 
-For comprehensive field types, advanced configuration, real-world examples, and best practices:
+### Install & Setup
 
-**[View Complete Documentation](http://hasinhayder.github.io/tyro-dashboard/doc.html)**
+| Command | Description |
+| --- | --- |
+| `tyro-dashboard:install` | Install package resources (config, views, routes, middleware) |
+| `tyro-dashboard:publish` | Publish views, config, and styles (with per-area options) |
+| `tyro-dashboard:publish-style` | Publish styles to customize shadcn variables |
+| `tyro-dashboard:update` | Update published resources and sidebar overrides |
+| `tyro-dashboard:update-config` | Update config with the latest version |
+| `tyro-dashboard:update-style` | Update published styles with the latest version |
+| `tyro-dashboard:update-script` | Update published scripts with the latest version |
+| `tyro-dashboard:setup-ai-skill` | Install the Tyro Dashboard AI skill for your agent |
 
-### Separate Dashboards
+### Pages & Resources
 
-Different experiences for different user types:
+| Command | Description |
+| --- | --- |
+| `tyro-dashboard:create-admin-page` | Create a new admin dashboard page |
+| `tyro-dashboard:create-user-page` | Create a new user dashboard page |
+| `tyro-dashboard:create-common-page` | Create a page visible in both user and admin sidebars |
+| `tyro-dashboard:remove-admin-page` | Remove an admin dashboard page |
+| `tyro-dashboard:remove-user-page` | Remove a user dashboard page |
+| `tyro-dashboard:remove-common-page` | Remove a common dashboard page |
+| `tyro-dashboard:make-resource` | Scaffold a new resource (model, migration, controller) |
+| `tyro-dashboard:clear-cache` | Clear cached field configurations for Dynamic CRUD |
 
-#### Admin Dashboard
-- Total user count & statistics
-- Suspended vs. active users
-- Recent user list
-- Total roles & privileges count
-- Comprehensive system insights
+### Users & Info
 
-#### User Dashboard
-- Personalized welcome
-- Relevant metrics
-- Non-admin features
-- Extensible for custom content
+| Command | Description |
+| --- | --- |
+| `tyro-dashboard:createsuperuser` | Create a superuser with admin privileges |
+| `tyro-dashboard:version` | Display the current version |
 
-**Why Separate Dashboards?**
-- Different information needs
-- Better UX for each user type
-- Simplified navigation for users
+Run `php artisan list tyro-dashboard` to see every available command.
 
-### Impersonation & User Debugging
+## Configuration
 
-Securely log in as another user to diagnose issues, verify functionality, and provide support without needing their password.
+Publish and customize everything:
 
-#### Key Features
+```bash
+php artisan tyro-dashboard:publish --config
+```
 
-- **Seamless User Switching** — Admins can temporarily log in as any user from the user management interface
-- **Non-Invasive** — The impersonated user's session is not affected; admins have their own separate session
-- **Quick Access** — Impersonate directly from the user list or user detail page
-- **Easy Exit** — Return to admin account with a single click
+Key options in `config/tyro-dashboard.php`:
 
-#### Use Cases
+| Env var | Default | Description |
+| --- | --- | --- |
+| `TYRO_DASHBOARD_PREFIX` | `dashboard` | URL prefix for the dashboard |
+| `TYRO_DASHBOARD_USER_MODEL` | `App\Models\User` | User model the dashboard operates on |
+| `TYRO_DASHBOARD_ENABLE_INVITATION` | `true` | Enable the invitation/referral system |
+| `TYRO_DASHBOARD_ENABLE_AUDIT_LOGS` | `true` | Enable audit logging |
+| `TYRO_DASHBOARD_ENABLE_SYSTEM_SETTINGS` | `true` | Enable system settings page |
+| `TYRO_DASHBOARD_ENABLE_CHECKPOINTS` | `true` | Enable checkpoint feature |
+| `TYRO_DASHBOARD_SHOW_ROLES_MENU` | `true` | Show the roles menu item |
+| `TYRO_DASHBOARD_SHOW_PRIVILEGES_MENU` | `true` | Show the privileges menu item |
+| `TYRO_DASHBOARD_SHOW_RESOURCES_MENU` | `true` | Show the resources menu item |
+| `TYRO_DASHBOARD_COLLAPSIBLE_SIDEBAR` | `true` | Allow the sidebar to collapse |
+| `TYRO_DASHBOARD_ADMIN_BAR_ENABLED` | `false` | Show the global admin notice bar |
+| `TYRO_DASHBOARD_ADMIN_BAR_MESSAGE` | `''` | Admin bar notice text |
+| `TYRO_DASHBOARD_ADMIN_BAR_BG_COLOR` | `#000000` | Admin bar background color |
+| `TYRO_DASHBOARD_ADMIN_BAR_TEXT_COLOR` | `#ffffff` | Admin bar text color |
+| `TYRO_DASHBOARD_ADMIN_BAR_ALIGN` | `left` | Admin bar text alignment |
+| `TYRO_DASHBOARD_ADMIN_BAR_HEIGHT` | `40px` | Admin bar height |
+| `TYRO_DASHBOARD_APP_NAME` | `Laravel` | App name shown in the dashboard |
+| `TYRO_DASHBOARD_LOGO` | `null` | Logo URL |
+| `TYRO_DASHBOARD_LOGO_HEIGHT` | `32px` | Logo display height |
+| `TYRO_DASHBOARD_FAVICON` | `null` | Favicon URL |
+| `TYRO_DASHBOARD_SIDEBAR_BG` | `null` | Sidebar background color |
+| `TYRO_DASHBOARD_SIDEBAR_TEXT` | `null` | Sidebar text color |
+| `TYRO_DASHBOARD_SIDEBAR_PRIMARY` | `null` | Sidebar primary color |
+| `TYRO_DASHBOARD_SIDEBAR_ACCENT` | `null` | Sidebar accent color |
+| `TYRO_DASHBOARD_UPLOAD_DISK` | `public` | Storage disk for resource uploads |
+| `TYRO_DASHBOARD_UPLOAD_DIRECTORY` | `uploads` | Storage directory for resource uploads |
+| `TYRO_DASHBOARD_AUTO_DELETE_UPLOADS` | `true` | Delete files when a resource is deleted |
+| `TYRO_DASHBOARD_ENABLE_PROFILE_PHOTO` | `false` | Enable profile photo uploads |
+| `TYRO_DASHBOARD_ENABLE_GRAVATAR` | `false` | Use Gravatar for profile photos |
+| `TYRO_DASHBOARD_PROFILE_PHOTO_DISK` | `public` | Storage disk for profile photos |
+| `TYRO_DASHBOARD_PROFILE_PHOTO_DIRECTORY` | `profile_images` | Profile photo directory |
+| `TYRO_DASHBOARD_PROFILE_PHOTO_MAX_SIZE` | `10240` | Profile photo max size (KB) |
+| `TYRO_DASHBOARD_PROFILE_PHOTO_WIDTH` | `400` | Profile photo width (px) |
+| `TYRO_DASHBOARD_PROFILE_PHOTO_HEIGHT` | `400` | Profile photo height (px) |
+| `TYRO_DASHBOARD_PROFILE_PHOTO_QUALITY` | `90` | Profile photo JPEG quality |
+| `TYRO_DASHBOARD_NOTIFICATION_STYLE` | `legacy` | Notification style: `legacy` or `toast` |
+| `TYRO_DASHBOARD_TOAST_POSITION` | `bottom-right` | Toast position: `top-right` or `bottom-right` |
+| `TYRO_DASHBOARD_DISABLE_EXAMPLES` | `false` | Disable example resources/pages |
+| `TYRO_DASHBOARD_MEDIA_MAX_SIZE` | `10240` | Media library max upload size (KB) |
+| `TYRO_DASHBOARD_FREEPIK_KEY` | `null` | FreePik API key for media library |
+| `TYRO_DASHBOARD_PEXELS_KEY` | `null` | Pexels API key for media library |
+| `TYRO_DASHBOARD_UNSPLASH_ACCESS_KEY` | `null` | Unsplash API key for media library |
+| `TYRO_DASHBOARD_PIXABAY_KEY` | `null` | Pixabay API key for media library |
+| `TYRO_SHOW_GLOBAL_ERRORS` | `true` | Show global form errors |
+| `TYRO_SHOW_FIELD_ERRORS` | `true` | Show per-field form errors |
 
-**Troubleshooting**: 
-- User reports a bug? Log in as them to reproduce the issue in their exact environment
-- Verify permissions are working correctly for specific roles
-- Check if a feature is visible to users with certain privileges
+## Impersonation
 
-**Customer Support**: 
-- Help users navigate the platform by seeing what they see
-- Verify account settings and permissions
-- Check if user-facing features are working as expected
+Admins can temporarily log in as any user from the user management interface, without affecting the user's session. Perfect for troubleshooting, customer support, and feature verification. Only admins can impersonate, and impersonation respects existing security controls (2FA, email verification, etc.).
 
-**Feature Verification**: 
-- Test new features from different user perspectives
-- Verify role-based visibility of content
-- Validate permission-based feature access
+## Admin Bar & Global Notices
 
-#### Security
+Show globally visible announcements at the top of all dashboard layouts:
 
-- Only users with admin privileges can impersonate other users
-- The impersonated user is not logged out; admins operate in a separate session
-- Impersonation respects all existing security controls (2FA, email verification, etc.)
-
-#### How to Use
-
-1. Navigate to **User Management** in the admin dashboard
-2. Find the user you want to debug
-3. Click the **"Impersonate"** button from the user row or detail page
-4. You'll be logged in as that user while maintaining your admin session
-5. Browse the application as the user would see it
-6. Click **"Exit Impersonation"** to return to your admin account
-
-### Admin Bar & Global Notices
-
-The **Admin Bar** allows you to display globally visible announcements, alerts, or notices at the very top of all dashboard layouts. It's perfect for maintenance windows, system-wide alerts, or important announcements.
-
-#### Key Features
-- **Dynamic CSS Integration** — Automatically offsets the dashboard layout and sidebar to prevent overlapping.
-- **Configurable Aesthetics** — Customizable background color, text color, alignment, and height.
-- **Persistent or Dynamic** — Enable via `.env`/config or show programmatically at runtime.
-- **Security Focused** — Uses a strict allow-list for HTML tags (`<p>`, `<a>`, `<b>`, `<i>`, etc.) in messages.
-
-#### How to Use
-
-**1. Configuration via .env**
-Drop these into your `.env` to immediately activate a notice:
 ```env
 TYRO_DASHBOARD_ADMIN_BAR_ENABLED=true
-TYRO_DASHBOARD_ADMIN_BAR_MESSAGE="⚠️ System maintenance this Sunday at 10:00 PM."
+TYRO_DASHBOARD_ADMIN_BAR_MESSAGE="System maintenance this Sunday at 10:00 PM."
 TYRO_DASHBOARD_ADMIN_BAR_BG_COLOR="#ffcc00"
 ```
 
-**2. Programmatic Usage**
-Use the `AdminNotice` service class to show notices based on your own application logic (e.g., in a middleware or service provider):
+Or programmatically:
 
 ```php
 use HasinHayder\TyroDashboard\Services\AdminNotice;
 
-// Basic usage
 AdminNotice::show('Sale ends in 24 hours! <b>Don\'t miss out!</b>');
-
-// Advanced usage with custom styling
-AdminNotice::show(
-    'Server SSD capacity is critically low (< 5%).',
-    '#dc2626', // Red background
-    '#ffffff'  // White text
-);
+AdminNotice::show('Server SSD capacity is critically low (< 5%).', '#dc2626', '#ffffff');
 ```
 
-### Audit Trail & Compliance
+## Audit Trail
 
-Comprehensive audit logging for complete transparency and compliance tracking:
+Every role/privilege change, user lifecycle event, and CRUD operation on tracked resources is logged with who, what, and when. Browse, search, and filter logs from the **Audit Logs** page in the admin dashboard (admin only).
 
-#### What's Tracked
-
-- **System Events** — Role and privilege changes, user lifecycle events (creation, suspension, deletion)
-- **Administrative Actions** — All admin dashboard activities with who, what, and when
-- **User & Security Events** — Password changes, 2FA updates, permission modifications
-- **Resource Changes** — All CRUD operations on tracked resources with before/after states
-
-#### Features
-
-- **Searchable Logs** — Find events by actor, event type, or target resource
-- **Advanced Filtering** — Filter by event type, user, date range, and more
-- **Full Details** — View complete event data including changes made and affected records
-- **Privacy Protection** — Sensitive data handling for compliance requirements
-- **Admin Control** — Selective flushing of audit records when needed
-
-#### Use Cases
-
-**Security & Compliance**:
-- Demonstrate regulatory compliance (SOC 2, GDPR, HIPAA audit requirements)
-- Investigate security incidents with complete activity trails
-- Monitor for unauthorized access attempts or suspicious activity
-
-**Operational Insights**:
-- Track who made what changes and when
-- Debug issues by reviewing related events
-- Verify administrative actions for accountability
-
-**User Support**:
-- Review user activity to assist with support requests
-- Verify account changes and permission updates
-- Timeline reconstruction for troubleshooting
-
-#### Access
-
-Navigate to **Audit Logs** in the admin dashboard to access the audit trail interface. Only users with admin privileges can view and manage audit logs.
-
-### File Upload Configuration
-
-Intelligent three-tier file upload system for flexible storage management:
-
-#### Priority System
-1. **Model-level** (highest) — Define in model using HasCrud trait
-2. **Resource-level** (middle) — Configure per-resource in config file  
-3. **Global-level** (fallback) — Set global defaults for all resources
-
-
-### Security & Authorization
-
-Built-in authorization at multiple levels:
-
-- Middleware-based admin checks 
-- Per-resource access control
-- Per-field readonly modes
-- User suspension prevention of access
-- Protected resource configuration
-- Email verification requirement support
-- Two-factor authentication integration
-- Secure password hashing
-
----
-
-## Installation
-
-**Get up and running in under 3 minutes.** No complicated setup, no configuration headaches — just install and go.
-
-### Prerequisites
-
-- Laravel 10.0+ or 11.x
-- PHP 8.2+
-- [Tyro RBAC](https://github.com/hasinhayder/tyro) package
-- [Tyro Login](https://github.com/hasinhayder/tyro-login) package
-
-### That's It — Three Simple Steps
-
-#### Step 1: Install via Composer
+## Profile Photos
 
 ```bash
-composer require hasinhayder/tyro-dashboard
-```
-
-#### Step 2: Run the Installer
-
-```bash
-php artisan tyro-dashboard:install
-```
-
-This one command does **everything** for you:
-- Publishes the configuration file
-- Publishes all view files
-- Registers routes and middleware
-- Sets up your dashboard structure
-
-#### Step 3: Visit Your Dashboard
-
-Navigate to `/dashboard` in your browser.
-
-**That's it!** You now have a fully functional admin dashboard with:
-- Complete user management
-- Role & privilege administration
-- Separate admin and user dashboards
-- Beautiful, responsive UI
-
-### Add Your First Resource in 30 Seconds
-
-```php
-// app/Models/Product.php
-use HasinHayder\TyroDashboard\Concerns\HasCrud;
-
-class Product extends Model
-{
-    use HasCrud;  // That's it!
-    
-    protected $fillable = ['name', 'price', 'description'];
-}
-```
-
-Visit `/dashboard/resources/products` — **your admin interface is live.**
-
-No controllers. No views. No routes. No validation. **Just add the trait and you're done.**
-
----
-
-## Invitation/Referral System
-
-Built-in referral program to drive organic user growth:
-
-- **Admin Dashboard** — Manage all invitation links, view referral statistics, create links for users
-- **User Dashboard** — Generate personal invitation link and track referrals
-- **Automatic Tracking** — Signups through invitation links are automatically tracked
-- **Fully Configurable** — Enable/disable with `TYRO_DASHBOARD_ENABLE_INVITATION` environment variable (enabled by default)
-
-#### Updating From Previous Versions
-
-If you're updating to a version that includes the invitation system, you **must run migrations** to create the required database tables:
-
-```bash
-# Option 1: Run all pending migrations
 php artisan migrate
-
-# Option 2: Run only Tyro Login migrations
-php artisan migrate --path=vendor/hasinhayder/tyro-login/database/migrations
+php artisan storage:link
 ```
 
-This creates the `invitation_links` and `invitation_referrals` tables needed for the referral system to function.
-
----
-
-## Profile Photo & Gravatar Support
-
-Each user can now have a custom profile photo or use Gravatar by default.
-
-### Setup Instructions
-
-1. **Run Migrations** — Add the necessary columns to your users table:
-   ```bash
-   php artisan migrate
-   ```
-
-2. **Update User Model** — Add the `HasProfilePhoto` trait to your `User` model:
-   ```php
-   use HasinHayder\TyroDashboard\Traits\HasProfilePhoto;
-
-   class User extends Authenticatable
-   {
-       use HasProfilePhoto;
-       // ...
-   }
-   ```
-
-3. **Storage Link** — Ensure your public storage is linked:
-   ```bash
-   php artisan storage:link
-   ```
-
-
----
+Add the `HasProfilePhoto` trait to your User model, then enable uploads or Gravatar in `.env` (`TYRO_DASHBOARD_ENABLE_PROFILE_PHOTO=true` / `TYRO_DASHBOARD_ENABLE_GRAVATAR=true`).
 
 ## Use Cases
 
-### E-Commerce Admin Panel
-
-**Challenge**: Build an admin panel to manage products, categories, and orders.
-
-**Solution**: Add resources for Products, Categories, and Orders. Set role-based access (Admin: full, Manager: read-only). **Result**: Full e-commerce admin panel in under 30 minutes.
-
-### Enterprise User Management
-
-**Challenge**: Manage 1000+ employees with different departments and access levels.
-
-**Solution**: Create roles (admin, hr, manager, employee), define privileges (manage_users, view_reports, approve_leave), assign to users. **Result**: HR manages all employees via web interface — no database access needed.
-
-### SaaS Multi-Tenant Platform
-
-**Challenge**: Each tenant needs their own admin panel with custom roles.
-
-**Solution**: Use tenant-specific resource configuration with custom role assignments. **Result**: Multi-tenant admin panels without code duplication.
-
-### Content Management System
-
-**Challenge**: Blog CMS with posts, authors, and comments.
-
-**Solution**: Create resources for Posts, Authors, and Categories with relationship fields. **Result**: Complete CMS admin interface without frontend development.
-
----
+- **E-commerce**: resources for Products, Categories, Orders with role-based access
+- **Enterprise user management**: roles and privileges for HR, managers, employees
+- **SaaS multi-tenant**: tenant-specific resources with custom role assignments
+- **CMS**: Posts, Authors, Categories with relationship fields
 
 ## Full Documentation
 
-For detailed configuration, customization guides, API reference, best practices, and troubleshooting:
+For detailed configuration, all field types, customization guides, and best practices:
 
 **[View Complete Documentation](http://hasinhayder.github.io/tyro-dashboard/doc.html)**
-
-Inside you'll find:
-- Detailed configuration options
-- All field types with examples
-- Customization guides (views, controllers)
-- Architecture overview
-- Console commands reference
-- Best practices & security guidelines
-- Troubleshooting guide
-- FAQ
-
----
 
 ## License
 
 The Tyro Dashboard package is open-source software licensed under the [MIT license](LICENSE).
 
----
-
 ## Acknowledgments
 
 Built on top of amazing packages:
-- [Tyro](https://github.com/hasinhayder/tyro) — RBAC framework
-- [Tyro Login](https://github.com/hasinhayder/tyro-login) — Authentication system
+
+- [Tyro](https://github.com/hasinhayder/tyro): RBAC framework
+- [Tyro Login](https://github.com/hasinhayder/tyro-login): authentication system
 
 ---
-
 
 ## Ready to Supercharge Your Laravel App?
 
