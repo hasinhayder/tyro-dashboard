@@ -61,16 +61,28 @@
 @endphp
 
 @if($imgUrl)
-<div @if($isShowTitle) class="tyro-media-figure" style="display:inline-flex;flex-direction:column;gap:0.4rem;max-width:100%;" @endif>
-    <img
-        src="{{ $imgUrl }}"
-        alt="{{ $altText }}"
-        loading="{{ $loadingValue }}"
-        {{ $attributes->except('style') }}
-        @if($finalStyle !== '') style="{{ $finalStyle }}" @endif
-    >
-    @if($titleText !== '')
-        <div class="tyro-media-title" style="font-size:0.8125rem;font-weight:600;color:var(--foreground);text-align:center;line-height:1.3;overflow:hidden;text-overflow:ellipsis;">{{ $titleText }}</div>
+    @if($isShowTitle)
+        <div class="tyro-media-figure" style="display:inline-flex;flex-direction:column;gap:0.4rem;max-width:100%;">
+            <img
+                src="{{ $imgUrl }}"
+                alt="{{ $altText }}"
+                loading="{{ $loadingValue }}"
+                decoding="async"
+                {{ $attributes->except('style') }}
+                @if($finalStyle !== '') style="{{ $finalStyle }}" @endif
+            >
+            @if($titleText !== '')
+                <div class="tyro-media-title" style="font-size:0.8125rem;font-weight:600;color:var(--foreground);text-align:center;line-height:1.3;overflow:hidden;text-overflow:ellipsis;">{{ $titleText }}</div>
+            @endif
+        </div>
+    @else
+        <img
+            src="{{ $imgUrl }}"
+            alt="{{ $altText }}"
+            loading="{{ $loadingValue }}"
+            decoding="async"
+            {{ $attributes->except('style') }}
+            @if($finalStyle !== '') style="{{ $finalStyle }}" @endif
+        >
     @endif
-</div>
 @endif

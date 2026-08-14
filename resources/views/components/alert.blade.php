@@ -17,9 +17,10 @@
 
     $iconProvided = isset($icon) ? trim((string) $icon) : '';
     $iconSvg = $iconProvided !== '' ? $iconProvided : ($defaultIcons[$variant] ?? '');
+    $role = in_array($variant, ['error', 'warning'], true) ? 'alert' : 'status';
 @endphp
 
-<div {{ $attributes->merge(['class' => 'alert alert-'.$variant]) }}>
+<div {{ $attributes->merge(['class' => 'alert alert-'.$variant, 'role' => $role]) }}>
     @if($iconSvg !== '')
         {!! $iconSvg !!}
     @endif

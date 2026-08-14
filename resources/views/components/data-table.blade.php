@@ -8,6 +8,7 @@
     'title' => null,
     'description' => null,
     'empty' => 'No records found.',
+    'emptyTitle' => null,
     'showHeader' => true,
 ])
 
@@ -99,7 +100,7 @@
             <thead>
                 <tr>
                     @foreach($normalisedColumns as $col)
-                        <th{!! $col['thClass'] !== '' ? ' class="'.e($col['thClass']).'"' : '' !!}{!! $col['align'] !== '' ? ' style="text-align:'.e($col['align']).';"' : '' !!}>{{ $col['label'] }}</th>
+                        <th scope="col"{!! $col['thClass'] !== '' ? ' class="'.e($col['thClass']).'"' : '' !!}{!! $col['align'] !== '' ? ' style="text-align:'.e($col['align']).';"' : '' !!}>{{ $col['label'] }}</th>
                     @endforeach
                 </tr>
             </thead>
@@ -115,9 +116,16 @@
                                 } elseif (filled($col['key'])) {
                                     $cellValue = data_get($item, $col['key']) ?? '';
                                 }
-                                $alignStyle = $col['align'] !== '' ? ' text-align:'.e($col['align']).';' : '';
+                                $cellClass = trim((string) $col['class']);
+                                $cellAttrs = '';
+                                if ($cellClass !== '') {
+                                    $cellAttrs .= ' class="'.e($cellClass).'"';
+                                }
+                                if ($col['align'] !== '') {
+                                    $cellAttrs .= ' style="text-align:'.e($col['align']).';"';
+                                }
                             @endphp
-                            <td{!! $col['class'] !== '' || $col['align'] !== '' ? ' class="'.e($col['class']).'"' : '' !!}{!! $alignStyle !== '' ? ' style="'.$alignStyle.'"' : '' !!}>{!! $cellValue !!}</td>
+                            <td{!! $cellAttrs !!}>{!! $cellValue !!}</td>
                         @endforeach
                     </tr>
                 @endforeach
@@ -137,8 +145,16 @@
     </div>
     @endif
 @else
-    <div class="empty-state" style="padding:2rem;">
-        <p class="empty-state-description">{{ $empty }}</p>
+    <div class="empty-state" style="padding:2.5rem 1.5rem;">
+        <div class="empty-state-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M3 7v10a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 5.9A2 2 0 0 0 7.93 5H5a2 2 0 0 0-2 2Z" />
+            </svg>
+        </div>
+        @if(filled($emptyTitle))
+            <h3 class="empty-state-title">{{ $emptyTitle }}</h3>
+        @endif
+        <p class="empty-state-description" style="margin-bottom:0;">{{ $empty }}</p>
     </div>
 @endif
 
