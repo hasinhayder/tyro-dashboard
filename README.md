@@ -138,7 +138,7 @@ Tyro Dashboard ships a library of shadcn-styled Blade components you can drop in
 | `<x-tyro-dashboard::badge>` | Status badge; `variant` = `primary`, `success`, `warning`, `danger`, `secondary`, `info` |
 | `<x-tyro-dashboard::card>` | Card panel with `title`, `description`, `actions` and `footer` slots |
 | `<x-tyro-dashboard::checkbox>` | Styled checkbox with label and color variants; supports `indeterminate` |
-| `<x-tyro-dashboard::data-table>` | Table from a collection + columns with formatting, striped/hover/compact variants |
+| `<x-tyro-dashboard::data-table>` | Table from a collection + columns with formatting, striped/hover/compact variants; customizable empty state via `empty` and `emptyTitle` |
 | `<x-tyro-dashboard::dropdown>` | Dropdown menu with `trigger` slot, alignment, and items |
 | `<x-tyro-dashboard::dropdown-item>` | Dropdown item; `href`, `icon`, `variant` (incl. `danger`) |
 | `<x-tyro-dashboard::dropdown-divider>` | Divider for dropdown menus |
