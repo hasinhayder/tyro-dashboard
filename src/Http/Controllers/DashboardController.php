@@ -6,6 +6,7 @@ use HasinHayder\TyroLogin\Models\InvitationLink;
 use HasinHayder\TyroLogin\Models\InvitationReferral;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 class DashboardController extends BaseController {
@@ -21,6 +22,7 @@ class DashboardController extends BaseController {
             try {
                 // User stats
                 $stats['total_users'] = class_exists($userModel) ? $userModel::count() : 0;
+                $stats['total_logged_in_users'] = $this->getLoggedInUserCount();
 
                 // Try to get suspended users count
                 if (class_exists($userModel)) {
@@ -83,6 +85,7 @@ class DashboardController extends BaseController {
                 // If any error occurs, provide default stats
                 $stats = [
                     'total_users' => 0,
+                    'total_logged_in_users' => 0,
                     'total_roles' => 0,
                     'total_privileges' => 0,
                     'recent_users' => new Collection,
@@ -120,6 +123,23 @@ class DashboardController extends BaseController {
         return view('tyro-dashboard::dashboard.user', $this->getViewData([
             'stats' => $stats,
         ]));
+    }
+
+    protected function getLoggedInUserCount(): int {
+        if (config('session.driver') !== 'database') {
+            return 0;
+        }
+
+        try {
+            return DB::connection(config('session.connection'))
+                ->table(config('session.table', 'sessions'))
+                ->where('last_activity', '>=', now()->subMinutes(config('session.lifetime', 120))->getTimestamp())
+                ->whereNotNull('user_id')
+                ->distinct('user_id')
+                ->count('user_id');
+        } catch (\Throwable $e) {
+            return 0;
+        }
     }
 
     /**
