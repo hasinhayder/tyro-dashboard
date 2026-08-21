@@ -56,6 +56,7 @@
                         <option value="">All Status</option>
                         <option value="active" {{ ($filters['status'] ?? '') === 'active' ? 'selected' : '' }}>Active</option>
                         <option value="suspended" {{ ($filters['status'] ?? '') === 'suspended' ? 'selected' : '' }}>Suspended</option>
+                        <option value="logged_in" {{ ($filters['status'] ?? '') === 'logged_in' ? 'selected' : '' }}>Logged In</option>
                     </select>
                 </div>
                 <button type="submit" class="btn btn-secondary">Filter</button>

@@ -21,6 +21,7 @@ class UserController extends BaseController {
         $userModel = $this->getUserModel();
         $perPage = config('tyro-dashboard.pagination.users', 15);
 
+        $onlineUserIds = $this->getOnlineUserIds();
         $query = $userModel::with('roles');
 
         // Search
@@ -43,11 +44,12 @@ class UserController extends BaseController {
             $query->whereNotNull('suspended_at');
         } elseif ($request->get('status') === 'active') {
             $query->whereNull('suspended_at');
+        } elseif ($request->get('status') === 'logged_in') {
+            $query->whereIn('id', $onlineUserIds->all());
         }
 
         $users = $query->latest()->paginate($perPage)->withQueryString();
         $roles = Role::all();
-        $onlineUserIds = $this->getOnlineUserIds($users->pluck('id'));
 
         return view('tyro-dashboard::users.index', $this->getViewData([
             'users' => $users,
@@ -111,7 +113,7 @@ class UserController extends BaseController {
 
         return view('tyro-dashboard::users.edit', $this->getViewData([
             'editUser' => $user,
-            'isOnline' => $this->getOnlineUserIds(collect([$user->id]))->containsStrict((string) $user->getKey()),
+            'isOnline' => $this->getOnlineUserIds()->containsStrict((string) $user->getKey()),
             'roles' => $roles,
         ]));
     }
@@ -398,15 +400,14 @@ class UserController extends BaseController {
             ->with('success', 'You have stopped impersonating and returned to your account.');
     }
 
-    protected function getOnlineUserIds(Collection $userIds): Collection {
-        if (config('session.driver') !== 'database' || $userIds->isEmpty()) {
+    protected function getOnlineUserIds(): Collection {
+        if (config('session.driver') !== 'database') {
             return collect();
         }
 
         try {
             return DB::connection(config('session.connection'))
                 ->table(config('session.table', 'sessions'))
-                ->whereIn('user_id', $userIds->all())
                 ->where('last_activity', '>=', now()->subMinutes(config('session.lifetime', 120))->getTimestamp())
                 ->whereNotNull('user_id')
                 ->distinct()
