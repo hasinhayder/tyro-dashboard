@@ -4,6 +4,7 @@ use HasinHayder\TyroDashboard\Http\Controllers\AuditController;
 use HasinHayder\TyroDashboard\Http\Controllers\CheckpointController;
 use HasinHayder\TyroDashboard\Http\Controllers\ComponentsController;
 use HasinHayder\TyroDashboard\Http\Controllers\DashboardController;
+use HasinHayder\TyroDashboard\Http\Controllers\HealthController;
 use HasinHayder\TyroDashboard\Http\Controllers\InvitationController;
 use HasinHayder\TyroDashboard\Http\Controllers\MediaController;
 use HasinHayder\TyroDashboard\Http\Controllers\PrivilegeController;
@@ -182,6 +183,13 @@ Route::middleware('tyro-dashboard.admin')->group(function () {
             Route::post('/toggle-flag', [CheckpointController::class, 'toggleFlag'])->name('toggle-flag');
             Route::post('/encrypt', [CheckpointController::class, 'encrypt'])->name('encrypt');
             Route::post('/generate-key', [CheckpointController::class, 'generateKey'])->name('generate-key');
+        });
+    }
+
+    // System Health (Admin) - read-only diagnostics
+    if (config('tyro-dashboard.features.health', true)) {
+        Route::prefix('health')->name('health.')->group(function () {
+            Route::get('/', [HealthController::class, 'index'])->name('index');
         });
     }
 });

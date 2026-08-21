@@ -157,6 +157,15 @@
             </a>
             @endif
 
+            @if(config('tyro-dashboard.features.health', true))
+            <a href="{{ route($dashboardRoute::name('health.index')) }}" class="sidebar-link {{ request()->routeIs($dashboardRoute::pattern('health.*')) ? 'active' : '' }}">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M22 12h-4l-3 9L9 3l-3 9H2" />
+                </svg>
+                System Health
+            </a>
+            @endif
+
             @if(!empty($adminMenuItems))
                 @foreach($adminMenuItems as $item)
                     <a href="{{ route($item['route'] ?? '#') }}" class="sidebar-link {{ request()->routeIs($item['route'] ?? '') ? 'active' : '' }}">

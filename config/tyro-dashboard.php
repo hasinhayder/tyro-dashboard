@@ -121,6 +121,7 @@ return [
         'audit_logs' => env('TYRO_DASHBOARD_ENABLE_AUDIT_LOGS', true),
         'system_settings' => env('TYRO_DASHBOARD_ENABLE_SYSTEM_SETTINGS', true),
         'checkpoints' => env('TYRO_DASHBOARD_ENABLE_CHECKPOINTS', true),
+        'health' => env('TYRO_DASHBOARD_ENABLE_HEALTH', true),
         'show_roles_menu' => env('TYRO_DASHBOARD_SHOW_ROLES_MENU', true),
         'show_privileges_menu' => env('TYRO_DASHBOARD_SHOW_PRIVILEGES_MENU', true),
         'show_resources_menu' => env('TYRO_DASHBOARD_SHOW_RESOURCES_MENU', true),

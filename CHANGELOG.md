@@ -2,6 +2,9 @@
 
 All notable changes to Tyro Dashboard are documented in this file.
 
+## [v1.47.0](https://github.com/hasinhayder/tyro-dashboard/releases/tag/v1.47.0) - 2026-08-21
+- System Health admin page: read-only runtime diagnostics (PHP memory + upload/execution limits, OPcache, disk usage, database driver/version/tables/size, cache round-trip latency, queue reachability ping, storage writability, runtime context with app/PHP timezone mismatch check, tyro ecosystem package versions from composer.lock) with ordered-hybrid probe caching (live cache probe + 60s expensive-bucket cache, graceful degradation when the cache store is down), gated by `TYRO_DASHBOARD_ENABLE_HEALTH`
+
 ## [v1.46.1](https://github.com/hasinhayder/tyro-dashboard/releases/tag/v1.46.1) - 2026-06-26
 - Minor UI Tweaks
 

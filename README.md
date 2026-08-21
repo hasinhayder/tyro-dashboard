@@ -32,6 +32,7 @@ What would take 40-60 hours of development now takes minutes of configuration.
 - **Invitation system**: referral links with automatic signup tracking
 - **Profile photos**: custom uploads or Gravatar
 - **Media library**: full media management, uploads, WebP conversion, thumbnails, stock photo search, and a reusable media picker
+- **System health**: read-only runtime diagnostics — PHP memory, OPcache, disk, database, cache, and queue status
 - **Beautiful UI**: modern, responsive, shadcn components, dark/light themes
 - **Security first**: middleware checks, per-resource access, protected resources
 

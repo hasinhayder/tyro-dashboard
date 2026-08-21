@@ -19,7 +19,7 @@ class VersionCommand extends Command {
      * Execute the console command.
      */
     public function handle(): int {
-        $version = '1.46.4'; // Media alt-text save fix (PR #7)
+        $version = '1.47.0'; // System Health admin page
 
         $this->info('');
         $this->info('  ╔════════════════════════════════════════╗');
@@ -70,6 +70,7 @@ class VersionCommand extends Command {
 }
 
 // Changelog
+// 1.47.0 - feat(health): System Health admin page — read-only runtime diagnostics (PHP memory + upload/execution limits, OPcache, disk, database, cache round-trip, queue reachability, storage writability, runtime context with timezone mismatch check, tyro ecosystem versions) with ordered-hybrid probe caching, gated by TYRO_DASHBOARD_ENABLE_HEALTH
 // 1.46.4 - fix(#7): Media Library alt-text field now saves correctly; alt route was POST-only so PATCH method spoofing returned a 405, and the alt/rename endpoints are now aligned on native PATCH
 // 1.46.3 - fix(#8): app layout now uses config('tyro-dashboard.admin_roles') for the @hasanyrole sidebar check, fixing the admin sidebar collapsing into the user sidebar for the super-admin role
 // 1.46.3 - fix(#6): disallow SVG uploads to prevent stored XSS
