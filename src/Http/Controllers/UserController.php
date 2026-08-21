@@ -47,10 +47,12 @@ class UserController extends BaseController {
 
         $users = $query->latest()->paginate($perPage)->withQueryString();
         $roles = Role::all();
+        $onlineUserIds = $this->getOnlineUserIds($users->pluck('id'));
 
         return view('tyro-dashboard::users.index', $this->getViewData([
             'users' => $users,
             'roles' => $roles,
+            'onlineUserIds' => $onlineUserIds,
             'filters' => $request->only(['search', 'role', 'status']),
         ]));
     }
@@ -109,6 +111,7 @@ class UserController extends BaseController {
 
         return view('tyro-dashboard::users.edit', $this->getViewData([
             'editUser' => $user,
+            'isOnline' => $this->getOnlineUserIds(collect([$user->id]))->containsStrict((string) $user->getKey()),
             'roles' => $roles,
         ]));
     }
@@ -393,6 +396,25 @@ class UserController extends BaseController {
         return redirect()
             ->route(DashboardRoute::name('users.index'))
             ->with('success', 'You have stopped impersonating and returned to your account.');
+    }
+
+    protected function getOnlineUserIds(Collection $userIds): Collection {
+        if (config('session.driver') !== 'database' || $userIds->isEmpty()) {
+            return collect();
+        }
+
+        try {
+            return DB::connection(config('session.connection'))
+                ->table(config('session.table', 'sessions'))
+                ->whereIn('user_id', $userIds->all())
+                ->where('last_activity', '>=', now()->subMinutes(config('session.lifetime', 120))->getTimestamp())
+                ->whereNotNull('user_id')
+                ->distinct()
+                ->pluck('user_id')
+                ->map(fn ($id) => (string) $id);
+        } catch (\Throwable $e) {
+            return collect();
+        }
     }
 
     /**

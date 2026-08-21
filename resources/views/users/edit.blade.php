@@ -110,6 +110,9 @@
                     <div>
                         <div style="font-weight: 600; color: var(--foreground); display: flex; align-items: center; gap: 0.5rem;">
                             {{ $editUser->name }}
+                            @if($isOnline)
+                                <span title="Online" aria-label="Online" style="display: inline-block; width: 0.625rem; height: 0.625rem; border-radius: 9999px; background-color: var(--success); box-shadow: 0 0 0 3px color-mix(in srgb, var(--success), transparent 85%);"></span>
+                            @endif
                             @if(method_exists($editUser, 'isSuspended') && $editUser->isSuspended())
                                 <span class="badge badge-danger">Suspended</span>
                             @else

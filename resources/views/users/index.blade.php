@@ -102,7 +102,12 @@
                                     @endif
                                 </div>
                                 <div class="user-cell-info">
-                                    <div class="user-cell-name">{{ $listUser->name }}</div>
+                                    <div class="user-cell-name" style="display: flex; align-items: center; gap: 0.5rem;">
+                                        {{ $listUser->name }}
+                                        @if($onlineUserIds->containsStrict((string) $listUser->getKey()))
+                                            <span title="Online" aria-label="Online" style="display: inline-block; width: 0.5rem; height: 0.5rem; border-radius: 9999px; background-color: var(--success); box-shadow: 0 0 0 3px color-mix(in srgb, var(--success), transparent 85%);"></span>
+                                        @endif
+                                    </div>
                                     <div class="user-cell-email">{{ $listUser->email }}</div>
                                 </div>
                             </a>
