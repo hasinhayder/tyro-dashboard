@@ -88,6 +88,23 @@
         opacity: 0.6;
         cursor: wait;
     }
+    .health-copy-page-btn {
+        flex-shrink: 0;
+        white-space: nowrap;
+        color: var(--muted-foreground);
+    }
+    .health-copy-page-btn svg {
+        width: 1rem;
+        height: 1rem;
+        flex-shrink: 0;
+    }
+    .health-copy-page-btn:hover {
+        color: var(--foreground);
+    }
+    .health-copy-page-btn[disabled] {
+        opacity: 0.6;
+        cursor: wait;
+    }
     .health-stat-wrap {
         position: relative;
     }
@@ -110,6 +127,10 @@
             <h1 class="page-title">System Health</h1>
             <p class="page-description">Read-only runtime diagnostics for this application. Nothing on this page changes any setting.</p>
         </div>
+        <button type="button" class="btn btn-ghost health-copy-page-btn" title="Copy this page as an image" aria-label="Copy this page as an image" onclick="copyHealthPage(this)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="M21 15l-5-5L5 21"/></svg>
+            <span>Copy page as image</span>
+        </button>
     </div>
 </div>
 
@@ -613,6 +634,7 @@
 
     function healthResolveColors() {
         return {
+            background: healthCssVar('--background') || '#fafafa',
             card: healthCssVar('--card') || '#ffffff',
             foreground: healthCssVar('--foreground') || '#18181b',
             muted: healthCssVar('--muted-foreground') || '#71717a',
@@ -765,12 +787,9 @@
         return appName + ' • Tyro Dashboard • ' + ts;
     }
 
-    function healthBuildSvg(content) {
-        var colors = healthResolveColors();
-        var W = 720;
+    function healthRenderDetailCard(content, W, colors) {
         var PAD = 28;
         var INNER = W - PAD * 2;
-        var FONT = 'Inter, system-ui, -apple-system, sans-serif';
         var body = [];
         var esc = healthEscapeXml;
         var y = PAD + 2;
@@ -848,15 +867,112 @@
             }
         });
 
-        y += 4;
+        return { body: body, height: y + 10 };
+    }
+
+    function healthBuildSvg(content) {
+        var colors = healthResolveColors();
+        var W = 720;
+        var PAD = 28;
+        var rendered = healthRenderDetailCard(content, W, colors);
+        var body = rendered.body.slice();
+        var y = rendered.height + 2;
         body.push('<line x1="' + PAD + '" y1="' + y + '" x2="' + (W - PAD) + '" y2="' + y + '" stroke="' + colors.border + '" stroke-width="1"/>');
         y += 21;
-        body.push('<text x="' + PAD + '" y="' + y + '" font-size="11" fill="' + colors.muted + '">' + esc(healthCaption()) + '</text>');
+        body.push('<text x="' + PAD + '" y="' + y + '" font-size="11" fill="' + colors.muted + '">' + healthEscapeXml(healthCaption()) + '</text>');
         var H = Math.max(y + 20, 132);
 
-        var svg = '<svg xmlns="http://www.w3.org/2000/svg" width="' + W + '" height="' + H + '" viewBox="0 0 ' + W + ' ' + H + '" font-family="' + FONT + '">'
+        var svg = '<svg xmlns="http://www.w3.org/2000/svg" width="' + W + '" height="' + H + '" viewBox="0 0 ' + W + ' ' + H + '" font-family="Inter, system-ui, -apple-system, sans-serif">'
             + '<rect x="0.5" y="0.5" width="' + (W - 1) + '" height="' + (H - 1) + '" rx="12" fill="' + colors.card + '" stroke="' + colors.border + '" stroke-opacity="0.6"/>'
             + body.join('')
+            + '</svg>';
+
+        return { svg: svg, width: W, height: H };
+    }
+
+    function healthRenderStatCard(content, W, colors) {
+        var body = [];
+        var esc = healthEscapeXml;
+        var accent = content.statVariant ? healthProgressColor(colors, content.statVariant) : colors.primary;
+        var value = content.rows.length ? content.rows[0].value : '—';
+        body.push('<rect x="0.5" y="0.5" width="' + (W - 1) + '" height="79" rx="12" fill="' + colors.card + '" stroke="' + colors.border + '" stroke-opacity="0.6"/>');
+        body.push('<rect x="16" y="18" width="4" height="44" rx="2" fill="' + accent + '"/>');
+        body.push('<text x="30" y="33" font-size="11" fill="' + colors.muted + '">' + esc(healthTruncateText(content.title, Math.floor((W - 46) / 6))) + '</text>');
+        body.push('<text x="30" y="60" font-size="19" font-weight="700" fill="' + colors.foreground + '">' + esc(healthTruncateText(value, Math.floor((W - 46) / 10.5))) + '</text>');
+        return { body: body, height: 80 };
+    }
+
+    function healthBuildPageSvg() {
+        var colors = healthResolveColors();
+        var W = 720;
+        var PAD = 28;
+        var esc = healthEscapeXml;
+        var parts = [];
+        var y = PAD + 6;
+
+        var pageTitle = healthCleanText(document.querySelector('.page-title')) || 'System Health';
+        var pageDesc = healthCleanText(document.querySelector('.page-description'));
+        parts.push('<text x="' + PAD + '" y="' + (y + 20) + '" font-size="24" font-weight="700" fill="' + colors.foreground + '">' + esc(healthTruncateText(pageTitle, 46)) + '</text>');
+        y += 34;
+        if (pageDesc) {
+            healthWrapText(pageDesc, 88).forEach(function (line) {
+                parts.push('<text x="' + PAD + '" y="' + (y + 12) + '" font-size="12" fill="' + colors.muted + '">' + esc(line) + '</text>');
+                y += 16;
+            });
+        }
+        y += 10;
+
+        var section = '';
+        var asOf = '';
+        var blocks = document.querySelectorAll('.stats-grid, .health-section-head, .grid-2');
+        Array.prototype.forEach.call(blocks, function (block) {
+            if (block.classList.contains('health-section-head')) {
+                section = healthCleanText(block.querySelector('h2'));
+                asOf = healthCleanText(block.querySelector('.health-asof'));
+                return;
+            }
+            if (block.classList.contains('stats-grid')) {
+                var statW = Math.floor((W - 14) / 2);
+                var stats = [];
+                Array.prototype.forEach.call(block.querySelectorAll('.health-stat-wrap'), function (wrapEl) {
+                    stats.push(healthRenderStatCard(healthCollectContent(wrapEl), statW, colors));
+                });
+                for (var i = 0; i < stats.length; i += 2) {
+                    var rowH = 0;
+                    stats.slice(i, i + 2).forEach(function (stat, idx) {
+                        parts.push('<g transform="translate(' + idx * (statW + 14) + ',' + y + ')">' + stat.body.join('') + '</g>');
+                        rowH = Math.max(rowH, stat.height);
+                    });
+                    y += rowH + 14;
+                }
+                y += 4;
+                return;
+            }
+            if (block.classList.contains('grid-2')) {
+                if (section) {
+                    var label = asOf ? section + ' — ' + asOf : section;
+                    parts.push('<text x="' + PAD + '" y="' + (y + 12) + '" font-size="13" font-weight="600" fill="' + colors.foreground + '">' + esc(healthTruncateText(label, 92)) + '</text>');
+                    y += 26;
+                    section = '';
+                    asOf = '';
+                }
+                Array.prototype.forEach.call(block.querySelectorAll('.card'), function (cardEl) {
+                    var rendered = healthRenderDetailCard(healthCollectContent(cardEl), W, colors);
+                    parts.push('<g transform="translate(0,' + y + ')">' + rendered.body.join('') + '</g>');
+                    y += rendered.height + 6;
+                });
+            }
+        });
+
+        y += 6;
+        parts.push('<line x1="' + PAD + '" y1="' + y + '" x2="' + (W - PAD) + '" y2="' + y + '" stroke="' + colors.border + '" stroke-width="1"/>');
+        y += 21;
+        parts.push('<text x="' + PAD + '" y="' + y + '" font-size="11" fill="' + colors.muted + '">' + esc(healthCaption()) + '</text>');
+        var H = y + 20;
+
+        var svg = '<svg xmlns="http://www.w3.org/2000/svg" width="' + W + '" height="' + H + '" viewBox="0 0 ' + W + ' ' + H + '" font-family="Inter, system-ui, -apple-system, sans-serif">'
+            + '<rect x="0" y="0" width="' + W + '" height="' + H + '" fill="' + colors.background + '"/>'
+            + parts.join('')
             + '</svg>';
 
         return { svg: svg, width: W, height: H };
@@ -895,6 +1011,34 @@
         });
     }
 
+    function healthCopyPngBlob(blob, nameTitle, successMessage) {
+        function downloadFallback() {
+            var slug = nameTitle.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '') || 'card';
+            var now = new Date();
+            var stamp = now.getFullYear()
+                + String(now.getMonth() + 1).padStart(2, '0')
+                + String(now.getDate()).padStart(2, '0')
+                + '-' + String(now.getHours()).padStart(2, '0')
+                + String(now.getMinutes()).padStart(2, '0');
+            var url = URL.createObjectURL(blob);
+            var link = document.createElement('a');
+            link.href = url;
+            link.download = 'health-' + slug + '-' + stamp + '.png';
+            document.body.appendChild(link);
+            link.click();
+            link.remove();
+            setTimeout(function () { URL.revokeObjectURL(url); }, 10000);
+            showToast('Clipboard image not supported — the PNG was downloaded instead.', 'warning');
+        }
+        if (window.ClipboardItem && navigator.clipboard && navigator.clipboard.write) {
+            return navigator.clipboard.write([new ClipboardItem({ 'image/png': blob })]).then(function () {
+                showToast(successMessage, 'success');
+            }).catch(downloadFallback);
+        }
+        downloadFallback();
+        return Promise.resolve();
+    }
+
     function copyHealthCard(btn) {
         var cardEl = btn.closest('.card') || btn.closest('.health-stat-wrap');
         if (!cardEl) {
@@ -914,32 +1058,31 @@
             return;
         }
         healthSvgToPng(built.svg, built.width, built.height).then(function (blob) {
-            function downloadFallback() {
-                var slug = cardTitle.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '') || 'card';
-                var now = new Date();
-                var stamp = now.getFullYear()
-                    + String(now.getMonth() + 1).padStart(2, '0')
-                    + String(now.getDate()).padStart(2, '0')
-                    + '-' + String(now.getHours()).padStart(2, '0')
-                    + String(now.getMinutes()).padStart(2, '0');
-                var url = URL.createObjectURL(blob);
-                var link = document.createElement('a');
-                link.href = url;
-                link.download = 'health-' + slug + '-' + stamp + '.png';
-                document.body.appendChild(link);
-                link.click();
-                link.remove();
-                setTimeout(function () { URL.revokeObjectURL(url); }, 10000);
-                showToast('Clipboard image not supported — the PNG was downloaded instead.', 'warning');
-            }
-            if (window.ClipboardItem && navigator.clipboard && navigator.clipboard.write) {
-                return navigator.clipboard.write([new ClipboardItem({ 'image/png': blob })]).then(function () {
-                    showToast('Card image copied to the clipboard.', 'success');
-                }).catch(downloadFallback);
-            }
-            downloadFallback();
+            return healthCopyPngBlob(blob, cardTitle, 'Card image copied to the clipboard.');
         }).catch(function () {
             showToast('Could not generate the card image.', 'error');
+        }).finally(function () {
+            btn.disabled = false;
+        });
+    }
+
+    function copyHealthPage(btn) {
+        btn.disabled = true;
+        var built = null;
+        try {
+            built = healthBuildPageSvg();
+        } catch (err) {
+            built = null;
+        }
+        if (!built) {
+            btn.disabled = false;
+            showToast('Could not generate the page image.', 'error');
+            return;
+        }
+        healthSvgToPng(built.svg, built.width, built.height).then(function (blob) {
+            return healthCopyPngBlob(blob, 'Page', 'Page image copied to the clipboard.');
+        }).catch(function () {
+            showToast('Could not generate the page image.', 'error');
         }).finally(function () {
             btn.disabled = false;
         });
