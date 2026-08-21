@@ -9,7 +9,9 @@ use HasinHayder\TyroDashboard\Support\DashboardRoute;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 
 class UserController extends BaseController {
     /**
@@ -259,6 +261,64 @@ class UserController extends BaseController {
         return redirect()
             ->route(DashboardRoute::name('users.index'))
             ->with('success', "Deleted {$deletedCount} users.");
+    }
+
+    /**
+     * Log the specified user out of all supported sessions.
+     */
+    public function logout($id) {
+        $userModel = $this->getUserModel();
+        $user = $userModel::findOrFail($id);
+
+        if ($user->id === auth()->id()) {
+            return redirect()
+                ->route(DashboardRoute::name('users.index'))
+                ->with('error', 'You cannot log yourself out.');
+        }
+
+        $tokenCount = $user->tokens()->count();
+        $user->tokens()->delete();
+
+        $sessionCount = 0;
+        $sessionDriver = config('session.driver');
+        $sessionsRevoked = false;
+        $sessionRevocationFailed = false;
+
+        if ($sessionDriver === 'database') {
+            try {
+                $sessionCount = DB::connection(config('session.connection'))
+                    ->table(config('session.table', 'sessions'))
+                    ->where('user_id', $user->getAuthIdentifier())
+                    ->delete();
+                $sessionsRevoked = true;
+            } catch (\Throwable $e) {
+                $sessionRevocationFailed = true;
+            }
+        }
+
+        $user->setRememberToken(Str::random(60));
+        $user->save();
+
+        $result = $sessionsRevoked ? 'complete' : 'partial';
+        $this->auditSafely('user.logout', $user, null, [
+            'target_user_id' => $user->getAuthIdentifier(),
+            'target_user_email' => $user->email,
+            'api_tokens_revoked' => $tokenCount,
+            'browser_sessions_revoked' => $sessionCount,
+            'browser_session_revocation_failed' => $sessionRevocationFailed,
+            'session_driver' => $sessionDriver,
+            'result' => $result,
+        ]);
+
+        $message = $sessionsRevoked
+            ? "{$user->name} has been logged out of all browser sessions and {$tokenCount} API token(s) were revoked."
+            : ($sessionRevocationFailed
+                ? "{$user->name}'s {$tokenCount} API token(s) were revoked, but browser sessions could not be terminated because the session store could not be accessed."
+                : "{$user->name}'s {$tokenCount} API token(s) were revoked, but browser sessions could not be terminated because the session driver is not database.");
+
+        return redirect()
+            ->route(DashboardRoute::name('users.index'))
+            ->with($sessionsRevoked ? 'success' : 'warning', $message);
     }
 
     /**

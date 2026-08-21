@@ -113,6 +113,7 @@ Route::middleware('tyro-dashboard.admin')->group(function () {
         Route::post('/{id}/suspend', [UserController::class, 'suspend'])->name('suspend');
         Route::post('/{id}/unsuspend', [UserController::class, 'unsuspend'])->name('unsuspend');
         Route::post('/{id}/login-as', [UserController::class, 'loginAs'])->name('login-as');
+        Route::post('/{id}/logout', [UserController::class, 'logout'])->name('logout');
         Route::delete('/{id}/photo', [ProfileController::class, 'deleteUserPhoto'])->name('photo.delete');
         Route::delete('/{id}', [UserController::class, 'destroy'])->name('destroy');
     });
