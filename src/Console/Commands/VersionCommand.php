@@ -19,7 +19,7 @@ class VersionCommand extends Command {
      * Execute the console command.
      */
     public function handle(): int {
-        $version = '1.48.0'; // Health page copy-as-image
+        $version = '1.48.0'; // Per-user logout and logged-in user filtering
 
         $this->info('');
         $this->info('  ╔════════════════════════════════════════╗');
@@ -70,6 +70,7 @@ class VersionCommand extends Command {
 }
 
 // Changelog
+// 1.48.0 - feat(logout): per-user logout and logged-in user filtering — added a "Logout" button to the user list for admins to log out individual users, and a "Logged In" filter to show only currently logged-in users in the user list
 // 1.48.0 - feat(health): copy-as-image on System Health — per-card PNG copy buttons on all 13 cards plus a page-level "Copy page as image" button, vanilla-JS SVG composition with theme-aware colors, 2x canvas rasterization, clipboard write with download fallback and toast feedback; zero new dependencies
 // 1.47.0 - feat(health): System Health admin page — read-only runtime diagnostics (PHP memory + upload/execution limits, OPcache, disk, database, cache round-trip, queue reachability, storage writability, runtime context with timezone mismatch check, tyro ecosystem versions) with ordered-hybrid probe caching, gated by TYRO_DASHBOARD_ENABLE_HEALTH
 // 1.46.4 - fix(#7): Media Library alt-text field now saves correctly; alt route was POST-only so PATCH method spoofing returned a 405, and the alt/rename endpoints are now aligned on native PATCH
