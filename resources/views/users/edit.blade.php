@@ -201,6 +201,7 @@
                     Once you delete a user, there is no going back. Please be certain.
                 </p>
                 <div style="display: flex; justify-content: flex-end; gap: 0.75rem; padding-top: 1rem; border-top: 1px solid var(--border);">
+                    @if(config('session.driver') === 'database')
                     <form action="{{ route($dashboardRoute::name('users.logout'), $editUser->id) }}" method="POST" id="logout-user-form">
                         @csrf
                         <button type="button" class="btn btn-warning" onclick="event.preventDefault(); showDanger('Log Out User', {{ Js::from('Are you sure you want to log out '.$editUser->name.'? This will end all browser sessions and revoke all API tokens.') }}, { confirmText: 'Log Out' }).then(confirmed => { if(confirmed) document.getElementById('logout-user-form').submit(); })">
@@ -210,6 +211,7 @@
                             Log Out User
                         </button>
                     </form>
+                    @endif
                     <form action="{{ route($dashboardRoute::name('users.destroy'), $editUser->id) }}" method="POST" id="delete-user-form">
                         @csrf
                         @method('DELETE')

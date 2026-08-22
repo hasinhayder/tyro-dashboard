@@ -56,7 +56,9 @@
                         <option value="">All Status</option>
                         <option value="active" {{ ($filters['status'] ?? '') === 'active' ? 'selected' : '' }}>Active</option>
                         <option value="suspended" {{ ($filters['status'] ?? '') === 'suspended' ? 'selected' : '' }}>Suspended</option>
-                        <option value="logged_in" {{ ($filters['status'] ?? '') === 'logged_in' ? 'selected' : '' }}>Logged In</option>
+                        @if(config('session.driver') === 'database')
+                            <option value="logged_in" {{ ($filters['status'] ?? '') === 'logged_in' ? 'selected' : '' }}>Logged In</option>
+                        @endif
                     </select>
                 </div>
                 <button type="submit" class="btn btn-secondary">Filter</button>
@@ -164,6 +166,7 @@
                                 </button>
                             @endif
                             @if($listUser->id !== $user->id)
+                            @if(config('session.driver') === 'database')
                                 <form action="{{ route($dashboardRoute::name('users.logout'), $listUser->id) }}" method="POST" style="display: inline;" id="logout-user-form-{{ $listUser->id }}">
                                     @csrf
                                     <button type="button" class="action-btn action-btn-danger" title="Log Out" aria-label="Log out {{ $listUser->name }}" onclick="event.preventDefault(); showDanger('Log Out User', {{ Js::from('Are you sure you want to log out '.$listUser->name.'? This will end all browser sessions and revoke all API tokens.') }}, { confirmText: 'Log Out' }).then(confirmed => { if(confirmed) document.getElementById('logout-user-form-{{ $listUser->id }}').submit(); })">
@@ -172,6 +175,7 @@
                                         </svg>
                                     </button>
                                 </form>
+                            @endif
                                 <form action="{{ route($dashboardRoute::name('users.destroy'), $listUser->id) }}" method="POST" style="display: inline;" id="delete-user-form-{{ $listUser->id }}">
                                     @csrf
                                     @method('DELETE')
