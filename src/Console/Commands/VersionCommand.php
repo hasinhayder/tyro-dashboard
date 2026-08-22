@@ -19,7 +19,7 @@ class VersionCommand extends Command {
      * Execute the console command.
      */
     public function handle(): int {
-        $version = '1.48.0'; // Per-user logout and logged-in user filtering
+        $version = '1.49.0'; // Log viewer: browse, filter, and clear application logs
 
         $this->info('');
         $this->info('  ╔════════════════════════════════════════╗');
@@ -70,6 +70,7 @@ class VersionCommand extends Command {
 }
 
 // Changelog
+// 1.49.0 - feat(logs): admin log viewer — browse application log files in storage/logs with per-level stat cards (distinct Lucide level icons, filter toggle), file/level/message filters, pagination, stack-trace details with copy, tail-capping for large files, and a clear-file action gated by the dashboard danger modal
 // 1.48.0 - feat(logout): per-user logout and logged-in user filtering — added a "Logout" button to the user list for admins to log out individual users, and a "Logged In" filter to show only currently logged-in users in the user list
 // 1.48.0 - feat(health): copy-as-image on System Health — per-card PNG copy buttons on all 13 cards plus a page-level "Copy page as image" button, vanilla-JS SVG composition with theme-aware colors, 2x canvas rasterization, clipboard write with download fallback and toast feedback; zero new dependencies
 // 1.47.0 - feat(health): System Health admin page — read-only runtime diagnostics (PHP memory + upload/execution limits, OPcache, disk, database, cache round-trip, queue reachability, storage writability, runtime context with timezone mismatch check, tyro ecosystem versions) with ordered-hybrid probe caching, gated by TYRO_DASHBOARD_ENABLE_HEALTH
