@@ -6,6 +6,7 @@ use HasinHayder\TyroDashboard\Http\Controllers\ComponentsController;
 use HasinHayder\TyroDashboard\Http\Controllers\DashboardController;
 use HasinHayder\TyroDashboard\Http\Controllers\HealthController;
 use HasinHayder\TyroDashboard\Http\Controllers\InvitationController;
+use HasinHayder\TyroDashboard\Http\Controllers\LogViewController;
 use HasinHayder\TyroDashboard\Http\Controllers\MediaController;
 use HasinHayder\TyroDashboard\Http\Controllers\PrivilegeController;
 use HasinHayder\TyroDashboard\Http\Controllers\ProfileController;
@@ -191,6 +192,14 @@ Route::middleware('tyro-dashboard.admin')->group(function () {
     if (config('tyro-dashboard.features.health', true)) {
         Route::prefix('health')->name('health.')->group(function () {
             Route::get('/', [HealthController::class, 'index'])->name('index');
+        });
+    }
+
+    // Log Viewer (Admin) - browse application log files
+    if (config('tyro-dashboard.features.log_viewer', true)) {
+        Route::prefix('logs')->name('logs.')->group(function () {
+            Route::get('/', [LogViewController::class, 'index'])->name('index');
+            Route::delete('/clear', [LogViewController::class, 'clear'])->name('clear');
         });
     }
 });
