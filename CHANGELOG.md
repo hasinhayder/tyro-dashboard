@@ -2,6 +2,9 @@
 
 All notable changes to Tyro Dashboard are documented in this file.
 
+## [v1.48.0](https://github.com/hasinhayder/tyro-dashboard/releases/tag/v1.48.0) - 2026-08-22
+- Log Viewer admin page: browse `storage/logs/*.log` files (single + daily rotation) with file picker, per-level count cards as toggleable level filters, case-insensitive message/stack-trace search, per-page sizing, expandable stack traces with copy-to-clipboard, tail-capped parsing (default 16 MB, `TYRO_DASHBOARD_LOG_MAX_READ_BYTES`), and a confirm-guarded "Clear this file" truncate action (never deletes files) — admin-only, gated by `TYRO_DASHBOARD_ENABLE_LOG_VIEWER` with identical route and sidebar gating; consumers with a published sidebar need to re-publish `partials/admin-sidebar.blade.php` (or add the link manually) to see the new menu entry
+
 ## [v1.47.0](https://github.com/hasinhayder/tyro-dashboard/releases/tag/v1.47.0) - 2026-08-21
 - System Health admin page: read-only runtime diagnostics (PHP memory + upload/execution limits, OPcache, disk usage, database driver/version/tables/size, cache round-trip latency, queue reachability ping, storage writability, runtime context with app/PHP timezone mismatch check, tyro ecosystem package versions from composer.lock) with ordered-hybrid probe caching (live cache probe + 60s expensive-bucket cache, graceful degradation when the cache store is down), gated by `TYRO_DASHBOARD_ENABLE_HEALTH`
 

@@ -122,6 +122,7 @@ return [
         'system_settings' => env('TYRO_DASHBOARD_ENABLE_SYSTEM_SETTINGS', true),
         'checkpoints' => env('TYRO_DASHBOARD_ENABLE_CHECKPOINTS', true),
         'health' => env('TYRO_DASHBOARD_ENABLE_HEALTH', true),
+        'log_viewer' => env('TYRO_DASHBOARD_ENABLE_LOG_VIEWER', true),
         'show_roles_menu' => env('TYRO_DASHBOARD_SHOW_ROLES_MENU', true),
         'show_privileges_menu' => env('TYRO_DASHBOARD_SHOW_PRIVILEGES_MENU', true),
         'show_resources_menu' => env('TYRO_DASHBOARD_SHOW_RESOURCES_MENU', true),
@@ -267,6 +268,19 @@ return [
     |
     */
     'disable_examples' => env('TYRO_DASHBOARD_DISABLE_EXAMPLES', false),
+
+    /*
+    |--------------------------------------------------------------------------
+    | Log Viewer
+    |--------------------------------------------------------------------------
+    |
+    | Configure the admin log viewer for application log files in storage/logs.
+    |
+    */
+    'log_viewer' => [
+        'max_read_bytes' => env('TYRO_DASHBOARD_LOG_MAX_READ_BYTES', 16777216), // tail cap: 16MB
+        'per_page' => 25,
+    ],
 
     /*
     |--------------------------------------------------------------------------
