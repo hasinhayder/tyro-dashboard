@@ -43,7 +43,7 @@
                 </div>
                 <div class="filter-group">
                     <label class="filter-label">Role:</label>
-                    <select name="role" class="form-select" style="min-width: 150px;">
+                    <select name="role" class="form-select" style="min-width: 150px;" onchange="this.form.submit()">
                         <option value="">All Roles</option>
                         @foreach($roles as $role)
                             <option value="{{ $role->slug }}" {{ ($filters['role'] ?? '') === $role->slug ? 'selected' : '' }}>{{ $role->name }}</option>
@@ -52,7 +52,7 @@
                 </div>
                 <div class="filter-group">
                     <label class="filter-label">Status:</label>
-                    <select name="status" class="form-select" style="min-width: 130px;">
+                    <select name="status" class="form-select" style="min-width: 130px;" onchange="this.form.submit()">
                         <option value="">All Status</option>
                         <option value="active" {{ ($filters['status'] ?? '') === 'active' ? 'selected' : '' }}>Active</option>
                         <option value="suspended" {{ ($filters['status'] ?? '') === 'suspended' ? 'selected' : '' }}>Suspended</option>
