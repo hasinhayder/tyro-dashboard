@@ -2,8 +2,19 @@
 
 All notable changes to Tyro Dashboard are documented in this file.
 
-## [v1.48.0](https://github.com/hasinhayder/tyro-dashboard/releases/tag/v1.48.0) - 2026-08-22
+## [v1.50.0](https://github.com/hasinhayder/tyro-dashboard/releases/tag/v1.50.0) - 2026-08-23
+- Heartbeat API for online user detection: auth-protected `POST /heartbeat` writes a per-user cache key (TTL via `TYRO_DASHBOARD_HEARTBEAT_TTL`, default 600s) every 5 minutes from the dashboard JS (survives page refreshes via localStorage timestamp, CSRF header, silent failures); isOnline badges, the logged-in user filter, and the dashboard logged-in stat now use the heartbeat cache unioned with the DB-session fallback — gated by `TYRO_DASHBOARD_ENABLE_HEARTBEAT`
+- Force logout with Redis sessions: per-user logout now dispatches Tyro Login's `ForceLogout` event when `session.driver=redis` (logs the user out on their next web request; tyro-login floor bumped to `^2.14`), the logout button/icon render for database + redis drivers with driver-aware messages and audit fields, and `OnlineUsers::forget()` clears heartbeat presence immediately on successful session revocation
+
+## [v1.49.1](https://github.com/hasinhayder/tyro-dashboard/releases/tag/v1.49.1) - 2026-08-22
+- Log Viewer patch re-release (re-tag of v1.49.0 pointing at the same commit; no code changes)
+
+## [v1.49.0](https://github.com/hasinhayder/tyro-dashboard/releases/tag/v1.49.0) - 2026-08-22
 - Log Viewer admin page: browse `storage/logs/*.log` files (single + daily rotation) with file picker, per-level count cards as toggleable level filters, case-insensitive message/stack-trace search, per-page sizing, expandable stack traces with copy-to-clipboard, tail-capped parsing (default 16 MB, `TYRO_DASHBOARD_LOG_MAX_READ_BYTES`), and a confirm-guarded "Clear this file" truncate action (never deletes files) — admin-only, gated by `TYRO_DASHBOARD_ENABLE_LOG_VIEWER` with identical route and sidebar gating; consumers with a published sidebar need to re-publish `partials/admin-sidebar.blade.php` (or add the link manually) to see the new menu entry
+
+## [v1.48.0](https://github.com/hasinhayder/tyro-dashboard/releases/tag/v1.48.0) - 2026-08-22
+- Per-user logout and logged-in user filtering: "Logout" button in the admin user list to log out individual users (rendered only when the session driver is database), logged-in status indicator in the user list, "Logged In" filter to show only currently logged-in users, dashboard total logged-in users card, invitation links card link fix, and user list dropdown filters now apply automatically on change
+- System Health copy-as-image: per-card PNG copy buttons plus a page-level "Copy page as image" button, theme-aware vanilla-JS SVG composition with 2x canvas rasterization, clipboard write with download fallback and toast feedback; zero new dependencies
 
 ## [v1.47.0](https://github.com/hasinhayder/tyro-dashboard/releases/tag/v1.47.0) - 2026-08-21
 - System Health admin page: read-only runtime diagnostics (PHP memory + upload/execution limits, OPcache, disk usage, database driver/version/tables/size, cache round-trip latency, queue reachability ping, storage writability, runtime context with app/PHP timezone mismatch check, tyro ecosystem package versions from composer.lock) with ordered-hybrid probe caching (live cache probe + 60s expensive-bucket cache, graceful degradation when the cache store is down), gated by `TYRO_DASHBOARD_ENABLE_HEALTH`
