@@ -19,7 +19,7 @@ class VersionCommand extends Command {
      * Execute the console command.
      */
     public function handle(): int {
-        $version = '1.50.0'; // Heartbeat API: auth-protected POST /heartbeat writes a per-user cache key every 5 min from the dashboard JS; online indicators now use heartbeat cache with session fallback
+        $version = '1.50.0'; // Heartbeat API for online detection and Force logout with Redis sessions: per-user logout now dispatches Tyro Login's ForceLogout event when session.driver=redis (tyro-login ^2.14), UI logout buttons render for database+redis drivers, and heartbeat presence is cleared on successful revocation
 
         $this->info('');
         $this->info('  ╔════════════════════════════════════════╗');
@@ -70,6 +70,7 @@ class VersionCommand extends Command {
 }
 
 // Changelog
+// 1.50.0 - feat(logout): force logout with Redis session driver — users.logout now dispatches Tyro Login's ForceLogout event when session.driver=redis (logs the user out on their next web request; tyro-login floor bumped to ^2.14), the logout button/icon render for database+redis drivers with driver-aware messages and audit fields, OnlineUsers::forget() clears heartbeat presence immediately on successful session revocation, and UserForceLogoutTest covers redis/database/unsupported drivers (redis test skips gracefully when no server is reachable)
 // 1.50.0 - feat(heartbeat): heartbeat API for online detection — auth-protected POST /heartbeat writes a per-user cache key (TTL via TYRO_DASHBOARD_HEARTBEAT_TTL, default 600s) every 5 minutes from the dashboard JS (survives page refreshes via localStorage timestamp, CSRF header, silent failures); isOnline badges, the logged-in user filter, and the dashboard logged-in stat now use the heartbeat cache unioned with the DB-session fallback; gated by TYRO_DASHBOARD_ENABLE_HEARTBEAT
 // 1.49.0 - feat(logs): admin log viewer — browse application log files in storage/logs with per-level stat cards (distinct Lucide level icons, filter toggle), file/level/message filters, pagination, stack-trace details with copy, tail-capping for large files, and a clear-file action gated by the dashboard danger modal
 // 1.48.0 - feat(logout): per-user logout and logged-in user filtering — added a "Logout" button to the user list for admins to log out individual users, and a "Logged In" filter to show only currently logged-in users in the user list
