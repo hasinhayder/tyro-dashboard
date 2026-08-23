@@ -19,7 +19,7 @@ class VersionCommand extends Command {
      * Execute the console command.
      */
     public function handle(): int {
-        $version = '1.49.0'; // Log viewer: browse, filter, and clear application logs
+        $version = '1.50.0'; // Heartbeat API: auth-protected POST /heartbeat writes a per-user cache key every 5 min from the dashboard JS; online indicators now use heartbeat cache with session fallback
 
         $this->info('');
         $this->info('  ╔════════════════════════════════════════╗');
@@ -70,6 +70,7 @@ class VersionCommand extends Command {
 }
 
 // Changelog
+// 1.50.0 - feat(heartbeat): heartbeat API for online detection — auth-protected POST /heartbeat writes a per-user cache key (TTL via TYRO_DASHBOARD_HEARTBEAT_TTL, default 600s) every 5 minutes from the dashboard JS (survives page refreshes via localStorage timestamp, CSRF header, silent failures); isOnline badges, the logged-in user filter, and the dashboard logged-in stat now use the heartbeat cache unioned with the DB-session fallback; gated by TYRO_DASHBOARD_ENABLE_HEARTBEAT
 // 1.49.0 - feat(logs): admin log viewer — browse application log files in storage/logs with per-level stat cards (distinct Lucide level icons, filter toggle), file/level/message filters, pagination, stack-trace details with copy, tail-capping for large files, and a clear-file action gated by the dashboard danger modal
 // 1.48.0 - feat(logout): per-user logout and logged-in user filtering — added a "Logout" button to the user list for admins to log out individual users, and a "Logged In" filter to show only currently logged-in users in the user list
 // 1.48.0 - feat(health): copy-as-image on System Health — per-card PNG copy buttons on all 13 cards plus a page-level "Copy page as image" button, vanilla-JS SVG composition with theme-aware colors, 2x canvas rasterization, clipboard write with download fallback and toast feedback; zero new dependencies

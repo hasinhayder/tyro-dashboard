@@ -466,3 +466,48 @@
         checkbox.indeterminate = true;
     });
 </script>
+
+@if(config('tyro-dashboard.features.heartbeat', true))
+<script>
+    // Heartbeat: POST a beat every 5 minutes so online detection works
+    // regardless of the session driver. The last-beat timestamp is persisted
+    // in localStorage so a page refresh schedules only the remaining delay
+    // instead of restarting the interval.
+    (function() {
+        const heartbeatUrl = @json(route(\HasinHayder\TyroDashboard\Support\DashboardRoute::name('heartbeat')));
+        const storageKey = 'tyro-dashboard-heartbeat';
+        const interval = 300000; // 5 minutes
+
+        function fire() {
+            // Write before firing: a parallel tab loading right now reads this
+            // timestamp and schedules the remaining delay instead of doubling up.
+            try {
+                localStorage.setItem(storageKey, String(Date.now()));
+            } catch (e) {}
+
+            fetch(heartbeatUrl, {
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '',
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'Accept': 'application/json',
+                },
+                keepalive: true,
+            }).catch(function() {});
+
+            setTimeout(fire, interval);
+        }
+
+        // Guarded like the setItem above: browsers with site storage blocked
+        // throw SecurityError on localStorage access — fall back to firing now.
+        let last = NaN;
+        try {
+            last = parseInt(localStorage.getItem(storageKey), 10);
+        } catch (e) {}
+        const elapsed = isNaN(last) ? interval : Date.now() - last;
+        const remaining = Math.min(Math.max(interval - elapsed, 0), interval);
+
+        setTimeout(fire, remaining);
+    })();
+</script>
+@endif

@@ -129,7 +129,20 @@ return [
         'activity_log' => false, // Future feature
         'profile_photo_upload' => env('TYRO_DASHBOARD_ENABLE_PROFILE_PHOTO', false),
         'gravatar' => env('TYRO_DASHBOARD_ENABLE_GRAVATAR', false),
+        'heartbeat' => env('TYRO_DASHBOARD_ENABLE_HEARTBEAT', true),
     ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Heartbeat
+    |--------------------------------------------------------------------------
+    |
+    | Online-user detection window (in seconds) for the cache-based heartbeat.
+    | Should be at least twice the 5-minute frontend interval so a single
+    | missed beat does not mark a user offline.
+    |
+    */
+    'heartbeat_ttl' => (int) env('TYRO_DASHBOARD_HEARTBEAT_TTL', 600),
 
     /*
     |--------------------------------------------------------------------------

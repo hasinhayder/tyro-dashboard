@@ -2,6 +2,7 @@
 
 namespace HasinHayder\TyroDashboard\Http\Controllers;
 
+use HasinHayder\TyroDashboard\Support\OnlineUsers;
 use HasinHayder\TyroLogin\Models\InvitationLink;
 use HasinHayder\TyroLogin\Models\InvitationReferral;
 use Illuminate\Http\Request;
@@ -126,20 +127,24 @@ class DashboardController extends BaseController {
     }
 
     protected function getLoggedInUserCount(): int {
-        if (config('session.driver') !== 'database') {
-            return 0;
+        $sessionIds = collect();
+
+        if (config('session.driver') === 'database') {
+            try {
+                $sessionIds = DB::connection(config('session.connection'))
+                    ->table(config('session.table', 'sessions'))
+                    ->where('last_activity', '>=', now()->subMinutes(config('session.lifetime', 120))->getTimestamp())
+                    ->whereNotNull('user_id')
+                    ->distinct()
+                    ->pluck('user_id')
+                    ->map(fn ($id) => (string) $id);
+            } catch (\Throwable $e) {
+                $sessionIds = collect();
+            }
         }
 
-        try {
-            return DB::connection(config('session.connection'))
-                ->table(config('session.table', 'sessions'))
-                ->where('last_activity', '>=', now()->subMinutes(config('session.lifetime', 120))->getTimestamp())
-                ->whereNotNull('user_id')
-                ->distinct('user_id')
-                ->count('user_id');
-        } catch (\Throwable $e) {
-            return 0;
-        }
+        // Heartbeat cache is the primary signal; DB sessions stay as a fallback
+        return OnlineUsers::onlineUserIds()->merge($sessionIds)->unique()->count();
     }
 
     /**

@@ -6,6 +6,7 @@ use HasinHayder\Tyro\Models\Role;
 use HasinHayder\Tyro\Support\PasswordRules;
 use HasinHayder\Tyro\Support\TyroAudit;
 use HasinHayder\TyroDashboard\Support\DashboardRoute;
+use HasinHayder\TyroDashboard\Support\OnlineUsers;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
@@ -401,21 +402,24 @@ class UserController extends BaseController {
     }
 
     protected function getOnlineUserIds(): Collection {
-        if (config('session.driver') !== 'database') {
-            return collect();
+        $sessionIds = collect();
+
+        if (config('session.driver') === 'database') {
+            try {
+                $sessionIds = DB::connection(config('session.connection'))
+                    ->table(config('session.table', 'sessions'))
+                    ->where('last_activity', '>=', now()->subMinutes(config('session.lifetime', 120))->getTimestamp())
+                    ->whereNotNull('user_id')
+                    ->distinct()
+                    ->pluck('user_id')
+                    ->map(fn ($id) => (string) $id);
+            } catch (\Throwable $e) {
+                $sessionIds = collect();
+            }
         }
 
-        try {
-            return DB::connection(config('session.connection'))
-                ->table(config('session.table', 'sessions'))
-                ->where('last_activity', '>=', now()->subMinutes(config('session.lifetime', 120))->getTimestamp())
-                ->whereNotNull('user_id')
-                ->distinct()
-                ->pluck('user_id')
-                ->map(fn ($id) => (string) $id);
-        } catch (\Throwable $e) {
-            return collect();
-        }
+        // Heartbeat cache is the primary signal; DB sessions stay as a fallback
+        return OnlineUsers::onlineUserIds()->merge($sessionIds)->unique()->values();
     }
 
     /**

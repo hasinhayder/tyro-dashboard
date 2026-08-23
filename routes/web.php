@@ -5,6 +5,7 @@ use HasinHayder\TyroDashboard\Http\Controllers\CheckpointController;
 use HasinHayder\TyroDashboard\Http\Controllers\ComponentsController;
 use HasinHayder\TyroDashboard\Http\Controllers\DashboardController;
 use HasinHayder\TyroDashboard\Http\Controllers\HealthController;
+use HasinHayder\TyroDashboard\Http\Controllers\HeartbeatController;
 use HasinHayder\TyroDashboard\Http\Controllers\InvitationController;
 use HasinHayder\TyroDashboard\Http\Controllers\LogViewController;
 use HasinHayder\TyroDashboard\Http\Controllers\MediaController;
@@ -80,6 +81,11 @@ if (config('tyro-dashboard.features.invitation_system', true)) {
 
 // Leave impersonation (accessible to anyone currently impersonating)
 Route::post('/leave-impersonation', [UserController::class, 'leaveImpersonation'])->name('leave-impersonation');
+
+// Heartbeat — cache-based online detection (all authenticated users)
+if (config('tyro-dashboard.features.heartbeat', true)) {
+    Route::post('/heartbeat', [HeartbeatController::class, 'store'])->name('heartbeat');
+}
 
 // Media Library (all authenticated users)
 Route::get('media', [MediaController::class, 'index'])->name('media');
