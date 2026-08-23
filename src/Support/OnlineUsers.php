@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Cache;
  * - `OnlineUsers::heartbeatKey($userId)` — cache key for a user's heartbeat
  * - `OnlineUsers::touch($userId)` — record a heartbeat beat for a user
  * - `OnlineUsers::isOnline($userId)` — whether the user heartbeated within the TTL window
+ * - `OnlineUsers::forget($userId)` — clear a user's beat so they appear offline immediately
  * - `OnlineUsers::onlineUserIds()` — string IDs of all users inside the TTL window
  *
  * Every beat (re)writes a per-user cache key whose TTL defines the online
@@ -32,6 +33,10 @@ class OnlineUsers {
 
     public static function isOnline($userId): bool {
         return Cache::has(static::heartbeatKey($userId));
+    }
+
+    public static function forget($userId): void {
+        Cache::forget(static::heartbeatKey($userId));
     }
 
     public static function onlineUserIds(): Collection {

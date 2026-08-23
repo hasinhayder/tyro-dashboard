@@ -166,10 +166,10 @@
                                 </button>
                             @endif
                             @if($listUser->id !== $user->id)
-                            @if(config('session.driver') === 'database')
+                            @if(in_array(config('session.driver'), ['database', 'redis']))
                                 <form action="{{ route($dashboardRoute::name('users.logout'), $listUser->id) }}" method="POST" style="display: inline;" id="logout-user-form-{{ $listUser->id }}">
                                     @csrf
-                                    <button type="button" class="action-btn action-btn-danger" title="Log Out" aria-label="Log out {{ $listUser->name }}" onclick="event.preventDefault(); showDanger('Log Out User', {{ Js::from('Are you sure you want to log out '.$listUser->name.'? This will end all browser sessions and revoke all API tokens.') }}, { confirmText: 'Log Out' }).then(confirmed => { if(confirmed) document.getElementById('logout-user-form-{{ $listUser->id }}').submit(); })">
+                                    <button type="button" class="action-btn action-btn-danger" title="Log Out" aria-label="Log out {{ $listUser->name }}" onclick="event.preventDefault(); showDanger('Log Out User', {{ Js::from('Are you sure you want to log out '.$listUser->name.'? This will force them out of all browser sessions and revoke all API tokens.') }}, { confirmText: 'Log Out' }).then(confirmed => { if(confirmed) document.getElementById('logout-user-form-{{ $listUser->id }}').submit(); })">
                                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                             <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6A2.25 2.25 0 005.25 5.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15m3-3H9m0 0l3-3m-3 3l3 3" />
                                         </svg>

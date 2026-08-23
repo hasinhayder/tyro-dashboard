@@ -7,6 +7,7 @@ use HasinHayder\Tyro\Support\PasswordRules;
 use HasinHayder\Tyro\Support\TyroAudit;
 use HasinHayder\TyroDashboard\Support\DashboardRoute;
 use HasinHayder\TyroDashboard\Support\OnlineUsers;
+use HasinHayder\TyroLogin\Events\ForceLogout;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
@@ -289,6 +290,7 @@ class UserController extends BaseController {
         $sessionDriver = config('session.driver');
         $sessionsRevoked = false;
         $sessionRevocationFailed = false;
+        $forceLogoutDispatched = false;
 
         if ($sessionDriver === 'database') {
             try {
@@ -300,6 +302,20 @@ class UserController extends BaseController {
             } catch (\Throwable $e) {
                 $sessionRevocationFailed = true;
             }
+        } elseif ($sessionDriver === 'redis') {
+            // Redis sessions cannot be enumerated like database rows, so mark the
+            // user for logout instead; Tyro Login logs them out on their next web request.
+            try {
+                event(new ForceLogout((int) $user->getAuthIdentifier()));
+                $forceLogoutDispatched = true;
+                $sessionsRevoked = true;
+            } catch (\Throwable $e) {
+                $sessionRevocationFailed = true;
+            }
+        }
+
+        if ($sessionsRevoked) {
+            OnlineUsers::forget($user->getAuthIdentifier());
         }
 
         $user->setRememberToken(Str::random(60));
@@ -312,15 +328,20 @@ class UserController extends BaseController {
             'api_tokens_revoked' => $tokenCount,
             'browser_sessions_revoked' => $sessionCount,
             'browser_session_revocation_failed' => $sessionRevocationFailed,
+            'force_logout_dispatched' => $forceLogoutDispatched,
             'session_driver' => $sessionDriver,
             'result' => $result,
         ]);
 
-        $message = $sessionsRevoked
-            ? "{$user->name} has been logged out of all browser sessions and {$tokenCount} API token(s) were revoked."
-            : ($sessionRevocationFailed
-                ? "{$user->name}'s {$tokenCount} API token(s) were revoked, but browser sessions could not be terminated because the session store could not be accessed."
-                : "{$user->name}'s {$tokenCount} API token(s) were revoked, but browser sessions could not be terminated because the session driver is not database.");
+        if ($forceLogoutDispatched) {
+            $message = "{$user->name} has been marked for logout and will be logged out on their next request. {$tokenCount} API token(s) were revoked.";
+        } elseif ($sessionsRevoked) {
+            $message = "{$user->name} has been logged out of all browser sessions and {$tokenCount} API token(s) were revoked.";
+        } elseif ($sessionRevocationFailed) {
+            $message = "{$user->name}'s {$tokenCount} API token(s) were revoked, but browser sessions could not be terminated because the session store could not be accessed.";
+        } else {
+            $message = "{$user->name}'s {$tokenCount} API token(s) were revoked, but browser sessions could not be terminated because the session driver is not supported.";
+        }
 
         return redirect()
             ->route(DashboardRoute::name('users.index'))
