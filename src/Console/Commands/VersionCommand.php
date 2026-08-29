@@ -19,7 +19,7 @@ class VersionCommand extends Command {
      * Execute the console command.
      */
     public function handle(): int {
-        $version = '1.50.0'; // Heartbeat API for online detection and Force logout with Redis sessions: per-user logout now dispatches Tyro Login's ForceLogout event when session.driver=redis (tyro-login ^2.14), UI logout buttons render for database+redis drivers, and heartbeat presence is cleared on successful revocation
+        $version = '1.51.0'; // feat(smtp): SMTP Settings admin page — live .env editing, preset CRUD with encrypted passwords, apply-preset to .env, tabular Use Preset picker, Save current as preset, danger-confirmed cache clear, and dashboard-modal UX (Esc/overlay aware)
 
         $this->info('');
         $this->info('  ╔════════════════════════════════════════╗');
@@ -70,6 +70,7 @@ class VersionCommand extends Command {
 }
 
 // Changelog
+// 1.51.0 - feat(smtp): SMTP Settings admin page — live .env editing (MAIL_* + MAIL_FROM_*), presets table with encrypted passwords (CRUD + apply to .env), tabular Use Preset modal (Preset/Host/Actions, 860→760px), Save current settings as preset, Clear Config Cache via showDanger, Esc-aware modals, and sidebar entry under Administration
 // 1.50.0 - feat(logout): force logout with Redis session driver — users.logout now dispatches Tyro Login's ForceLogout event when session.driver=redis (logs the user out on their next web request; tyro-login floor bumped to ^2.14), the logout button/icon render for database+redis drivers with driver-aware messages and audit fields, OnlineUsers::forget() clears heartbeat presence immediately on successful session revocation, and UserForceLogoutTest covers redis/database/unsupported drivers (redis test skips gracefully when no server is reachable)
 // 1.50.0 - feat(heartbeat): heartbeat API for online detection — auth-protected POST /heartbeat writes a per-user cache key (TTL via TYRO_DASHBOARD_HEARTBEAT_TTL, default 600s) every 5 minutes from the dashboard JS (survives page refreshes via localStorage timestamp, CSRF header, silent failures); isOnline badges, the logged-in user filter, and the dashboard logged-in stat now use the heartbeat cache unioned with the DB-session fallback; gated by TYRO_DASHBOARD_ENABLE_HEARTBEAT
 // 1.49.1 - Log Viewer patch re-release (re-tag of v1.49.0 pointing at the same commit; no code changes)
