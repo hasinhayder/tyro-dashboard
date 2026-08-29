@@ -2,6 +2,9 @@
 
 All notable changes to Tyro Dashboard are documented in this file.
 
+## [v1.51.0](https://github.com/hasinhayder/tyro-dashboard/releases/tag/v1.51.0) - 2026-08-29
+- SMTP Settings admin page: live `.env` editing for `MAIL_*` + `MAIL_FROM_*` with server-side validation, reusable SMTP presets (CRUD with encrypted passwords, apply-to-`.env`), tabular "Use Preset" picker, "Save current settings as preset", test-email sender, and a danger-confirmed config-cache clear — admin-only, gated by `TYRO_DASHBOARD_ENABLE_SMTP_SETTINGS` (`features.smtp_settings`, default true) with identical route and sidebar gating; passwords are never prefilled into the form (blank = keep existing value), preset passwords are encrypted at rest, and the new `tyro_smtp_presets` table ships via a package migration. Consumers with a published sidebar need to re-publish `partials/admin-sidebar.blade.php` (or add the link manually) to see the new menu entry
+
 ## [v1.50.0](https://github.com/hasinhayder/tyro-dashboard/releases/tag/v1.50.0) - 2026-08-23
 - Heartbeat API for online user detection: auth-protected `POST /heartbeat` writes a per-user cache key (TTL via `TYRO_DASHBOARD_HEARTBEAT_TTL`, default 600s) every 5 minutes from the dashboard JS (survives page refreshes via localStorage timestamp, CSRF header, silent failures); isOnline badges, the logged-in user filter, and the dashboard logged-in stat now use the heartbeat cache unioned with the DB-session fallback — gated by `TYRO_DASHBOARD_ENABLE_HEARTBEAT`
 - Force logout with Redis sessions: per-user logout now dispatches Tyro Login's `ForceLogout` event when `session.driver=redis` (logs the user out on their next web request; tyro-login floor bumped to `^2.14`), the logout button/icon render for database + redis drivers with driver-aware messages and audit fields, and `OnlineUsers::forget()` clears heartbeat presence immediately on successful session revocation
