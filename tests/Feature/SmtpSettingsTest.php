@@ -188,6 +188,90 @@ class SmtpSettingsTest extends TestCase {
         expect($env)->not->toContain('MAIL_USERNAME');
     }
 
+    public function test_update_without_password_keeps_existing_password_in_env(): void {
+        $this->seedEnv(implode("\n", [
+            'APP_NAME="Tyro"',
+            'MAIL_MAILER="smtp"',
+            'MAIL_HOST="smtp.example.com"',
+            'MAIL_PORT="587"',
+            'MAIL_PASSWORD="existing-secret"',
+            '',
+        ]));
+
+        $this->actingAs($this->admin())
+            ->postJson(route(DashboardRoute::name('settings.smtp.update')), [
+                'MAIL_MAILER' => 'smtp',
+                'MAIL_HOST' => 'smtp.example.com',
+                'MAIL_PORT' => 587,
+                'MAIL_SCHEME' => 'tls',
+                'MAIL_USERNAME' => 'user',
+                'MAIL_PASSWORD' => null,
+                'MAIL_FROM_ADDRESS' => 'hello@example.com',
+                'MAIL_FROM_NAME' => 'Example App',
+            ], $this->ajaxHeaders())
+            ->assertOk()
+            ->assertJson(['success' => true]);
+
+        expect($this->envContents())->toContain('MAIL_PASSWORD="existing-secret"');
+    }
+
+    public function test_update_with_empty_string_password_keeps_existing_password_in_env(): void {
+        $this->seedEnv(implode("\n", [
+            'APP_NAME="Tyro"',
+            'MAIL_MAILER="smtp"',
+            'MAIL_HOST="smtp.example.com"',
+            'MAIL_PORT="587"',
+            'MAIL_PASSWORD="existing-secret"',
+            '',
+        ]));
+
+        $this->actingAs($this->admin())
+            ->postJson(route(DashboardRoute::name('settings.smtp.update')), [
+                'MAIL_MAILER' => 'smtp',
+                'MAIL_HOST' => 'smtp.example.com',
+                'MAIL_PORT' => 587,
+                'MAIL_SCHEME' => 'tls',
+                'MAIL_USERNAME' => 'user',
+                'MAIL_PASSWORD' => '',
+                'MAIL_FROM_ADDRESS' => 'hello@example.com',
+                'MAIL_FROM_NAME' => 'Example App',
+            ], $this->ajaxHeaders())
+            ->assertOk()
+            ->assertJson(['success' => true]);
+
+        expect($this->envContents())->toContain('MAIL_PASSWORD="existing-secret"');
+    }
+
+    public function test_update_with_new_password_replaces_existing_password_in_env(): void {
+        $this->seedEnv(implode("\n", [
+            'APP_NAME="Tyro"',
+            'MAIL_MAILER="smtp"',
+            'MAIL_HOST="smtp.example.com"',
+            'MAIL_PORT="587"',
+            'MAIL_PASSWORD="old-secret"',
+            '',
+        ]));
+
+        $this->actingAs($this->admin())
+            ->postJson(route(DashboardRoute::name('settings.smtp.update')), [
+                'MAIL_MAILER' => 'smtp',
+                'MAIL_HOST' => 'smtp.example.com',
+                'MAIL_PORT' => 587,
+                'MAIL_SCHEME' => 'tls',
+                'MAIL_USERNAME' => 'user',
+                'MAIL_PASSWORD' => 'new-secret',
+                'MAIL_FROM_ADDRESS' => 'hello@example.com',
+                'MAIL_FROM_NAME' => 'Example App',
+            ], $this->ajaxHeaders())
+            ->assertOk()
+            ->assertJson(['success' => true]);
+
+        $env = $this->envContents();
+
+        expect($env)->toContain('MAIL_PASSWORD="new-secret"');
+        expect($env)->not->toContain('old-secret');
+    }
+
     public function test_update_rejects_invalid_values(): void {
         $this->seedEnv("APP_NAME=\"Tyro\"\n");
 

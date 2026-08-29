@@ -33,6 +33,13 @@ class SmtpController extends BaseController {
             'MAIL_FROM_NAME' => 'nullable|string|max:255',
         ]);
 
+        // An empty password means "keep the existing value" — never write or
+        // remove MAIL_PASSWORD in that case. The password is never prefilled
+        // into the form, so an empty field can only mean "leave unchanged".
+        if (empty($validated['MAIL_PASSWORD'])) {
+            unset($validated['MAIL_PASSWORD']);
+        }
+
         $this->writeEnv($validated);
 
         try { Artisan::call('config:clear'); } catch (\Throwable $e) {}
@@ -142,6 +149,10 @@ class SmtpController extends BaseController {
         $validated = $request->validate([
             'to' => 'required|email|max:255',
         ]);
+
+        // Make sure the mail config reflects the latest .env values (e.g. a
+        // just-applied preset) before sending the test message.
+        try { Artisan::call('config:clear'); } catch (\Throwable $e) {}
 
         try {
             Mail::raw('This is a test email from Tyro Dashboard SMTP settings. If you received this, your mail configuration is working.', function ($message) use ($validated) {
