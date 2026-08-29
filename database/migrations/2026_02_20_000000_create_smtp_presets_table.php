@@ -14,7 +14,7 @@ return new class extends Migration {
             $table->id();
             $table->string('name')->unique();
             $table->string('mailer')->default('smtp');
-            $table->string('host');
+            $table->string('host')->default('');
             $table->unsignedSmallInteger('port')->default(587);
             $table->string('encryption')->nullable();
             $table->string('username')->nullable();

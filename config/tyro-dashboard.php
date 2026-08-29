@@ -120,6 +120,7 @@ return [
         'invitation_system' => env('TYRO_DASHBOARD_ENABLE_INVITATION', true),
         'audit_logs' => env('TYRO_DASHBOARD_ENABLE_AUDIT_LOGS', true),
         'system_settings' => env('TYRO_DASHBOARD_ENABLE_SYSTEM_SETTINGS', true),
+        'smtp_settings' => env('TYRO_DASHBOARD_ENABLE_SMTP_SETTINGS', true),
         'checkpoints' => env('TYRO_DASHBOARD_ENABLE_CHECKPOINTS', true),
         'health' => env('TYRO_DASHBOARD_ENABLE_HEALTH', true),
         'log_viewer' => env('TYRO_DASHBOARD_ENABLE_LOG_VIEWER', true),

@@ -391,9 +391,9 @@
         clearCache: @json(route($dashboardRoute::name('settings.smtp.clear-config-cache'))),
         test: @json(route($dashboardRoute::name('settings.smtp.test'))),
         presetStore: @json(route($dashboardRoute::name('settings.smtp.presets.store'))),
-        presetUpdate: function(id){ return @json(url(config('tyro-dashboard.routes.prefix','dashboard'))) + '/settings/smtp/presets/' + id; },
-        presetDestroy: function(id){ return @json(url(config('tyro-dashboard.routes.prefix','dashboard'))) + '/settings/smtp/presets/' + id; },
-        presetApply: function(id){ return @json(url(config('tyro-dashboard.routes.prefix','dashboard'))) + '/settings/smtp/presets/' + id + '/apply'; },
+        presetUpdate: function(id){ return @json(route($dashboardRoute::name('settings.smtp.presets.update'), ['id' => ':id'])).replace(':id', id); },
+        presetDestroy: function(id){ return @json(route($dashboardRoute::name('settings.smtp.presets.destroy'), ['id' => ':id'])).replace(':id', id); },
+        presetApply: function(id){ return @json(route($dashboardRoute::name('settings.smtp.presets.apply'), ['id' => ':id'])).replace(':id', id); },
     };
     var presetsData = @json($presets->keyBy('id'));
 

@@ -74,7 +74,7 @@ If the key is package-only and not exposed in the settings UI, document that cho
 True feature flags live under `config('tyro-dashboard.features.*')`:
 - `user_management`, `role_management`, `privilege_management`
 - `settings_management`, `profile_management`
-- `invitation_system`, `audit_logs`, `system_settings`
+- `invitation_system`, `audit_logs`, `system_settings`, `smtp_settings`
 - `show_roles_menu`, `show_privileges_menu`, `show_resources_menu`
 - `profile_photo_upload`, `gravatar`
 - `activity_log` (future feature, currently `false` — not yet implemented)
@@ -95,6 +95,7 @@ Other related booleans live in their own sections and should stay there:
 Every feature flag under `features.*` must gate BOTH the UI visibility AND the route registration. Never gate one without the other:
 - Disabling `audit_logs` hides the sidebar link AND prevents audit route registration
 - Disabling `system_settings` hides the settings link AND prevents settings route registration
+- Disabling `smtp_settings` (env `TYRO_DASHBOARD_ENABLE_SMTP_SETTINGS`) hides the SMTP Settings link AND prevents `settings/smtp` route registration — required because the SMTP page is a second `.env` editor
 - Disabling `show_roles_menu` hides the roles link but the roles routes remain active (admin can still manage roles if they know the URL) — this is intentional: `show_*_menu` flags are visibility-only, not access-control flags
 
 ### Adding a Feature Flag

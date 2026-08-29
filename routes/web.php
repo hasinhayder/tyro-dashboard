@@ -178,17 +178,19 @@ Route::middleware('tyro-dashboard.admin')->group(function () {
         });
     }
 
-    // SMTP Settings (Admin)
-    Route::prefix('settings/smtp')->name('settings.smtp.')->group(function () {
-        Route::get('/', [SmtpController::class, 'index'])->name('index');
-        Route::post('/update', [SmtpController::class, 'update'])->name('update');
-        Route::post('/clear-config-cache', [SmtpController::class, 'clearConfigCache'])->name('clear-config-cache');
-        Route::post('/test', [SmtpController::class, 'sendTest'])->name('test');
-        Route::post('/presets', [SmtpController::class, 'storePreset'])->name('presets.store');
-        Route::put('/presets/{id}', [SmtpController::class, 'updatePreset'])->name('presets.update');
-        Route::delete('/presets/{id}', [SmtpController::class, 'destroyPreset'])->name('presets.destroy');
-        Route::post('/presets/{id}/apply', [SmtpController::class, 'applyPreset'])->name('presets.apply');
-    });
+    // SMTP Settings (Admin) - manage MAIL_* env values and SMTP presets
+    if (config('tyro-dashboard.features.smtp_settings', true)) {
+        Route::prefix('settings/smtp')->name('settings.smtp.')->group(function () {
+            Route::get('/', [SmtpController::class, 'index'])->name('index');
+            Route::post('/update', [SmtpController::class, 'update'])->name('update');
+            Route::post('/clear-config-cache', [SmtpController::class, 'clearConfigCache'])->name('clear-config-cache');
+            Route::post('/test', [SmtpController::class, 'sendTest'])->name('test');
+            Route::post('/presets', [SmtpController::class, 'storePreset'])->name('presets.store');
+            Route::put('/presets/{id}', [SmtpController::class, 'updatePreset'])->name('presets.update');
+            Route::delete('/presets/{id}', [SmtpController::class, 'destroyPreset'])->name('presets.destroy');
+            Route::post('/presets/{id}/apply', [SmtpController::class, 'applyPreset'])->name('presets.apply');
+        });
+    }
 
     // Checkpoints (Admin) - visual manager for hasinhayder/tyro-checkpoint
     if (config('tyro-dashboard.features.checkpoints', true) && class_exists(\HasinHayder\TyroCheckpoint\TyroCheckpointServiceProvider::class)) {

@@ -148,12 +148,14 @@
             </a>
             @endif
 
+            @if(config('tyro-dashboard.features.smtp_settings', true))
             <a href="{{ route($dashboardRoute::name('settings.smtp.index')) }}" class="sidebar-link {{ request()->routeIs($dashboardRoute::pattern('settings.smtp.*')) ? 'active' : '' }}">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                 </svg>
                 SMTP Settings
             </a>
+            @endif
 
             @if(config('tyro-dashboard.features.checkpoints', true) && class_exists(\HasinHayder\TyroCheckpoint\TyroCheckpointServiceProvider::class))
             <a href="{{ route($dashboardRoute::name('checkpoints.index')) }}" class="sidebar-link {{ request()->routeIs($dashboardRoute::pattern('checkpoints.*')) ? 'active' : '' }}">
