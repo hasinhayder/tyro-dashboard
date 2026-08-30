@@ -2,6 +2,9 @@
 
 All notable changes to Tyro Dashboard are documented in this file.
 
+## [v1.51.1](https://github.com/hasinhayder/tyro-dashboard/releases/tag/v1.51.1) - 2026-08-30
+- SMTP Settings encryption dropdown fix: the `MAIL_SCHEME` value for the TLS option is now `smtp` and for the SSL option `smtps` (labels unchanged), which are the DSN schemes Symfony's mailer actually supports — previously the written `tls`/`ssl` values made providers like Hostinger (SMTP/SMTP-S) fail with "TLS or SSL is not supported". Validation for the SMTP form and presets accepts `smtp`/`smtps` accordingly
+
 ## [v1.51.0](https://github.com/hasinhayder/tyro-dashboard/releases/tag/v1.51.0) - 2026-08-29
 - SMTP Settings admin page: live `.env` editing for `MAIL_*` + `MAIL_FROM_*` with server-side validation, reusable SMTP presets (CRUD with encrypted passwords, apply-to-`.env`), tabular "Use Preset" picker, "Save current settings as preset", test-email sender, and a danger-confirmed config-cache clear — admin-only, gated by `TYRO_DASHBOARD_ENABLE_SMTP_SETTINGS` (`features.smtp_settings`, default true) with identical route and sidebar gating; passwords are never prefilled into the form (blank = keep existing value), preset passwords are encrypted at rest, and the new `tyro_smtp_presets` table ships via a package migration. Consumers with a published sidebar need to re-publish `partials/admin-sidebar.blade.php` (or add the link manually) to see the new menu entry
 

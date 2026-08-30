@@ -161,7 +161,7 @@ class SmtpSettingsTest extends TestCase {
                 'MAIL_MAILER' => 'smtp',
                 'MAIL_HOST' => 'smtp.example.com',
                 'MAIL_PORT' => 2525,
-                'MAIL_SCHEME' => 'tls',
+                'MAIL_SCHEME' => 'smtp',
                 'MAIL_USERNAME' => null,
                 'MAIL_PASSWORD' => 'plain-secret',
                 'MAIL_FROM_ADDRESS' => 'hello@example.com',
@@ -176,7 +176,7 @@ class SmtpSettingsTest extends TestCase {
             ->toContain('MAIL_MAILER="smtp"')
             ->toContain('MAIL_HOST="smtp.example.com"')
             ->toContain('MAIL_PORT="2525"')
-            ->toContain('MAIL_SCHEME="tls"')
+            ->toContain('MAIL_SCHEME="smtp"')
             ->toContain('MAIL_PASSWORD="plain-secret"')
             ->toContain('MAIL_FROM_ADDRESS="hello@example.com"')
             ->toContain('MAIL_FROM_NAME="Example App"');
@@ -203,7 +203,7 @@ class SmtpSettingsTest extends TestCase {
                 'MAIL_MAILER' => 'smtp',
                 'MAIL_HOST' => 'smtp.example.com',
                 'MAIL_PORT' => 587,
-                'MAIL_SCHEME' => 'tls',
+                'MAIL_SCHEME' => 'smtp',
                 'MAIL_USERNAME' => 'user',
                 'MAIL_PASSWORD' => null,
                 'MAIL_FROM_ADDRESS' => 'hello@example.com',
@@ -230,7 +230,7 @@ class SmtpSettingsTest extends TestCase {
                 'MAIL_MAILER' => 'smtp',
                 'MAIL_HOST' => 'smtp.example.com',
                 'MAIL_PORT' => 587,
-                'MAIL_SCHEME' => 'tls',
+                'MAIL_SCHEME' => 'smtp',
                 'MAIL_USERNAME' => 'user',
                 'MAIL_PASSWORD' => '',
                 'MAIL_FROM_ADDRESS' => 'hello@example.com',
@@ -257,7 +257,7 @@ class SmtpSettingsTest extends TestCase {
                 'MAIL_MAILER' => 'smtp',
                 'MAIL_HOST' => 'smtp.example.com',
                 'MAIL_PORT' => 587,
-                'MAIL_SCHEME' => 'tls',
+                'MAIL_SCHEME' => 'smtp',
                 'MAIL_USERNAME' => 'user',
                 'MAIL_PASSWORD' => 'new-secret',
                 'MAIL_FROM_ADDRESS' => 'hello@example.com',
@@ -309,7 +309,7 @@ class SmtpSettingsTest extends TestCase {
                 'mailer' => 'smtp',
                 'host' => 'smtp.prod.example',
                 'port' => 587,
-                'encryption' => 'tls',
+                'encryption' => 'smtp',
                 'username' => 'prod-user',
                 'password' => 'super-secret',
                 'from_address' => 'noreply@example.com',
@@ -348,7 +348,7 @@ class SmtpSettingsTest extends TestCase {
             'mailer' => 'smtp',
             'host' => 'smtp.staging.example',
             'port' => 587,
-            'encryption' => 'tls',
+            'encryption' => 'smtp',
             'username' => 'staging-user',
             'password' => encrypt('original-secret'),
         ]);
@@ -359,7 +359,7 @@ class SmtpSettingsTest extends TestCase {
                 'mailer' => 'smtp',
                 'host' => 'smtp.staging2.example',
                 'port' => 587,
-                'encryption' => 'tls',
+                'encryption' => 'smtp',
                 'username' => 'staging-user',
             ], $this->ajaxHeaders())
             ->assertOk()
@@ -379,7 +379,7 @@ class SmtpSettingsTest extends TestCase {
             'mailer' => 'smtp',
             'host' => 'smtp.staging.example',
             'port' => 465,
-            'encryption' => 'ssl',
+            'encryption' => 'smtps',
             'username' => 'staging-user',
             'password' => encrypt('staging-secret'),
             'from_address' => 'staging@example.com',
@@ -397,7 +397,7 @@ class SmtpSettingsTest extends TestCase {
             ->toContain('MAIL_MAILER="smtp"')
             ->toContain('MAIL_HOST="smtp.staging.example"')
             ->toContain('MAIL_PORT="465"')
-            ->toContain('MAIL_SCHEME="ssl"')
+            ->toContain('MAIL_SCHEME="smtps"')
             ->toContain('MAIL_USERNAME="staging-user"')
             ->toContain('MAIL_PASSWORD="staging-secret"')
             ->toContain('MAIL_FROM_ADDRESS="staging@example.com"')

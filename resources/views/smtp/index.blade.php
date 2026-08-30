@@ -106,8 +106,8 @@
                 <label class="form-label" for="MAIL_SCHEME">Encryption</label>
                 <select id="MAIL_SCHEME" class="form-select">
                     <option value="" {{ empty($current['MAIL_SCHEME']) ? 'selected' : '' }}>None</option>
-                    <option value="tls" {{ ($current['MAIL_SCHEME'] ?? '') === 'tls' ? 'selected' : '' }}>TLS</option>
-                    <option value="ssl" {{ ($current['MAIL_SCHEME'] ?? '') === 'ssl' ? 'selected' : '' }}>SSL</option>
+                    <option value="smtp" {{ ($current['MAIL_SCHEME'] ?? '') === 'smtp' ? 'selected' : '' }}>TLS</option>
+                    <option value="smtps" {{ ($current['MAIL_SCHEME'] ?? '') === 'smtps' ? 'selected' : '' }}>SSL</option>
                 </select>
             </div>
             <div class="form-group">
@@ -196,8 +196,8 @@
                         <label class="form-label" for="preset_encryption">Encryption</label>
                         <select id="preset_encryption" class="form-select">
                             <option value="">None</option>
-                            <option value="tls">TLS</option>
-                            <option value="ssl">SSL</option>
+                            <option value="smtp">TLS</option>
+                            <option value="smtps">SSL</option>
                         </select>
                     </div>
                     <div class="form-group">
