@@ -134,7 +134,7 @@
             <div class="smtp-test-row">
                 <div class="form-group">
                     <label class="form-label" for="smtpTestTo">Send test to</label>
-                    <input type="email" id="smtpTestTo" class="form-input" placeholder="you@example.com" value="{{ auth()->user()->email ?? '' }}">
+                    <input type="email" id="smtpTestTo" class="form-input" placeholder="you@example.com" value="{{ auth()->user()->email ?? '' }}" data-default="{{ auth()->user()->email ?? '' }}">
                 </div>
                 <button type="button" class="btn btn-secondary" id="smtpTestBtn" onclick="sendTestEmail()">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>

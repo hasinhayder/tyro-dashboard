@@ -11,6 +11,18 @@
         presetApply: function(id){ return @json(route($dashboardRoute::name('settings.smtp.presets.apply'), ['id' => ':id'])).replace(':id', id); },
     };
     var presetsData = @json($presets->keyBy('id'));
+    var TEST_EMAIL_KEY = 'tyro_smtp_last_test_email';
+
+    // Restore the last test-email recipient (per browser) on load; falls back
+    // to the logged-in user's address when nothing has been saved yet.
+    (function(){
+        var el=document.getElementById('smtpTestTo');
+        if(!el) return;
+        try {
+            var saved=localStorage.getItem(TEST_EMAIL_KEY);
+            if(saved) el.value=saved;
+        } catch(e){}
+    })();
 
     function headers(){ return { 'X-CSRF-TOKEN': csrf, 'X-Requested-With': 'XMLHttpRequest', 'Accept': 'application/json', 'Content-Type': 'application/json' }; }
     function setBusy(btn,busy){ if(!btn) return; btn.disabled=busy; btn.style.opacity=busy?'0.6':''; btn.style.cursor=busy?'wait':''; }
@@ -52,6 +64,7 @@
         var btn=document.getElementById('smtpTestBtn');
         var to=document.getElementById('smtpTestTo').value.trim();
         if(!to){ showToast('Enter a recipient email.','warning'); return; }
+        try { localStorage.setItem(TEST_EMAIL_KEY, to); } catch(e){}
         setBusy(btn,true);
         fetch(routes.test,{method:'POST',headers:headers(),body:JSON.stringify({to:to})})
         .then(function(r){return r.json().then(function(d){return {ok:r.ok,d:d};});})
