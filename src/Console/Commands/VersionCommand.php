@@ -19,7 +19,7 @@ class VersionCommand extends Command {
      * Execute the console command.
      */
     public function handle(): int {
-        $version = '1.51.1'; // fix(smtp): encryption dropdown now uses smtp/smtps DSN schemes (TLS/SSL labels) so Symfony accepts them — fixes Hostinger SMTP/SMTP-S
+        $version = '1.51.2'; // fix(media): bulk-select checkbox now matches action button size and alignment in media grid
 
         $this->info('');
         $this->info('  ╔════════════════════════════════════════╗');
@@ -70,6 +70,7 @@ class VersionCommand extends Command {
 }
 
 // Changelog
+// 1.51.2 - fix(media): media grid bulk-select checkbox now matches the action button size (1.7rem) with centered alignment so it no longer sits off-positioned next to the icons
 // 1.51.1 - fix(smtp): SMTP Settings encryption dropdown now writes the Symfony DSN schemes smtp (TLS label) and smtps (SSL label) to MAIL_SCHEME instead of tls/ssl, which Symfony's EsmtpTransportFactory rejects — fixes Hostinger "SMTP/SMTP-S" (and similar providers) reporting TLS or SSL is not supported; form and preset validation updated to smtp/smtps
 // 1.51.0 - feat(smtp): SMTP Settings admin page — live .env editing (MAIL_* + MAIL_FROM_*), presets table with encrypted passwords (CRUD + apply to .env; tyro_smtp_presets.host defaults to '' so non-smtp presets may omit host), tabular Use Preset modal (Preset/Host/Actions), Save current settings as preset, Clear Config Cache via showDanger, Esc-aware modals, and sidebar entry under Administration; routes and sidebar link are dual-gated by TYRO_DASHBOARD_ENABLE_SMTP_SETTINGS (features.smtp_settings, default true), and SmtpSettingsTest/SmtpSettingsDisabledTest cover authorization, .env writes, preset password encryption, and disabled-feature gating
 // 1.50.0 - feat(logout): force logout with Redis session driver — users.logout now dispatches Tyro Login's ForceLogout event when session.driver=redis (logs the user out on their next web request; tyro-login floor bumped to ^2.14), the logout button/icon render for database+redis drivers with driver-aware messages and audit fields, OnlineUsers::forget() clears heartbeat presence immediately on successful session revocation, and UserForceLogoutTest covers redis/database/unsupported drivers (redis test skips gracefully when no server is reachable)

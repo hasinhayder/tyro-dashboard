@@ -2,6 +2,9 @@
 
 All notable changes to Tyro Dashboard are documented in this file.
 
+## [v1.51.2](https://github.com/hasinhayder/tyro-dashboard/releases/tag/v1.51.2) - 2026-09-04
+- Media Library bulk-select checkbox alignment fix: the grid checkbox wrapper now matches the action button size with centered alignment so it no longer sits smaller/off-positioned next to the action icons
+
 ## [v1.51.1](https://github.com/hasinhayder/tyro-dashboard/releases/tag/v1.51.1) - 2026-08-30
 - SMTP Settings encryption dropdown fix: the `MAIL_SCHEME` value for the TLS option is now `smtp` and for the SSL option `smtps` (labels unchanged), which are the DSN schemes Symfony's mailer actually supports — previously the written `tls`/`ssl` values made providers like Hostinger (SMTP/SMTP-S) fail with "TLS or SSL is not supported". Validation for the SMTP form and presets accepts `smtp`/`smtps` accordingly
 

@@ -121,8 +121,9 @@
         outline-offset: -2px;
     }
     .media-bulk-check {
-        width: 1.45rem;
-        height: 1.45rem;
+        width: 1.7rem;
+        height: 1.7rem;
+        margin: 0;
         display: inline-flex;
         align-items: center;
         justify-content: center;
@@ -313,6 +314,7 @@
     }
     .media-card-actions {
         display: flex;
+        align-items: center;
         gap: 0.3rem;
         margin-top: auto;
         justify-content: flex-end;
@@ -630,6 +632,10 @@
             padding: 0.55rem;
         }
         .media-card-actions .btn {
+            width: 1.6rem;
+            height: 1.6rem;
+        }
+        .media-card-actions > .media-bulk-check {
             width: 1.6rem;
             height: 1.6rem;
         }
