@@ -547,11 +547,11 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        padding: 1.25rem;
+        padding: 1.5rem;
         opacity: 0;
         visibility: hidden;
         pointer-events: none;
-        transition: opacity 0.2s ease, visibility 0.2s ease;
+        transition: opacity 0.25s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.25s cubic-bezier(0.16, 1, 0.3, 1);
     }
     .dashboard-lightbox.open {
         opacity: 1;
@@ -561,54 +561,278 @@
     .dashboard-lightbox__backdrop {
         position: absolute;
         inset: 0;
-        background: rgba(15, 23, 42, 0.88);
-        backdrop-filter: blur(10px);
+        background: rgba(10, 15, 29, 0.85);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
     }
     .dashboard-lightbox__dialog {
         position: relative;
         z-index: 1;
-        width: min(96vw, 1200px);
-        max-height: 94vh;
+        width: min(94vw, 920px);
+        max-height: 92vh;
         display: flex;
         flex-direction: column;
-        gap: 0.85rem;
+        overflow: hidden;
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 1.125rem;
+        box-shadow: 0 25px 60px -12px rgba(0, 0, 0, 0.35), 0 0 0 1px rgba(255, 255, 255, 0.05);
+        transform: scale(0.96) translateY(12px);
+        transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .dashboard-lightbox.open .dashboard-lightbox__dialog {
+        transform: scale(1) translateY(0);
     }
     .dashboard-lightbox__toolbar {
         display: flex;
-        justify-content: space-between;
         align-items: center;
+        justify-content: space-between;
         gap: 1rem;
+        padding: 0.875rem 1.25rem;
+        background: var(--card);
+        border-bottom: 1px solid var(--border);
+    }
+    .dashboard-lightbox__meta-wrap {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        min-width: 0;
+        flex: 1;
+    }
+    .dashboard-lightbox__icon {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 2.25rem;
+        height: 2.25rem;
+        border-radius: 0.625rem;
+        background: var(--muted);
+        color: var(--primary);
+        flex-shrink: 0;
+    }
+    .dashboard-lightbox__icon svg {
+        width: 18px;
+        height: 18px;
     }
     .dashboard-lightbox__meta {
-        color: rgba(255, 255, 255, 0.78);
-        font-size: 0.82rem;
-        line-height: 1.5;
+        flex: 1;
+        min-width: 0;
+    }
+    .dashboard-lightbox__name {
+        font-size: 0.9375rem;
+        font-weight: 600;
+        color: var(--foreground);
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        letter-spacing: -0.01em;
+        line-height: 1.35;
+    }
+    .dashboard-lightbox__sub {
+        font-size: 0.75rem;
+        color: var(--muted-foreground);
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        line-height: 1.4;
+        margin-top: 1px;
+    }
+    .dashboard-lightbox__toolbar-actions {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        flex-shrink: 0;
+    }
+    .dashboard-lightbox__btn-ghost {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 2.25rem;
+        height: 2.25rem;
+        border-radius: 0.5rem;
+        border: 1px solid var(--border);
+        background: transparent;
+        color: var(--muted-foreground);
+        cursor: pointer;
+        transition: all 0.15s ease;
+        text-decoration: none;
+    }
+    .dashboard-lightbox__btn-ghost:hover {
+        background: var(--muted);
+        color: var(--foreground);
+        border-color: var(--border);
     }
     .dashboard-lightbox__close {
-        width: 2.5rem;
-        height: 2.5rem;
-        border: 0;
-        border-radius: 999px;
-        background: rgba(255, 255, 255, 0.12);
-        color: #fff;
+        flex-shrink: 0;
+        width: 2.25rem;
+        height: 2.25rem;
+        border: 1px solid var(--border);
+        border-radius: 0.5rem;
+        background: transparent;
+        color: var(--muted-foreground);
         cursor: pointer;
         display: inline-flex;
         align-items: center;
         justify-content: center;
+        transition: all 0.15s ease;
+    }
+    .dashboard-lightbox__close:hover {
+        background: var(--muted);
+        color: var(--foreground);
+    }
+    .dashboard-lightbox__close:focus-visible,
+    .dashboard-lightbox__btn-ghost:focus-visible {
+        outline: 2px solid var(--primary);
+        outline-offset: 2px;
     }
     .dashboard-lightbox__media {
+        position: relative;
         display: flex;
         align-items: center;
         justify-content: center;
-        min-height: 0;
+        min-height: 260px;
+        max-height: 68vh;
+        overflow: hidden;
+        padding: 1.5rem;
+        background-color: var(--background);
+        background-image: radial-gradient(var(--border) 1px, transparent 1px);
+        background-size: 16px 16px;
     }
     .dashboard-lightbox__image {
         max-width: 100%;
-        max-height: 82vh;
+        max-height: 62vh;
         object-fit: contain;
-        border-radius: 1.25rem;
-        box-shadow: 0 24px 80px rgba(0, 0, 0, 0.38);
-        background: rgba(255, 255, 255, 0.03);
+        border-radius: 0.625rem;
+        box-shadow: 0 12px 36px -8px rgba(0, 0, 0, 0.3);
+        transition: transform 0.2s ease;
+        display: block;
+    }
+    .dashboard-lightbox__footer {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.75rem;
+        flex-wrap: wrap;
+        padding: 0.75rem 1.25rem;
+        background: var(--card);
+        border-top: 1px solid var(--border);
+        font-size: 0.8125rem;
+        color: var(--muted-foreground);
+    }
+    .dashboard-lightbox__hint {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+        font-size: 0.75rem;
+    }
+    .dashboard-lightbox__actions {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.625rem;
+    }
+    .dashboard-lightbox__copy {
+        flex-shrink: 0;
+        font-size: 0.8125rem;
+        font-weight: 500;
+        padding: 0.45rem 0.85rem;
+        border-radius: 0.5rem;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+        transition: all 0.15s ease;
+    }
+    .dashboard-lightbox__copy svg {
+        width: 15px;
+        height: 15px;
+    }
+    .dashboard-lightbox__footer kbd {
+        font-family: inherit;
+        font-size: 0.6875rem;
+        font-weight: 600;
+        padding: 0.15rem 0.45rem;
+        border: 1px solid var(--border);
+        border-bottom-width: 2px;
+        border-radius: 0.35rem;
+        background: var(--muted);
+        color: var(--foreground);
+        letter-spacing: 0.02em;
+    }
+    /* Copy URL Modern Modal Enhancement */
+    .copy-url-modal .modal-container {
+        max-width: 440px;
+        border-radius: 1rem;
+        box-shadow: 0 24px 48px -12px rgba(0, 0, 0, 0.25);
+    }
+    .copy-url-modal .modal-body {
+        padding: 1.5rem;
+    }
+    .copy-url-modal .modal-footer {
+        display: none !important;
+    }
+    .copy-url-modal .copy-url-options {
+        display: flex;
+        flex-direction: column;
+        gap: 0.625rem;
+        margin-top: 1.25rem;
+    }
+    .copy-url-option-btn {
+        display: flex !important;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.75rem;
+        padding: 0.85rem 1rem;
+        border-radius: 0.625rem;
+        border: 1px solid var(--border);
+        background: var(--card);
+        color: var(--foreground);
+        font-size: 0.875rem;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.15s cubic-bezier(0.16, 1, 0.3, 1);
+        text-align: left;
+        width: 100%;
+        box-sizing: border-box;
+    }
+    .copy-url-option-btn:hover {
+        background: var(--muted);
+        border-color: var(--primary);
+        transform: translateY(-1px);
+    }
+    .copy-url-option-btn:focus-visible {
+        outline: 2px solid var(--primary);
+        outline-offset: 2px;
+    }
+    .copy-url-option-btn .copy-url-label {
+        display: flex;
+        flex-direction: column;
+        gap: 0.15rem;
+        min-width: 0;
+        flex: 1;
+    }
+    .copy-url-option-btn .copy-url-name {
+        font-weight: 600;
+        color: var(--foreground);
+    }
+    .copy-url-option-btn .copy-url-desc {
+        font-size: 0.75rem;
+        color: var(--muted-foreground);
+        font-weight: 400;
+        line-height: 1.35;
+    }
+    .copy-url-option-btn .copy-url-icon {
+        color: var(--muted-foreground);
+        flex-shrink: 0;
+        transition: color 0.15s ease, transform 0.15s ease;
+    }
+    .copy-url-option-btn:hover .copy-url-icon {
+        color: var(--primary);
+        transform: translateX(2px);
+    }
+    @media (prefers-reduced-motion: reduce) {
+        .dashboard-lightbox,
+        .dashboard-lightbox__dialog {
+            transition: none;
+        }
     }
     @media (max-width: 640px) {
         .media-toolbar {
@@ -639,9 +863,22 @@
             width: 1.6rem;
             height: 1.6rem;
         }
+        .dashboard-lightbox {
+            padding: 0.75rem;
+        }
+        .dashboard-lightbox__dialog {
+            width: 100%;
+            max-height: 92vh;
+            border-radius: 0.85rem;
+        }
         .dashboard-lightbox__toolbar {
-            flex-direction: column-reverse;
-            align-items: stretch;
+            flex-direction: row;
+        }
+        .dashboard-lightbox__media {
+            padding: 0.6rem;
+        }
+        .dashboard-lightbox__image {
+            max-height: 60vh;
         }
     }
     .upload-progress {
@@ -1099,7 +1336,7 @@ $authUserId = auth()->id();
 <div class="media-grid" id="mediaGrid">
     @foreach($media as $file)
     <div class="media-card" id="media-{{ $file->id }}" data-media-entry>
-        <div class="media-card-figure" @if($file->is_image) data-lightbox-trigger data-image-src="{{ Storage::url($file->url) }}" data-image-alt="{{ $file->alt_text ?: $file->filename }}" data-image-name="{{ $file->filename }}" data-image-meta="{{ $file->formatted_size }} · {{ strtoupper(pathinfo($file->filename, PATHINFO_EXTENSION)) }}" role="button" tabindex="0" aria-label="Preview {{ $file->alt_text ?: $file->filename }}" title="Preview image" @endif>
+        <div class="media-card-figure" @if($file->is_image) data-lightbox-trigger data-image-src="{{ Storage::url($file->url) }}" data-image-alt="{{ $file->alt_text ?: $file->filename }}" data-image-name="{{ $file->filename }}" data-image-meta="{{ $file->formatted_size }} · {{ strtoupper(pathinfo($file->filename, PATHINFO_EXTENSION)) }}" data-copy-original="{{ url(Storage::url($file->url)) }}" data-copy-webp="{{ $file->webp_url ? url(Storage::url($file->webp_url)) : '' }}" data-copy-thumb="{{ url(Storage::url($file->thumbnail_url)) }}" data-source-url="{{ $file->source_url ?? '' }}" role="button" tabindex="0" aria-label="Preview {{ $file->alt_text ?: $file->filename }}" title="Preview image" @endif>
             @if($file->is_image)
                 <img src="{{ Storage::url($file->thumbnail_url) }}" alt="{{ $file->alt_text ?: $file->filename }}" class="media-card-thumb" loading="lazy">
                 <div class="media-card-overlay">
@@ -1117,6 +1354,10 @@ $authUserId = auth()->id();
                         data-image-alt="{{ $file->alt_text ?: $file->filename }}"
                         data-image-name="{{ $file->filename }}"
                         data-image-meta="{{ $file->formatted_size }} · {{ strtoupper(pathinfo($file->filename, PATHINFO_EXTENSION)) }}"
+                        data-copy-original="{{ url(Storage::url($file->url)) }}"
+                        data-copy-webp="{{ $file->webp_url ? url(Storage::url($file->webp_url)) : '' }}"
+                        data-copy-thumb="{{ url(Storage::url($file->thumbnail_url)) }}"
+                        data-source-url="{{ $file->source_url ?? '' }}"
                     >
                         Preview
                     </button>
@@ -1250,7 +1491,7 @@ $authUserId = auth()->id();
                 </td>
                 <td>
                     <div class="media-table-file">
-                        <div class="media-table-thumb" @if($file->is_image) data-lightbox-trigger data-image-src="{{ Storage::url($file->url) }}" data-image-alt="{{ $file->alt_text ?: $file->filename }}" data-image-name="{{ $file->filename }}" data-image-meta="{{ $file->formatted_size }} · {{ strtoupper(pathinfo($file->filename, PATHINFO_EXTENSION)) }}" role="button" tabindex="0" aria-label="Preview {{ $file->alt_text ?: $file->filename }}" title="Preview image" @endif>
+                        <div class="media-table-thumb" @if($file->is_image) data-lightbox-trigger data-image-src="{{ Storage::url($file->url) }}" data-image-alt="{{ $file->alt_text ?: $file->filename }}" data-image-name="{{ $file->filename }}" data-image-meta="{{ $file->formatted_size }} · {{ strtoupper(pathinfo($file->filename, PATHINFO_EXTENSION)) }}" data-copy-original="{{ url(Storage::url($file->url)) }}" data-copy-webp="{{ $file->webp_url ? url(Storage::url($file->webp_url)) : '' }}" data-copy-thumb="{{ url(Storage::url($file->thumbnail_url)) }}" data-source-url="{{ $file->source_url ?? '' }}" role="button" tabindex="0" aria-label="Preview {{ $file->alt_text ?: $file->filename }}" title="Preview image" @endif>
                             @if($file->is_image)
                                 <img src="{{ Storage::url($file->thumbnail_url) }}" alt="{{ $file->alt_text ?: $file->filename }}" loading="lazy">
                             @else
@@ -1305,6 +1546,10 @@ $authUserId = auth()->id();
                             data-image-alt="{{ $file->alt_text ?: $file->filename }}"
                             data-image-name="{{ $file->filename }}"
                             data-image-meta="{{ $file->formatted_size }} · {{ strtoupper(pathinfo($file->filename, PATHINFO_EXTENSION)) }}"
+                            data-copy-original="{{ url(Storage::url($file->url)) }}"
+                            data-copy-webp="{{ $file->webp_url ? url(Storage::url($file->webp_url)) : '' }}"
+                            data-copy-thumb="{{ url(Storage::url($file->thumbnail_url)) }}"
+                            data-source-url="{{ $file->source_url ?? '' }}"
                             title="Preview image"
                         >
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -1581,18 +1826,52 @@ $authUserId = auth()->id();
     <div class="dashboard-lightbox__backdrop" data-lightbox-close></div>
     <div class="dashboard-lightbox__dialog" role="dialog" aria-modal="true" aria-label="Media preview">
         <div class="dashboard-lightbox__toolbar">
-            <div class="dashboard-lightbox__meta">
-                <div id="dashboardLightboxName"></div>
-                <div id="dashboardLightboxMeta"></div>
+            <div class="dashboard-lightbox__meta-wrap">
+                <div class="dashboard-lightbox__icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="m2.25 15.75 5.159-5.159a2.25 2.25 0 0 1 3.182 0l5.159 5.159m-1.5-1.5 1.409-1.409a2.25 2.25 0 0 1 3.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 0 0 1.5-1.5V6a1.5 1.5 0 0 0-1.5-1.5H3.75A1.5 1.5 0 0 0 2.25 6v12a1.5 1.5 0 0 0 1.5 1.5Zm10.5-11.25h.008v.008h-.008V8.25Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z"/>
+                    </svg>
+                </div>
+                <div class="dashboard-lightbox__meta">
+                    <div id="dashboardLightboxName" class="dashboard-lightbox__name"></div>
+                    <div id="dashboardLightboxMeta" class="dashboard-lightbox__sub"></div>
+                </div>
             </div>
-            <button type="button" class="dashboard-lightbox__close" data-lightbox-close aria-label="Close media preview">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:20px;height:20px;">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-                </svg>
-            </button>
+            <div class="dashboard-lightbox__toolbar-actions">
+                <a id="dashboardLightboxSource" href="#" target="_blank" rel="noopener noreferrer" class="dashboard-lightbox__btn-ghost" title="Open source page" aria-label="Open source page" style="display: none;">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 6H5.25A2.25 2.25 0 0 0 3 8.25v10.5A2.25 2.25 0 0 0 5.25 21h10.5A2.25 2.25 0 0 0 18 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25"/>
+                    </svg>
+                </a>
+                <a id="dashboardLightboxDownload" href="#" download target="_blank" rel="noopener noreferrer" class="dashboard-lightbox__btn-ghost" title="Download image" aria-label="Download image">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3"/>
+                    </svg>
+                </a>
+                <button type="button" class="dashboard-lightbox__close" data-lightbox-close aria-label="Close media preview">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:17px;height:17px;">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
         </div>
         <div class="dashboard-lightbox__media">
             <img id="dashboardLightboxImage" class="dashboard-lightbox__image" alt="">
+        </div>
+        <div class="dashboard-lightbox__footer">
+            <span class="dashboard-lightbox__hint">
+                <span>Press</span>
+                <kbd>Esc</kbd>
+                <span>or click outside to close</span>
+            </span>
+            <div class="dashboard-lightbox__actions">
+                <button type="button" id="dashboardLightboxCopy" class="btn btn-secondary dashboard-lightbox__copy">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M13.19 8.688a4.5 4.5 0 0 1 1.242 7.244l-4.5 4.5a4.5 4.5 0 0 1-6.364-6.364l1.757-1.757m13.35-.622 1.757-1.757a4.5 4.5 0 0 0-6.364-6.364l-4.5 4.5a4.5 4.5 0 0 0 1.242 7.244"/>
+                    </svg>
+                    Copy URL
+                </button>
+            </div>
         </div>
     </div>
 </div>
@@ -1608,27 +1887,45 @@ $authUserId = auth()->id();
 </div>
 
 <!-- Copy URL Modal -->
-<div id="copyUrlModal" class="modal-overlay">
+<div id="copyUrlModal" class="modal-overlay copy-url-modal">
     <div class="modal-container">
         <div class="modal-content-wrapper">
             <div class="modal-body">
                 <div class="modal-body-inner">
-                    <div class="modal-icon info">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M13.19 8.688a4.5 4.5 0 0 1 1.242 7.244l-4.5 4.5a4.5 4.5 0 0 1-6.364-6.364l1.757-1.757m13.35-.622 1.757-1.757a4.5 4.5 0 0 0-6.364-6.364l-4.5 4.5a4.5 4.5 0 0 0 1.242 7.244"/>
-                        </svg>
-                    </div>
                     <div class="modal-text-content">
-                        <h2 class="modal-title">Copy URL</h2>
-                        <p class="modal-message">Which URL would you like to copy?</p>
+                        <h2 class="modal-title">Copy Media Link</h2>
+                        <p class="modal-message">Select which format or version you would like to copy to your clipboard.</p>
                     </div>
                 </div>
-            </div>
-            <div class="modal-footer" style="flex-direction: column; gap: 0.5rem;">
-                <button type="button" class="btn btn-modal-confirm" style="width: 100%;" onclick="copySelectedUrl('original')">Original</button>
-                <button type="button" class="btn btn-modal-confirm" id="copyUrlWebpBtn" style="width: 100%;" onclick="copySelectedUrl('webp')">WebP</button>
-                <button type="button" class="btn btn-modal-confirm" style="width: 100%;" onclick="copySelectedUrl('thumbnail')">Thumbnail</button>
-                <button type="button" class="btn btn-modal-cancel" style="width: 100%;" onclick="closeCopyUrlModal()">Cancel</button>
+                <div class="copy-url-options">
+                    <button type="button" class="copy-url-option-btn" onclick="copySelectedUrl('original')">
+                        <div class="copy-url-label">
+                            <span class="copy-url-name">Original URL</span>
+                            <span class="copy-url-desc">Full resolution original uploaded file</span>
+                        </div>
+                        <svg class="copy-url-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5"/>
+                        </svg>
+                    </button>
+                    <button type="button" class="copy-url-option-btn" id="copyUrlWebpBtn" onclick="copySelectedUrl('webp')">
+                        <div class="copy-url-label">
+                            <span class="copy-url-name">WebP URL</span>
+                            <span class="copy-url-desc">Optimized next-gen format for web speed</span>
+                        </div>
+                        <svg class="copy-url-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5"/>
+                        </svg>
+                    </button>
+                    <button type="button" class="copy-url-option-btn" onclick="copySelectedUrl('thumbnail')">
+                        <div class="copy-url-label">
+                            <span class="copy-url-name">Thumbnail URL</span>
+                            <span class="copy-url-desc">Small compressed preview thumbnail</span>
+                        </div>
+                        <svg class="copy-url-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5"/>
+                        </svg>
+                    </button>
+                </div>
             </div>
         </div>
         <button type="button" class="modal-close" onclick="closeCopyUrlModal()">
@@ -1670,6 +1967,10 @@ $authUserId = auth()->id();
     const lightboxImage = document.getElementById('dashboardLightboxImage');
     const lightboxName = document.getElementById('dashboardLightboxName');
     const lightboxMeta = document.getElementById('dashboardLightboxMeta');
+    const lightboxCopy = document.getElementById('dashboardLightboxCopy');
+    const lightboxDownload = document.getElementById('dashboardLightboxDownload');
+    const lightboxSource = document.getElementById('dashboardLightboxSource');
+    let lightboxCopyUrls = { original: '', webp: '', thumbnail: '' };
     let previousFocus = null;
     let previousOverflow = '';
 
@@ -1760,7 +2061,7 @@ $authUserId = auth()->id();
         copyUrlData = { original: originalUrl, webp: webpUrl, thumbnail: thumbnailUrl };
         const modal = document.getElementById('copyUrlModal');
         const webpBtn = document.getElementById('copyUrlWebpBtn');
-        webpBtn.style.display = webpUrl ? 'block' : 'none';
+        webpBtn.style.display = webpUrl ? 'flex' : 'none';
         modal.classList.add('active');
         document.body.style.overflow = 'hidden';
     }
@@ -1977,17 +2278,36 @@ $authUserId = auth()->id();
         const imageAlt = source?.dataset?.imageAlt ?? source?.imageAlt ?? '';
         const imageNameText = source?.dataset?.imageName ?? source?.imageName ?? '';
         const imageMetaText = source?.dataset?.imageMeta ?? source?.imageMeta ?? '';
+        const imageSourceUrl = source?.dataset?.sourceUrl ?? source?.sourceUrl ?? '';
 
         lightboxImage.src = imageSrc;
         lightboxImage.alt = imageAlt || imageNameText || 'Media preview';
         lightboxName.textContent = imageNameText;
         lightboxMeta.textContent = imageMetaText;
+        if (lightboxDownload) {
+            lightboxDownload.href = imageSrc;
+            lightboxDownload.setAttribute('download', imageNameText || 'image');
+        }
+        if (lightboxSource) {
+            if (imageSourceUrl) {
+                lightboxSource.href = imageSourceUrl;
+                lightboxSource.style.display = 'inline-flex';
+            } else {
+                lightboxSource.removeAttribute('href');
+                lightboxSource.style.display = 'none';
+            }
+        }
+        lightboxCopyUrls = {
+            original: source?.dataset?.copyOriginal ?? source?.copyOriginal ?? '',
+            webp: source?.dataset?.copyWebp ?? source?.copyWebp ?? '',
+            thumbnail: source?.dataset?.copyThumb ?? source?.copyThumb ?? '',
+        };
 
         lightbox.classList.add('open');
         lightbox.setAttribute('aria-hidden', 'false');
         previousOverflow = document.body.style.overflow;
         document.body.style.overflow = 'hidden';
-        lightbox.querySelector('[data-lightbox-close]')?.focus();
+        lightbox.querySelector('.dashboard-lightbox__close')?.focus();
     }
 
     function closeMediaLightbox() {
@@ -1996,6 +2316,13 @@ $authUserId = auth()->id();
         lightbox.classList.remove('open');
         lightbox.setAttribute('aria-hidden', 'true');
         lightboxImage.src = '';
+        if (lightboxDownload) {
+            lightboxDownload.removeAttribute('href');
+        }
+        if (lightboxSource) {
+            lightboxSource.removeAttribute('href');
+            lightboxSource.style.display = 'none';
+        }
         document.body.style.overflow = previousOverflow;
 
         if (previousFocus instanceof HTMLElement) {
@@ -2041,6 +2368,11 @@ $authUserId = auth()->id();
         }
 
         updateBulkMediaDeleteButtonState();
+    });
+
+    lightboxCopy?.addEventListener('click', () => {
+        closeMediaLightbox();
+        showCopyUrlModal(lightboxCopyUrls.original, lightboxCopyUrls.webp, lightboxCopyUrls.thumbnail);
     });
 
     lightbox?.addEventListener('click', (event) => {

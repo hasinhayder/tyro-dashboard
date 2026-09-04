@@ -2,6 +2,12 @@
 
 All notable changes to Tyro Dashboard are documented in this file.
 
+## [v1.51.4](https://github.com/hasinhayder/tyro-dashboard/releases/tag/v1.51.4) - 2026-09-04
+- Media Library modal design upgrade: polished preview lightbox with subtle dot-matrix background canvas, floating image drop shadow, thumbnail icon, new "Open original" button, cleaner typography, keyboard hints, and an enhanced multi-format URL picker with cards for Original, WebP, and Thumbnail formats
+
+## [v1.51.3](https://github.com/hasinhayder/tyro-dashboard/releases/tag/v1.51.3) - 2026-09-04
+- Media Library preview polish: clicking an image now opens it inside a themed card container with a filename header, muted image stage, and an Esc/outside-click footer hint instead of a bare floating image on the dark overlay
+
 ## [v1.51.2](https://github.com/hasinhayder/tyro-dashboard/releases/tag/v1.51.2) - 2026-09-04
 - Media Library bulk-select checkbox alignment fix: the grid checkbox wrapper now matches the action button size with centered alignment so it no longer sits smaller/off-positioned next to the action icons
 
