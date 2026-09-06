@@ -4,6 +4,7 @@ use HasinHayder\TyroDashboard\Http\Controllers\AuditController;
 use HasinHayder\TyroDashboard\Http\Controllers\CheckpointController;
 use HasinHayder\TyroDashboard\Http\Controllers\ComponentsController;
 use HasinHayder\TyroDashboard\Http\Controllers\DashboardController;
+use HasinHayder\TyroDashboard\Http\Controllers\EmailerController;
 use HasinHayder\TyroDashboard\Http\Controllers\HealthController;
 use HasinHayder\TyroDashboard\Http\Controllers\HeartbeatController;
 use HasinHayder\TyroDashboard\Http\Controllers\InvitationController;
@@ -189,6 +190,15 @@ Route::middleware('tyro-dashboard.admin')->group(function () {
             Route::put('/presets/{id}', [SmtpController::class, 'updatePreset'])->name('presets.update');
             Route::delete('/presets/{id}', [SmtpController::class, 'destroyPreset'])->name('presets.destroy');
             Route::post('/presets/{id}/apply', [SmtpController::class, 'applyPreset'])->name('presets.apply');
+        });
+    }
+
+    // Emailer (Admin) - send queued emails with design presets
+    if (config('tyro-dashboard.features.emailer', true)) {
+        Route::prefix('emailer')->name('emailer.')->group(function () {
+            Route::get('/', [EmailerController::class, 'index'])->name('index');
+            Route::post('/send', [EmailerController::class, 'send'])->name('send');
+            Route::post('/preview', [EmailerController::class, 'preview'])->name('preview');
         });
     }
 

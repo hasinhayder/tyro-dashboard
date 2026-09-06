@@ -19,7 +19,7 @@ class VersionCommand extends Command {
      * Execute the console command.
      */
     public function handle(): int {
-        $version = '1.51.3'; // fixed(media): improved media preview modal layout and styling
+        $version = '1.52.0'; // feat(emailer): email composer with preset templates, live preview, queue dispatcher, and feature toggle
 
         $this->info('');
         $this->info('  ╔════════════════════════════════════════╗');
@@ -70,6 +70,7 @@ class VersionCommand extends Command {
 }
 
 // Changelog
+// 1.52.0 - feat(emailer): email composer with preset templates, live preview, queue dispatcher, and feature toggle
 // 1.51.3 - fixed(media): improved media preview modal layout and styling
 // 1.51.2 - fix(media): media grid bulk-select checkbox now matches the action button size (1.7rem) with centered alignment so it no longer sits off-positioned next to the icons
 // 1.51.1 - fix(smtp): SMTP Settings encryption dropdown now writes the Symfony DSN schemes smtp (TLS label) and smtps (SSL label) to MAIL_SCHEME instead of tls/ssl, which Symfony's EsmtpTransportFactory rejects — fixes Hostinger "SMTP/SMTP-S" (and similar providers) reporting TLS or SSL is not supported; form and preset validation updated to smtp/smtps

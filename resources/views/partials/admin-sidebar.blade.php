@@ -157,6 +157,15 @@
             </a>
             @endif
 
+            @if(config('tyro-dashboard.features.emailer', true))
+            <a href="{{ route($dashboardRoute::name('emailer.index')) }}" class="sidebar-link {{ request()->routeIs($dashboardRoute::pattern('emailer.*')) ? 'active' : '' }}">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5" />
+                </svg>
+                Emailer
+            </a>
+            @endif
+
             @if(config('tyro-dashboard.features.checkpoints', true) && class_exists(\HasinHayder\TyroCheckpoint\TyroCheckpointServiceProvider::class))
             <a href="{{ route($dashboardRoute::name('checkpoints.index')) }}" class="sidebar-link {{ request()->routeIs($dashboardRoute::pattern('checkpoints.*')) ? 'active' : '' }}">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">

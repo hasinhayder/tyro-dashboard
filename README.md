@@ -32,6 +32,7 @@ What would take 40-60 hours of development now takes minutes of configuration.
 - **Invitation system**: referral links with automatic signup tracking
 - **Profile photos**: custom uploads or Gravatar
 - **Media library**: full media management, uploads, WebP conversion, thumbnails, stock photo search, and a reusable media picker
+- **Emailer**: rich-text mail composer with switchable preset templates (Modern, Corporate, Newsletter, Plain), live preview, and background queue dispatching
 - **System health**: read-only runtime diagnostics — PHP memory, OPcache, disk, database, cache, and queue status
 - **Beautiful UI**: modern, responsive, shadcn components, dark/light themes
 - **Security first**: middleware checks, per-resource access, protected resources
@@ -184,6 +185,7 @@ Key options in `config/tyro-dashboard.php`:
 | `TYRO_DASHBOARD_PREFIX` | `dashboard` | URL prefix for the dashboard |
 | `TYRO_DASHBOARD_USER_MODEL` | `App\Models\User` | User model the dashboard operates on |
 | `TYRO_DASHBOARD_ENABLE_INVITATION` | `true` | Enable the invitation/referral system |
+| `TYRO_DASHBOARD_ENABLE_EMAILER` | `true` | Enable emailer feature (composer and queue dispatcher) |
 | `TYRO_DASHBOARD_ENABLE_AUDIT_LOGS` | `true` | Enable audit logging |
 | `TYRO_DASHBOARD_ENABLE_SYSTEM_SETTINGS` | `true` | Enable system settings page |
 | `TYRO_DASHBOARD_ENABLE_CHECKPOINTS` | `true` | Enable checkpoint feature |
@@ -322,6 +324,26 @@ php artisan storage:link
 | `TYRO_DASHBOARD_PIXABAY_KEY` | `null` | Pixabay API key for stock photo search |
 | `TYRO_DASHBOARD_FREEPIK_KEY` | `null` | Freepik API key for stock photo search |
 | `TYRO_DASHBOARD_PEXELS_KEY` | `null` | Pexels API key for stock photo search |
+
+## Emailer
+
+Tyro Dashboard comes with a built-in admin email composer at `/dashboard/emailer` designed for sending professional emails, announcements, and newsletters directly from the dashboard.
+
+### What you get
+
+- **Switchable preset designs**: Choose from curated templates — Modern, Corporate, Newsletter, and Plain — with your choice remembered across sessions.
+- **Rich-text composer**: Powered by Quill for formatting headings, bold/italic, lists, quotes, links, and code.
+- **Live modal preview**: Preview your email with recipient details and selected template styling before dispatching.
+- **Background queue delivery**: Automatically dispatches sending via `SendQueuedEmailJob` to the host application's queue worker (`ShouldQueue`) without blocking the dashboard UI.
+- **Direct SMTP settings access**: Quick navigation to configure your mail driver directly from the header.
+- **Feature toggling**: Easily disable the feature with `TYRO_DASHBOARD_ENABLE_EMAILER=false` (hides sidebar item and returns 404 on the route).
+
+### Configuration
+
+```env
+# Disable or enable Emailer
+TYRO_DASHBOARD_ENABLE_EMAILER=true
+```
 
 ## Use Cases
 
