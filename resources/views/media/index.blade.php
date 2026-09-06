@@ -85,10 +85,7 @@
         gap: 1rem;
     }
     @media (min-width: 1280px) {
-        .media-grid { grid-template-columns: repeat(5, 1fr); }
-    }
-    @media (min-width: 1600px) {
-        .media-grid { grid-template-columns: repeat(6, 1fr); }
+        .media-grid { grid-template-columns: repeat(var(--tyro-media-gallery-columns), minmax(0, 1fr)); }
     }
     .media-card {
         border: 1px solid var(--border);
@@ -320,6 +317,9 @@
         justify-content: flex-end;
         padding-top: 0.35rem;
         border-top: 1px solid color-mix(in srgb, var(--border) 60%, transparent);
+    }
+    .media-card-actions .media-view-new-tab {
+        display: none !important;
     }
     .media-card-actions .btn {
         font-size: 0.7rem;
@@ -1164,6 +1164,9 @@
 
 @section('content')
 <div class="media-library-shell">
+@php
+    $mediaGalleryColumns = max(1, min(12, (int) config('tyro-dashboard.media.gallery_columns', 6)));
+@endphp
 <script type="application/json" id="dashboardMediaConfig">
     @php
         $dashboardMediaConfig = [
@@ -1333,7 +1336,7 @@ $authUserId = auth()->id();
 <!-- Media Results -->
 @if($media->count())
 @if($mediaView === 'grid')
-<div class="media-grid" id="mediaGrid">
+<div class="media-grid" id="mediaGrid" style="--tyro-media-gallery-columns: {{ $mediaGalleryColumns }};">
     @foreach($media as $file)
     <div class="media-card" id="media-{{ $file->id }}" data-media-entry>
         <div class="media-card-figure" @if($file->is_image) data-lightbox-trigger data-image-src="{{ Storage::url($file->url) }}" data-image-alt="{{ $file->alt_text ?: $file->filename }}" data-image-name="{{ $file->filename }}" data-image-meta="{{ $file->formatted_size }} · {{ strtoupper(pathinfo($file->filename, PATHINFO_EXTENSION)) }}" data-copy-original="{{ url(Storage::url($file->url)) }}" data-copy-webp="{{ $file->webp_url ? url(Storage::url($file->webp_url)) : '' }}" data-copy-thumb="{{ url(Storage::url($file->thumbnail_url)) }}" data-source-url="{{ $file->source_url ?? '' }}" role="button" tabindex="0" aria-label="Preview {{ $file->alt_text ?: $file->filename }}" title="Preview image" @endif>
@@ -1405,7 +1408,7 @@ $authUserId = auth()->id();
                     </label>
                 @endif
                 <a href="{{ Storage::url($file->url) }}" target="_blank" rel="noopener noreferrer"
-                        class="btn btn-secondary"
+                        class="btn btn-secondary media-view-new-tab"
                         title="View in new tab">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 6H5.25A2.25 2.25 0 0 0 3 8.25v10.5A2.25 2.25 0 0 0 5.25 21h10.5A2.25 2.25 0 0 0 18 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25"/>
@@ -1416,7 +1419,7 @@ $authUserId = auth()->id();
                         class="btn btn-secondary"
                         title="Open source page">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 10.5H18a4.5 4.5 0 1 1 0 9h-4.5m-3-15H6a4.5 4.5 0 1 0 0 9h4.5m-3 0h9"/>
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 6H5.25A2.25 2.25 0 0 0 3 8.25v10.5A2.25 2.25 0 0 0 5.25 21h10.5A2.25 2.25 0 0 0 18 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25"/>
                     </svg>
                 </a>
                 @endif
@@ -1559,7 +1562,7 @@ $authUserId = auth()->id();
                         </button>
                         @endif
                         <a href="{{ Storage::url($file->url) }}" target="_blank" rel="noopener noreferrer"
-                            class="btn btn-secondary"
+                            class="btn btn-secondary media-view-new-tab"
                             title="View in new tab">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 6H5.25A2.25 2.25 0 0 0 3 8.25v10.5A2.25 2.25 0 0 0 5.25 21h10.5A2.25 2.25 0 0 0 18 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25"/>
@@ -1570,7 +1573,7 @@ $authUserId = auth()->id();
                             class="btn btn-secondary"
                             title="Open source page">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 10.5H18a4.5 4.5 0 1 1 0 9h-4.5m-3-15H6a4.5 4.5 0 1 0 0 9h4.5m-3 0h9"/>
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 6H5.25A2.25 2.25 0 0 0 3 8.25v10.5A2.25 2.25 0 0 0 5.25 21h10.5A2.25 2.25 0 0 0 18 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25"/>
                             </svg>
                         </a>
                         @endif

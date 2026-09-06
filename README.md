@@ -228,6 +228,7 @@ Key options in `config/tyro-dashboard.php`:
 | `TYRO_DASHBOARD_TOAST_POSITION` | `bottom-right` | Toast position: `top-right` or `bottom-right` |
 | `TYRO_DASHBOARD_DISABLE_EXAMPLES` | `false` | Disable example resources/pages |
 | `TYRO_DASHBOARD_MEDIA_MAX_SIZE` | `10240` | Media library max upload size (KB) |
+| `TYRO_DASHBOARD_MEDIA_GALLERY_COLUMNS` | `6` | Number of images per row in the desktop media gallery (1-12) |
 | `TYRO_DASHBOARD_FREEPIK_KEY` | `null` | FreePik API key for media library |
 | `TYRO_DASHBOARD_PEXELS_KEY` | `null` | Pexels API key for media library |
 | `TYRO_DASHBOARD_UNSPLASH_ACCESS_KEY` | `null` | Unsplash API key for media library |
@@ -319,6 +320,7 @@ php artisan storage:link
 | `TYRO_DASHBOARD_UPLOAD_DISK` | `public` | Storage disk for uploads |
 | `TYRO_DASHBOARD_UPLOAD_DIRECTORY` | `uploads` | Storage directory for uploads |
 | `TYRO_DASHBOARD_MEDIA_MAX_SIZE` | `10240` | Max upload size (KB) |
+| `TYRO_DASHBOARD_MEDIA_GALLERY_COLUMNS` | `6` | Number of images per row in the desktop media gallery (1-12) |
 | `TYRO_DASHBOARD_AUTO_DELETE_UPLOADS` | `true` | Delete files when a resource is deleted |
 | `TYRO_DASHBOARD_UNSPLASH_ACCESS_KEY` | `null` | Unsplash API key for stock photo search |
 | `TYRO_DASHBOARD_PIXABAY_KEY` | `null` | Pixabay API key for stock photo search |

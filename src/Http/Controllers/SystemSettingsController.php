@@ -212,6 +212,7 @@ class SystemSettingsController extends BaseController {
             'TYRO_DASHBOARD_UNSPLASH_ACCESS_KEY' => 'nullable|string|max:255',
             'TYRO_DASHBOARD_PIXABAY_KEY' => 'nullable|string|max:255',
             'TYRO_DASHBOARD_MEDIA_MAX_SIZE' => 'nullable|integer|min:1|max:1048576',
+            'TYRO_DASHBOARD_MEDIA_GALLERY_COLUMNS' => 'nullable|integer|min:1|max:12',
 
             'TYRO_LOGIN_PASSKEYS_ENABLED' => 'nullable|boolean',
             'TYRO_LOGIN_PASSKEYS_DIVIDER' => 'nullable|string|max:255',
@@ -560,6 +561,7 @@ class SystemSettingsController extends BaseController {
             'TYRO_DASHBOARD_UNSPLASH_ACCESS_KEY' => config('tyro-dashboard.media.api_keys.unsplash'),
             'TYRO_DASHBOARD_PIXABAY_KEY' => config('tyro-dashboard.media.api_keys.pixabay'),
             'TYRO_DASHBOARD_MEDIA_MAX_SIZE' => config('tyro-dashboard.media.max_size'),
+            'TYRO_DASHBOARD_MEDIA_GALLERY_COLUMNS' => config('tyro-dashboard.media.gallery_columns'),
 
             'TYRO_LOGIN_PASSKEYS_ENABLED' => config('tyro-login.passkeys.enabled', false),
             'TYRO_LOGIN_PASSKEYS_DIVIDER' => config('tyro-login.passkeys.divider_text'),
@@ -776,6 +778,7 @@ class SystemSettingsController extends BaseController {
             'TYRO_DASHBOARD_UNSPLASH_ACCESS_KEY' => null,
             'TYRO_DASHBOARD_PIXABAY_KEY' => null,
             'TYRO_DASHBOARD_MEDIA_MAX_SIZE' => 10240,
+            'TYRO_DASHBOARD_MEDIA_GALLERY_COLUMNS' => 6,
 
             'TYRO_LOGIN_PASSKEYS_ENABLED' => false,
             'TYRO_LOGIN_PASSKEYS_DIVIDER' => 'or continue with email',

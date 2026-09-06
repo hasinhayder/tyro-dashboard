@@ -307,6 +307,7 @@ return [
     */
     'media' => [
         'max_size' => env('TYRO_DASHBOARD_MEDIA_MAX_SIZE', 10240),
+        'gallery_columns' => (int) env('TYRO_DASHBOARD_MEDIA_GALLERY_COLUMNS', 6),
         'api_keys' => [
             'freepik' => env('TYRO_DASHBOARD_FREEPIK_KEY'),
             'pexels' => env('TYRO_DASHBOARD_PEXELS_KEY'),
