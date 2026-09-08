@@ -46,6 +46,19 @@
                         <td>{{ $cp['size_for_humans'] }}</td>
                         <td>
                             <div class="cp-actions action-buttons">
+                                @if($cp['exists_on_disk'])
+                                    <a href="{{ route($dashboardRoute::name('checkpoints.download'), ['identifier' => $identifier, 'v' => $cp['size']]) }}" class="action-btn" title="Download" aria-label="Download {{ $name }}">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v12m0 0l-4-4m4 4l4-4M5 21h14"/>
+                                        </svg>
+                                    </a>
+                                @else
+                                    <button type="button" class="action-btn" title="Snapshot file is missing" aria-label="Snapshot file is missing" disabled style="opacity: 0.3; cursor: not-allowed;">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v12m0 0l-4-4m4 4l4-4M5 21h14"/>
+                                        </svg>
+                                    </button>
+                                @endif
                                 <button type="button" class="action-btn @if($cp['encrypted']) action-btn-success @endif" title="{{ $cp['encrypted'] ? 'Encrypted' : 'Encrypt in place' }}" data-cp-action="{{ $cp['encrypted'] ? '' : 'encrypt' }}" data-cp-id="{{ $identifier }}" data-cp-name="{{ $name }}" @if($cp['encrypted']) disabled @endif>
                                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                         <path stroke-linecap="round" stroke-linejoin="round" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"/>

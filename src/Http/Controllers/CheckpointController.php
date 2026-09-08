@@ -26,6 +26,37 @@ class CheckpointController extends BaseController {
     }
 
     /**
+     * Download a checkpoint snapshot.
+     */
+    public function download(string $identifier, Checkpoint $checkpoint) {
+        $this->guardUnavailable($checkpoint);
+
+        $target = $checkpoint->find($identifier);
+        $path = $target['path'] ?? null;
+
+        if (! $target || ! is_string($path) || ! is_file($path)) {
+            abort(404);
+        }
+
+        $storagePath = realpath(dirname($checkpoint->metadataPath()));
+        $realPath = realpath($path);
+
+        if ($storagePath === false || $realPath === false || ! str_starts_with(
+            $realPath,
+            rtrim($storagePath, DIRECTORY_SEPARATOR).DIRECTORY_SEPARATOR
+        )) {
+            abort(404);
+        }
+
+        return response()->download($realPath, basename($realPath), [
+            'Content-Type' => 'application/octet-stream',
+            'Cache-Control' => 'no-store, no-cache, must-revalidate, max-age=0',
+            'Pragma' => 'no-cache',
+            'Expires' => '0',
+        ]);
+    }
+
+    /**
      * Create a new checkpoint.
      */
     public function create(Request $request, Checkpoint $checkpoint): JsonResponse {

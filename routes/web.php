@@ -207,6 +207,7 @@ Route::middleware('tyro-dashboard.admin')->group(function () {
         Route::prefix('checkpoints')->name('checkpoints.')->group(function () {
             Route::get('/', [CheckpointController::class, 'index'])->name('index');
             Route::post('/', [CheckpointController::class, 'create'])->name('create');
+            Route::get('/download/{identifier}', [CheckpointController::class, 'download'])->name('download');
             Route::post('/restore', [CheckpointController::class, 'restore'])->name('restore');
             Route::post('/delete', [CheckpointController::class, 'delete'])->name('delete');
             Route::post('/flush', [CheckpointController::class, 'flush'])->name('flush');
