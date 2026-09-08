@@ -93,22 +93,12 @@
     .cp-create-foot {
         display: flex;
         align-items: center;
-        justify-content: space-between;
+        justify-content: flex-end;
         gap: 1rem;
         flex-wrap: wrap;
         padding-top: 1rem;
         border-top: 1px solid var(--border);
     }
-    .cp-toggle {
-        display: inline-flex;
-        align-items: center;
-        gap: 0.5rem;
-        font-size: 0.875rem;
-        color: var(--foreground);
-        cursor: pointer;
-        user-select: none;
-    }
-    .cp-toggle svg { width: 18px; height: 18px; color: var(--muted-foreground); }
     @media (max-width: 640px) {
         .cp-create-fields { grid-template-columns: 1fr; }
     }
@@ -258,13 +248,6 @@
                     </div>
                 </div>
                 <div class="cp-create-foot">
-                    <label class="cp-toggle" for="cpEncrypt">
-                        <input type="checkbox" id="cpEncrypt" name="encrypt" value="1" class="checkbox-input">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
-                        </svg>
-                        Encrypt this checkpoint
-                    </label>
                     <button type="submit" class="btn btn-primary" id="cpCreateBtn">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/>
@@ -432,8 +415,7 @@
             if (isBusy(btn)) return;
             handle(post(routes.create, {
                 name: document.getElementById('cpName').value,
-                note: document.getElementById('cpNote').value,
-                encrypt: document.getElementById('cpEncrypt').checked ? '1' : '0'
+                note: document.getElementById('cpNote').value
             }), 'Checkpoint created.', btn);
             createForm.reset();
         });
