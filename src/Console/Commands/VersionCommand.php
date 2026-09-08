@@ -19,7 +19,7 @@ class VersionCommand extends Command {
      * Execute the console command.
      */
     public function handle(): int {
-        $version = '1.53.0'; // feat(media): configurable gallery columns, hidden grid new-tab action, and updated source-page icon
+        $version = '1.54.0'; // feat(checkpoints): import external snapshots through the admin upload UI with driver selection and encrypted-file detection
 
         $this->info('');
         $this->info('  ╔════════════════════════════════════════╗');
@@ -70,6 +70,7 @@ class VersionCommand extends Command {
 }
 
 // Changelog
+// 1.54.0 - feat(checkpoints): download checkpoints, import external .sqlite, .sql, and .enc snapshots from the admin UI with optional checkpoint name/note/driver, preserved .enc detection, service error feedback, and automatic list/stat refresh
 // 1.53.0 - feat(media): configurable desktop gallery columns via TYRO_DASHBOARD_MEDIA_GALLERY_COLUMNS (default 6, configurable from 1 to 12), hidden the per-item "View in new tab" action while preserving its code, replaced the Open Source icon with the external-link icon, and documented the new setting in README.md
 // 1.52.0 - feat(emailer): email composer with preset templates, live preview, queue dispatcher, and feature toggle
 // 1.51.3 - fixed(media): improved media preview modal layout and styling

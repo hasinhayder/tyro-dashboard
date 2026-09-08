@@ -83,6 +83,55 @@ class CheckpointController extends BaseController {
     }
 
     /**
+     * Import a checkpoint snapshot uploaded by the admin.
+     */
+    public function import(Request $request, Checkpoint $checkpoint): JsonResponse {
+        $this->requireAjax($request);
+        $this->guardUnavailable($checkpoint);
+
+        $data = $request->validate([
+            'file' => ['required', 'file'],
+            'name' => ['nullable', 'string', 'max:100'],
+            'note' => ['nullable', 'string', 'max:500'],
+            'driver' => ['nullable', 'string', 'in:sqlite,mysql,pgsql'],
+        ]);
+
+        $uploaded = $request->file('file');
+        $suffix = $uploaded->getClientOriginalExtension();
+        $suffix = $suffix !== '' ? '.'.$suffix : '';
+        $tmp = sys_get_temp_dir().'/tyro-import-'.uniqid('', true).$suffix;
+
+        try {
+            try {
+                $uploaded->move(dirname($tmp), basename($tmp));
+            } catch (\Throwable $e) {
+                return $this->error('Could not store the uploaded snapshot file.', 422);
+            }
+
+            if (! is_file($tmp)) {
+                return $this->error('Could not store the uploaded snapshot file.', 422);
+            }
+
+            $error = null;
+            $exit = $checkpoint->import(
+                $tmp,
+                $data['name'] ?? null,
+                $data['note'] ?? null,
+                $data['driver'] ?? null,
+                $error,
+            );
+
+            if ($exit !== 0) {
+                return $this->error($error ?: 'Could not import the snapshot file.', 422);
+            }
+
+            return $this->listResponse('Checkpoint imported successfully.');
+        } finally {
+            @unlink($tmp);
+        }
+    }
+
+    /**
      * Restore a checkpoint.
      */
     public function restore(Request $request, Checkpoint $checkpoint): JsonResponse {

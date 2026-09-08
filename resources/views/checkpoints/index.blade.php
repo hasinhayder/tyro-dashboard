@@ -131,6 +131,12 @@
     .cp-actions .action-btn.action-btn-danger svg,
     .cp-actions .action-btn.action-btn-primary svg,
     .cp-actions .action-btn.action-btn-success svg { stroke: currentColor !important; }
+    .cp-header-actions {
+        display: flex;
+        align-items: center;
+        gap: .5rem;
+        flex-wrap: wrap;
+    }
 </style>
 @endpush
 
@@ -141,14 +147,24 @@
             <h1 class="page-title">Checkpoints</h1>
             <p class="page-description">Snapshot your database and restore it instantly. Powered by Tyro Checkpoint.</p>
         </div>
-        <div id="cpFlushWrap" style="display: none;">
-            <button type="button" class="btn btn-destructive" id="cpFlushBtn" data-cp-action="flush">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M3 6h18M8 6V4a1 1 0 011-1h6a1 1 0 011 1v2m1 0v14a2 2 0 01-2 2H9a2 2 0 01-2-2V6h10z"/>
-                </svg>
-                Flush Unlocked
-            </button>
-        </div>
+        @if($available)
+            <div class="cp-header-actions">
+                <button type="button" class="btn btn-outline" data-cp-action="open-import">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 16V4m0 0L8 8m4-4 4 4M5 14v4a2 2 0 002 2h10a2 2 0 002-2v-4"/>
+                    </svg>
+                    Import
+                </button>
+                <div id="cpFlushWrap" style="display: none;">
+                    <button type="button" class="btn btn-destructive" id="cpFlushBtn" data-cp-action="flush">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M3 6h18M8 6V4a1 1 0 011-1h6a1 1 0 011 1v2m1 0v14a2 2 0 01-2 2H9a2 2 0 01-2-2V6h10z"/>
+                        </svg>
+                        Flush Unlocked
+                    </button>
+                </div>
+            </div>
+        @endif
     </div>
 </div>
 
@@ -263,6 +279,49 @@
     <div id="cpListContainer">
         @include('tyro-dashboard::checkpoints._list', ['checkpoints' => $checkpoints])
     </div>
+
+    <div id="cpImportModal" class="modal-overlay">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title">Import Checkpoint</h3>
+                <button type="button" class="modal-close" onclick="closeModal('cpImportModal')" aria-label="Close">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+                </button>
+            </div>
+            <form id="cpImportForm">
+                @csrf
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label class="form-label" for="cpImportFile">Snapshot file</label>
+                        <input type="file" id="cpImportFile" name="file" class="form-input" accept=".sqlite,.sql,.enc" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="cpImportName">Name</label>
+                        <input type="text" id="cpImportName" name="name" class="form-input" maxlength="100" placeholder="optional, e.g. imported_2026_09_08_120000">
+                        <small class="form-help">Letters, numbers, underscores, and hyphens only. Empty names use an automatic timestamp.</small>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="cpImportNote">Note</label>
+                        <input type="text" id="cpImportNote" name="note" class="form-input" maxlength="500" placeholder="optional description">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="cpImportDriver">Driver</label>
+                        <select id="cpImportDriver" name="driver" class="form-input">
+                            <option value="">Auto (active connection)</option>
+                            <option value="sqlite">sqlite</option>
+                            <option value="mysql">mysql</option>
+                            <option value="pgsql">pgsql</option>
+                        </select>
+                    </div>
+                    <p class="form-help">Imported checkpoints are always flagged. A <code>.enc</code> file is recorded as encrypted. The original file is copied, not moved.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline" onclick="closeModal('cpImportModal')">Cancel</button>
+                    <button type="submit" class="btn btn-primary" id="cpImportSubmitBtn">Import</button>
+                </div>
+            </form>
+        </div>
+    </div>
 @endif
 @endsection
 
@@ -282,7 +341,8 @@
         toggleLock: '{{ route($dashboardRoute::name("checkpoints.toggle-lock")) }}',
         toggleFlag: '{{ route($dashboardRoute::name("checkpoints.toggle-flag")) }}',
         encrypt: '{{ route($dashboardRoute::name("checkpoints.encrypt")) }}',
-        generateKey: '{{ route($dashboardRoute::name("checkpoints.generate-key")) }}'
+        generateKey: '{{ route($dashboardRoute::name("checkpoints.generate-key")) }}',
+        import: '{{ route($dashboardRoute::name("checkpoints.import")) }}'
     };
 
     function formatBytes(b) {
@@ -439,8 +499,50 @@
                 // handle() helper above will prompt the user to confirm and retry.
                 handle(post(routes.generateKey, {}), null, btn);
                 break;
+            case 'open-import':
+                openModal('cpImportModal');
+                break;
         }
     });
+
+    var importForm = document.getElementById('cpImportForm');
+    if (importForm) {
+        importForm.addEventListener('submit', function (e) {
+            e.preventDefault();
+            var btn = document.getElementById('cpImportSubmitBtn');
+            var file = document.getElementById('cpImportFile').files[0];
+            if (isBusy(btn) || !file) return;
+
+            setBusy(btn, true);
+            var fd = new FormData();
+            fd.append('_token', csrf);
+            fd.append('file', file);
+            fd.append('name', document.getElementById('cpImportName').value);
+            fd.append('note', document.getElementById('cpImportNote').value);
+            fd.append('driver', document.getElementById('cpImportDriver').value);
+
+            fetch(routes.import, {
+                method: 'POST',
+                headers: { 'X-Requested-With': 'XMLHttpRequest', 'Accept': 'application/json' },
+                body: fd
+            }).then(function (r) {
+                return r.json().then(function (d) {
+                    if (r.ok && d.success) {
+                        applyResponse(d);
+                        closeModal('cpImportModal');
+                        importForm.reset();
+                        showToast(d.message, 'success');
+                    } else {
+                        showToast(d.message || 'Import failed.', 'error');
+                    }
+                });
+            }).catch(function () {
+                showToast('Network error. Please try again.', 'error');
+            }).finally(function () {
+                setBusy(btn, false);
+            });
+        });
+    }
 
     var flushWrap = document.getElementById('cpFlushWrap');
     if (flushWrap) flushWrap.style.display = ({{ (int) count($checkpoints) }} > 0 ? '' : 'none');
