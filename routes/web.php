@@ -101,6 +101,7 @@ Route::prefix('media')->name('media.')->group(function () {
     Route::delete('/bulk-delete', [MediaController::class, 'bulkDestroy'])->name('bulk-destroy');
     Route::patch('/{media}/alt', [MediaController::class, 'updateAlt'])->name('alt');
     Route::patch('/{media}/rename', [MediaController::class, 'rename'])->name('rename');
+    Route::patch('/{media}/toggle-favorite', [MediaController::class, 'toggleFavorite'])->name('toggle-favorite');
     Route::post('/{media}/crop-resize', [MediaController::class, 'cropResize'])->name('crop-resize');
     Route::delete('/{media}', [MediaController::class, 'destroy'])->name('destroy')->where('media', '[0-9]+');
 });

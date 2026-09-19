@@ -341,6 +341,29 @@
         height: 13px;
         flex-shrink: 0;
     }
+    .media-card-actions .media-fav-btn {
+        color: var(--muted-foreground);
+    }
+    .media-card-actions .media-fav-btn svg {
+        width: 15px;
+        height: 15px;
+        fill: none;
+        stroke: currentColor;
+        transition: fill 0.15s ease, stroke 0.15s ease, transform 0.15s ease;
+    }
+    .media-card-actions .media-fav-btn:hover {
+        color: #f59e0b;
+    }
+    .media-card-actions .media-fav-btn:hover svg {
+        stroke: #f59e0b;
+    }
+    .media-card-actions .media-fav-btn.is-favorite {
+        color: #f59e0b;
+    }
+    .media-card-actions .media-fav-btn.is-favorite svg {
+        fill: #f59e0b;
+        stroke: #f59e0b;
+    }
     .media-card-alt {
         display: grid;
         gap: 0.25rem;
@@ -1214,6 +1237,16 @@
     </div>
 </div>
 
+@php
+if (!function_exists('formatBytes')) {
+    function formatBytes(int $bytes): string {
+        if ($bytes < 1024) return $bytes . ' B';
+        if ($bytes < 1048576) return round($bytes / 1024, 1) . ' KB';
+        return round($bytes / 1048576, 1) . ' MB';
+    }
+}
+@endphp
+
 <!-- Stats -->
 <div class="card" style="margin-bottom: 1rem;">
     <div class="card-body">
@@ -1225,11 +1258,6 @@
 </div>
 
 @php
-function formatBytes(int $bytes): string {
-    if ($bytes < 1024) return $bytes . ' B';
-    if ($bytes < 1048576) return round($bytes / 1024, 1) . ' KB';
-    return round($bytes / 1048576, 1) . ' MB';
-}
 $adminRoles = config('tyro-dashboard.admin_roles', ['admin', 'super-admin']);
 $canDeleteMedia = !session()->has('impersonator_id') && !empty(array_intersect(array_merge($adminRoles, ['editor']), auth()->user()?->tyroRoleSlugs() ?? []));
 $authUserId = auth()->id();
@@ -1285,8 +1313,15 @@ $authUserId = auth()->id();
                             @endforeach
                         </select>
                     </div>
+                    <div class="filter-group">
+                        <label class="filter-label">Favorite:</label>
+                        <select name="favorite" class="form-select" style="min-width:140px;">
+                            <option value="">All Media</option>
+                            <option value="1" {{ request('favorite') === '1' ? 'selected' : '' }}>Favorites Only</option>
+                        </select>
+                    </div>
                     <button type="submit" class="btn btn-secondary">Filter</button>
-                    @if(request()->hasAny(['search', 'type', 'date']))
+                    @if(request()->hasAny(['search', 'type', 'date', 'favorite']))
                         <a href="{{ route($dashboardRoute::name('media'), ['view' => $mediaView]) }}" class="btn btn-primary">Clear</a>
                     @endif
                 </div>
@@ -1296,6 +1331,7 @@ $authUserId = auth()->id();
                     @if(request('search')) <input type="hidden" name="search" value="{{ request('search') }}"> @endif
                     @if(request('type')) <input type="hidden" name="type" value="{{ request('type') }}"> @endif
                     @if(request('date')) <input type="hidden" name="date" value="{{ request('date') }}"> @endif
+                    @if(request('favorite')) <input type="hidden" name="favorite" value="{{ request('favorite') }}"> @endif
                     <input type="hidden" name="view" value="{{ $mediaView }}">
                     <select name="per_page" class="form-select" style="min-width:70px; padding-top:0.6rem; padding-bottom:0.6rem; font-size:0.8rem;" onchange="this.form.submit()">
                         <option value="12" {{ $mediaPerPage == 12 ? 'selected' : '' }}>12</option>
@@ -1442,6 +1478,16 @@ $authUserId = auth()->id();
                     </svg>
                 </button>
                 @if($file->is_image)
+                <button type="button"
+                        class="btn btn-secondary media-fav-btn {{ $file->is_favorite ? 'is-favorite' : '' }}"
+                        data-media-fav-btn="{{ $file->id }}"
+                        onclick="toggleFavorite({{ $file->id }}, this)"
+                        title="{{ $file->is_favorite ? 'Remove from favorites' : 'Mark as favorite' }}"
+                        aria-label="{{ $file->is_favorite ? 'Remove from favorites' : 'Mark as favorite' }}">
+                    <svg viewBox="0 0 24 24" fill="{{ $file->is_favorite ? 'currentColor' : 'none' }}" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+                    </svg>
+                </button>
                 <button type="button" class="btn btn-secondary cr-edit-btn"
                         data-media-id="{{ $file->id }}"
                         data-url="{{ e(Storage::url($file->url)) }}"
@@ -1596,6 +1642,16 @@ $authUserId = auth()->id();
                             </svg>
                         </button>
                         @if($file->is_image)
+                        <button type="button"
+                            class="btn btn-secondary media-fav-btn {{ $file->is_favorite ? 'is-favorite' : '' }}"
+                            data-media-fav-btn="{{ $file->id }}"
+                            onclick="toggleFavorite({{ $file->id }}, this)"
+                            title="{{ $file->is_favorite ? 'Remove from favorites' : 'Mark as favorite' }}"
+                            aria-label="{{ $file->is_favorite ? 'Remove from favorites' : 'Mark as favorite' }}">
+                            <svg viewBox="0 0 24 24" fill="{{ $file->is_favorite ? 'currentColor' : 'none' }}" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+                            </svg>
+                        </button>
                         <button type="button" class="btn btn-secondary cr-edit-btn"
                             data-media-id="{{ $file->id }}"
                             data-url="{{ e(Storage::url($file->url)) }}"
@@ -1963,6 +2019,7 @@ $authUserId = auth()->id();
     const DELETE_BASE = MEDIA_CONFIG.mediaUrl ? MEDIA_CONFIG.mediaUrl.replace(/\/+$/, '') + '/' : '/dashboard/media/';
     const RENAME_BASE  = '/dashboard/media/';
     const ALT_BASE    = '/dashboard/media/';
+    const TOGGLE_FAV_BASE = '/dashboard/media/';
 
     const toggleUploadForm = document.getElementById('toggleUploadForm');
     const uploadPanel = document.getElementById('uploadPanel');
@@ -2270,6 +2327,59 @@ $authUserId = auth()->id();
             }
         } catch {
             showAlert('Network error. Please try again.', 'Rename Failed', { variant: 'danger', confirmText: 'OK' });
+        }
+    }
+
+    // ── Favorite toggle ───────────────────────────────────────────────
+    async function toggleFavorite(id, btn) {
+        const buttons = document.querySelectorAll(`[data-media-fav-btn="${id}"]`);
+        const isFavBefore = btn.classList.contains('is-favorite');
+
+        // Optimistic UI update
+        buttons.forEach((b) => {
+            b.classList.toggle('is-favorite', !isFavBefore);
+            const newTitle = !isFavBefore ? 'Remove from favorites' : 'Mark as favorite';
+            b.title = newTitle;
+            b.setAttribute('aria-label', newTitle);
+        });
+
+        try {
+            const res = await fetch(TOGGLE_FAV_BASE + id + '/toggle-favorite', {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': CSRF,
+                    'Accept': 'application/json',
+                    'X-Requested-With': 'XMLHttpRequest',
+                },
+            });
+            const json = await res.json();
+            if (res.ok && json.success) {
+                buttons.forEach((b) => {
+                    b.classList.toggle('is-favorite', Boolean(json.is_favorite));
+                    const newTitle = json.is_favorite ? 'Remove from favorites' : 'Mark as favorite';
+                    b.title = newTitle;
+                    b.setAttribute('aria-label', newTitle);
+                });
+            } else {
+                // Revert on error
+                buttons.forEach((b) => {
+                    b.classList.toggle('is-favorite', isFavBefore);
+                    const origTitle = isFavBefore ? 'Remove from favorites' : 'Mark as favorite';
+                    b.title = origTitle;
+                    b.setAttribute('aria-label', origTitle);
+                });
+                showAlert(json.message || 'Could not update favorite status.', 'Favorite Update Failed', { variant: 'danger', confirmText: 'OK' });
+            }
+        } catch {
+            // Revert on network error
+            buttons.forEach((b) => {
+                b.classList.toggle('is-favorite', isFavBefore);
+                const origTitle = isFavBefore ? 'Remove from favorites' : 'Mark as favorite';
+                b.title = origTitle;
+                b.setAttribute('aria-label', origTitle);
+            });
+            showAlert('Network error. Please try again.', 'Favorite Update Failed', { variant: 'danger', confirmText: 'OK' });
         }
     }
 

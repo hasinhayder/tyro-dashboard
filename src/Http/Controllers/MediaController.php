@@ -91,6 +91,13 @@ class MediaController extends BaseController {
             $query->whereDate('created_at', $request->date);
         }
 
+        if ($request->filled('favorite')) {
+            $isFav = filter_var($request->favorite, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
+            if ($isFav !== null) {
+                $query->where('is_favorite', $isFav);
+            }
+        }
+
         $media = $query->paginate($mediaPerPage)->withQueryString();
 
         $statsQuery = Media::query();
@@ -168,6 +175,13 @@ class MediaController extends BaseController {
             $query->where('mime_type', 'like', $request->type.'/%');
         }
 
+        if ($request->filled('favorite')) {
+            $isFav = filter_var($request->favorite, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
+            if ($isFav !== null) {
+                $query->where('is_favorite', $isFav);
+            }
+        }
+
         if ($request->filled('search')) {
             $query->where('filename', 'like', '%'.$request->search.'%');
         }
@@ -187,6 +201,7 @@ class MediaController extends BaseController {
                 'original_size' => $m->formatted_size,
                 'webp_size' => $m->webp_path ? $this->formatStorageSize($m->disk, $m->webp_path) : null,
                 'alt_text' => $m->alt_text,
+                'is_favorite' => (bool) $m->is_favorite,
                 'source_url' => $m->source_url,
             ]),
             'next_page_url' => $media->nextPageUrl(),
@@ -298,6 +313,23 @@ class MediaController extends BaseController {
         $this->flushMediaCache();
 
         return response()->json(['success' => true]);
+    }
+
+    public function toggleFavorite(Media $media): JsonResponse {
+        $user = auth()->user();
+        if (! $this->canManageMedia($media, $user)) {
+            abort(403, 'You do not have permission to modify this media file.');
+        }
+
+        $media->is_favorite = ! (bool) $media->is_favorite;
+        $media->save();
+
+        $this->flushMediaCache();
+
+        return response()->json([
+            'success' => true,
+            'is_favorite' => (bool) $media->is_favorite,
+        ]);
     }
 
     public function cropResize(Request $request, Media $media): JsonResponse {
@@ -462,6 +494,10 @@ class MediaController extends BaseController {
         return redirect()
             ->route(DashboardRoute::name('media'), $request->except(['_token', '_method', 'selected_ids']))
             ->with('success', "Deleted {$deletedCount} media ".($deletedCount === 1 ? 'file' : 'files').'.');
+    }
+
+    private function canManageMedia(Media $media, $user): bool {
+        return $this->canDeleteAnyMedia($user) || $media->user_id === $user?->id;
     }
 
     private function canDeleteMedia(Media $media, $user): bool {

@@ -19,8 +19,15 @@ class Media extends Model {
         'mime_type',
         'size',
         'alt_text',
+        'is_favorite',
         'source_url',
     ];
+
+    protected function casts(): array {
+        return [
+            'is_favorite' => 'boolean',
+        ];
+    }
 
     public function uploader(): BelongsTo {
         return $this->belongsTo(config('tyro-dashboard.user_model', 'App\Models\User'), 'user_id');

@@ -14,6 +14,12 @@ $storageBaseUrl = rtrim(\Illuminate\Support\Facades\Storage::disk('public')->url
             </div>
 
             <div class="tyro-media-modal-header-actions">
+                <button type="button" class="tyro-media-modal-fav-toggle" id="tyroDashboardMediaPickerFavToggle" aria-pressed="false" title="Filter favorites only" aria-label="Filter favorites only">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+                    </svg>
+                    <span>Favorites</span>
+                </button>
                 <button type="button" class="tyro-media-modal-close" data-tyro-media-picker-close aria-label="Close media picker">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
@@ -99,9 +105,12 @@ $storageBaseUrl = rtrim(\Illuminate\Support\Facades\Storage::disk('public')->url
         const outputWrap = document.getElementById('tyroDashboardMediaOutputWrap');
         const outputSelect = document.getElementById('tyroDashboardMediaOutputSelect');
 
+        const favToggle = document.getElementById('tyroDashboardMediaPickerFavToggle');
+
         let activeInput = null;
         let nextPageUrl = null;
         let searchTimer = null;
+        let onlyFavorites = false;
 
         function stateMarkup(title, text) {
             return `<div class="tyro-media-modal-state"><div><strong>${escapeHtml(title)}</strong><span>${escapeHtml(text)}</span></div></div>`;
@@ -214,9 +223,18 @@ $storageBaseUrl = rtrim(\Illuminate\Support\Facades\Storage::disk('public')->url
             }
         }
 
+        function syncFavToggleUI() {
+            if (!favToggle) return;
+            favToggle.classList.toggle('is-active', onlyFavorites);
+            favToggle.setAttribute('aria-pressed', onlyFavorites ? 'true' : 'false');
+            favToggle.title = onlyFavorites ? 'Showing favorites only (click to show all)' : 'Filter favorites only';
+        }
+
         function openForInput(input) {
             activeInput = input;
             searchInput.value = '';
+            onlyFavorites = false;
+            syncFavToggleUI();
             syncOutputSelector();
             modal.classList.add('open');
             modal.setAttribute('aria-hidden', 'false');
@@ -228,6 +246,8 @@ $storageBaseUrl = rtrim(\Illuminate\Support\Facades\Storage::disk('public')->url
             modal.classList.remove('open');
             modal.setAttribute('aria-hidden', 'true');
             activeInput = null;
+            onlyFavorites = false;
+            syncFavToggleUI();
             syncOutputSelector();
         }
 
@@ -237,6 +257,10 @@ $storageBaseUrl = rtrim(\Illuminate\Support\Facades\Storage::disk('public')->url
                 search: searchInput.value || '',
                 page: '1',
             });
+
+            if (onlyFavorites) {
+                params.set('favorite', '1');
+            }
 
             if (!append) {
                 grid.innerHTML = stateMarkup('Loading media', 'Fetching your latest uploads.');
@@ -248,6 +272,9 @@ $storageBaseUrl = rtrim(\Illuminate\Support\Facades\Storage::disk('public')->url
                 const fetchUrl = new URL(url, window.location.origin);
                 fetchUrl.searchParams.set('type', 'image');
                 fetchUrl.searchParams.set('search', searchInput.value || '');
+                if (onlyFavorites) {
+                    fetchUrl.searchParams.set('favorite', '1');
+                }
 
                 const response = await fetch(fetchUrl.toString(), {
                     headers: { 'X-Requested-With': 'XMLHttpRequest' },
@@ -269,7 +296,10 @@ $storageBaseUrl = rtrim(\Illuminate\Support\Facades\Storage::disk('public')->url
             }
 
             if (!items.length && !append) {
-                grid.innerHTML = stateMarkup('Nothing matched your search', 'Try a different keyword or upload a new image.');
+                grid.innerHTML = stateMarkup(
+                    onlyFavorites ? 'No favorite images found' : 'Nothing matched your search',
+                    onlyFavorites ? 'Star favorite images in the Media Library to quickly find them here.' : 'Try a different keyword or upload a new image.'
+                );
                 return;
             }
 
@@ -287,12 +317,18 @@ $storageBaseUrl = rtrim(\Illuminate\Support\Facades\Storage::disk('public')->url
                 const previewUrl = storageUrl(item.thumbnail_url || item.webp_url || item.url || '');
                 const actionLabel = itemMatchesCurrentValue(item) ? 'Selected' : 'Use this image';
                 const metaText = item.webp_size || item.size || item.original_size || getExtension(item.filename);
+                const favBadgeHtml = item.is_favorite ? `
+                    <span class="tyro-media-item-badge tyro-media-item-fav" title="Favorite">
+                        <svg viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                        Fav
+                    </span>
+                ` : '<span class="tyro-media-item-badge">Thumb</span>';
 
                 card.innerHTML = `
                     <div class="tyro-media-item-preview">
                         <img src="${escapeHtml(previewUrl)}" alt="${escapeHtml(item.alt_text || item.filename || 'Media image')}" loading="lazy">
                         <div class="tyro-media-item-overlay">
-                            <span class="tyro-media-item-badge">Thumb</span>
+                            ${favBadgeHtml}
                             <span class="tyro-media-item-action">${escapeHtml(actionLabel)}</span>
                         </div>
                     </div>
@@ -301,7 +337,6 @@ $storageBaseUrl = rtrim(\Illuminate\Support\Facades\Storage::disk('public')->url
                         <div class="tyro-media-item-meta">${escapeHtml(metaText)}</div>
                     </div>
                 `;
-
                 card.addEventListener('click', () => selectItem(item));
                 grid.appendChild(card);
             });
@@ -417,6 +452,13 @@ $storageBaseUrl = rtrim(\Illuminate\Support\Facades\Storage::disk('public')->url
                 if (input) {
                     openForInput(input);
                 }
+                return;
+            }
+
+            if (event.target.closest('#tyroDashboardMediaPickerFavToggle')) {
+                onlyFavorites = !onlyFavorites;
+                syncFavToggleUI();
+                loadMedia(false);
                 return;
             }
 

@@ -296,6 +296,58 @@
         line-height: 1.6;
     }
 
+    .tyro-media-modal-fav-toggle {
+        appearance: none;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.4rem;
+        height: 2.5rem;
+        padding: 0 1rem;
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.04);
+        color: var(--muted-foreground);
+        font-size: 0.85rem;
+        font-weight: 500;
+        cursor: pointer;
+        line-height: 1;
+        box-sizing: border-box;
+        transition: background-color 0.18s ease, color 0.18s ease, border-color 0.18s ease, transform 0.15s ease;
+    }
+
+    .tyro-media-modal-fav-toggle span {
+        display: inline-block;
+        line-height: 1;
+        transform: translateY(0.5px);
+    }
+
+    .tyro-media-modal-fav-toggle:hover {
+        background: rgba(255, 255, 255, 0.08);
+        color: #f59e0b;
+        border-color: rgba(245, 158, 11, 0.3);
+    }
+
+    .tyro-media-modal-fav-toggle svg {
+        width: 1rem;
+        height: 1rem;
+        flex-shrink: 0;
+        display: block;
+        transition: transform 0.18s ease;
+    }
+
+    .tyro-media-modal-fav-toggle.is-active {
+        background: rgba(245, 158, 11, 0.14);
+        color: #f59e0b;
+        border-color: rgba(245, 158, 11, 0.45);
+        font-weight: 600;
+    }
+
+    .tyro-media-modal-fav-toggle.is-active svg {
+        fill: #f59e0b;
+        stroke: #f59e0b;
+    }
+
     .tyro-media-modal-close {
         appearance: none;
         display: inline-flex;
@@ -447,6 +499,21 @@
         background: rgba(255, 255, 255, 0.14);
         color: #fff;
         backdrop-filter: blur(10px);
+    }
+
+    .tyro-media-item-badge.tyro-media-item-fav {
+        background: rgba(245, 158, 11, 0.9);
+        color: #fff;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.2rem;
+        box-shadow: 0 4px 12px rgba(245, 158, 11, 0.35);
+    }
+
+    .tyro-media-item-badge.tyro-media-item-fav svg {
+        width: 0.75rem;
+        height: 0.75rem;
+        fill: currentColor;
     }
 
     .tyro-media-item-action {
