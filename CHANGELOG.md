@@ -2,6 +2,31 @@
 
 All notable changes to Tyro Dashboard are documented in this file.
 
+## [v1.55.2](https://github.com/hasinhayder/tyro-dashboard/releases/tag/v1.55.2) - 2026-09-19
+- Configurable media picker grid columns: added `columns` and `galleryColumns` props to `<x-media-picker>` (e.g. `columns="6"`, `:columns="7"`, or `galleryColumns="6"`) allowing per-trigger custom column counts in the media picker modal grid, defaulting to 5 columns on desktop and automatically adapting responsibly on mobile
+- Square image card presentation: the entire media picker modal card now maintains a square 1:1 aspect ratio with proportional image filling and compact file metadata footer
+
+## [v1.55.1](https://github.com/hasinhayder/tyro-dashboard/releases/tag/v1.55.1) - 2026-09-19
+- Media gallery filter auto-apply: dropdown filters (Type, Date, Favorite) now automatically submit and filter the media gallery on selection change without requiring manual submission
+- Media gallery filter clear button: the "Clear" button is now hidden when query parameters are present but empty (e.g. `search=&type=&date=&favorite=`), displaying only when at least one active filter value is filled
+
+## [v1.55.0](https://github.com/hasinhayder/tyro-dashboard/releases/tag/v1.55.0) - 2026-09-19
+- Media bookmark / favorite feature: mark images as favorite with a star toggle button on media gallery cards (yellow active star, gray inactive), accompanied by database migration and model attribute
+- Media gallery favorite filter: added a dedicated Favorite filter dropdown to filter between all images and favorite images
+- Media picker favorite filter toggle: added a star toggle button in the top-right header of the media picker modal to quickly filter only favorite uploads directly from the picker
+
+## [v1.54.0](https://github.com/hasinhayder/tyro-dashboard/releases/tag/v1.54.0) - 2026-09-08
+- Checkpoint downloads & external snapshot import: download checkpoints directly from the UI, and import external `.sqlite`, `.sql`, and `.enc` database snapshots from the admin interface with optional checkpoint name, notes, and driver detection
+- Preserved `.enc` encryption detection, service error feedback, and automatic list and stat refresh
+
+## [v1.53.0](https://github.com/hasinhayder/tyro-dashboard/releases/tag/v1.53.0) - 2026-09-06
+- Configurable desktop gallery columns: desktop media gallery grid columns can now be configured via `TYRO_DASHBOARD_MEDIA_GALLERY_COLUMNS` (default 6, supports 1 to 12)
+- Hidden per-item "View in new tab" action in media gallery grid while preserving underlying functionality
+- Replaced Open Source icon with the external-link icon
+
+## [v1.52.0](https://github.com/hasinhayder/tyro-dashboard/releases/tag/v1.52.0) - 2026-09-06
+- Emailer feature: email composer with preset templates, live rendered preview, queue dispatcher, and feature toggle gated by `TYRO_DASHBOARD_ENABLE_EMAILER`
+
 ## [v1.51.4](https://github.com/hasinhayder/tyro-dashboard/releases/tag/v1.51.4) - 2026-09-04
 - Media Library modal design upgrade: polished preview lightbox with subtle dot-matrix background canvas, floating image drop shadow, thumbnail icon, new "Open original" button, cleaner typography, keyboard hints, and an enhanced multi-format URL picker with cards for Original, WebP, and Thumbnail formats
 
