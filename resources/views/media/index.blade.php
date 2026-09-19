@@ -1294,7 +1294,7 @@ $authUserId = auth()->id();
                     </div>
                     <div class="filter-group">
                         <label class="filter-label">Type:</label>
-                        <select name="type" class="form-select" style="min-width:130px;">
+                        <select name="type" class="form-select" style="min-width:130px;" onchange="this.form.submit()">
                             <option value="">All Types</option>
                             <option value="image" {{ request('type') === 'image' ? 'selected' : '' }}>Images</option>
                             <option value="application" {{ request('type') === 'application' ? 'selected' : '' }}>Documents</option>
@@ -1304,7 +1304,7 @@ $authUserId = auth()->id();
                     </div>
                     <div class="filter-group">
                         <label class="filter-label">Date:</label>
-                        <select name="date" class="form-select" style="min-width:175px;">
+                        <select name="date" class="form-select" style="min-width:175px;" onchange="this.form.submit()">
                             <option value="">All Dates</option>
                             @foreach($uploadDates as $date)
                                 <option value="{{ $date->format('Y-m-d') }}" {{ request('date') === $date->format('Y-m-d') ? 'selected' : '' }}>
@@ -1315,13 +1315,13 @@ $authUserId = auth()->id();
                     </div>
                     <div class="filter-group">
                         <label class="filter-label">Favorite:</label>
-                        <select name="favorite" class="form-select" style="min-width:140px;">
+                        <select name="favorite" class="form-select" style="min-width:140px;" onchange="this.form.submit()">
                             <option value="">All Media</option>
                             <option value="1" {{ request('favorite') === '1' ? 'selected' : '' }}>Favorites Only</option>
                         </select>
                     </div>
                     <button type="submit" class="btn btn-secondary">Filter</button>
-                    @if(request()->hasAny(['search', 'type', 'date', 'favorite']))
+                    @if(request()->filled('search') || request()->filled('type') || request()->filled('date') || request()->filled('favorite'))
                         <a href="{{ route($dashboardRoute::name('media'), ['view' => $mediaView]) }}" class="btn btn-primary">Clear</a>
                     @endif
                 </div>

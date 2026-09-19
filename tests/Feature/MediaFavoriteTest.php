@@ -136,6 +136,18 @@ class MediaFavoriteTest extends TestCase {
         $responseFav->assertOk();
         $responseFav->assertSee('favorite-photo');
         $responseFav->assertDontSee('regular-photo');
+        $responseFav->assertSee('>Clear</a>', false);
+
+        // When query parameters exist but are all empty strings, Clear button should NOT appear
+        $responseEmptyParams = $this->actingAs($user)->get(route(DashboardRoute::name('media'), [
+            'view' => 'grid',
+            'search' => '',
+            'type' => '',
+            'date' => '',
+            'favorite' => '',
+        ]));
+        $responseEmptyParams->assertOk();
+        $responseEmptyParams->assertDontSee('>Clear</a>', false);
     }
 
     public function test_filter_favorites_in_media_picker() {
