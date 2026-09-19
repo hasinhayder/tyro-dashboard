@@ -197,4 +197,23 @@ class MediaFavoriteTest extends TestCase {
         $favItem = collect($responseFav->json('data'))->firstWhere('filename', 'picker-fav.jpg');
         $this->assertTrue($favItem['is_favorite']);
     }
+
+    public function test_media_picker_component_renders_custom_columns_prop() {
+        // Render default (no columns prop)
+        $defaultHtml = (string) $this->blade('<x-tyro-dashboard-media-picker name="photo" />');
+        $this->assertStringNotContainsString('data-tyro-media-columns', $defaultHtml);
+
+        // Render with columns="6"
+        $sixColumnsHtml = (string) $this->blade('<x-tyro-dashboard-media-picker name="photo" columns="6" />');
+        $this->assertStringContainsString('data-tyro-media-columns="6"', $sixColumnsHtml);
+
+        // Render with :columns="6" and preview="true"
+        $sixColumnsWithPreviewHtml = (string) $this->blade('<x-tyro-dashboard-media-picker name="photo" :columns="6" :preview="true" />');
+        $this->assertStringContainsString('data-tyro-media-columns="6"', $sixColumnsWithPreviewHtml);
+
+        // Render with galleryColumns="4"
+        $fourColumnsHtml = (string) $this->blade('<x-tyro-dashboard-media-picker name="photo" galleryColumns="4" />');
+        $this->assertStringContainsString('data-tyro-media-columns="4"', $fourColumnsHtml);
+    }
 }
+

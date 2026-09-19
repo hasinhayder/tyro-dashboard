@@ -409,7 +409,7 @@
 
     .tyro-media-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+        grid-template-columns: repeat(var(--picker-grid-columns, 5), minmax(0, 1fr));
         gap: 1rem;
     }
 
@@ -417,6 +417,7 @@
         display: flex;
         flex-direction: column;
         min-width: 0;
+        aspect-ratio: 1 / 1;
         border: 1px solid rgba(255, 255, 255, 0.08);
         border-radius: 1rem;
         overflow: hidden;
@@ -439,7 +440,9 @@
 
     .tyro-media-item-preview {
         position: relative;
-        height: 148px;
+        width: 100%;
+        flex: 1;
+        min-height: 0;
         overflow: hidden;
         background: linear-gradient(135deg, rgba(255, 255, 255, 0.05), transparent), var(--muted);
     }
@@ -472,7 +475,7 @@
         display: flex;
         flex-direction: column;
         justify-content: space-between;
-        padding: 0.8rem;
+        padding: 0.5rem;
         background: linear-gradient(180deg, rgba(15, 23, 42, 0.14), rgba(15, 23, 42, 0.68));
         opacity: 0;
         transition: opacity 0.2s ease;
@@ -526,8 +529,10 @@
     .tyro-media-item-body {
         display: flex;
         flex-direction: column;
-        gap: 0.35rem;
-        padding: 0.85rem 0.9rem 0.95rem;
+        gap: 0.2rem;
+        padding: 0.5rem 0.65rem 0.6rem;
+        flex-shrink: 0;
+        background: inherit;
     }
 
     .tyro-media-item-name {
@@ -535,15 +540,17 @@
         white-space: nowrap;
         text-overflow: ellipsis;
         color: var(--foreground);
-        font-size: 0.84rem;
+        font-size: 0.78rem;
         font-weight: 600;
+        line-height: 1.25;
     }
 
     .tyro-media-item-meta {
         color: var(--muted-foreground);
-        font-size: 0.72rem;
+        font-size: 0.68rem;
         text-transform: uppercase;
-        letter-spacing: 0.08em;
+        letter-spacing: 0.05em;
+        line-height: 1.2;
     }
 
     .tyro-media-modal-state {
@@ -670,7 +677,10 @@
         }
 
         .tyro-media-item-preview {
-            height: 132px;
+            width: 100%;
+            flex: 1;
+            min-height: 0;
+            height: auto;
         }
     }
 </style>

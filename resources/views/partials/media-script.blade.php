@@ -236,6 +236,16 @@ $storageBaseUrl = rtrim(\Illuminate\Support\Facades\Storage::disk('public')->url
             onlyFavorites = false;
             syncFavToggleUI();
             syncOutputSelector();
+
+            const customCols = input?.dataset.tyroMediaColumns;
+            if (grid) {
+                if (customCols && parseInt(customCols, 10) > 0) {
+                    grid.style.setProperty('--picker-grid-columns', parseInt(customCols, 10));
+                } else {
+                    grid.style.removeProperty('--picker-grid-columns');
+                }
+            }
+
             modal.classList.add('open');
             modal.setAttribute('aria-hidden', 'false');
             loadMedia(false);
@@ -249,6 +259,9 @@ $storageBaseUrl = rtrim(\Illuminate\Support\Facades\Storage::disk('public')->url
             onlyFavorites = false;
             syncFavToggleUI();
             syncOutputSelector();
+            if (grid) {
+                grid.style.removeProperty('--picker-grid-columns');
+            }
         }
 
         async function loadMedia(append) {

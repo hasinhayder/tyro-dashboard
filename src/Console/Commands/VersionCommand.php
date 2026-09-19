@@ -19,7 +19,7 @@ class VersionCommand extends Command {
      * Execute the console command.
      */
     public function handle(): int {
-        $version = '1.55.1'; // fix(media): only display clear button when filter parameters are actually filled
+        $version = '1.55.2'; // feat(media): configurable media picker columns prop and square image cards
 
         $this->info('');
         $this->info('  ╔════════════════════════════════════════╗');
@@ -70,6 +70,7 @@ class VersionCommand extends Command {
 }
 
 // Changelog
+// 1.55.2 - feat(media): configurable media picker columns prop (e.g. columns="6" or :columns="7") with per-trigger dynamic grid sizing and square image card presentation
 // 1.55.1 - fix(media): hide Clear filter button when query parameters are present but empty (requires filled filter values to show)
 // 1.55.0 - feat(media): favorite/bookmark images with star toggle on image cards (yellow active, gray inactive), media gallery auto-applying dropdown filters (Type, Date, Favorite), and a header favorite toggle filter on the media picker component
 // 1.54.0 - feat(checkpoints): download checkpoints, import external .sqlite, .sql, and .enc snapshots from the admin UI with optional checkpoint name/note/driver, preserved .enc detection, service error feedback, and automatic list/stat refresh
