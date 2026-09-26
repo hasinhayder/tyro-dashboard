@@ -1999,7 +1999,7 @@ $authUserId = auth()->id();
         <div class="dashboard-lightbox__media">
             <img id="dashboardLightboxImage" class="dashboard-lightbox__image" alt="">
         </div>
-        <div class="dashboard-lightbox__categories-bar" style="padding:0.65rem 1.25rem;border-top:1px solid var(--border);background:var(--muted);display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;">
+        <div class="dashboard-lightbox__categories-bar" style="display:none;padding:0.65rem 1.25rem;border-top:1px solid var(--border);background:var(--muted);align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;">
             <div style="display:flex;align-items:center;gap:0.45rem;flex-wrap:wrap;min-width:0;">
                 <span style="font-size:0.75rem;font-weight:600;text-transform:uppercase;letter-spacing:0.05em;color:var(--muted-foreground);">Category:</span>
                 <div id="dashboardLightboxCategories" style="display:flex;align-items:center;gap:0.35rem;flex-wrap:wrap;"></div>
