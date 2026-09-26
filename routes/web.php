@@ -9,6 +9,7 @@ use HasinHayder\TyroDashboard\Http\Controllers\HealthController;
 use HasinHayder\TyroDashboard\Http\Controllers\HeartbeatController;
 use HasinHayder\TyroDashboard\Http\Controllers\InvitationController;
 use HasinHayder\TyroDashboard\Http\Controllers\LogViewController;
+use HasinHayder\TyroDashboard\Http\Controllers\MediaCategoryController;
 use HasinHayder\TyroDashboard\Http\Controllers\MediaController;
 use HasinHayder\TyroDashboard\Http\Controllers\PrivilegeController;
 use HasinHayder\TyroDashboard\Http\Controllers\ProfileController;
@@ -99,6 +100,17 @@ Route::prefix('media')->name('media.')->group(function () {
     Route::post('/starred-images', [MediaController::class, 'storeStarredImage'])->name('starred-images.store');
     Route::delete('/starred-images', [MediaController::class, 'destroyStarredImage'])->name('starred-images.destroy');
     Route::delete('/bulk-delete', [MediaController::class, 'bulkDestroy'])->name('bulk-destroy');
+    Route::post('/bulk-category-attach', [MediaController::class, 'bulkCategoryAttach'])->name('bulk-category-attach');
+    Route::post('/bulk-category-unlink', [MediaController::class, 'bulkCategoryUnlink'])->name('bulk-category-unlink');
+
+    // Media Categories
+    Route::get('/categories', [MediaCategoryController::class, 'index'])->name('categories.index');
+    Route::post('/categories', [MediaCategoryController::class, 'store'])->name('categories.store');
+    Route::put('/categories/{category}', [MediaCategoryController::class, 'update'])->name('categories.update');
+    Route::delete('/categories/{category}', [MediaCategoryController::class, 'destroy'])->name('categories.destroy');
+    Route::post('/categories/{category}/add-media', [MediaCategoryController::class, 'addMedia'])->name('categories.add-media');
+
+    Route::patch('/{media}/categories', [MediaController::class, 'updateCategories'])->name('update-categories');
     Route::patch('/{media}/alt', [MediaController::class, 'updateAlt'])->name('alt');
     Route::patch('/{media}/rename', [MediaController::class, 'rename'])->name('rename');
     Route::patch('/{media}/toggle-favorite', [MediaController::class, 'toggleFavorite'])->name('toggle-favorite');

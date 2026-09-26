@@ -62,6 +62,18 @@ $storageBaseUrl = rtrim(\Illuminate\Support\Facades\Storage::disk('public')->url
             </div>
         </div>
 
+        <div class="tyro-media-picker-multi-bar" id="tyroDashboardMediaPickerMultiBar" style="display:none;">
+            <div class="tyro-media-picker-multi-info">
+                <span class="tyro-media-picker-multi-count" id="tyroDashboardMediaPickerMultiCount">0 items selected</span>
+            </div>
+            <div class="tyro-media-picker-multi-actions">
+                <button type="button" class="btn btn-secondary btn-sm" id="tyroDashboardMediaPickerClearSelection">Clear</button>
+                <button type="button" class="btn btn-primary btn-sm" id="tyroDashboardMediaPickerConfirmBtn" disabled>
+                    Add Selected Media
+                </button>
+            </div>
+        </div>
+
         <div class="tyro-media-modal-upload">
             <label class="btn btn-primary tyro-media-upload-button">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;" aria-hidden="true">
@@ -106,11 +118,51 @@ $storageBaseUrl = rtrim(\Illuminate\Support\Facades\Storage::disk('public')->url
         const outputSelect = document.getElementById('tyroDashboardMediaOutputSelect');
 
         const favToggle = document.getElementById('tyroDashboardMediaPickerFavToggle');
+        const modalTitle = document.getElementById('tyroDashboardMediaPickerTitle');
+        const modalSubtitle = modal?.querySelector('.tyro-media-modal-subtitle');
+        const multiBar = document.getElementById('tyroDashboardMediaPickerMultiBar');
+        const multiCount = document.getElementById('tyroDashboardMediaPickerMultiCount');
+        const clearSelectionBtn = document.getElementById('tyroDashboardMediaPickerClearSelection');
+        const confirmBtn = document.getElementById('tyroDashboardMediaPickerConfirmBtn');
 
         let activeInput = null;
         let nextPageUrl = null;
         let searchTimer = null;
         let onlyFavorites = false;
+        let isMultiSelect = false;
+        let selectedMediaIds = new Set();
+        let onMultiSelectConfirm = null;
+        let multiConfirmLabel = 'Add Selected Media';
+        const defaultTitle = modalTitle ? modalTitle.textContent : 'Choose media';
+        const defaultSubtitle = modalSubtitle ? modalSubtitle.textContent : '';
+
+        function updateMultiSelectBar() {
+            if (!multiBar) return;
+            const count = selectedMediaIds.size;
+            if (multiCount) {
+                multiCount.textContent = count === 1 ? '1 item selected' : `${count} items selected`;
+            }
+            if (confirmBtn) {
+                confirmBtn.disabled = count === 0;
+                confirmBtn.textContent = count > 0 ? `${multiConfirmLabel} (${count})` : multiConfirmLabel;
+            }
+        }
+
+        function toggleMultiSelectItem(item, card) {
+            const id = Number(item.id);
+            if (selectedMediaIds.has(id)) {
+                selectedMediaIds.delete(id);
+                card.classList.remove('is-selected');
+                const actionEl = card.querySelector('.tyro-media-item-action');
+                if (actionEl) actionEl.textContent = 'Click to select';
+            } else {
+                selectedMediaIds.add(id);
+                card.classList.add('is-selected');
+                const actionEl = card.querySelector('.tyro-media-item-action');
+                if (actionEl) actionEl.textContent = 'Selected';
+            }
+            updateMultiSelectBar();
+        }
 
         function stateMarkup(title, text) {
             return `<div class="tyro-media-modal-state"><div><strong>${escapeHtml(title)}</strong><span>${escapeHtml(text)}</span></div></div>`;
@@ -231,6 +283,13 @@ $storageBaseUrl = rtrim(\Illuminate\Support\Facades\Storage::disk('public')->url
         }
 
         function openForInput(input) {
+            isMultiSelect = false;
+            selectedMediaIds.clear();
+            onMultiSelectConfirm = null;
+            if (multiBar) multiBar.style.display = 'none';
+            if (modalTitle) modalTitle.textContent = defaultTitle;
+            if (modalSubtitle) modalSubtitle.textContent = defaultSubtitle;
+
             activeInput = input;
             searchInput.value = '';
             onlyFavorites = false;
@@ -252,11 +311,40 @@ $storageBaseUrl = rtrim(\Illuminate\Support\Facades\Storage::disk('public')->url
             window.setTimeout(() => searchInput.focus(), 80);
         }
 
+        function openMultiSelect(options = {}) {
+            isMultiSelect = true;
+            activeInput = null;
+            selectedMediaIds = new Set((options.initialIds || []).map(Number));
+            onMultiSelectConfirm = options.onConfirm || null;
+            multiConfirmLabel = options.confirmLabel || 'Add Selected Media';
+
+            if (modalTitle) modalTitle.textContent = options.title || 'Choose media';
+            if (modalSubtitle) modalSubtitle.textContent = options.subtitle || 'Select images from your library and click confirm.';
+            if (outputWrap) outputWrap.hidden = true;
+            if (multiBar) multiBar.style.display = 'flex';
+
+            searchInput.value = '';
+            onlyFavorites = false;
+            syncFavToggleUI();
+            updateMultiSelectBar();
+
+            modal.classList.add('open');
+            modal.setAttribute('aria-hidden', 'false');
+            loadMedia(false);
+            window.setTimeout(() => searchInput.focus(), 80);
+        }
+
         function close() {
             modal.classList.remove('open');
             modal.setAttribute('aria-hidden', 'true');
             activeInput = null;
             onlyFavorites = false;
+            isMultiSelect = false;
+            selectedMediaIds.clear();
+            onMultiSelectConfirm = null;
+            if (multiBar) multiBar.style.display = 'none';
+            if (modalTitle) modalTitle.textContent = defaultTitle;
+            if (modalSubtitle) modalSubtitle.textContent = defaultSubtitle;
             syncFavToggleUI();
             syncOutputSelector();
             if (grid) {
@@ -323,12 +411,17 @@ $storageBaseUrl = rtrim(\Illuminate\Support\Facades\Storage::disk('public')->url
                 card.dataset.mediaId = String(item.id || '');
                 card.title = item.filename || 'Media';
 
-                if (itemMatchesCurrentValue(item)) {
+                const isItemMultiSelected = isMultiSelect && selectedMediaIds.has(Number(item.id));
+                const isSingleSelected = !isMultiSelect && itemMatchesCurrentValue(item);
+
+                if (isItemMultiSelected || isSingleSelected) {
                     card.classList.add('is-selected');
                 }
 
                 const previewUrl = storageUrl(item.thumbnail_url || item.webp_url || item.url || '');
-                const actionLabel = itemMatchesCurrentValue(item) ? 'Selected' : 'Use this image';
+                const actionLabel = isMultiSelect
+                    ? (isItemMultiSelected ? 'Selected' : 'Click to select')
+                    : (isSingleSelected ? 'Selected' : 'Use this image');
                 const metaText = item.webp_size || item.size || item.original_size || getExtension(item.filename);
                 const favBadgeHtml = item.is_favorite ? `
                     <span class="tyro-media-item-badge tyro-media-item-fav" title="Favorite">
@@ -337,8 +430,15 @@ $storageBaseUrl = rtrim(\Illuminate\Support\Facades\Storage::disk('public')->url
                     </span>
                 ` : '<span class="tyro-media-item-badge">Thumb</span>';
 
+                const checkboxHtml = isMultiSelect ? `
+                    <div class="tyro-media-item-checkbox">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5"/></svg>
+                    </div>
+                ` : '';
+
                 card.innerHTML = `
                     <div class="tyro-media-item-preview">
+                        ${checkboxHtml}
                         <img src="${escapeHtml(previewUrl)}" alt="${escapeHtml(item.alt_text || item.filename || 'Media image')}" loading="lazy">
                         <div class="tyro-media-item-overlay">
                             ${favBadgeHtml}
@@ -350,7 +450,13 @@ $storageBaseUrl = rtrim(\Illuminate\Support\Facades\Storage::disk('public')->url
                         <div class="tyro-media-item-meta">${escapeHtml(metaText)}</div>
                     </div>
                 `;
-                card.addEventListener('click', () => selectItem(item));
+                card.addEventListener('click', () => {
+                    if (isMultiSelect) {
+                        toggleMultiSelectItem(item, card);
+                    } else {
+                        selectItem(item);
+                    }
+                });
                 grid.appendChild(card);
             });
         }
@@ -426,7 +532,13 @@ $storageBaseUrl = rtrim(\Illuminate\Support\Facades\Storage::disk('public')->url
                 uploadProgressFill.style.width = '100%';
                 uploadProgressText.textContent = '100%';
                 uploadStatus.textContent = 'Uploaded.';
-                selectItem(result);
+                if (isMultiSelect) {
+                    selectedMediaIds.add(Number(result.id));
+                    updateMultiSelectBar();
+                    loadMedia(false);
+                } else {
+                    selectItem(result);
+                }
             } else {
                 uploadStatus.textContent = 'Upload failed.';
             }
@@ -513,8 +625,35 @@ $storageBaseUrl = rtrim(\Illuminate\Support\Facades\Storage::disk('public')->url
 
         uploadInput.addEventListener('change', uploadFile);
 
+        clearSelectionBtn?.addEventListener('click', () => {
+            selectedMediaIds.clear();
+            grid.querySelectorAll('.tyro-media-item.is-selected').forEach(c => {
+                c.classList.remove('is-selected');
+                const a = c.querySelector('.tyro-media-item-action');
+                if (a) a.textContent = 'Click to select';
+            });
+            updateMultiSelectBar();
+        });
+
+        confirmBtn?.addEventListener('click', async () => {
+            if (onMultiSelectConfirm && selectedMediaIds.size > 0) {
+                confirmBtn.disabled = true;
+                const originalText = confirmBtn.textContent;
+                confirmBtn.textContent = 'Adding...';
+                try {
+                    await onMultiSelectConfirm(Array.from(selectedMediaIds), window.TyroDashboardMediaPicker);
+                } catch (e) {
+                    console.error(e);
+                } finally {
+                    confirmBtn.disabled = false;
+                    confirmBtn.textContent = originalText;
+                }
+            }
+        });
+
         window.TyroDashboardMediaPicker = {
             openForInput,
+            openMultiSelect,
             close,
             reload: () => loadMedia(false),
         };

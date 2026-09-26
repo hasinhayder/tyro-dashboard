@@ -683,4 +683,57 @@
             height: auto;
         }
     }
+
+    .tyro-media-picker-multi-bar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+        padding: 0.9rem 1.5rem;
+        background: var(--card, #1e293b);
+        border-top: 1px solid rgba(255, 255, 255, 0.08);
+        border-bottom-left-radius: 1rem;
+        border-bottom-right-radius: 1rem;
+    }
+
+    .tyro-media-picker-multi-count {
+        font-size: 0.875rem;
+        font-weight: 600;
+        color: var(--foreground);
+    }
+
+    .tyro-media-picker-multi-actions {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .tyro-media-item-checkbox {
+        position: absolute;
+        top: 0.5rem;
+        left: 0.5rem;
+        width: 1.35rem;
+        height: 1.35rem;
+        border-radius: 6px;
+        background: rgba(0, 0, 0, 0.5);
+        border: 1.5px solid rgba(255, 255, 255, 0.6);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: transparent;
+        transition: all 0.15s ease;
+        z-index: 2;
+    }
+
+    .tyro-media-item.is-selected .tyro-media-item-checkbox {
+        background: var(--primary);
+        border-color: var(--primary);
+        color: #fff;
+    }
+
+    .tyro-media-item-checkbox svg {
+        width: 0.9rem;
+        height: 0.9rem;
+        stroke-width: 2.5;
+    }
 </style>

@@ -1217,10 +1217,30 @@
         @endif
     @endforeach
 </form>
+<form id="bulk-category-attach-form" action="{{ route($dashboardRoute::name('media.bulk-category-attach')) }}" method="POST" style="display:none;">
+    @csrf
+    <input type="hidden" name="category_id" id="bulk-attach-category-id">
+    @foreach(request()->except(['_token', '_method', 'selected_ids', 'category_id']) as $key => $value)
+        @if(is_scalar($value))
+            <input type="hidden" name="{{ $key }}" value="{{ $value }}">
+        @endif
+    @endforeach
+</form>
+@if(request()->filled('category') && request('category') !== 'none')
+<form id="bulk-category-unlink-form" action="{{ route($dashboardRoute::name('media.bulk-category-unlink')) }}" method="POST" style="display:none;">
+    @csrf
+    <input type="hidden" name="category_id" value="{{ request('category') }}">
+    @foreach(request()->except(['_token', '_method', 'selected_ids']) as $key => $value)
+        @if(is_scalar($value))
+            <input type="hidden" name="{{ $key }}" value="{{ $value }}">
+        @endif
+    @endforeach
+</form>
+@endif
 <div class="page-header">
     <div class="page-header-row">
         </div>
-        <div style="display:flex;gap:0.5rem;flex-shrink:0;">
+        <div style="display:flex;gap:0.5rem;flex-shrink:0;flex-wrap:wrap;align-items:center;">
             <button type="button" class="btn btn-primary" id="toggleUploadForm" style="white-space:nowrap;">
                 Add Media
             </button>
@@ -1230,6 +1250,28 @@
                 </svg>
                 Import Images
             </button>
+            <a href="{{ route($dashboardRoute::name('media.categories.index')) }}" class="btn btn-secondary" style="white-space:nowrap;">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:15px;height:15px;display:inline;vertical-align:-2px;margin-right:4px;">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12.75V12A2.25 2.25 0 0 1 4.5 9.75h15A2.25 2.25 0 0 1 21.75 12v.75m-8.69-6.44-2.12-2.12a1.5 1.5 0 0 0-1.061-.44H4.5A2.25 2.25 0 0 0 2.25 6v12a2.25 2.25 0 0 0 2.25 2.25h15A2.25 2.25 0 0 0 21.75 18V9a2.25 2.25 0 0 0-2.25-2.25h-5.379a1.5 1.5 0 0 1-1.06-.44Z" />
+                </svg>
+                Category
+            </a>
+            <div id="bulk-media-category-wrap" style="display:none;align-items:center;gap:0.35rem;">
+                <select id="bulk-media-category-select" class="form-select" style="padding:0.35rem 0.6rem;font-size:0.8rem;height:auto;min-width:140px;">
+                    <option value="">Assign to Category...</option>
+                    @foreach($categories as $cat)
+                        <option value="{{ $cat->id }}">{{ $cat->name }}</option>
+                    @endforeach
+                </select>
+                <button type="button" class="btn btn-secondary" id="bulk-media-category-btn" onclick="submitBulkCategoryAttach()" style="white-space:nowrap;">
+                    Assign
+                </button>
+            </div>
+            @if(request()->filled('category') && request('category') !== 'none')
+                <button type="button" class="btn btn-secondary" id="bulk-media-unlink-btn" onclick="submitBulkCategoryUnlink()" style="white-space:nowrap;display:none;color:var(--warning,#f59e0b);">
+                    Unlink Selected
+                </button>
+            @endif
             <button type="button" class="btn btn-destructive" id="bulk-media-delete-btn" onclick="submitBulkMediaDelete()" style="white-space:nowrap;display:none;">
                 Delete Selected
             </button>
@@ -1320,8 +1362,20 @@ $authUserId = auth()->id();
                             <option value="1" {{ request('favorite') === '1' ? 'selected' : '' }}>Favorites Only</option>
                         </select>
                     </div>
+                    <div class="filter-group">
+                        <label class="filter-label">Category:</label>
+                        <select name="category" class="form-select" style="min-width:150px;" onchange="this.form.submit()">
+                            <option value="">All Categories</option>
+                            <option value="none" {{ request('category') === 'none' ? 'selected' : '' }}>Uncategorized</option>
+                            @foreach($categories as $cat)
+                                <option value="{{ $cat->id }}" {{ request('category') == $cat->id ? 'selected' : '' }}>
+                                    {{ $cat->name }} ({{ $cat->media_count }})
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
                     <button type="submit" class="btn btn-secondary">Filter</button>
-                    @if(request()->filled('search') || request()->filled('type') || request()->filled('date') || request()->filled('favorite'))
+                    @if(request()->filled('search') || request()->filled('type') || request()->filled('date') || request()->filled('favorite') || request()->filled('category'))
                         <a href="{{ route($dashboardRoute::name('media'), ['view' => $mediaView]) }}" class="btn btn-primary">Clear</a>
                     @endif
                 </div>
@@ -1332,6 +1386,7 @@ $authUserId = auth()->id();
                     @if(request('type')) <input type="hidden" name="type" value="{{ request('type') }}"> @endif
                     @if(request('date')) <input type="hidden" name="date" value="{{ request('date') }}"> @endif
                     @if(request('favorite')) <input type="hidden" name="favorite" value="{{ request('favorite') }}"> @endif
+                    @if(request('category')) <input type="hidden" name="category" value="{{ request('category') }}"> @endif
                     <input type="hidden" name="view" value="{{ $mediaView }}">
                     <select name="per_page" class="form-select" style="min-width:70px; padding-top:0.6rem; padding-bottom:0.6rem; font-size:0.8rem;" onchange="this.form.submit()">
                         <option value="12" {{ $mediaPerPage == 12 ? 'selected' : '' }}>12</option>
@@ -1369,13 +1424,34 @@ $authUserId = auth()->id();
     </div>
 </div>
 
+@if(request()->filled('category'))
+    @php
+        $activeCatName = request('category') === 'none'
+            ? 'Uncategorized'
+            : ($categories->firstWhere('id', request('category'))?->name ?? 'Category');
+    @endphp
+    <div class="card" style="margin-bottom:1rem;border-left:3px solid var(--primary);">
+        <div class="card-body" style="padding:0.75rem 1.25rem;display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;">
+            <div style="display:flex;align-items:center;gap:0.5rem;">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;color:var(--primary);">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12.75V12A2.25 2.25 0 0 1 4.5 9.75h15A2.25 2.25 0 0 1 21.75 12v.75m-8.69-6.44-2.12-2.12a1.5 1.5 0 0 0-1.061-.44H4.5A2.25 2.25 0 0 0 2.25 6v12a2.25 2.25 0 0 0 2.25 2.25h15A2.25 2.25 0 0 0 21.75 18V9a2.25 2.25 0 0 0-2.25-2.25h-5.379a1.5 1.5 0 0 1-1.06-.44Z" />
+                </svg>
+                <span style="font-size:0.875rem;">Filtered by category: <strong>{{ $activeCatName }}</strong> ({{ $media->total() }} {{ \Illuminate\Support\Str::plural('file', $media->total()) }})</span>
+            </div>
+            <a href="{{ route($dashboardRoute::name('media'), request()->except('category')) }}" class="btn btn-secondary btn-sm">
+                Clear Category Filter
+            </a>
+        </div>
+    </div>
+@endif
+
 <!-- Media Results -->
 @if($media->count())
 @if($mediaView === 'grid')
 <div class="media-grid" id="mediaGrid" style="--tyro-media-gallery-columns: {{ $mediaGalleryColumns }};">
     @foreach($media as $file)
     <div class="media-card" id="media-{{ $file->id }}" data-media-entry>
-        <div class="media-card-figure" @if($file->is_image) data-lightbox-trigger data-image-src="{{ Storage::url($file->url) }}" data-image-alt="{{ $file->alt_text ?: $file->filename }}" data-image-name="{{ $file->filename }}" data-image-meta="{{ $file->formatted_size }} · {{ strtoupper(pathinfo($file->filename, PATHINFO_EXTENSION)) }}" data-copy-original="{{ url(Storage::url($file->url)) }}" data-copy-webp="{{ $file->webp_url ? url(Storage::url($file->webp_url)) : '' }}" data-copy-thumb="{{ url(Storage::url($file->thumbnail_url)) }}" data-source-url="{{ $file->source_url ?? '' }}" role="button" tabindex="0" aria-label="Preview {{ $file->alt_text ?: $file->filename }}" title="Preview image" @endif>
+        <div class="media-card-figure" @if($file->is_image) data-lightbox-trigger data-media-id="{{ $file->id }}" data-categories="{{ e(json_encode($file->categories->map(fn($c) => ['id' => $c->id, 'name' => $c->name]))) }}" data-image-src="{{ Storage::url($file->url) }}" data-image-alt="{{ $file->alt_text ?: $file->filename }}" data-image-name="{{ $file->filename }}" data-image-meta="{{ $file->formatted_size }} · {{ strtoupper(pathinfo($file->filename, PATHINFO_EXTENSION)) }}" data-copy-original="{{ url(Storage::url($file->url)) }}" data-copy-webp="{{ $file->webp_url ? url(Storage::url($file->webp_url)) : '' }}" data-copy-thumb="{{ url(Storage::url($file->thumbnail_url)) }}" data-source-url="{{ $file->source_url ?? '' }}" role="button" tabindex="0" aria-label="Preview {{ $file->alt_text ?: $file->filename }}" title="Preview image" @endif>
             @if($file->is_image)
                 <img src="{{ Storage::url($file->thumbnail_url) }}" alt="{{ $file->alt_text ?: $file->filename }}" class="media-card-thumb" loading="lazy">
                 <div class="media-card-overlay">
@@ -1389,6 +1465,8 @@ $authUserId = auth()->id();
                         type="button"
                         class="media-card-preview"
                         data-lightbox-trigger
+                        data-media-id="{{ $file->id }}"
+                        data-categories="{{ e(json_encode($file->categories->map(fn($c) => ['id' => $c->id, 'name' => $c->name]))) }}"
                         data-image-src="{{ Storage::url($file->url) }}"
                         data-image-alt="{{ $file->alt_text ?: $file->filename }}"
                         data-image-name="{{ $file->filename }}"
@@ -1427,6 +1505,11 @@ $authUserId = auth()->id();
                     <span style="margin-left:auto;font-size:0.75rem;font-weight:500;color:var(--muted-foreground);white-space:nowrap;">
                         ID: {{ $file->id }}
                     </span>
+            </div>
+            <div class="media-card-categories" id="card-cats-{{ $file->id }}" style="display:flex;gap:0.25rem;flex-wrap:wrap;margin-top:0.35rem;">
+                @foreach($file->categories as $c)
+                    <span class="badge badge-secondary" style="font-size:0.68rem;padding:0.15rem 0.4rem;">{{ $c->name }}</span>
+                @endforeach
             </div>
             @if($file->is_image)
             <div class="media-card-alt">
@@ -1525,6 +1608,7 @@ $authUserId = auth()->id();
                 <th scope="col">Type</th>
                 <th scope="col">Size</th>
                 <th scope="col">Dimensions</th>
+                <th scope="col">Categories</th>
                 <th scope="col">Uploaded</th>
                 <th scope="col">Alt Text</th>
                 <th scope="col">Actions</th>
@@ -1540,7 +1624,7 @@ $authUserId = auth()->id();
                 </td>
                 <td>
                     <div class="media-table-file">
-                        <div class="media-table-thumb" @if($file->is_image) data-lightbox-trigger data-image-src="{{ Storage::url($file->url) }}" data-image-alt="{{ $file->alt_text ?: $file->filename }}" data-image-name="{{ $file->filename }}" data-image-meta="{{ $file->formatted_size }} · {{ strtoupper(pathinfo($file->filename, PATHINFO_EXTENSION)) }}" data-copy-original="{{ url(Storage::url($file->url)) }}" data-copy-webp="{{ $file->webp_url ? url(Storage::url($file->webp_url)) : '' }}" data-copy-thumb="{{ url(Storage::url($file->thumbnail_url)) }}" data-source-url="{{ $file->source_url ?? '' }}" role="button" tabindex="0" aria-label="Preview {{ $file->alt_text ?: $file->filename }}" title="Preview image" @endif>
+                        <div class="media-table-thumb" @if($file->is_image) data-lightbox-trigger data-media-id="{{ $file->id }}" data-categories="{{ e(json_encode($file->categories->map(fn($c) => ['id' => $c->id, 'name' => $c->name]))) }}" data-image-src="{{ Storage::url($file->url) }}" data-image-alt="{{ $file->alt_text ?: $file->filename }}" data-image-name="{{ $file->filename }}" data-image-meta="{{ $file->formatted_size }} · {{ strtoupper(pathinfo($file->filename, PATHINFO_EXTENSION)) }}" data-copy-original="{{ url(Storage::url($file->url)) }}" data-copy-webp="{{ $file->webp_url ? url(Storage::url($file->webp_url)) : '' }}" data-copy-thumb="{{ url(Storage::url($file->thumbnail_url)) }}" data-source-url="{{ $file->source_url ?? '' }}" role="button" tabindex="0" aria-label="Preview {{ $file->alt_text ?: $file->filename }}" title="Preview image" @endif>
                             @if($file->is_image)
                                 <img src="{{ Storage::url($file->thumbnail_url) }}" alt="{{ $file->alt_text ?: $file->filename }}" loading="lazy">
                             @else
@@ -1567,6 +1651,15 @@ $authUserId = auth()->id();
                     @else
                         <span class="media-table-muted">—</span>
                     @endif
+                </td>
+                <td>
+                    <div id="table-cats-{{ $file->id }}" style="display:flex;gap:0.25rem;flex-wrap:wrap;max-width:180px;">
+                        @forelse($file->categories as $c)
+                            <span class="badge badge-secondary" style="font-size:0.7rem;padding:0.15rem 0.45rem;">{{ $c->name }}</span>
+                        @empty
+                            <span style="font-size:0.75rem;color:var(--muted-foreground);">—</span>
+                        @endforelse
+                    </div>
                 </td>
                 <td>
                     <span class="media-table-date">{{ optional($file->created_at)->format('M j, Y') }}</span>
@@ -1917,6 +2010,20 @@ $authUserId = auth()->id();
         <div class="dashboard-lightbox__media">
             <img id="dashboardLightboxImage" class="dashboard-lightbox__image" alt="">
         </div>
+        <div class="dashboard-lightbox__categories-bar" style="padding:0.65rem 1.25rem;border-top:1px solid var(--border);background:var(--muted);display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;">
+            <div style="display:flex;align-items:center;gap:0.45rem;flex-wrap:wrap;min-width:0;">
+                <span style="font-size:0.75rem;font-weight:600;text-transform:uppercase;letter-spacing:0.05em;color:var(--muted-foreground);">Category:</span>
+                <div id="dashboardLightboxCategories" style="display:flex;align-items:center;gap:0.35rem;flex-wrap:wrap;"></div>
+            </div>
+            <div style="display:flex;align-items:center;gap:0.4rem;flex-shrink:0;">
+                <select id="dashboardLightboxCategorySelect" class="form-select" style="font-size:0.8rem;padding:0.3rem 0.6rem;height:auto;min-width:160px;">
+                    <option value="">+ Add to Category...</option>
+                    @foreach($categories as $cat)
+                        <option value="{{ $cat->id }}">{{ $cat->name }}</option>
+                    @endforeach
+                </select>
+            </div>
+        </div>
         <div class="dashboard-lightbox__footer">
             <span class="dashboard-lightbox__hint">
                 <span>Press</span>
@@ -2173,9 +2280,21 @@ $authUserId = auth()->id();
     function updateBulkMediaDeleteButtonState() {
         const checkedCount = document.querySelectorAll('.media-bulk-checkbox:checked').length;
         const button = document.getElementById('bulk-media-delete-btn');
+        const categoryWrap = document.getElementById('bulk-media-category-wrap');
+        const unlinkBtn = document.getElementById('bulk-media-unlink-btn');
+
         if (button) {
             button.style.display = checkedCount > 0 ? '' : 'none';
             button.textContent = checkedCount > 0 ? `Delete Selected (${checkedCount})` : 'Delete Selected';
+        }
+
+        if (categoryWrap) {
+            categoryWrap.style.display = checkedCount > 0 ? 'inline-flex' : 'none';
+        }
+
+        if (unlinkBtn) {
+            unlinkBtn.style.display = checkedCount > 0 ? '' : 'none';
+            unlinkBtn.textContent = checkedCount > 0 ? `Unlink Selected (${checkedCount})` : 'Unlink Selected';
         }
 
         const selectAll = document.getElementById('select-all-media');
@@ -2184,6 +2303,51 @@ $authUserId = auth()->id();
             selectAll.checked = checkboxes.length > 0 && checkboxes.every((checkbox) => checkbox.checked);
             selectAll.indeterminate = checkboxes.some((checkbox) => checkbox.checked) && !selectAll.checked;
         }
+    }
+
+    function submitBulkCategoryAttach() {
+        const checked = Array.from(document.querySelectorAll('.media-bulk-checkbox:checked'));
+        if (!checked.length) return;
+
+        const select = document.getElementById('bulk-media-category-select');
+        const catId = select?.value;
+        if (!catId) {
+            alert('Please select a category first.');
+            return;
+        }
+
+        const form = document.getElementById('bulk-category-attach-form');
+        document.getElementById('bulk-attach-category-id').value = catId;
+        form.querySelectorAll('input[name="selected_ids[]"]').forEach((input) => input.remove());
+        checked.forEach((checkbox) => {
+            const input = document.createElement('input');
+            input.type = 'hidden';
+            input.name = 'selected_ids[]';
+            input.value = checkbox.value;
+            form.appendChild(input);
+        });
+        form.submit();
+    }
+
+    function submitBulkCategoryUnlink() {
+        const checked = Array.from(document.querySelectorAll('.media-bulk-checkbox:checked'));
+        if (!checked.length) return;
+
+        showDanger('Unlink from Category', `Unlink ${checked.length} selected media ${checked.length === 1 ? 'file' : 'files'} from this category? Files will not be deleted from your media library.`)
+            .then((confirmed) => {
+                if (!confirmed) return;
+
+                const form = document.getElementById('bulk-category-unlink-form');
+                form.querySelectorAll('input[name="selected_ids[]"]').forEach((input) => input.remove());
+                checked.forEach((checkbox) => {
+                    const input = document.createElement('input');
+                    input.type = 'hidden';
+                    input.name = 'selected_ids[]';
+                    input.value = checkbox.value;
+                    form.appendChild(input);
+                });
+                form.submit();
+            });
     }
 
     function submitBulkMediaDelete() {
@@ -2383,10 +2547,139 @@ $authUserId = auth()->id();
         }
     }
 
+    let currentLightboxMediaId = null;
+    let currentLightboxSource = null;
+    let currentLightboxCategories = [];
+
+    function renderLightboxCategories() {
+        const container = document.getElementById('dashboardLightboxCategories');
+        if (!container) return;
+        container.innerHTML = '';
+        if (!currentLightboxCategories.length) {
+            container.innerHTML = '<span style="font-size:0.75rem;color:var(--muted-foreground);font-style:italic;">No category assigned</span>';
+            return;
+        }
+
+        currentLightboxCategories.forEach(cat => {
+            const badge = document.createElement('span');
+            badge.className = 'badge badge-secondary';
+            badge.style.cssText = 'display:inline-flex;align-items:center;gap:0.35rem;padding:0.2rem 0.55rem;font-size:0.75rem;';
+            badge.innerHTML = `
+                <span>${escapeHtml(cat.name)}</span>
+                <button type="button" style="background:none;border:none;color:var(--muted-foreground);cursor:pointer;padding:0;line-height:1;font-size:0.95rem;margin-left:2px;" title="Remove category">&times;</button>
+            `;
+            badge.querySelector('button').addEventListener('click', (e) => {
+                e.stopPropagation();
+                detachLightboxCategory(cat.id);
+            });
+            container.appendChild(badge);
+        });
+    }
+
+    async function attachLightboxCategory(catId) {
+        if (!currentLightboxMediaId || !catId) return;
+        try {
+            const res = await fetch(`${DELETE_BASE}${currentLightboxMediaId}/categories`, {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': CSRF,
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'Accept': 'application/json',
+                },
+                body: JSON.stringify({ action: 'attach', category_id: catId }),
+            });
+            const data = await res.json();
+            if (data.success) {
+                currentLightboxCategories = data.categories;
+                renderLightboxCategories();
+                syncMediaCategoriesInDOM(currentLightboxMediaId, data.categories);
+            }
+        } catch(e) {
+            console.error(e);
+        }
+    }
+
+    async function detachLightboxCategory(catId) {
+        if (!currentLightboxMediaId || !catId) return;
+        try {
+            const res = await fetch(`${DELETE_BASE}${currentLightboxMediaId}/categories`, {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': CSRF,
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'Accept': 'application/json',
+                },
+                body: JSON.stringify({ action: 'detach', category_id: catId }),
+            });
+            const data = await res.json();
+            if (data.success) {
+                currentLightboxCategories = data.categories;
+                renderLightboxCategories();
+                syncMediaCategoriesInDOM(currentLightboxMediaId, data.categories);
+            }
+        } catch(e) {
+            console.error(e);
+        }
+    }
+
+    function syncMediaCategoriesInDOM(mediaId, categories) {
+        const json = JSON.stringify(categories);
+        document.querySelectorAll(`[data-lightbox-trigger][data-media-id="${mediaId}"]`).forEach(el => {
+            el.dataset.categories = json;
+        });
+
+        const cardCats = document.getElementById(`card-cats-${mediaId}`);
+        if (cardCats) {
+            cardCats.innerHTML = '';
+            categories.forEach(c => {
+                const s = document.createElement('span');
+                s.className = 'badge badge-secondary';
+                s.style.cssText = 'font-size:0.68rem;padding:0.15rem 0.4rem;';
+                s.textContent = c.name;
+                cardCats.appendChild(s);
+            });
+        }
+
+        const tableCats = document.getElementById(`table-cats-${mediaId}`);
+        if (tableCats) {
+            tableCats.innerHTML = '';
+            if (categories.length) {
+                categories.forEach(c => {
+                    const s = document.createElement('span');
+                    s.className = 'badge badge-secondary';
+                    s.style.cssText = 'font-size:0.7rem;padding:0.15rem 0.45rem;';
+                    s.textContent = c.name;
+                    tableCats.appendChild(s);
+                });
+            } else {
+                tableCats.innerHTML = '<span style="font-size:0.75rem;color:var(--muted-foreground);">—</span>';
+            }
+        }
+    }
+
+    document.getElementById('dashboardLightboxCategorySelect')?.addEventListener('change', function() {
+        const val = this.value;
+        if (val) {
+            attachLightboxCategory(val);
+            this.value = '';
+        }
+    });
+
     function openMediaLightbox(source) {
         if (!lightbox || !lightboxImage) return;
 
         previousFocus = document.activeElement;
+        currentLightboxSource = source;
+        currentLightboxMediaId = source?.dataset?.mediaId;
+        let cats = [];
+        try {
+            cats = JSON.parse(source?.dataset?.categories || '[]');
+        } catch(e) {}
+        currentLightboxCategories = cats;
+        renderLightboxCategories();
+
         const imageSrc = source?.dataset?.imageSrc ?? source?.imageSrc ?? '';
         const imageAlt = source?.dataset?.imageAlt ?? source?.imageAlt ?? '';
         const imageNameText = source?.dataset?.imageName ?? source?.imageName ?? '';

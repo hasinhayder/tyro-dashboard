@@ -3,6 +3,7 @@
 namespace HasinHayder\TyroDashboard\Http\Controllers;
 
 use HasinHayder\TyroDashboard\Models\Media;
+use HasinHayder\TyroDashboard\Models\MediaCategory;
 use HasinHayder\TyroDashboard\Models\StarredImportImage;
 use HasinHayder\TyroDashboard\Support\DashboardRoute;
 use Illuminate\Http\JsonResponse;
@@ -98,7 +99,17 @@ class MediaController extends BaseController {
             }
         }
 
-        $media = $query->paginate($mediaPerPage)->withQueryString();
+        if ($request->filled('category')) {
+            if ($request->category === 'none') {
+                $query->whereDoesntHave('categories');
+            } else {
+                $query->whereHas('categories', function ($q) use ($request) {
+                    $q->where('tyro_media_categories.id', $request->category);
+                });
+            }
+        }
+
+        $media = $query->with('categories')->paginate($mediaPerPage)->withQueryString();
 
         $statsQuery = Media::query();
         if ($isImpersonating || ! $isAdmin) {
@@ -106,6 +117,12 @@ class MediaController extends BaseController {
         }
         $totalCount = $statsQuery->count();
         $totalSize = $statsQuery->sum('size');
+
+        $categoriesQuery = MediaCategory::query();
+        if ($isImpersonating || ! $isAdmin) {
+            $categoriesQuery->where('user_id', $user->id);
+        }
+        $categories = $categoriesQuery->withCount('media')->orderBy('name')->get();
 
         $uploadDates = (clone $statsQuery)
             ->selectRaw('DATE(created_at) as upload_date')
@@ -123,7 +140,7 @@ class MediaController extends BaseController {
 
         $starredImages = $this->starredImagesForCurrentUser();
 
-        $response = response()->view('tyro-dashboard::media.index', compact('media', 'totalCount', 'totalSize', 'importerKeys', 'uploadDates', 'mediaView', 'starredImages', 'mediaPerPage', 'isAdmin'));
+        $response = response()->view('tyro-dashboard::media.index', compact('media', 'totalCount', 'totalSize', 'importerKeys', 'uploadDates', 'mediaView', 'starredImages', 'mediaPerPage', 'isAdmin', 'categories'));
 
         if ($requestedView === 'list' || $requestedView === 'grid') {
             $response->cookie(cookie(
@@ -186,7 +203,17 @@ class MediaController extends BaseController {
             $query->where('filename', 'like', '%'.$request->search.'%');
         }
 
-        $media = $query->paginate(30);
+        if ($request->filled('category')) {
+            if ($request->category === 'none') {
+                $query->whereDoesntHave('categories');
+            } else {
+                $query->whereHas('categories', function ($q) use ($request) {
+                    $q->where('tyro_media_categories.id', $request->category);
+                });
+            }
+        }
+
+        $media = $query->with('categories')->paginate(30);
 
         return response()->json([
             'data' => $media->map(fn ($m) => [
@@ -203,6 +230,12 @@ class MediaController extends BaseController {
                 'alt_text' => $m->alt_text,
                 'is_favorite' => (bool) $m->is_favorite,
                 'source_url' => $m->source_url,
+                'categories' => $m->categories->map(fn ($c) => [
+                    'id' => $c->id,
+                    'name' => $c->name,
+                    'slug' => $c->slug,
+                ]),
+                'category_ids' => $m->categories->pluck('id')->all(),
             ]),
             'next_page_url' => $media->nextPageUrl(),
             'total' => $media->total(),
@@ -494,6 +527,153 @@ class MediaController extends BaseController {
         return redirect()
             ->route(DashboardRoute::name('media'), $request->except(['_token', '_method', 'selected_ids']))
             ->with('success', "Deleted {$deletedCount} media ".($deletedCount === 1 ? 'file' : 'files').'.');
+    }
+
+    public function bulkCategoryAttach(Request $request) {
+        $validated = $request->validate([
+            'selected_ids' => ['required', 'array', 'min:1'],
+            'selected_ids.*' => ['integer'],
+            'category_id' => ['required', 'integer', 'exists:tyro_media_categories,id'],
+        ]);
+
+        $user = auth()->user();
+        $category = MediaCategory::findOrFail($validated['category_id']);
+
+        if (! $this->canManageCategory($category, $user)) {
+            abort(403, 'You do not have permission to attach media to this category.');
+        }
+
+        $query = Media::query()->whereIn('id', $validated['selected_ids']);
+        if (! $this->canDeleteAnyMedia($user)) {
+            $query->where('user_id', $user->id);
+        }
+
+        $mediaIds = $query->pluck('id')->all();
+        if (! empty($mediaIds)) {
+            $category->media()->syncWithoutDetaching($mediaIds);
+            $this->flushMediaCache();
+        }
+
+        $count = count($mediaIds);
+        $message = "Assigned {$count} media ".($count === 1 ? 'file' : 'files')." to '{$category->name}'.";
+
+        if ($request->wantsJson() || $request->ajax()) {
+            return response()->json([
+                'success' => true,
+                'message' => $message,
+                'attached_count' => $count,
+                'category' => $category,
+            ]);
+        }
+
+        return redirect()
+            ->route(DashboardRoute::name('media'), $request->except(['_token', '_method', 'selected_ids', 'category_id']))
+            ->with('success', $message);
+    }
+
+    public function bulkCategoryUnlink(Request $request) {
+        $validated = $request->validate([
+            'selected_ids' => ['required', 'array', 'min:1'],
+            'selected_ids.*' => ['integer'],
+            'category_id' => ['required', 'integer', 'exists:tyro_media_categories,id'],
+        ]);
+
+        $user = auth()->user();
+        $category = MediaCategory::findOrFail($validated['category_id']);
+
+        if (! $this->canManageCategory($category, $user)) {
+            abort(403, 'You do not have permission to unlink media from this category.');
+        }
+
+        $query = Media::query()->whereIn('id', $validated['selected_ids']);
+        if (! $this->canDeleteAnyMedia($user)) {
+            $query->where('user_id', $user->id);
+        }
+
+        $mediaIds = $query->pluck('id')->all();
+        if (! empty($mediaIds)) {
+            $category->media()->detach($mediaIds);
+            $this->flushMediaCache();
+        }
+
+        $count = count($mediaIds);
+        $message = "Unlinked {$count} media ".($count === 1 ? 'file' : 'files')." from '{$category->name}'.";
+
+        if ($request->wantsJson() || $request->ajax()) {
+            return response()->json([
+                'success' => true,
+                'message' => $message,
+                'unlinked_count' => $count,
+                'category' => $category,
+            ]);
+        }
+
+        return redirect()
+            ->route(DashboardRoute::name('media'), $request->except(['_token', '_method', 'selected_ids']))
+            ->with('success', $message);
+    }
+
+    public function updateCategories(Request $request, Media $media): JsonResponse {
+        $user = auth()->user();
+        if (! $this->canManageMedia($media, $user)) {
+            abort(403, 'You do not have permission to modify this media file.');
+        }
+
+        $validated = $request->validate([
+            'action' => 'required|in:attach,detach,sync',
+            'category_id' => 'required_if:action,attach,detach|nullable|integer|exists:tyro_media_categories,id',
+            'category_ids' => 'required_if:action,sync|nullable|array',
+            'category_ids.*' => 'integer|exists:tyro_media_categories,id',
+        ]);
+
+        if ($validated['action'] === 'attach') {
+            $category = MediaCategory::findOrFail($validated['category_id']);
+            if (! $this->canManageCategory($category, $user)) {
+                abort(403, 'You do not have permission to attach this category.');
+            }
+            $media->categories()->syncWithoutDetaching([$category->id]);
+        } elseif ($validated['action'] === 'detach') {
+            $category = MediaCategory::findOrFail($validated['category_id']);
+            if (! $this->canManageCategory($category, $user)) {
+                abort(403, 'You do not have permission to detach this category.');
+            }
+            $media->categories()->detach($category->id);
+        } elseif ($validated['action'] === 'sync') {
+            $categoryIds = $validated['category_ids'] ?? [];
+            if (! $this->canDeleteAnyMedia($user)) {
+                $categoryIds = MediaCategory::whereIn('id', $categoryIds)
+                    ->where('user_id', $user->id)
+                    ->pluck('id')
+                    ->all();
+            }
+            $media->categories()->sync($categoryIds);
+        }
+
+        $this->flushMediaCache();
+
+        $updatedCategories = $media->categories()->get()->map(fn ($c) => [
+            'id' => $c->id,
+            'name' => $c->name,
+            'slug' => $c->slug,
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'categories' => $updatedCategories,
+            'message' => 'Categories updated successfully.',
+        ]);
+    }
+
+    private function canManageCategory(MediaCategory $category, $user): bool {
+        if (! $user) {
+            return false;
+        }
+
+        if (session()->has('impersonator_id')) {
+            return $category->user_id === $user->id;
+        }
+
+        return $this->canDeleteAnyMedia($user) || $category->user_id === $user->id;
     }
 
     private function canManageMedia(Media $media, $user): bool {
