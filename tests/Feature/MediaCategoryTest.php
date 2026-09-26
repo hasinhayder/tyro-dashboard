@@ -104,6 +104,47 @@ class MediaCategoryTest extends TestCase {
         $responseAdmin->assertSee('User2 Category');
     }
 
+    public function test_categories_list_endpoint_scopes_by_user_and_includes_media_counts() {
+        $admin = CategoryAdminUser::create([
+            'name' => 'Admin User',
+            'email' => 'admin@example.com',
+            'password' => bcrypt('secret'),
+        ]);
+
+        $user1 = CategoryMemberUser::create([
+            'name' => 'User One',
+            'email' => 'user1@example.com',
+            'password' => bcrypt('secret'),
+        ]);
+
+        $user2 = CategoryMemberUser::create([
+            'name' => 'User Two',
+            'email' => 'user2@example.com',
+            'password' => bcrypt('secret'),
+        ]);
+
+        $cat1 = MediaCategory::create(['user_id' => $user1->id, 'name' => 'Wallpapers']);
+        MediaCategory::create(['user_id' => $user2->id, 'name' => 'User2 Category']);
+
+        $catMedia = $this->createMedia($user1->id, 'wallpaper-1.jpg');
+        $cat1->media()->attach($catMedia->id);
+
+        // User 1 sees only their own category with media count
+        $response = $this->actingAs($user1)->getJson(route(DashboardRoute::name('media.categories.list')));
+        $response->assertOk();
+        $response->assertJsonCount(1, 'data');
+        $response->assertJson([
+            'data' => [
+                ['id' => $cat1->id, 'name' => 'Wallpapers', 'media_count' => 1],
+            ],
+        ]);
+
+        // Admin sees all categories
+        $responseAdmin = $this->actingAs($admin)->getJson(route(DashboardRoute::name('media.categories.list')));
+        $responseAdmin->assertOk();
+        $responseAdmin->assertJsonCount(2, 'data');
+    }
+
     public function test_user_can_create_category_with_unique_slug() {
         $user = CategoryMemberUser::create([
             'name' => 'John Doe',
@@ -251,6 +292,39 @@ class MediaCategoryTest extends TestCase {
         $responseUncat->assertOk();
         $responseUncat->assertSee('random-note.jpg');
         $responseUncat->assertDontSee('wallpaper-123.jpg');
+    }
+
+    public function test_media_picker_filters_by_category_and_uncategorized() {
+        $user = CategoryMemberUser::create([
+            'name' => 'User One',
+            'email' => 'user1@example.com',
+            'password' => bcrypt('secret'),
+        ]);
+
+        $category = MediaCategory::create(['user_id' => $user->id, 'name' => 'Logos']);
+        $catMedia = $this->createMedia($user->id, 'brand-logo.png');
+        $uncatMedia = $this->createMedia($user->id, 'random-photo.jpg');
+
+        $category->media()->attach($catMedia->id);
+
+        // Picker without category filter: both images returned
+        $responseAll = $this->actingAs($user)->getJson(route(DashboardRoute::name('media.picker'), ['type' => 'image']));
+        $responseAll->assertOk();
+        $this->assertCount(2, $responseAll->json('data'));
+
+        // Picker filtered by category ID: only categorized image returned
+        $responseCat = $this->actingAs($user)->getJson(route(DashboardRoute::name('media.picker'), ['type' => 'image', 'category' => $category->id]));
+        $responseCat->assertOk();
+        $filenamesCat = collect($responseCat->json('data'))->pluck('filename')->all();
+        $this->assertContains('brand-logo.png', $filenamesCat);
+        $this->assertNotContains('random-photo.jpg', $filenamesCat);
+
+        // Picker filtered by uncategorized ('none'): only uncategorized image returned
+        $responseNone = $this->actingAs($user)->getJson(route(DashboardRoute::name('media.picker'), ['type' => 'image', 'category' => 'none']));
+        $responseNone->assertOk();
+        $filenamesNone = collect($responseNone->json('data'))->pluck('filename')->all();
+        $this->assertContains('random-photo.jpg', $filenamesNone);
+        $this->assertNotContains('brand-logo.png', $filenamesNone);
     }
 
     public function test_bulk_category_attach_and_bulk_unlink() {

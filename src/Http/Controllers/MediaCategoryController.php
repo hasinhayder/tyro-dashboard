@@ -87,6 +87,28 @@ class MediaCategoryController extends BaseController {
         ));
     }
 
+    public function list(): JsonResponse {
+        $user = auth()->user();
+        $isAdmin = $this->isPrivilegedUser($user);
+        $isImpersonating = session()->has('impersonator_id');
+
+        $query = MediaCategory::query()->withCount('media');
+
+        if ($isImpersonating || ! $isAdmin) {
+            $query->where('user_id', $user->id);
+        }
+
+        $categories = $query->orderBy('name')->get();
+
+        return response()->json([
+            'data' => $categories->map(fn ($category) => [
+                'id' => $category->id,
+                'name' => $category->name,
+                'media_count' => $category->media_count,
+            ]),
+        ]);
+    }
+
     public function store(Request $request) {
         $user = auth()->user();
 

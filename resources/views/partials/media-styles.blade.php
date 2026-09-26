@@ -401,6 +401,34 @@
         background: rgba(255, 255, 255, 0.04);
     }
 
+    .tyro-media-modal-category {
+        display: none;
+        flex: 1 1 0;
+        min-width: 0;
+    }
+
+    .tyro-media-modal-category[hidden] {
+        display: none !important;
+    }
+
+    .tyro-media-modal-toolbar-left.has-category-filter .tyro-media-modal-category {
+        display: inline-flex;
+    }
+
+    .tyro-media-modal-toolbar-left.has-category-filter .tyro-media-modal-search {
+        flex: 3 1 0;
+    }
+
+    .tyro-media-category-select {
+        width: 100%;
+        height: 2.5rem;
+        min-height: 2.5rem;
+        padding: 0 0.8rem;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.04);
+        font-size: 0.78rem;
+    }
+
     .tyro-media-modal-body {
         flex: 1;
         overflow-y: auto;
@@ -668,6 +696,15 @@
         }
 
         .tyro-media-modal-search {
+            width: 100%;
+        }
+
+        .tyro-media-modal-toolbar-left.has-category-filter .tyro-media-modal-search {
+            flex: 0 0 auto;
+        }
+
+        .tyro-media-modal-category {
+            flex: 0 0 auto;
             width: 100%;
         }
 

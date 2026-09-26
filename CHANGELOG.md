@@ -3,6 +3,7 @@
 All notable changes to Tyro Dashboard are documented in this file.
 
 ## [v1.56.0](https://github.com/hasinhayder/tyro-dashboard/releases/tag/v1.56.0) - 2026-09-26
+- Media picker category dropdown: the "Choose media" modal now shows a category dropdown on the same line as the search box (search 75% / category 25%) that instantly filters the images; when no categories exist the dropdown is hidden and the search box takes the full width, backed by a new `media.categories.list` JSON endpoint
 - Media Categories management: added dedicated Categories page (`/dashboard/media/categories`) with full CRUD, user and admin permission scoping, and automatic unique slug generation
 - Bulk Category creation: added "Add Bulk Category" modal to quickly create multiple categories from comma-separated (or newline-separated) input
 - Media category assignment & filtering: added category filter dropdown on media library and picker, bulk "Add to Category" modal with toggle switches and scrollable list, and bulk unlinking from categories

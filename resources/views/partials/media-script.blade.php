@@ -1,6 +1,7 @@
 @php
 $mediaPickerUrl = route(\HasinHayder\TyroDashboard\Support\DashboardRoute::name('media.picker'));
 $mediaUploadUrl = route(\HasinHayder\TyroDashboard\Support\DashboardRoute::name('media.upload'));
+$mediaCategoriesUrl = route(\HasinHayder\TyroDashboard\Support\DashboardRoute::name('media.categories.list'));
 $storageBaseUrl = rtrim(\Illuminate\Support\Facades\Storage::disk('public')->url(''), '/');
 @endphp
 
@@ -29,7 +30,7 @@ $storageBaseUrl = rtrim(\Illuminate\Support\Facades\Storage::disk('public')->url
         </div>
 
         <div class="tyro-media-modal-toolbar">
-            <div class="tyro-media-modal-toolbar-left">
+            <div class="tyro-media-modal-toolbar-left" id="tyroDashboardMediaPickerToolbarLeft">
                 <label class="tyro-media-modal-search" for="tyroDashboardMediaPickerSearch">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
                         <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-4.35-4.35m1.85-5.15a7 7 0 1 1-14 0 7 7 0 0 1 14 0Z" />
@@ -37,6 +38,11 @@ $storageBaseUrl = rtrim(\Illuminate\Support\Facades\Storage::disk('public')->url
                     <input type="text" id="tyroDashboardMediaPickerSearch" class="form-input" placeholder="Search images or filenames" autocomplete="off">
                 </label>
 
+                <label class="tyro-media-modal-category" for="tyroDashboardMediaPickerCategory" id="tyroDashboardMediaCategoryWrap" hidden>
+                    <select id="tyroDashboardMediaPickerCategory" class="form-select tyro-media-category-select" aria-label="Filter by category">
+                        <option value="">All Categories</option>
+                    </select>
+                </label>
             </div>
 
             <div class="tyro-media-modal-toolbar-right">
@@ -103,6 +109,7 @@ $storageBaseUrl = rtrim(\Illuminate\Support\Facades\Storage::disk('public')->url
 
         const mediaPickerUrl = @json($mediaPickerUrl);
         const mediaUploadUrl = @json($mediaUploadUrl);
+        const mediaCategoriesUrl = @json($mediaCategoriesUrl);
         const storageBaseUrl = @json($storageBaseUrl);
         const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '';
         const modal = document.getElementById('tyroDashboardMediaPickerModal');
@@ -117,6 +124,10 @@ $storageBaseUrl = rtrim(\Illuminate\Support\Facades\Storage::disk('public')->url
         const outputWrap = document.getElementById('tyroDashboardMediaOutputWrap');
         const outputSelect = document.getElementById('tyroDashboardMediaOutputSelect');
 
+        const toolbarLeft = document.getElementById('tyroDashboardMediaPickerToolbarLeft');
+        const categoryWrap = document.getElementById('tyroDashboardMediaCategoryWrap');
+        const categorySelect = document.getElementById('tyroDashboardMediaPickerCategory');
+
         const favToggle = document.getElementById('tyroDashboardMediaPickerFavToggle');
         const modalTitle = document.getElementById('tyroDashboardMediaPickerTitle');
         const modalSubtitle = modal?.querySelector('.tyro-media-modal-subtitle');
@@ -129,6 +140,7 @@ $storageBaseUrl = rtrim(\Illuminate\Support\Facades\Storage::disk('public')->url
         let nextPageUrl = null;
         let searchTimer = null;
         let onlyFavorites = false;
+        let activeCategoryId = '';
         let isMultiSelect = false;
         let selectedMediaIds = new Set();
         let onMultiSelectConfirm = null;
@@ -282,6 +294,57 @@ $storageBaseUrl = rtrim(\Illuminate\Support\Facades\Storage::disk('public')->url
             favToggle.title = onlyFavorites ? 'Showing favorites only (click to show all)' : 'Filter favorites only';
         }
 
+        function syncCategoryFilterUI(hasCategories) {
+            if (!categoryWrap || !toolbarLeft) return;
+            categoryWrap.hidden = !hasCategories;
+            toolbarLeft.classList.toggle('has-category-filter', hasCategories);
+        }
+
+        async function loadCategories() {
+            if (!categoryWrap || !categorySelect) {
+                return;
+            }
+
+            try {
+                const response = await fetch(mediaCategoriesUrl, {
+                    headers: { 'X-Requested-With': 'XMLHttpRequest' },
+                });
+                const json = await response.json();
+                const categories = Array.isArray(json.data) ? json.data : [];
+
+                if (!categories.length) {
+                    activeCategoryId = '';
+                    categorySelect.value = '';
+                    syncCategoryFilterUI(false);
+                    return;
+                }
+
+                categorySelect.innerHTML = '';
+
+                const allOption = document.createElement('option');
+                allOption.value = '';
+                allOption.textContent = 'All Categories';
+                categorySelect.appendChild(allOption);
+
+                const noneOption = document.createElement('option');
+                noneOption.value = 'none';
+                noneOption.textContent = 'Uncategorized';
+                categorySelect.appendChild(noneOption);
+
+                categories.forEach((category) => {
+                    const option = document.createElement('option');
+                    option.value = String(category.id);
+                    option.textContent = `${category.name} (${category.media_count ?? 0})`;
+                    categorySelect.appendChild(option);
+                });
+
+                categorySelect.value = activeCategoryId;
+                syncCategoryFilterUI(true);
+            } catch (error) {
+                syncCategoryFilterUI(false);
+            }
+        }
+
         function openForInput(input) {
             isMultiSelect = false;
             selectedMediaIds.clear();
@@ -293,8 +356,11 @@ $storageBaseUrl = rtrim(\Illuminate\Support\Facades\Storage::disk('public')->url
             activeInput = input;
             searchInput.value = '';
             onlyFavorites = false;
+            activeCategoryId = '';
+            if (categorySelect) categorySelect.value = '';
             syncFavToggleUI();
             syncOutputSelector();
+            loadCategories();
 
             const customCols = input?.dataset.tyroMediaColumns;
             if (grid) {
@@ -325,7 +391,10 @@ $storageBaseUrl = rtrim(\Illuminate\Support\Facades\Storage::disk('public')->url
 
             searchInput.value = '';
             onlyFavorites = false;
+            activeCategoryId = '';
+            if (categorySelect) categorySelect.value = '';
             syncFavToggleUI();
+            loadCategories();
             updateMultiSelectBar();
 
             modal.classList.add('open');
@@ -339,6 +408,8 @@ $storageBaseUrl = rtrim(\Illuminate\Support\Facades\Storage::disk('public')->url
             modal.setAttribute('aria-hidden', 'true');
             activeInput = null;
             onlyFavorites = false;
+            activeCategoryId = '';
+            if (categorySelect) categorySelect.value = '';
             isMultiSelect = false;
             selectedMediaIds.clear();
             onMultiSelectConfirm = null;
@@ -363,6 +434,10 @@ $storageBaseUrl = rtrim(\Illuminate\Support\Facades\Storage::disk('public')->url
                 params.set('favorite', '1');
             }
 
+            if (activeCategoryId) {
+                params.set('category', activeCategoryId);
+            }
+
             if (!append) {
                 grid.innerHTML = stateMarkup('Loading media', 'Fetching your latest uploads.');
                 nextPageUrl = null;
@@ -375,6 +450,9 @@ $storageBaseUrl = rtrim(\Illuminate\Support\Facades\Storage::disk('public')->url
                 fetchUrl.searchParams.set('search', searchInput.value || '');
                 if (onlyFavorites) {
                     fetchUrl.searchParams.set('favorite', '1');
+                }
+                if (activeCategoryId) {
+                    fetchUrl.searchParams.set('category', activeCategoryId);
                 }
 
                 const response = await fetch(fetchUrl.toString(), {
@@ -621,6 +699,11 @@ $storageBaseUrl = rtrim(\Illuminate\Support\Facades\Storage::disk('public')->url
         searchInput.addEventListener('input', () => {
             window.clearTimeout(searchTimer);
             searchTimer = window.setTimeout(() => loadMedia(false), 350);
+        });
+
+        categorySelect?.addEventListener('change', () => {
+            activeCategoryId = categorySelect.value;
+            loadMedia(false);
         });
 
         uploadInput.addEventListener('change', uploadFile);
