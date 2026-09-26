@@ -349,4 +349,50 @@ class MediaCategoryTest extends TestCase {
         $this->assertEquals('new-name.jpg', $fresh->filename);
         $this->assertEquals('A photo of a sunrise', $fresh->alt_text);
     }
+
+    public function test_bulk_category_store_creates_multiple_categories_from_comma_separated_text() {
+        $user = CategoryMemberUser::create([
+            'name' => 'User One',
+            'email' => 'user1@example.com',
+            'password' => bcrypt('secret'),
+        ]);
+
+        // Pre-create one existing category to test duplicate skipping
+        MediaCategory::create([
+            'user_id' => $user->id,
+            'name' => 'Travel',
+            'slug' => 'travel',
+        ]);
+
+        $response = $this->actingAs($user)->post(route(DashboardRoute::name('media.categories.bulk-store')), [
+            'categories' => "Nature, Travel, Animals, Technology\nArchitecture",
+        ]);
+
+        $response->assertRedirect(route(DashboardRoute::name('media.categories.index')));
+
+        // 4 new categories should have been created (Travel already existed)
+        $this->assertDatabaseHas('tyro_media_categories', [
+            'user_id' => $user->id,
+            'name' => 'Nature',
+            'slug' => 'nature',
+        ]);
+        $this->assertDatabaseHas('tyro_media_categories', [
+            'user_id' => $user->id,
+            'name' => 'Animals',
+            'slug' => 'animals',
+        ]);
+        $this->assertDatabaseHas('tyro_media_categories', [
+            'user_id' => $user->id,
+            'name' => 'Technology',
+            'slug' => 'technology',
+        ]);
+        $this->assertDatabaseHas('tyro_media_categories', [
+            'user_id' => $user->id,
+            'name' => 'Architecture',
+            'slug' => 'architecture',
+        ]);
+
+        $this->assertEquals(5, MediaCategory::where('user_id', $user->id)->count());
+    }
 }
+

@@ -106,6 +106,7 @@ Route::prefix('media')->name('media.')->group(function () {
     // Media Categories
     Route::get('/categories', [MediaCategoryController::class, 'index'])->name('categories.index');
     Route::post('/categories', [MediaCategoryController::class, 'store'])->name('categories.store');
+    Route::post('/categories/bulk', [MediaCategoryController::class, 'storeBulk'])->name('categories.bulk-store');
     Route::put('/categories/{category}', [MediaCategoryController::class, 'update'])->name('categories.update');
     Route::delete('/categories/{category}', [MediaCategoryController::class, 'destroy'])->name('categories.destroy');
     Route::post('/categories/{category}/add-media', [MediaCategoryController::class, 'addMedia'])->name('categories.add-media');

@@ -127,6 +127,71 @@ class MediaCategoryController extends BaseController {
             ->with('success', "Category '{$category->name}' created successfully.");
     }
 
+    public function storeBulk(Request $request) {
+        $user = auth()->user();
+
+        $validated = $request->validate([
+            'categories' => 'required|string',
+        ]);
+
+        $rawNames = preg_split('/[,\r\n]+/', $validated['categories']);
+        $created = [];
+        $skipped = [];
+
+        foreach ($rawNames as $raw) {
+            $name = trim($raw);
+            if ($name === '') {
+                continue;
+            }
+
+            $name = mb_substr($name, 0, 150);
+
+            // Check if user already has a category with this exact name (case-insensitive)
+            $existing = MediaCategory::where('user_id', $user->id)
+                ->whereRaw('LOWER(name) = ?', [mb_strtolower($name)])
+                ->first();
+
+            if ($existing) {
+                $skipped[] = $name;
+                continue;
+            }
+
+            $slug = MediaCategory::generateUniqueSlug($name, $user->id);
+
+            $cat = MediaCategory::create([
+                'user_id' => $user->id,
+                'name' => $name,
+                'slug' => $slug,
+                'description' => null,
+            ]);
+
+            $created[] = $cat;
+        }
+
+        $this->flushMediaCache();
+
+        $count = count($created);
+        $message = "Added {$count} ".($count === 1 ? 'category' : 'categories')." successfully.";
+        if (! empty($skipped)) {
+            $skippedCount = count($skipped);
+            $message .= " ({$skippedCount} duplicate ".($skippedCount === 1 ? 'category was' : 'categories were')." skipped).";
+        }
+
+        if ($request->wantsJson() || $request->ajax()) {
+            return response()->json([
+                'success' => true,
+                'created_count' => $count,
+                'created' => $created,
+                'skipped' => $skipped,
+                'message' => $message,
+            ]);
+        }
+
+        return redirect()
+            ->route(DashboardRoute::name('media.categories.index'))
+            ->with($count > 0 ? 'success' : 'info', $message);
+    }
+
     public function update(Request $request, MediaCategory $category) {
         $user = auth()->user();
         if (! $this->canManageCategory($category, $user)) {

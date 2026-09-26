@@ -3,6 +3,11 @@
 All notable changes to Tyro Dashboard are documented in this file.
 
 ## [v1.56.0](https://github.com/hasinhayder/tyro-dashboard/releases/tag/v1.56.0) - 2026-09-26
+- Media Categories management: added dedicated Categories page (`/dashboard/media/categories`) with full CRUD, user and admin permission scoping, and automatic unique slug generation
+- Bulk Category creation: added "Add Bulk Category" modal to quickly create multiple categories from comma-separated (or newline-separated) input
+- Media category assignment & filtering: added category filter dropdown on media library and picker, bulk "Add to Category" modal with toggle switches and scrollable list, and bulk unlinking from categories
+- Lightbox category management: attach and detach categories directly from the image preview modal with real-time UI updates
+- File Edit modal: replaced card alt inputs with a dedicated File Edit modal supporting filename renaming and alt text editing
 - Favicon upload support in System Settings: added a Favicon media picker in the Branding settings container using thumb-mode selection (`output="thumb"`) and live preview
 - Layout head integration: rendered `<link rel="icon">` in `layouts/admin.blade.php`, `layouts/app.blade.php`, and `layouts/user.blade.php` based on `TYRO_DASHBOARD_FAVICON` / `tyro-dashboard.branding.favicon` configuration
 - Environment configuration: added `TYRO_DASHBOARD_FAVICON` validation and `.env` persistence in `SystemSettingsController`

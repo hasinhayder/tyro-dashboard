@@ -136,6 +136,12 @@
                 </svg>
                 Media Library
             </a>
+            <button type="button" class="btn btn-secondary" onclick="openBulkCategoryModal()" style="white-space:nowrap;">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:15px;height:15px;display:inline;vertical-align:-2px;margin-right:4px;">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                </svg>
+                Add Bulk Category
+            </button>
             <button type="button" class="btn btn-primary" onclick="openCreateCategoryModal()" style="white-space:nowrap;">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:15px;height:15px;display:inline;vertical-align:-2px;margin-right:4px;">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
@@ -278,11 +284,46 @@
             @if(request()->filled('search'))
                 <a href="{{ route($dashboardRoute::name('media.categories.index')) }}" class="btn btn-secondary">Clear Search</a>
             @else
-                <button type="button" class="btn btn-primary" onclick="openCreateCategoryModal()">Create First Category</button>
+                <div style="display:flex;gap:0.5rem;justify-content:center;flex-wrap:wrap;">
+                    <button type="button" class="btn btn-secondary" onclick="openBulkCategoryModal()">Add Bulk Category</button>
+                    <button type="button" class="btn btn-primary" onclick="openCreateCategoryModal()">Create First Category</button>
+                </div>
             @endif
         </div>
     </div>
 @endif
+
+<!-- Add Bulk Category Modal -->
+<div class="modal-overlay" id="bulkCategoryModal">
+    <div class="modal" style="max-width: 500px; border: 1px solid var(--border);">
+        <div class="modal-header">
+            <h3 class="modal-title">Add Bulk Category</h3>
+            <button type="button" class="modal-close" onclick="closeModal('bulkCategoryModal')">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
+        </div>
+        <form action="{{ route($dashboardRoute::name('media.categories.bulk-store')) }}" method="POST">
+            @csrf
+            <div class="modal-body">
+                <div class="form-group" style="margin-bottom:0;">
+                    <label class="form-label" for="bulkCategoryInput">
+                        Categories <span style="color:var(--destructive)">*</span>
+                    </label>
+                    <textarea id="bulkCategoryInput" name="categories" class="form-input" rows="5" required placeholder="e.g. Logos, Hero Banners, Blog Posts, Nature, Travel" style="resize:vertical;" autocomplete="off"></textarea>
+                    <span style="font-size:0.75rem;color:var(--muted-foreground);margin-top:0.35rem;display:block;">
+                        Enter multiple category names separated by commas.
+                    </span>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" onclick="closeModal('bulkCategoryModal')">Cancel</button>
+                <button type="submit" class="btn btn-primary">Save Categories</button>
+            </div>
+        </form>
+    </div>
+</div>
 
 <!-- Create Category Modal -->
 <div class="modal-overlay" id="createCategoryModal">
@@ -409,6 +450,13 @@
     function openCreateCategoryModal() {
         openModal('createCategoryModal');
         setTimeout(() => document.getElementById('createCatName')?.focus(), 50);
+    }
+
+    function openBulkCategoryModal() {
+        const textarea = document.getElementById('bulkCategoryInput');
+        if (textarea) textarea.value = '';
+        openModal('bulkCategoryModal');
+        setTimeout(() => textarea?.focus(), 50);
     }
 
     function openEditCategoryModal(id, name, slug, description) {
