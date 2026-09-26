@@ -2,6 +2,11 @@
 
 All notable changes to Tyro Dashboard are documented in this file.
 
+## [v1.56.0](https://github.com/hasinhayder/tyro-dashboard/releases/tag/v1.56.0) - 2026-09-26
+- Favicon upload support in System Settings: added a Favicon media picker in the Branding settings container using thumb-mode selection (`output="thumb"`) and live preview
+- Layout head integration: rendered `<link rel="icon">` in `layouts/admin.blade.php`, `layouts/app.blade.php`, and `layouts/user.blade.php` based on `TYRO_DASHBOARD_FAVICON` / `tyro-dashboard.branding.favicon` configuration
+- Environment configuration: added `TYRO_DASHBOARD_FAVICON` validation and `.env` persistence in `SystemSettingsController`
+
 ## [v1.55.2](https://github.com/hasinhayder/tyro-dashboard/releases/tag/v1.55.2) - 2026-09-19
 - Configurable media picker grid columns: added `columns` and `galleryColumns` props to `<x-media-picker>` (e.g. `columns="6"`, `:columns="7"`, or `galleryColumns="6"`) allowing per-trigger custom column counts in the media picker modal grid, defaulting to 5 columns on desktop and automatically adapting responsibly on mobile
 - Square image card presentation: the entire media picker modal card now maintains a square 1:1 aspect ratio with proportional image filling and compact file metadata footer

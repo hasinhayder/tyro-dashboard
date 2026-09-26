@@ -20,5 +20,6 @@ abstract class TestCase extends BaseTestCase {
 
     protected function defineRoutes($router) {
         $router->get('login', fn () => 'login')->name('login');
+        $router->post('logout', fn () => 'logout')->name('tyro-login.logout');
     }
 }

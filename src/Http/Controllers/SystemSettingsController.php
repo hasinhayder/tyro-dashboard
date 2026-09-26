@@ -22,6 +22,7 @@ class SystemSettingsController extends BaseController {
         $validated = $request->validate([
             'TYRO_DASHBOARD_APP_NAME' => 'nullable|string|max:255',
             'TYRO_DASHBOARD_LOGO_HEIGHT' => 'nullable|string|max:20',
+            'TYRO_DASHBOARD_FAVICON' => 'nullable|string|max:500',
             'TYRO_DASHBOARD_SIDEBAR_BG' => 'nullable|string|max:50',
             'TYRO_DASHBOARD_SIDEBAR_TEXT' => 'nullable|string|max:50',
             'TYRO_DASHBOARD_SIDEBAR_PRIMARY' => 'nullable|string|max:50',
@@ -384,6 +385,7 @@ class SystemSettingsController extends BaseController {
         return [
             'TYRO_DASHBOARD_APP_NAME' => config('tyro-dashboard.branding.app_name'),
             'TYRO_DASHBOARD_LOGO_HEIGHT' => config('tyro-dashboard.branding.logo_height'),
+            'TYRO_DASHBOARD_FAVICON' => config('tyro-dashboard.branding.favicon'),
             'TYRO_DASHBOARD_SIDEBAR_BG' => config('tyro-dashboard.branding.sidebar_bg'),
             'TYRO_DASHBOARD_SIDEBAR_TEXT' => config('tyro-dashboard.branding.sidebar_text'),
             'TYRO_DASHBOARD_SIDEBAR_PRIMARY' => config('tyro-dashboard.branding.sidebar_primary'),
@@ -595,6 +597,7 @@ class SystemSettingsController extends BaseController {
         return [
             'TYRO_DASHBOARD_APP_NAME' => null,
             'TYRO_DASHBOARD_LOGO_HEIGHT' => '32px',
+            'TYRO_DASHBOARD_FAVICON' => null,
             'TYRO_DASHBOARD_SIDEBAR_BG' => null,
             'TYRO_DASHBOARD_SIDEBAR_TEXT' => null,
             'TYRO_DASHBOARD_SIDEBAR_PRIMARY' => null,

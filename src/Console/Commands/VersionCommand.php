@@ -19,7 +19,7 @@ class VersionCommand extends Command {
      * Execute the console command.
      */
     public function handle(): int {
-        $version = '1.55.2'; // feat(media): configurable media picker columns prop and square image cards
+        $version = '1.56.0'; // feat(branding): favicon upload container in settings with thumb-mode media picker and admin panel head integration
 
         $this->info('');
         $this->info('  ╔════════════════════════════════════════╗');
@@ -70,6 +70,7 @@ class VersionCommand extends Command {
 }
 
 // Changelog
+// 1.56.0 - feat(branding): favicon upload container in Branding settings using thumb-mode media picker, .env persistence via TYRO_DASHBOARD_FAVICON, and link tag rendering in admin/app/user layout heads
 // 1.55.2 - feat(media): configurable media picker columns prop (e.g. columns="6" or :columns="7") with per-trigger dynamic grid sizing and square image card presentation
 // 1.55.1 - fix(media): hide Clear filter button when query parameters are present but empty (requires filled filter values to show)
 // 1.55.0 - feat(media): favorite/bookmark images with star toggle on image cards (yellow active, gray inactive), media gallery auto-applying dropdown filters (Type, Date, Favorite), and a header favorite toggle filter on the media picker component

@@ -17,7 +17,7 @@
                         <div class="sys-settings-grid">
                             <div class="sys-settings-surface">
                                 <h4 class="sys-settings-surface-title">Branding</h4>
-                                <p class="sys-settings-surface-description">Customize the dashboard app name and sidebar colors.</p>
+                                <p class="sys-settings-surface-description">Customize the dashboard app name, logo sizing, and favicon.</p>
 
                                 <div class="form-group">
                                     <label for="TYRO_DASHBOARD_APP_NAME" class="form-label">App name (TYRO_DASHBOARD_APP_NAME)</label>
@@ -35,6 +35,23 @@
                                     <p class="form-hint">CSS height value e.g. <code>32px</code>, <code>3rem</code>.</p>
                                 </div>
 
+                                <div class="form-group" style="margin-bottom:0;">
+                                    <label class="form-label">Favicon (TYRO_DASHBOARD_FAVICON)</label>
+                                    <x-media-picker
+                                        name="TYRO_DASHBOARD_FAVICON"
+                                        :value="old('TYRO_DASHBOARD_FAVICON', $settings['TYRO_DASHBOARD_FAVICON'] ?? null)"
+                                        output="thumb"
+                                        preview="true"
+                                        preview-position="left"
+                                        preview-width="48px"
+                                        preview-height="48px"
+                                        button="primary"
+                                        button-text="Select Favicon"
+                                        width="100%"
+                                        size="medium"
+                                    />
+                                    <p class="form-hint" style="margin-top:0.35rem;">Used as the shortcut icon / favicon in dashboard browser tabs.</p>
+                                </div>
                             </div>
 
                             <div class="sys-settings-surface">
