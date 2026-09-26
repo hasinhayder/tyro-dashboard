@@ -257,9 +257,10 @@
         width: 8rem;
         height: 2.5rem;
         min-height: 2.5rem;
-        padding: 0 0.8rem;
+        padding: 0 2.2rem 0 0.8rem;
         border-radius: 999px;
-        background: rgba(255, 255, 255, 0.04);
+        background-color: rgba(255, 255, 255, 0.04);
+        background-position: right 0.7rem center;
         font-size: 0.78rem;
         letter-spacing: 0;
         text-transform: none;
@@ -423,10 +424,12 @@
         width: 100%;
         height: 2.5rem;
         min-height: 2.5rem;
-        padding: 0 0.8rem;
+        padding: 0 2.4rem 0 0.9rem;
         border-radius: 999px;
-        background: rgba(255, 255, 255, 0.04);
+        background-color: rgba(255, 255, 255, 0.04);
+        background-position: right 0.8rem center;
         font-size: 0.78rem;
+        cursor: pointer;
     }
 
     .tyro-media-modal-body {
@@ -439,6 +442,12 @@
         display: grid;
         grid-template-columns: repeat(var(--picker-grid-columns, 5), minmax(0, 1fr));
         gap: 1rem;
+        transition: opacity 0.18s ease;
+    }
+
+    .tyro-media-grid.is-loading {
+        opacity: 0.45;
+        pointer-events: none;
     }
 
     .tyro-media-item {

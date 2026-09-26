@@ -141,6 +141,7 @@ $storageBaseUrl = rtrim(\Illuminate\Support\Facades\Storage::disk('public')->url
         let searchTimer = null;
         let onlyFavorites = false;
         let activeCategoryId = '';
+        let loadSequence = 0;
         let isMultiSelect = false;
         let selectedMediaIds = new Set();
         let onMultiSelectConfirm = null;
@@ -438,9 +439,17 @@ $storageBaseUrl = rtrim(\Illuminate\Support\Facades\Storage::disk('public')->url
                 params.set('category', activeCategoryId);
             }
 
+            const requestId = ++loadSequence;
+
             if (!append) {
-                grid.innerHTML = stateMarkup('Loading media', 'Fetching your latest uploads.');
                 nextPageUrl = null;
+                // Keep existing cards in place (dimmed) to avoid layout jumps;
+                // fall back to the loading state only when there is nothing to keep.
+                if (grid.querySelector('.tyro-media-item')) {
+                    grid.classList.add('is-loading');
+                } else {
+                    grid.innerHTML = stateMarkup('Loading media', 'Fetching your latest uploads.');
+                }
             }
 
             try {
@@ -460,12 +469,23 @@ $storageBaseUrl = rtrim(\Illuminate\Support\Facades\Storage::disk('public')->url
                 });
                 const json = await response.json();
 
+                if (requestId !== loadSequence) {
+                    return;
+                }
+
                 renderItems(Array.isArray(json.data) ? json.data : [], append);
                 nextPageUrl = json.next_page_url || null;
                 loadMoreWrap.style.display = nextPageUrl ? '' : 'none';
             } catch (error) {
+                if (requestId !== loadSequence) {
+                    return;
+                }
                 grid.innerHTML = stateMarkup('Could not load media', 'Please try again in a moment.');
                 loadMoreWrap.style.display = 'none';
+            } finally {
+                if (requestId === loadSequence) {
+                    grid.classList.remove('is-loading');
+                }
             }
         }
 
