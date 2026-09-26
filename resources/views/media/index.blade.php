@@ -1219,8 +1219,7 @@
 </form>
 <form id="bulk-category-attach-form" action="{{ route($dashboardRoute::name('media.bulk-category-attach')) }}" method="POST" style="display:none;">
     @csrf
-    <input type="hidden" name="category_id" id="bulk-attach-category-id">
-    @foreach(request()->except(['_token', '_method', 'selected_ids', 'category_id']) as $key => $value)
+    @foreach(request()->except(['_token', '_method', 'selected_ids', 'category_id', 'category_ids']) as $key => $value)
         @if(is_scalar($value))
             <input type="hidden" name="{{ $key }}" value="{{ $value }}">
         @endif
@@ -1256,17 +1255,12 @@
                 </svg>
                 Category
             </a>
-            <div id="bulk-media-category-wrap" style="display:none;align-items:center;gap:0.35rem;">
-                <select id="bulk-media-category-select" class="form-select" style="padding:0.35rem 0.6rem;font-size:0.8rem;height:auto;min-width:140px;">
-                    <option value="">Assign to Category...</option>
-                    @foreach($categories as $cat)
-                        <option value="{{ $cat->id }}">{{ $cat->name }}</option>
-                    @endforeach
-                </select>
-                <button type="button" class="btn btn-secondary" id="bulk-media-category-btn" onclick="submitBulkCategoryAttach()" style="white-space:nowrap;">
-                    Assign
-                </button>
-            </div>
+            <button type="button" class="btn btn-secondary" id="bulk-media-category-btn" onclick="openBulkCategoryModal()" style="white-space:nowrap;display:none;">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:15px;height:15px;display:inline;vertical-align:-2px;margin-right:4px;">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                </svg>
+                Add to Category
+            </button>
             @if(request()->filled('category') && request('category') !== 'none')
                 <button type="button" class="btn btn-secondary" id="bulk-media-unlink-btn" onclick="submitBulkCategoryUnlink()" style="white-space:nowrap;display:none;color:var(--warning,#f59e0b);">
                     Unlink Selected
@@ -1511,15 +1505,6 @@ $authUserId = auth()->id();
                     <span class="badge badge-secondary" style="font-size:0.68rem;padding:0.15rem 0.4rem;">{{ $c->name }}</span>
                 @endforeach
             </div>
-            @if($file->is_image)
-            <div class="media-card-alt">
-                <input type="text" id="alt-{{ $file->id }}" class="form-input"
-                    placeholder="Alt text…" value="{{ $file->alt_text }}"
-                    onchange="saveAlt({{ $file->id }}, this.value)"
-                    onblur="saveAlt({{ $file->id }}, this.value)"
-                    title="Alt text for accessibility and SEO">
-            </div>
-            @endif
             <div class="media-card-actions">
                 @if($canDeleteMedia || $file->user_id === $authUserId)
                     <label class="media-bulk-check" title="Select {{ $file->filename }}">
@@ -1554,8 +1539,10 @@ $authUserId = auth()->id();
                         data-media-rename
                         data-filename="{{ e($file->filename) }}"
                         data-extension="{{ e(pathinfo($file->filename, PATHINFO_EXTENSION)) }}"
-                        onclick="renameMedia({{ $file->id }}, this)"
-                        title="Rename file">
+                        data-alt-text="{{ e($file->alt_text ?? '') }}"
+                        data-is-image="{{ $file->is_image ? '1' : '0' }}"
+                        onclick="openFileEditModal({{ $file->id }}, this)"
+                        title="Edit file">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125"/>
                     </svg>
@@ -1728,8 +1715,10 @@ $authUserId = auth()->id();
                             data-media-rename
                             data-filename="{{ e($file->filename) }}"
                             data-extension="{{ e(pathinfo($file->filename, PATHINFO_EXTENSION)) }}"
-                            onclick="renameMedia({{ $file->id }}, this)"
-                            title="Rename file">
+                            data-alt-text="{{ e($file->alt_text ?? '') }}"
+                            data-is-image="{{ $file->is_image ? '1' : '0' }}"
+                            onclick="openFileEditModal({{ $file->id }}, this)"
+                            title="Edit file">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125"/>
                             </svg>
@@ -2102,6 +2091,99 @@ $authUserId = auth()->id();
     </div>
 </div>
 
+<!-- File Edit Modal -->
+<div class="modal-overlay" id="fileEditModal">
+    <div class="modal" style="max-width: 480px; border: 1px solid var(--border);">
+        <div class="modal-header">
+            <h3 class="modal-title">File Edit</h3>
+            <button type="button" class="modal-close" onclick="closeModal('fileEditModal')">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
+        </div>
+        <form id="fileEditForm" onsubmit="submitFileEdit(event)">
+            <input type="hidden" id="editMediaId" value="">
+            <input type="hidden" id="editMediaExt" value="">
+            <div class="modal-body">
+                <div class="form-group" style="margin-bottom: 1rem;">
+                    <label class="form-label" for="editMediaFilename">
+                        File Name <span style="color:var(--destructive)">*</span>
+                    </label>
+                    <input type="text" id="editMediaFilename" class="form-input" required maxlength="200" autocomplete="off">
+                    <span style="font-size:0.75rem;color:var(--muted-foreground);margin-top:0.25rem;display:block;">
+                        Enter a new name for this file (without extension).
+                    </span>
+                </div>
+                <div class="form-group" id="editMediaAltGroup">
+                    <label class="form-label" for="editMediaAlt">
+                        Alt Text <span style="font-size:0.75rem;color:var(--muted-foreground);">(optional)</span>
+                    </label>
+                    <input type="text" id="editMediaAlt" class="form-input" maxlength="255" placeholder="Alt text for accessibility and SEO..." autocomplete="off">
+                    <span style="font-size:0.75rem;color:var(--muted-foreground);margin-top:0.25rem;display:block;">
+                        Alt text for accessibility and SEO.
+                    </span>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" onclick="closeModal('fileEditModal')">Cancel</button>
+                <button type="submit" class="btn btn-primary" id="saveFileEditBtn">Save Changes</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Bulk Add to Category Modal -->
+<div class="modal-overlay" id="bulkCategoryModal">
+    <div class="modal" style="max-width: 480px; border: 1px solid var(--border);">
+        <div class="modal-header">
+            <h3 class="modal-title">Add to Category</h3>
+            <button type="button" class="modal-close" onclick="closeModal('bulkCategoryModal')">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
+        </div>
+        <form id="bulkCategoryForm" onsubmit="submitBulkCategoryForm(event)">
+            <div class="modal-body" style="padding: 1.25rem;">
+                <p style="font-size:0.875rem;color:var(--muted-foreground);margin-bottom:1rem;" id="bulkCategoryModalSubtitle">
+                    Select categories to assign to the selected media.
+                </p>
+                <div class="bulk-category-list" style="display:flex;flex-direction:column;gap:0.6rem;max-height:320px;overflow-y:auto;padding-right:0.25rem;">
+                    @forelse($categories as $cat)
+                        <div style="display:flex;align-items:center;justify-content:space-between;padding:0.7rem 0.85rem;border:1px solid var(--border);border-radius:var(--radius, 0.5rem);background:var(--card);">
+                            <div style="min-width:0;padding-right:0.75rem;">
+                                <div style="font-size:0.875rem;font-weight:500;color:var(--foreground);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">{{ $cat->name }}</div>
+                                @if($cat->description)
+                                    <div style="font-size:0.75rem;color:var(--muted-foreground);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">{{ $cat->description }}</div>
+                                @endif
+                            </div>
+                            <label class="toggle-label" style="margin:0;cursor:pointer;flex-shrink:0;">
+                                <input type="checkbox" class="toggle-input bulk-category-toggle" value="{{ $cat->id }}" data-category-name="{{ $cat->name }}">
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                    @empty
+                        <div style="text-align:center;padding:1.5rem 0.5rem;color:var(--muted-foreground);font-size:0.875rem;">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="width:36px;height:36px;margin:0 auto 0.5rem;display:block;opacity:0.5;">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12.75V12A2.25 2.25 0 0 1 4.5 9.75h15A2.25 2.25 0 0 1 21.75 12v.75m-8.69-6.44-2.12-2.12a1.5 1.5 0 0 0-1.061-.44H4.5A2.25 2.25 0 0 0 2.25 6v12a2.25 2.25 0 0 0 2.25 2.25h15A2.25 2.25 0 0 0 21.75 18V9a2.25 2.25 0 0 0-2.25-2.25h-5.379a1.5 1.5 0 0 1-1.06-.44Z" />
+                            </svg>
+                            No categories available.
+                            <div style="margin-top:0.5rem;">
+                                <a href="{{ route($dashboardRoute::name('media.categories.index')) }}" class="btn btn-secondary btn-sm">Create Category</a>
+                            </div>
+                        </div>
+                    @endforelse
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" onclick="closeModal('bulkCategoryModal')">Cancel</button>
+                <button type="submit" class="btn btn-primary" id="saveBulkCategoryBtn" @if($categories->isEmpty()) disabled @endif>Save</button>
+            </div>
+        </form>
+    </div>
+</div>
+
 <!-- Copy toast -->
 <div class="copy-toast" id="copyToast">URL copied to clipboard!</div>
 </div>
@@ -2276,11 +2358,11 @@ $authUserId = auth()->id();
         }
     });
 
-    // ── Delete ────────────────────────────────────────────────────────
+    // ── Delete & Bulk Actions ─────────────────────────────────────────
     function updateBulkMediaDeleteButtonState() {
         const checkedCount = document.querySelectorAll('.media-bulk-checkbox:checked').length;
         const button = document.getElementById('bulk-media-delete-btn');
-        const categoryWrap = document.getElementById('bulk-media-category-wrap');
+        const categoryBtn = document.getElementById('bulk-media-category-btn');
         const unlinkBtn = document.getElementById('bulk-media-unlink-btn');
 
         if (button) {
@@ -2288,8 +2370,8 @@ $authUserId = auth()->id();
             button.textContent = checkedCount > 0 ? `Delete Selected (${checkedCount})` : 'Delete Selected';
         }
 
-        if (categoryWrap) {
-            categoryWrap.style.display = checkedCount > 0 ? 'inline-flex' : 'none';
+        if (categoryBtn) {
+            categoryBtn.style.display = checkedCount > 0 ? 'inline-flex' : 'none';
         }
 
         if (unlinkBtn) {
@@ -2305,28 +2387,67 @@ $authUserId = auth()->id();
         }
     }
 
-    function submitBulkCategoryAttach() {
-        const checked = Array.from(document.querySelectorAll('.media-bulk-checkbox:checked'));
-        if (!checked.length) return;
-
-        const select = document.getElementById('bulk-media-category-select');
-        const catId = select?.value;
-        if (!catId) {
-            alert('Please select a category first.');
+    function openBulkCategoryModal() {
+        const checkedMedia = Array.from(document.querySelectorAll('.media-bulk-checkbox:checked'));
+        if (!checkedMedia.length) {
+            showAlert('Please select at least one media item first.', 'No Media Selected', { variant: 'info', confirmText: 'OK' });
             return;
         }
 
+        const count = checkedMedia.length;
+        const subtitle = document.getElementById('bulkCategoryModalSubtitle');
+        if (subtitle) {
+            subtitle.textContent = `Assign ${count} selected ${count === 1 ? 'file' : 'files'} to categories:`;
+        }
+
+        document.querySelectorAll('.bulk-category-toggle').forEach(t => t.checked = false);
+        openModal('bulkCategoryModal');
+    }
+
+    function submitBulkCategoryForm(event) {
+        event.preventDefault();
+        const checkedMedia = Array.from(document.querySelectorAll('.media-bulk-checkbox:checked'));
+        if (!checkedMedia.length) {
+            closeModal('bulkCategoryModal');
+            return;
+        }
+
+        const checkedCats = Array.from(document.querySelectorAll('.bulk-category-toggle:checked'));
+        if (!checkedCats.length) {
+            showAlert('Please turn on at least one category toggle.', 'No Category Selected', { variant: 'warning', confirmText: 'OK' });
+            return;
+        }
+
+        const saveBtn = document.getElementById('saveBulkCategoryBtn');
+        if (saveBtn) {
+            saveBtn.disabled = true;
+            saveBtn.textContent = 'Saving...';
+        }
+
         const form = document.getElementById('bulk-category-attach-form');
-        document.getElementById('bulk-attach-category-id').value = catId;
-        form.querySelectorAll('input[name="selected_ids[]"]').forEach((input) => input.remove());
-        checked.forEach((checkbox) => {
+        form.querySelectorAll('input[name="selected_ids[]"], input[name="category_ids[]"]').forEach((input) => input.remove());
+
+        checkedMedia.forEach((checkbox) => {
             const input = document.createElement('input');
             input.type = 'hidden';
             input.name = 'selected_ids[]';
             input.value = checkbox.value;
             form.appendChild(input);
         });
+
+        checkedCats.forEach((checkbox) => {
+            const input = document.createElement('input');
+            input.type = 'hidden';
+            input.name = 'category_ids[]';
+            input.value = checkbox.value;
+            form.appendChild(input);
+        });
+
         form.submit();
+    }
+
+    function submitBulkCategoryAttach() {
+        openBulkCategoryModal();
     }
 
     function submitBulkCategoryUnlink() {
@@ -2433,27 +2554,65 @@ $authUserId = auth()->id();
         }, 600);
     }
 
-    // ── Rename ────────────────────────────────────────────────────────
-    async function renameMedia(id, btn) {
-        const current = btn.dataset.filename || '';
-        const ext     = btn.dataset.extension || '';
-        // Strip extension for display/prompt — user works with clean names
+    // ── File Edit (Rename + Alt Text) ─────────────────────────────────
+    let currentEditMediaButton = null;
+
+    function openFileEditModal(id, btn) {
+        if (!btn && id) {
+            btn = document.querySelector(`[data-media-rename][data-media-id="${id}"]`);
+        }
+        currentEditMediaButton = btn;
+        const current = btn ? (btn.dataset.filename || '') : '';
+        const ext     = btn ? (btn.dataset.extension || '') : '';
+        const altText = btn ? (btn.dataset.altText || '') : '';
+        const isImage = btn ? (btn.dataset.isImage === '1') : false;
+
         const currentDisplay = ext && current.endsWith('.' + ext)
             ? current.slice(0, -(ext.length + 1))
             : current;
 
-        const result = await showPrompt('Rename File', 'Enter a new name for this file (without extension):', currentDisplay, currentDisplay);
-        if (result === false || result === null) return;   // cancelled
-        const newDisplay = result.trim();
-        if (!newDisplay || newDisplay === currentDisplay) return;  // blank or unchanged
+        document.getElementById('editMediaId').value = id;
+        document.getElementById('editMediaExt').value = ext;
+        document.getElementById('editMediaFilename').value = currentDisplay;
 
-        // Re-attach the original extension transparently
+        const altGroup = document.getElementById('editMediaAltGroup');
+        const altInput = document.getElementById('editMediaAlt');
+        if (altGroup && altInput) {
+            if (isImage) {
+                altGroup.style.display = 'block';
+                altInput.value = altText;
+            } else {
+                altGroup.style.display = 'none';
+                altInput.value = '';
+            }
+        }
+
+        openModal('fileEditModal');
+        setTimeout(() => document.getElementById('editMediaFilename')?.focus(), 50);
+    }
+
+    async function submitFileEdit(event) {
+        event.preventDefault();
+        const id = document.getElementById('editMediaId').value;
+        const ext = document.getElementById('editMediaExt').value;
+        const newDisplay = document.getElementById('editMediaFilename').value.trim();
+        const newAlt = document.getElementById('editMediaAlt')?.value.trim() || '';
+
+        if (!newDisplay) {
+            document.getElementById('editMediaFilename').focus();
+            return;
+        }
+
         const newName = ext ? newDisplay + '.' + ext : newDisplay;
+        const saveBtn = document.getElementById('saveFileEditBtn');
+        const originalText = saveBtn.textContent;
+        saveBtn.disabled = true;
+        saveBtn.textContent = 'Saving...';
 
         try {
-            const res  = await fetch(RENAME_BASE + id + '/rename', {
+            const res = await fetch(RENAME_BASE + id + '/rename', {
                 method: 'PATCH',
-                body: JSON.stringify({ filename: newName }),
+                body: JSON.stringify({ filename: newName, alt_text: newAlt }),
                 headers: {
                     'Content-Type': 'application/json',
                     'X-CSRF-TOKEN': CSRF,
@@ -2463,12 +2622,14 @@ $authUserId = auth()->id();
             });
             const json = await res.json();
             if (res.ok && json.success) {
+                closeModal('fileEditModal');
+
                 const savedExt = json.filename.includes('.') ? json.filename.split('.').pop() : '';
                 const savedDisplay = savedExt && json.filename.endsWith('.' + savedExt)
                     ? json.filename.slice(0, -(savedExt.length + 1))
                     : json.filename;
 
-                const entry = btn.closest('[data-media-entry]');
+                const entry = currentEditMediaButton?.closest('[data-media-entry]');
                 entry?.querySelectorAll('[data-media-name]').forEach((nameEl) => {
                     nameEl.textContent = savedDisplay;
                     nameEl.title = savedDisplay;
@@ -2479,19 +2640,42 @@ $authUserId = auth()->id();
                     tableFilename.textContent = json.filename;
                 }
 
+                // Update alt text in list view if input is present
+                const listAltInput = document.getElementById(`alt-list-${id}`);
+                if (listAltInput) {
+                    listAltInput.value = json.alt_text || '';
+                }
+
+                // Update lightbox trigger attributes
+                document.querySelectorAll(`[data-lightbox-trigger][data-media-id="${id}"]`).forEach((el) => {
+                    el.dataset.imageAlt = json.alt_text || json.filename;
+                    el.dataset.imageName = json.filename;
+                });
+
+                // Update all edit buttons for this media ID
                 document.querySelectorAll(`[data-media-rename][data-media-id="${id}"]`).forEach((renameBtn) => {
                     renameBtn.dataset.filename = json.filename;
+                    renameBtn.dataset.altText = json.alt_text || '';
                 });
 
                 document.querySelectorAll(`.cr-edit-btn[data-media-id="${id}"]`).forEach((editBtn) => {
                     editBtn.dataset.filename = json.filename;
                 });
+
+                showCopyToast('File updated successfully.');
             } else {
-                showAlert(json.message || 'Rename failed. Please try again.', 'Rename Failed', { variant: 'danger', confirmText: 'OK' });
+                showAlert(json.message || 'Update failed. Please try again.', 'Update Failed', { variant: 'danger', confirmText: 'OK' });
             }
         } catch {
-            showAlert('Network error. Please try again.', 'Rename Failed', { variant: 'danger', confirmText: 'OK' });
+            showAlert('Network error. Please try again.', 'Update Failed', { variant: 'danger', confirmText: 'OK' });
+        } finally {
+            saveBtn.disabled = false;
+            saveBtn.textContent = originalText;
         }
+    }
+
+    function renameMedia(id, btn) {
+        openFileEditModal(id, btn);
     }
 
     // ── Favorite toggle ───────────────────────────────────────────────

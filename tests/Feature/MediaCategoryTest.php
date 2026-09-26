@@ -264,13 +264,22 @@ class MediaCategoryTest extends TestCase {
         $media1 = $this->createMedia($user->id, 'prod1.jpg');
         $media2 = $this->createMedia($user->id, 'prod2.jpg');
 
-        // Bulk Attach
+        // Bulk Attach single
         $responseAttach = $this->actingAs($user)->post(route(DashboardRoute::name('media.bulk-category-attach')), [
             'selected_ids' => [$media1->id, $media2->id],
             'category_id' => $category->id,
         ]);
         $responseAttach->assertRedirect();
         $this->assertEquals(2, $category->media()->count());
+
+        // Bulk Attach multiple categories via category_ids[]
+        $category2 = MediaCategory::create(['user_id' => $user->id, 'name' => 'Featured']);
+        $responseAttachMulti = $this->actingAs($user)->post(route(DashboardRoute::name('media.bulk-category-attach')), [
+            'selected_ids' => [$media1->id, $media2->id],
+            'category_ids' => [$category->id, $category2->id],
+        ]);
+        $responseAttachMulti->assertRedirect();
+        $this->assertEquals(2, $category2->media()->count());
 
         // Bulk Unlink
         $responseUnlink = $this->actingAs($user)->post(route(DashboardRoute::name('media.bulk-category-unlink')), [
@@ -313,5 +322,31 @@ class MediaCategoryTest extends TestCase {
         $responseDetach->assertOk();
         $responseDetach->assertJson(['success' => true]);
         $this->assertFalse($media->fresh()->categories->contains($category->id));
+    }
+
+    public function test_rename_endpoint_updates_filename_and_alt_text() {
+        $user = CategoryMemberUser::create([
+            'name' => 'User One',
+            'email' => 'user1@example.com',
+            'password' => bcrypt('secret'),
+        ]);
+
+        $media = $this->createMedia($user->id, 'old-name.jpg');
+
+        $response = $this->actingAs($user)->patchJson(route(DashboardRoute::name('media.rename'), $media), [
+            'filename' => 'new-name.jpg',
+            'alt_text' => 'A photo of a sunrise',
+        ]);
+
+        $response->assertOk()
+            ->assertJson([
+                'success' => true,
+                'filename' => 'new-name.jpg',
+                'alt_text' => 'A photo of a sunrise',
+            ]);
+
+        $fresh = $media->fresh();
+        $this->assertEquals('new-name.jpg', $fresh->filename);
+        $this->assertEquals('A photo of a sunrise', $fresh->alt_text);
     }
 }

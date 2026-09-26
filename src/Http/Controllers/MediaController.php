@@ -325,15 +325,30 @@ class MediaController extends BaseController {
     }
 
     public function rename(Request $request, Media $media): JsonResponse {
-        $request->validate([
+        $user = auth()->user();
+        if (! $this->canManageMedia($media, $user)) {
+            abort(403, 'You do not have permission to modify this media file.');
+        }
+
+        $validated = $request->validate([
             'filename' => 'required|string|max:200',
+            'alt_text' => 'nullable|string|max:255',
         ]);
 
-        $media->update(['filename' => $request->filename]);
+        $data = ['filename' => $validated['filename']];
+        if ($request->has('alt_text')) {
+            $data['alt_text'] = $validated['alt_text'];
+        }
+
+        $media->update($data);
 
         $this->flushMediaCache();
 
-        return response()->json(['success' => true, 'filename' => $media->filename]);
+        return response()->json([
+            'success' => true,
+            'filename' => $media->filename,
+            'alt_text' => $media->alt_text,
+        ]);
     }
 
     public function updateAlt(Request $request, Media $media): JsonResponse {
@@ -533,14 +548,32 @@ class MediaController extends BaseController {
         $validated = $request->validate([
             'selected_ids' => ['required', 'array', 'min:1'],
             'selected_ids.*' => ['integer'],
-            'category_id' => ['required', 'integer', 'exists:tyro_media_categories,id'],
+            'category_id' => ['nullable', 'integer', 'exists:tyro_media_categories,id'],
+            'category_ids' => ['nullable', 'array', 'min:1'],
+            'category_ids.*' => ['integer', 'exists:tyro_media_categories,id'],
         ]);
 
-        $user = auth()->user();
-        $category = MediaCategory::findOrFail($validated['category_id']);
+        $categoryIds = [];
+        if (! empty($validated['category_ids'])) {
+            $categoryIds = array_unique(array_map('intval', $validated['category_ids']));
+        } elseif (! empty($validated['category_id'])) {
+            $categoryIds = [(int) $validated['category_id']];
+        }
 
-        if (! $this->canManageCategory($category, $user)) {
-            abort(403, 'You do not have permission to attach media to this category.');
+        if (empty($categoryIds)) {
+            if ($request->wantsJson() || $request->ajax()) {
+                return response()->json(['success' => false, 'message' => 'Please select at least one category.'], 422);
+            }
+            return redirect()->back()->with('error', 'Please select at least one category.');
+        }
+
+        $user = auth()->user();
+        $categories = MediaCategory::whereIn('id', $categoryIds)->get();
+
+        foreach ($categories as $category) {
+            if (! $this->canManageCategory($category, $user)) {
+                abort(403, 'You do not have permission to attach media to one or more selected categories.');
+            }
         }
 
         $query = Media::query()->whereIn('id', $validated['selected_ids']);
@@ -550,24 +583,28 @@ class MediaController extends BaseController {
 
         $mediaIds = $query->pluck('id')->all();
         if (! empty($mediaIds)) {
-            $category->media()->syncWithoutDetaching($mediaIds);
+            foreach ($categories as $category) {
+                $category->media()->syncWithoutDetaching($mediaIds);
+            }
             $this->flushMediaCache();
         }
 
         $count = count($mediaIds);
-        $message = "Assigned {$count} media ".($count === 1 ? 'file' : 'files')." to '{$category->name}'.";
+        $catNames = $categories->pluck('name')->join(', ');
+        $message = "Assigned {$count} media ".($count === 1 ? 'file' : 'files')." to {$catNames}.";
 
         if ($request->wantsJson() || $request->ajax()) {
             return response()->json([
                 'success' => true,
                 'message' => $message,
                 'attached_count' => $count,
-                'category' => $category,
+                'category' => $categories->first(),
+                'categories' => $categories,
             ]);
         }
 
         return redirect()
-            ->route(DashboardRoute::name('media'), $request->except(['_token', '_method', 'selected_ids', 'category_id']))
+            ->route(DashboardRoute::name('media'), $request->except(['_token', '_method', 'selected_ids', 'category_id', 'category_ids']))
             ->with('success', $message);
     }
 
