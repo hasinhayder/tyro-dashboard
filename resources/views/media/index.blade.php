@@ -2135,7 +2135,7 @@ $authUserId = auth()->id();
 
 <!-- Bulk Add to Category Modal -->
 <div class="modal-overlay" id="bulkCategoryModal">
-    <div class="modal" style="max-width: 480px; border: 1px solid var(--border);">
+    <div class="modal" style="max-width: 480px; max-height: 90vh; display: flex; flex-direction: column; border: 1px solid var(--border);">
         <div class="modal-header">
             <h3 class="modal-title">Add to Category</h3>
             <button type="button" class="modal-close" onclick="closeModal('bulkCategoryModal')">
@@ -2144,14 +2144,19 @@ $authUserId = auth()->id();
                 </svg>
             </button>
         </div>
-        <form id="bulkCategoryForm" onsubmit="submitBulkCategoryForm(event)">
-            <div class="modal-body" style="padding: 1.25rem;">
-                <p style="font-size:0.875rem;color:var(--muted-foreground);margin-bottom:1rem;" id="bulkCategoryModalSubtitle">
+        <form id="bulkCategoryForm" onsubmit="submitBulkCategoryForm(event)" style="display:flex;flex-direction:column;overflow:hidden;">
+            <div class="modal-body" style="padding: 1.25rem; overflow-y: auto;">
+                <p style="font-size:0.875rem;color:var(--muted-foreground);margin-bottom:0.75rem;" id="bulkCategoryModalSubtitle">
                     Select categories to assign to the selected media.
                 </p>
-                <div class="bulk-category-list" style="display:flex;flex-direction:column;gap:0.6rem;max-height:320px;overflow-y:auto;padding-right:0.25rem;">
-                    @forelse($categories as $cat)
-                        <div style="display:flex;align-items:center;justify-content:space-between;padding:0.7rem 0.85rem;border:1px solid var(--border);border-radius:var(--radius, 0.5rem);background:var(--card);">
+                @if($categories->count() > 10)
+                    <div style="margin-bottom:0.75rem;">
+                        <input type="text" id="bulkCategorySearchInput" class="form-input" placeholder="Search categories..." style="font-size:0.85rem;padding:0.4rem 0.75rem;" oninput="filterBulkCategoryList(this.value)">
+                    </div>
+                @endif
+                <div class="bulk-category-list" id="bulkCategoryList" style="display:flex;flex-direction:column;gap:0.375rem;max-height:480px;overflow-y:auto;padding-right:0.25rem;">
+                    @forelse($categories->sortBy('name', SORT_NATURAL | SORT_FLAG_CASE) as $cat)
+                        <div class="bulk-category-item" data-category-name="{{ strtolower($cat->name) }}" style="display:flex;align-items:center;justify-content:space-between;padding:0.6rem 0.85rem;border:1px solid var(--border);border-radius:var(--radius, 0.5rem);background:var(--card);min-height:42px;box-sizing:border-box;">
                             <div style="min-width:0;padding-right:0.75rem;">
                                 <div style="font-size:0.875rem;font-weight:500;color:var(--foreground);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">{{ $cat->name }}</div>
                                 @if($cat->description)
@@ -2400,8 +2405,22 @@ $authUserId = auth()->id();
             subtitle.textContent = `Assign ${count} selected ${count === 1 ? 'file' : 'files'} to categories:`;
         }
 
+        const searchInput = document.getElementById('bulkCategorySearchInput');
+        if (searchInput) {
+            searchInput.value = '';
+            filterBulkCategoryList('');
+        }
+
         document.querySelectorAll('.bulk-category-toggle').forEach(t => t.checked = false);
         openModal('bulkCategoryModal');
+    }
+
+    function filterBulkCategoryList(query) {
+        const q = (query || '').toLowerCase().trim();
+        document.querySelectorAll('.bulk-category-item').forEach(item => {
+            const name = item.dataset.categoryName || '';
+            item.style.display = (!q || name.includes(q)) ? 'flex' : 'none';
+        });
     }
 
     function submitBulkCategoryForm(event) {
