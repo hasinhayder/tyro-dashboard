@@ -325,26 +325,35 @@
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-
-                                <div class="form-group" style="margin-bottom:0.85rem;">
-                                    <label for="TYRO_LOGIN_SOCIAL_LINK_EXISTING" class="form-label">Link existing accounts by email (TYRO_LOGIN_SOCIAL_LINK_EXISTING)</label>
-                                    <div style="margin-top:0.35rem;">
-                                        <input type="hidden" name="TYRO_LOGIN_SOCIAL_LINK_EXISTING" value="0">
-                                        <label class="toggle-label">
-                                            <input type="checkbox" name="TYRO_LOGIN_SOCIAL_LINK_EXISTING" value="1" class="toggle-input" {{ old('TYRO_LOGIN_SOCIAL_LINK_EXISTING', $settings['TYRO_LOGIN_SOCIAL_LINK_EXISTING']) ? 'checked' : '' }}>
-                                            <span class="toggle-slider"></span>
-                                        </label>
+                                    <div class="sys-settings-toggle">
+                                        <div class="sys-settings-toggle-top">
+                                            <div>
+                                                <p class="sys-settings-toggle-title">Link existing accounts by email <span style="font-weight:normal">(<code>TYRO_LOGIN_SOCIAL_LINK_EXISTING</code>)</span></p>
+                                                <p class="sys-settings-toggle-description">Links social sign-ins to an existing account with the same email address instead of creating a duplicate.</p>
+                                            </div>
+                                            <div>
+                                                <input type="hidden" name="TYRO_LOGIN_SOCIAL_LINK_EXISTING" value="0">
+                                                <label class="toggle-label">
+                                                    <input type="checkbox" name="TYRO_LOGIN_SOCIAL_LINK_EXISTING" value="1" class="toggle-input" {{ old('TYRO_LOGIN_SOCIAL_LINK_EXISTING', $settings['TYRO_LOGIN_SOCIAL_LINK_EXISTING']) ? 'checked' : '' }}>
+                                                    <span class="toggle-slider"></span>
+                                                </label>
+                                            </div>
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="form-group" style="margin-bottom:0.85rem;">
-                                    <label for="TYRO_LOGIN_SOCIAL_AUTO_VERIFY_EMAIL" class="form-label">Auto-verify email after social login (TYRO_LOGIN_SOCIAL_AUTO_VERIFY_EMAIL)</label>
-                                    <div style="margin-top:0.35rem;">
-                                        <input type="hidden" name="TYRO_LOGIN_SOCIAL_AUTO_VERIFY_EMAIL" value="0">
-                                        <label class="toggle-label">
-                                            <input type="checkbox" name="TYRO_LOGIN_SOCIAL_AUTO_VERIFY_EMAIL" value="1" class="toggle-input" {{ old('TYRO_LOGIN_SOCIAL_AUTO_VERIFY_EMAIL', $settings['TYRO_LOGIN_SOCIAL_AUTO_VERIFY_EMAIL']) ? 'checked' : '' }}>
-                                            <span class="toggle-slider"></span>
-                                        </label>
+                                    <div class="sys-settings-toggle">
+                                        <div class="sys-settings-toggle-top">
+                                            <div>
+                                                <p class="sys-settings-toggle-title">Auto-verify email after social login <span style="font-weight:normal">(<code>TYRO_LOGIN_SOCIAL_AUTO_VERIFY_EMAIL</code>)</span></p>
+                                                <p class="sys-settings-toggle-description">Marks the user's email as verified automatically after a social sign-in, since social providers confirm email ownership.</p>
+                                            </div>
+                                            <div>
+                                                <input type="hidden" name="TYRO_LOGIN_SOCIAL_AUTO_VERIFY_EMAIL" value="0">
+                                                <label class="toggle-label">
+                                                    <input type="checkbox" name="TYRO_LOGIN_SOCIAL_AUTO_VERIFY_EMAIL" value="1" class="toggle-input" {{ old('TYRO_LOGIN_SOCIAL_AUTO_VERIFY_EMAIL', $settings['TYRO_LOGIN_SOCIAL_AUTO_VERIFY_EMAIL']) ? 'checked' : '' }}>
+                                                    <span class="toggle-slider"></span>
+                                                </label>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="form-group" style="margin-bottom:0;">

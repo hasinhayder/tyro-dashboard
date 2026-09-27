@@ -19,7 +19,7 @@ class VersionCommand extends Command {
      * Execute the console command.
      */
     public function handle(): int {
-        $version = '1.56.0'; // feat(media): media categories, bulk category creation, filtering and assignment, and branding favicon upload
+        $version = '1.56.1'; // fix(settings): Authentication Plus social toggles now use the standard settings toggle card markup
 
         $this->info('');
         $this->info('  ╔════════════════════════════════════════╗');
@@ -70,6 +70,7 @@ class VersionCommand extends Command {
 }
 
 // Changelog
+// 1.56.1 - fix(settings): Authentication Plus social toggles (TYRO_LOGIN_SOCIAL_LINK_EXISTING and TYRO_LOGIN_SOCIAL_AUTO_VERIFY_EMAIL) now use the standard sys-settings-toggle card markup inside the Social Provider Details list instead of raw label/checkbox rows, matching the provider toggles above
 // 1.56.0 - feat(media): media categories management (CRUD, unique slugs, user/admin scoping), bulk category creation from comma-separated input, category filtering in media gallery and picker, multi-select "Add to Category" modal with toggles and scrollable list, bulk unlinking, lightbox category tagging, and file edit modal for rename and alt text
 // 1.56.0 - feat(branding): favicon upload container in Branding settings using thumb-mode media picker, .env persistence via TYRO_DASHBOARD_FAVICON, and link tag rendering in admin/app/user layout heads
 // 1.55.2 - feat(media): configurable media picker columns prop (e.g. columns="6" or :columns="7") with per-trigger dynamic grid sizing and square image card presentation
