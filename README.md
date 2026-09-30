@@ -20,22 +20,124 @@ A production-ready Laravel package that delivers a complete admin & user dashboa
 
 What would take 40-60 hours of development now takes minutes of configuration.
 
-## Features
+- [Overview](#overview)
+- [Key Features](#key-features)
+- [Why Tyro Dashboard?](#why-tyro-dashboard)
+- [Save Time, Focus on Your Product](#save-time-focus-on-your-product)
+- [Requirements](#requirements)
+- [Installation](#installation)
+- [Dynamic CRUD in 30 Seconds](#dynamic-crud-in-30-seconds)
+- [Sidebar Resource Grouping & Custom Links](#-sidebar-resource-grouping--custom-links)
+- [CLI at a glance](#cli-at-a-glance)
+- [UI Components](#ui-components)
+- [Configuration](#configuration)
+- [Updating the Config](#updating-the-config)
+- [Impersonation](#impersonation)
+- [Admin Bar & Global Notices](#admin-bar--global-notices)
+- [Audit Trail](#audit-trail)
+- [Profile Photos](#profile-photos)
+- [Media Library](#media-library)
+- [Emailer](#emailer)
+- [System Health](#system-health)
+- [Use Cases](#use-cases)
+- [Full Documentation](#full-documentation)
+- [License](#license)
 
-- **User management**: full CRUD, search, suspension, 2FA, passkeys, role assignment
-- **Impersonation**: log in as any user to troubleshoot and verify features
-- **RBAC & privileges**: visual role and privilege management with protected roles
-- **Dynamic resource CRUD**: describe a model, get a complete admin interface
-- **Separate dashboards**: distinct admin and user experiences out of the box
-- **Audit trail**: searchable logs of all admin activities and resource changes
-- **Admin bar**: global maintenance and announcement notices in seconds
-- **Invitation system**: referral links with automatic signup tracking
-- **Profile photos**: custom uploads or Gravatar
-- **Media library**: full media management, uploads, WebP conversion, thumbnails, stock photo search, and a reusable media picker
-- **Emailer**: rich-text mail composer with switchable preset templates (Modern, Corporate, Newsletter, Plain), live preview, and background queue dispatching
-- **System health**: read-only runtime diagnostics — PHP memory, OPcache, disk, database, cache, and queue status
-- **Beautiful UI**: modern, responsive, shadcn components, dark/light themes
-- **Security first**: middleware checks, per-resource access, protected resources
+---
+
+## Key Features
+
+- **Complete User Management** — Full CRUD, 2FA, passkeys, suspension, role assignment
+- **Role-Based Access Control** — Granular privileges with visual role and privilege management
+- **Dynamic Resource CRUD** — Describe your model in config, get a complete admin interface
+- **Sidebar Resource Grouping** — Organize resources into collapsible accordion groups, custom URLs, and named routes
+- **Separate Dashboards** — Tailored admin and user experiences out of the box
+- **User Impersonation** — Debug user issues by securely logging in as them
+- **Audit Trail & Compliance** — Track all admin activities and changes with searchable logs
+- **Admin Bar** — Deploy global maintenance or announcement notices in seconds
+- **Media Library** — Full media manager with WebP conversion, thumbnails, and stock photo search
+- **Emailer** — Rich-text mail composer with switchable templates, live preview, and queue dispatching
+- **System Health** — Real-time diagnostic monitors for PHP memory, OPcache, disk, database, and cache
+- **Beautiful UI** — Modern, responsive interface built with shadcn components
+- **Security First** — Built-in authorization, protected resources, and middleware guards
+
+---
+
+## Why Tyro Dashboard?
+
+### For Development Teams
+
+| Problem | Solution |
+|---|---|
+| Spending 40-60 hours on every admin panel | **Minutes of configuration** |
+| Writing similar CRUD code across projects | **Declare once, reuse forever** |
+| Inconsistent implementations across teams | **Standardized patterns** |
+| Building user management from scratch | **Ready to use, day one** |
+
+### For Product Managers
+
+- **Faster Time-to-Market** — Launch features faster with pre-built admin
+- **Scalability Ready** — Built to handle growing user bases
+- **Feature Velocity** — Focus on business logic, not infrastructure
+- **Lower Maintenance** — Package updates benefit everyone
+
+### For Security Teams
+
+- Integrated with Tyro's battle-tested RBAC
+- Fine-grained role & privilege management
+- Suspension tracking, role changes logged
+- Leverages Laravel's security features
+
+---
+
+## Save Time, Focus on Your Product
+
+Every hour spent building admin features is an hour not spent on your core product.
+
+### The Real Cost of Building From Scratch
+
+| Feature | Time to Build | With Tyro Dashboard | Time Saved |
+|---|---|---|---|
+| User Management (CRUD, search, filters) | 12-16 hours | **0 minutes** | 12-16 hours |
+| Role & Privilege System | 8-12 hours | **0 minutes** | 8-12 hours |
+| Admin Dashboard UI | 6-10 hours | **0 minutes** | 6-10 hours |
+| Authentication & Authorization | 4-6 hours | **0 minutes** | 4-6 hours |
+| Resource CRUD (per resource) | 6-10 hours | **2 minutes** | 6-10 hours |
+| Form Validation & Error Handling | 3-5 hours | **0 minutes** | 3-5 hours |
+| **Total for First Project** | **40-60 hours** | **5 minutes** | **40-60 hours** |
+| **Each Additional Project** | **40-60 hours** | **5 minutes** | **40-60 hours** |
+
+### What You Can Do With the Time You Save
+
+**Instead of building admin panels for the 10th time, you could:**
+
+- Ship that feature your customers have been asking for
+- Refactor that technical debt you've been avoiding
+- Add the polish that makes your product stand out
+- Actually take that weekend off
+- Onboard 3 new team members in the time you'd spend training them on your custom admin code
+- Focus 100% on what makes your product unique
+
+### The Compound Effect
+
+```
+Without Tyro Dashboard:
+Project 1: 50 hours on admin
+Project 2: 50 hours on admin
+Project 3: 50 hours on admin
+Project 4: 50 hours on admin
+= 200 hours spent on repetitive work
+
+With Tyro Dashboard:
+Project 1: 5 minutes setup
+Project 2: 5 minutes setup
+Project 3: 5 minutes setup
+Project 4: 5 minutes setup
+= 20 minutes total
+= 199.67 hours saved
+```
+
+---
 
 ## Requirements
 
@@ -43,6 +145,8 @@ What would take 40-60 hours of development now takes minutes of configuration.
 - Laravel 12 or 13
 - [Tyro](https://github.com/hasinhayder/tyro) package
 - [Tyro Login](https://github.com/hasinhayder/tyro-login) package
+
+---
 
 ## Installation
 
@@ -55,7 +159,9 @@ php artisan tyro-dashboard:install
 
 Then visit `/dashboard` in your browser. `tyro-dashboard:install` publishes the config, views, routes, and middleware for you.
 
-> **Note:** if you're updating to a version with the invitation system, run `php artisan migrate` to create the `invitation_links` and `invitation_referrals` tables.
+> **Note:** If you're updating to a version with the invitation system, run `php artisan migrate` to create the `invitation_links` and `invitation_referrals` tables.
+
+---
 
 ## Dynamic CRUD in 30 Seconds
 
@@ -92,12 +198,67 @@ Visit `/dashboard/resources/products` and you have a live admin interface with l
 
 **No controllers. No views. No routes. No validation logic. Just configuration.**
 
+---
+
+## 📂 Sidebar Resource Grouping & Custom Links
+
+Organize your sidebar into clean, collapsible accordion sections, add custom application links, or link directly to named Laravel routes within `config/tyro-dashboard.php`:
+
+```php
+'resources' => [
+
+    // 1. Grouped Dynamic CRUD Model
+    'categories' => [
+        'group'  => 'Product & Inventory', // Group Name for Accordion
+        'model'  => App\Models\Category::class,
+        'title'  => 'Categories',
+        'icon'   => '<svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"/></svg>',
+        'roles'  => ['admin', 'manager'],
+        'fields' => [
+            'name' => ['type' => 'text', 'label' => 'Category Name', 'rules' => 'required'],
+        ],
+    ],
+
+    // 2. Custom Direct URL Link inside a Group
+    'web_pos' => [
+        'group'     => 'Sales & POS',
+        'title'     => 'Web POS Terminal',
+        'url'       => '/pos',          // Direct URL Path
+        'target'    => '_blank',        // Opens in new tab
+        'privilege' => 'pos.sell',      // Optional Tyro RBAC check
+        'icon'      => '<svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v12m-3-2.818l.879.559c.211.135.442.2.673.2.226 0 .453-.064.661-.19a1.122 1.122 0 00.465-.916c0-.528-.4-.954-.925-1.042l-.4-.067c-.525-.088-.925-.514-.925-1.042 0-.376.183-.728.497-.918a1.121 1.121 0 011.077-.14l.879.56M12 3v18"/></svg>',
+    ],
+
+    // 3. Custom Named Route Link inside a Group
+    'sales_invoices' => [
+        'group' => 'Sales & POS',
+        'title' => 'Sales Invoices',
+        'route' => 'sales.index',       // Named Laravel Route
+        'roles' => ['admin', 'manager'],
+    ],
+
+    // 4. Standard Ungrouped Resource (Default Tyro Behavior)
+    // Any resource without a 'group' attribute renders in the default "Resources" section
+    'posts' => [
+        'model'  => App\Models\Post::class,
+        'title'  => 'Posts',
+        'fields' => [
+            'title'   => ['type' => 'text', 'label' => 'Title', 'rules' => 'required'],
+            'content' => ['type' => 'textarea', 'label' => 'Content'],
+        ],
+    ],
+
+]
+```
+
+---
+
 ## CLI at a glance
 
 ### Install & Setup
 
 | Command | Description |
-| --- | --- |
+|---|---|
 | `tyro-dashboard:install` | Install package resources (config, views, routes, middleware) |
 | `tyro-dashboard:publish` | Publish views, config, and styles (with per-area options) |
 | `tyro-dashboard:publish-style` | Publish styles to customize shadcn variables |
@@ -110,7 +271,7 @@ Visit `/dashboard/resources/products` and you have a live admin interface with l
 ### Pages & Resources
 
 | Command | Description |
-| --- | --- |
+|---|---|
 | `tyro-dashboard:create-admin-page` | Create a new admin dashboard page |
 | `tyro-dashboard:create-user-page` | Create a new user dashboard page |
 | `tyro-dashboard:create-common-page` | Create a page visible in both user and admin sidebars |
@@ -123,24 +284,26 @@ Visit `/dashboard/resources/products` and you have a live admin interface with l
 ### Users & Info
 
 | Command | Description |
-| --- | --- |
+|---|---|
 | `tyro-dashboard:createsuperuser` | Create a superuser with admin privileges |
 | `tyro-dashboard:version` | Display the current version |
 
 Run `php artisan list tyro-dashboard` to see every available command.
+
+---
 
 ## UI Components
 
 Tyro Dashboard ships a library of shadcn-styled Blade components you can drop into any page immediately — no build step required. Use them with the `tyro-dashboard::` namespace, e.g. `<x-tyro-dashboard::card>`.
 
 | Component | Description |
-| --- | --- |
+|---|---|
 | `<x-tyro-dashboard::alert>` | Contextual alert with icon; `variant` = `info`, `success`, `warning`, `error` |
 | `<x-tyro-dashboard::avatar>` | User avatar with photo/Gravatar fallback to initials; `size`, `user` |
 | `<x-tyro-dashboard::badge>` | Status badge; `variant` = `primary`, `success`, `warning`, `danger`, `secondary`, `info` |
 | `<x-tyro-dashboard::card>` | Card panel with `title`, `description`, `actions` and `footer` slots |
 | `<x-tyro-dashboard::checkbox>` | Styled checkbox with label and color variants; supports `indeterminate` |
-| `<x-tyro-dashboard::data-table>` | Table from a collection + columns with formatting, striped/hover/compact variants; customizable empty state via `empty` and `emptyTitle` |
+| `<x-tyro-dashboard::data-table>` | Table from a collection + columns with formatting, striped/hover/compact variants |
 | `<x-tyro-dashboard::dropdown>` | Dropdown menu with `trigger` slot, alignment, and items |
 | `<x-tyro-dashboard::dropdown-item>` | Dropdown item; `href`, `icon`, `variant` (incl. `danger`) |
 | `<x-tyro-dashboard::dropdown-divider>` | Divider for dropdown menus |
@@ -150,7 +313,7 @@ Tyro Dashboard ships a library of shadcn-styled Blade components you can drop in
 | `<x-tyro-dashboard::stat>` | Stat card with icon, value, label, change and trend (up/down) |
 | `<x-tyro-dashboard::toggle>` | Toggle switch with label and color variants |
 | `<x-tyro-dashboard::media>` | Renders media with WebP/thumbnail fallback, sizing, rounded/circle, lazy loading |
-| `<x-tyro-dashboard-media-picker>` | Media library picker for any form field (see Media Library) |
+| `<x-tyro-dashboard-media-picker>` | Media library picker for any form field |
 
 Example:
 
@@ -168,6 +331,8 @@ Example:
 </x-tyro-dashboard::card>
 ```
 
+---
+
 ## Configuration
 
 Publish and customize everything:
@@ -178,10 +343,8 @@ php artisan tyro-dashboard:publish --config
 
 Key options in `config/tyro-dashboard.php`:
 
-> Most settings are driven by env vars (table below). Some are plain config arrays — e.g. `pagination` (users/roles/privileges/resources per page) and `protected` (roles and user IDs that cannot be deleted) — customize those directly in the published config file.
-
 | Env var | Default | Description |
-| --- | --- | --- |
+|---|---|---|
 | `TYRO_DASHBOARD_PREFIX` | `dashboard` | URL prefix for the dashboard |
 | `TYRO_DASHBOARD_USER_MODEL` | `App\Models\User` | User model the dashboard operates on |
 | `TYRO_DASHBOARD_ENABLE_INVITATION` | `true` | Enable the invitation/referral system |
@@ -211,7 +374,7 @@ Key options in `config/tyro-dashboard.php`:
 | `TYRO_DASHBOARD_SIDEBAR_HEADER_BORDER` | `null` | Sidebar header border color |
 | `TYRO_DASHBOARD_SIDEBAR_ACCORDION_COMPACT` | `false` | Compact sidebar accordion sections |
 | `TYRO_DASHBOARD_SIDEBAR_ACCORDION_OPEN_SECTIONS` | `1` | Number of accordion sections open by default |
-| `TYRO_DASHBOARD_SIDEBAR_LOGO` | `null` | Sidebar logo URL (falls back to `TYRO_DASHBOARD_LOGO` behavior) |
+| `TYRO_DASHBOARD_SIDEBAR_LOGO` | `null` | Sidebar logo URL |
 | `TYRO_DASHBOARD_UPLOAD_DISK` | `public` | Storage disk for resource uploads |
 | `TYRO_DASHBOARD_UPLOAD_DIRECTORY` | `uploads` | Storage directory for resource uploads |
 | `TYRO_DASHBOARD_AUTO_DELETE_UPLOADS` | `true` | Delete files when a resource is deleted |
@@ -228,13 +391,15 @@ Key options in `config/tyro-dashboard.php`:
 | `TYRO_DASHBOARD_TOAST_POSITION` | `bottom-right` | Toast position: `top-right` or `bottom-right` |
 | `TYRO_DASHBOARD_DISABLE_EXAMPLES` | `false` | Disable example resources/pages |
 | `TYRO_DASHBOARD_MEDIA_MAX_SIZE` | `10240` | Media library max upload size (KB) |
-| `TYRO_DASHBOARD_MEDIA_GALLERY_COLUMNS` | `6` | Number of images per row in the desktop media gallery (1-12) |
+| `TYRO_DASHBOARD_MEDIA_GALLERY_COLUMNS` | `6` | Number of images per row in desktop media gallery |
 | `TYRO_DASHBOARD_FREEPIK_KEY` | `null` | FreePik API key for media library |
 | `TYRO_DASHBOARD_PEXELS_KEY` | `null` | Pexels API key for media library |
 | `TYRO_DASHBOARD_UNSPLASH_ACCESS_KEY` | `null` | Unsplash API key for media library |
 | `TYRO_DASHBOARD_PIXABAY_KEY` | `null` | Pixabay API key for media library |
 | `TYRO_SHOW_GLOBAL_ERRORS` | `true` | Show global form errors |
 | `TYRO_SHOW_FIELD_ERRORS` | `true` | Show per-field form errors |
+
+---
 
 ### Updating the Config
 
@@ -244,21 +409,25 @@ When you upgrade Tyro Dashboard, refresh your published config to pick up new ke
 php artisan tyro-dashboard:update-config
 ```
 
-This force-publishes the latest `config/tyro-dashboard.php` and also refreshes the Tyro and Tyro Login configs. **It overwrites your published config**, so pass `--with-backup` to keep a timestamped copy first:
+Pass `--with-backup` to keep a timestamped copy first:
 
 ```bash
 php artisan tyro-dashboard:update-config --with-backup
 ```
 
-The backup is saved as `config/tyro-dashboard-backup-YYYY-MM-DD-HHMMSS.txt`. To update everything at once (styles, scripts, config, and published sidebar/flash-message overrides), run the full update command instead:
+To update everything at once (styles, scripts, config, and published sidebar overrides), run:
 
 ```bash
 php artisan tyro-dashboard:update
 ```
 
+---
+
 ## Impersonation
 
 Admins can temporarily log in as any user from the user management interface, without affecting the user's session. Perfect for troubleshooting, customer support, and feature verification. Only admins can impersonate, and impersonation respects existing security controls (2FA, email verification, etc.).
+
+---
 
 ## Admin Bar & Global Notices
 
@@ -279,9 +448,13 @@ AdminNotice::show('Sale ends in 24 hours! <b>Don\'t miss out!</b>');
 AdminNotice::show('Server SSD capacity is critically low (< 5%).', '#dc2626', '#ffffff');
 ```
 
+---
+
 ## Audit Trail
 
 Every role/privilege change, user lifecycle event, and CRUD operation on tracked resources is logged with who, what, and when. Browse, search, and filter logs from the **Audit Logs** page in the admin dashboard (admin only).
+
+---
 
 ## Profile Photos
 
@@ -291,6 +464,8 @@ php artisan storage:link
 ```
 
 Add the `HasProfilePhoto` trait to your User model, then enable uploads or Gravatar in `.env` (`TYRO_DASHBOARD_ENABLE_PROFILE_PHOTO=true` / `TYRO_DASHBOARD_ENABLE_GRAVATAR=true`).
+
+---
 
 ## Media Library
 
@@ -303,29 +478,17 @@ php artisan storage:link
 
 ### What you get
 
-- **Uploads with automatic processing**: every image gets a WebP variant and a 600px thumbnail (Intervention Image v3, GD or Imagick)
-- **Media picker**: a reusable `<x-tyro-dashboard-media-picker>` Blade component that works in any form — pick from the library or upload right from the field, with output options for original, WebP, or thumbnail
-- **Media display**: `<x-tyro-dashboard-media>` renders any media record with smart variant (WebP/thumbnail) fallback, sizing, rounding, and lazy loading
-- **`HasMedia` trait**: add to your `User` model to get `media()`, `mediaLibrary()`, `mediaUrl()`, `deleteMedia()` and more — programmatic access to the library
+- **Uploads with automatic processing**: every image gets a WebP variant and a 600px thumbnail (Intervention Image, GD or Imagick)
+- **Media picker**: a reusable `<x-tyro-dashboard-media-picker>` Blade component that works in any form
+- **Media display**: `<x-tyro-dashboard-media>` renders any media record with smart variant fallback, sizing, and lazy loading
+- **`HasMedia` trait**: add to your `User` model to get programmatic access to the library
 - **Crop & resize**: visual Cropper.js selection with replace-in-place or create-a-new-file modes
-- **Stock photo search**: search and import from Unsplash, Pixabay, Freepik, and Pexels directly into your library (set your API keys in `.env`)
+- **Stock photo search**: search and import from Unsplash, Pixabay, Freepik, and Pexels directly into your library
 - **Starred images**: save favorites from stock providers for quick access
 - **Bulk operations**: select and delete multiple files, plus per-file alt text and rename support
 - **Sensible access control**: all authenticated users can use the library; admins and editors can manage any file, regular users only their own
 
-### Configuration
-
-| Env var | Default | Description |
-| --- | --- | --- |
-| `TYRO_DASHBOARD_UPLOAD_DISK` | `public` | Storage disk for uploads |
-| `TYRO_DASHBOARD_UPLOAD_DIRECTORY` | `uploads` | Storage directory for uploads |
-| `TYRO_DASHBOARD_MEDIA_MAX_SIZE` | `10240` | Max upload size (KB) |
-| `TYRO_DASHBOARD_MEDIA_GALLERY_COLUMNS` | `6` | Number of images per row in the desktop media gallery (1-12) |
-| `TYRO_DASHBOARD_AUTO_DELETE_UPLOADS` | `true` | Delete files when a resource is deleted |
-| `TYRO_DASHBOARD_UNSPLASH_ACCESS_KEY` | `null` | Unsplash API key for stock photo search |
-| `TYRO_DASHBOARD_PIXABAY_KEY` | `null` | Pixabay API key for stock photo search |
-| `TYRO_DASHBOARD_FREEPIK_KEY` | `null` | Freepik API key for stock photo search |
-| `TYRO_DASHBOARD_PEXELS_KEY` | `null` | Pexels API key for stock photo search |
+---
 
 ## Emailer
 
@@ -333,19 +496,20 @@ Tyro Dashboard comes with a built-in admin email composer at `/dashboard/emailer
 
 ### What you get
 
-- **Switchable preset designs**: Choose from curated templates — Modern, Corporate, Newsletter, and Plain — with your choice remembered across sessions.
+- **Switchable preset designs**: Choose from curated templates — Modern, Corporate, Newsletter, and Plain — remembered across sessions.
 - **Rich-text composer**: Powered by Quill for formatting headings, bold/italic, lists, quotes, links, and code.
 - **Live modal preview**: Preview your email with recipient details and selected template styling before dispatching.
-- **Background queue delivery**: Automatically dispatches sending via `SendQueuedEmailJob` to the host application's queue worker (`ShouldQueue`) without blocking the dashboard UI.
+- **Background queue delivery**: Automatically dispatches sending via `SendQueuedEmailJob` to the host application's queue worker without blocking the dashboard UI.
 - **Direct SMTP settings access**: Quick navigation to configure your mail driver directly from the header.
-- **Feature toggling**: Easily disable the feature with `TYRO_DASHBOARD_ENABLE_EMAILER=false` (hides sidebar item and returns 404 on the route).
+- **Feature toggling**: Easily disable the feature with `TYRO_DASHBOARD_ENABLE_EMAILER=false`.
 
-### Configuration
+---
 
-```env
-# Disable or enable Emailer
-TYRO_DASHBOARD_ENABLE_EMAILER=true
-```
+## System Health
+
+Built-in read-only runtime diagnostics available at `/dashboard/health`. Monitor PHP memory limit, OPcache status, disk space, database connection, cache status, and background queue workers directly from the admin panel.
+
+---
 
 ## Use Cases
 
@@ -354,11 +518,15 @@ TYRO_DASHBOARD_ENABLE_EMAILER=true
 - **SaaS multi-tenant**: tenant-specific resources with custom role assignments
 - **CMS**: Posts, Authors, Categories with relationship fields
 
+---
+
 ## Full Documentation
 
 For detailed configuration, all field types, customization guides, and best practices:
 
 **[View Complete Documentation](http://hasinhayder.github.io/tyro-dashboard/doc.html)**
+
+---
 
 ## License
 
@@ -375,7 +543,7 @@ Built on top of amazing packages:
 
 ## Ready to Supercharge Your Laravel App?
 
-```
+```bash
 composer require hasinhayder/tyro-dashboard
 php artisan tyro-dashboard:install
 open http://localhost:8000/dashboard

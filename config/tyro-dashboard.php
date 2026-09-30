@@ -222,42 +222,84 @@ return [
         'auto_delete_on_user_delete' => true,
     ],
 
-    /*
+/*
     |--------------------------------------------------------------------------
-    | Dynamic Resources (CRUD)
+    | Dynamic Resources, Groups & Navigation Links
     |--------------------------------------------------------------------------
     |
-    | Define your resources here to automatically generate CRUD interfaces.
+    | Define your resources here. Tyro Dashboard supports 4 flexible formats:
+    |
+    | 1. Dynamic CRUD Resource: Automatic model CRUD forms and data tables.
+    | 2. Grouped Resources: Add 'group' => 'Group Name' to create collapsible sections.
+    | 3. Custom Direct URLs: Link to custom pages, POS, or external sites ('url' => '/...').
+    | 4. Named Laravel Routes: Link to any named route ('route' => 'route.name').
+    |
+    | Optional Access Control Keys:
+    | - 'roles'     => ['admin', 'manager']  // Allowed roles (hidden from other users) 
+    |                                        //it works by default if not added roles
+    | - 'roles'     => ['cachier', 'manager']  // Allowed roles just for cachier and manager
+                                                 (hidden from other users) 
+    |                                        
+    | - 'readonly'  => ['staff']             // Can view, but cannot create/edit/delete
+    | - 'privilege' => 'pos.sell'            // Checked via Tyro RBAC permission
+    | - 'target'    => '_blank'              // Open in new browser tab
+    | - 'icon'      => '<svg>...</svg>'      // Custom SVG icon (18px x 18px recommended)
     |
     */
-    // 'resources' => [
-    //     // Example:
-    //     // 'posts' => [
-    //     //     'model' => 'App\Models\Post',
-    //     //     'title' => 'Posts',
-    //     //     'icon' => '<svg>...</svg>', // Optional SVG icon
-    //     //     'fields' => [
-    //     //         'title' => ['type' => 'text', 'label' => 'Title', 'rules' => 'required'],
-    //     //         'content' => ['type' => 'textarea', 'label' => 'Content'],
-    //     //     ],
-    //     // ],
-    // ],
     'resources' => [
-        // 'posts' => [
-        //     'model' => 'App\Models\Post',
-        //     'title' => 'Posts',
-        //     'fields' => [
-        //         'title' => ['type' => 'text', 'label' => 'Title', 'rules' => 'required'],
-        //         'content' => ['type' => 'textarea', 'label' => 'Content'],
-        //         'category_id' => [
-        //             'type' => 'select',
-        //             'label' => 'Category',
-        //             'relationship' => 'category', // Name of the relationship method in Post model
-        //             'option_label' => 'name',
-        //         ],
-        //         'is_published' => ['type' => 'boolean', 'label' => 'Published'],
-        //     ],
-        // ],
+
+        // =========================================================================
+        // 🚀 TYPE 1: Grouped Dynamic CRUD (Generates CRUD + Puts in Accordion)
+        // =========================================================================
+        'categories' => [
+            'group'     => 'Product & Inventory', // Group Header Title
+            'model'     => 'App\Models\Category',
+            'title'     => 'Categories',
+            'icon'      => '<svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"/></svg>',
+            'roles'     => ['admin', 'manager'],  // Only Admin & Manager can see this
+            'fields'    => [
+                'name'        => ['type' => 'text', 'label' => 'Category Name', 'rules' => 'required|max:191'],
+                'description' => ['type' => 'textarea', 'label' => 'Description'],
+            ],
+        ],
+
+        // =========================================================================
+        // 🚀 TYPE 2: Custom Direct URL inside a Group (e.g. POS Screen)
+        // =========================================================================
+        'web_pos' => [
+            'group'     => 'Sales & POS',
+            'title'     => 'Web POS Terminal',
+            'url'       => '/pos',               // Direct URL path
+            'target'    => '_blank',             // Opens full-screen in a new tab
+            'privilege' => 'pos.sell',           // Checked dynamically via Tyro RBAC
+            'icon'      => '<svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>',
+        ],
+
+        // =========================================================================
+        // 🚀 TYPE 3: Custom Named Laravel Route inside a Group
+        // =========================================================================
+        'branch_management' => [
+            'group' => 'Settings & Branches',
+            'title' => 'Manage Branches',
+            'route' => 'branches.index',         // Named route registered in routes/web.php
+            'roles' => ['admin', 'super-admin'], // Hidden from normal staff
+            'icon'  => '<svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>',
+        ],
+
+        // =========================================================================
+        // 🚀 TYPE 4: Standard Ungrouped Resource (Native Tyro Behavior)
+        // =========================================================================
+        // Omit the 'group' key to keep it in the default top-level "Resources" section
+        'posts' => [
+            'model'     => 'App\Models\Post',
+            'title'     => 'Posts',
+            'readonly'  => ['staff'],            // Staff can view, but cannot edit/delete
+            'fields'    => [
+                'title'   => ['type' => 'text', 'label' => 'Post Title', 'rules' => 'required'],
+                'content' => ['type' => 'textarea', 'label' => 'Content'],
+            ],
+        ],
+
     ],
 
     /*
