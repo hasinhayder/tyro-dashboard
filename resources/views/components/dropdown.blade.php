@@ -74,7 +74,14 @@
 
     document.addEventListener('keydown', function (e) {
         if (e.key === 'Escape') {
-            document.querySelectorAll('[data-dropdown].is-open').forEach(close);
+            document.querySelectorAll('[data-dropdown].is-open').forEach(function (d) {
+                var returnFocus = d.contains(document.activeElement);
+                close(d);
+                if (returnFocus) {
+                    var t = d.querySelector('[data-dropdown-trigger]');
+                    if (t) t.focus();
+                }
+            });
         }
     });
 

@@ -59,7 +59,7 @@
     @if($innerContent !== '')
         {!! $slot !!}
     @elseif($hasImage)
-        <img src="{{ $resolvedUser->profile_photo_url }}" alt="{{ $altText }}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">
+        <img src="{{ $resolvedUser->profile_photo_url }}" alt="{{ $altText }}" loading="lazy" decoding="async" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">
     @else
         {{ $initial }}
     @endif

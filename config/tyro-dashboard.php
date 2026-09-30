@@ -120,14 +120,31 @@ return [
         'invitation_system' => env('TYRO_DASHBOARD_ENABLE_INVITATION', true),
         'audit_logs' => env('TYRO_DASHBOARD_ENABLE_AUDIT_LOGS', true),
         'system_settings' => env('TYRO_DASHBOARD_ENABLE_SYSTEM_SETTINGS', true),
+        'smtp_settings' => env('TYRO_DASHBOARD_ENABLE_SMTP_SETTINGS', true),
+        'emailer' => env('TYRO_DASHBOARD_ENABLE_EMAILER', true),
         'checkpoints' => env('TYRO_DASHBOARD_ENABLE_CHECKPOINTS', true),
+        'health' => env('TYRO_DASHBOARD_ENABLE_HEALTH', true),
+        'log_viewer' => env('TYRO_DASHBOARD_ENABLE_LOG_VIEWER', true),
         'show_roles_menu' => env('TYRO_DASHBOARD_SHOW_ROLES_MENU', true),
         'show_privileges_menu' => env('TYRO_DASHBOARD_SHOW_PRIVILEGES_MENU', true),
         'show_resources_menu' => env('TYRO_DASHBOARD_SHOW_RESOURCES_MENU', true),
         'activity_log' => false, // Future feature
         'profile_photo_upload' => env('TYRO_DASHBOARD_ENABLE_PROFILE_PHOTO', false),
         'gravatar' => env('TYRO_DASHBOARD_ENABLE_GRAVATAR', false),
+        'heartbeat' => env('TYRO_DASHBOARD_ENABLE_HEARTBEAT', true),
     ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Heartbeat
+    |--------------------------------------------------------------------------
+    |
+    | Online-user detection window (in seconds) for the cache-based heartbeat.
+    | Should be at least twice the 5-minute frontend interval so a single
+    | missed beat does not mark a user offline.
+    |
+    */
+    'heartbeat_ttl' => (int) env('TYRO_DASHBOARD_HEARTBEAT_TTL', 600),
 
     /*
     |--------------------------------------------------------------------------
@@ -205,68 +222,81 @@ return [
         'auto_delete_on_user_delete' => true,
     ],
 
-    /*
+/*
     |--------------------------------------------------------------------------
-    | Dynamic Resources (CRUD)
-    |--------------------------------------------------------------------------
-    |
-    | Define your resources here to automatically generate CRUD interfaces.
-    |
-    */
-    // 'resources' => [
-    //     // Example:
-    //     // 'posts' => [
-    //     //     'model' => 'App\Models\Post',
-    //     //     'title' => 'Posts',
-    //     //     'icon' => '<svg>...</svg>', // Optional SVG icon
-    //     //     'fields' => [
-    //     //         'title' => ['type' => 'text', 'label' => 'Title', 'rules' => 'required'],
-    //     //         'content' => ['type' => 'textarea', 'label' => 'Content'],
-    //     //     ],
-    //     // ],
-    // ],
-    /*
-    |--------------------------------------------------------------------------
-    | Dynamic Resources (CRUDs & Custom Links)
+    | Dynamic Resources, Groups & Navigation Links
     |--------------------------------------------------------------------------
     |
-    | Define your resources here to automatically generate CRUD interfaces
-    | and sidebar links.
+    | Define your resources here. Tyro Dashboard supports 4 flexible formats:
     |
-    | Supported Optional Properties:
-    | - 'group'  : (string) Sidebar category section header (e.g. 'Product & Inventory').
-    | - 'url'    : (string) Custom URL path (e.g. '/pos'). Overrides standard CRUD route.
-    | - 'route'  : (string) Named Laravel route (e.g. 'admin.kds.chef').
-    | - 'target' : (string) Link target attribute ('_blank' to open in a new tab, '_self' for same tab).
+    | 1. Dynamic CRUD Resource: Automatic model CRUD forms and data tables.
+    | 2. Grouped Resources: Add 'group' => 'Group Name' to create collapsible sections.
+    | 3. Custom Direct URLs: Link to custom pages, POS, or external sites ('url' => '/...').
+    | 4. Named Laravel Routes: Link to any named route ('route' => 'route.name').
+    |
+    | Optional Access Control Keys:
+    | - 'roles'     => ['admin', 'manager']  // Allowed roles (hidden from other users) 
+    |                                        //it works by default if not added roles
+    | - 'roles'     => ['cachier', 'manager']  // Allowed roles just for cachier and manager
+                                                 (hidden from other users) 
+    |                                        
+    | - 'readonly'  => ['staff']             // Can view, but cannot create/edit/delete
+    | - 'privilege' => 'pos.sell'            // Checked via Tyro RBAC permission
+    | - 'target'    => '_blank'              // Open in new browser tab
+    | - 'icon'      => '<svg>...</svg>'      // Custom SVG icon (18px x 18px recommended)
     |
     */
     'resources' => [
 
-        // 🚀 Example 1: Custom URL Link inside a Group
-        'web_pos' => [
-            'group'  => 'Display & POS',
-            'title'  => 'Web POS Terminal',
-            'url'    => '/pos',
-            'target' => '_blank',
-            'icon'   => '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v12m-3-2.818l.879.559c.211.135.442.2.673.2.226 0 .453-.064.661-.19a1.122 1.122 0 00.465-.916c0-.528-.4-.954-.925-1.042l-.4-.067c-.525-.088-.925-.514-.925-1.042 0-.376.183-.728.497-.918a1.121 1.121 0 011.077-.14l.879.56M12 3v18" /></svg>',
-        ],
-        // 🚀 Example 2. Custom Named Route Link in "Display & POS" Group
-        'kds_chef' => [
-            'group'  => 'Display & POS',
-            'title'  => 'Chef Screen (KDS)',
-            'route'  => 'admin.kds.chef', // Named Laravel Route
-            'target' => '_blank',
-            'icon'   => '<svg>...</svg>',
-        ],
-        // 🚀 Example 3: Grouped Standard CRUD Resource
+        // =========================================================================
+        // 🚀 TYPE 1: Grouped Dynamic CRUD (Generates CRUD + Puts in Accordion)
+        // =========================================================================
         'categories' => [
-            'group' => 'Product & Inventory', // Group Name
-            'model' => 'App\Models\Category',
-            'title' => 'Categories',
-            'roles' => ['admin', 'super-admin'],
-            'icon'  => '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12.75V12A2.25 2.25 0 014.5 9.75h15A2.25 2.25 0 0121.75 12v.75m-8.69-6.44l-2.12-2.12a1.5 1.5 0 00-1.061-.44H4.5A2.25 2.25 0 002.25 6v12a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9a2.25 2.25 0 00-2.25-2.25h-5.379a1.5 1.5 0 01-1.06-.44z" /></svg>',
-            'fields' => [
-                'name' => ['type' => 'text', 'label' => 'Category Name', 'rules' => 'required|max:255', 'searchable' => true],
+            'group'     => 'Product & Inventory', // Group Header Title
+            'model'     => 'App\Models\Category',
+            'title'     => 'Categories',
+            'icon'      => '<svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"/></svg>',
+            'roles'     => ['admin', 'manager'],  // Only Admin & Manager can see this
+            'fields'    => [
+                'name'        => ['type' => 'text', 'label' => 'Category Name', 'rules' => 'required|max:191'],
+                'description' => ['type' => 'textarea', 'label' => 'Description'],
+            ],
+        ],
+
+        // =========================================================================
+        // 🚀 TYPE 2: Custom Direct URL inside a Group (e.g. POS Screen)
+        // =========================================================================
+        'web_pos' => [
+            'group'     => 'Sales & POS',
+            'title'     => 'Web POS Terminal',
+            'url'       => '/pos',               // Direct URL path
+            'target'    => '_blank',             // Opens full-screen in a new tab
+            'privilege' => 'pos.sell',           // Checked dynamically via Tyro RBAC
+            'icon'      => '<svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>',
+        ],
+
+        // =========================================================================
+        // 🚀 TYPE 3: Custom Named Laravel Route inside a Group
+        // =========================================================================
+        'branch_management' => [
+            'group' => 'Settings & Branches',
+            'title' => 'Manage Branches',
+            'route' => 'branches.index',         // Named route registered in routes/web.php
+            'roles' => ['admin', 'super-admin'], // Hidden from normal staff
+            'icon'  => '<svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>',
+        ],
+
+        // =========================================================================
+        // 🚀 TYPE 4: Standard Ungrouped Resource (Native Tyro Behavior)
+        // =========================================================================
+        // Omit the 'group' key to keep it in the default top-level "Resources" section
+        'posts' => [
+            'model'     => 'App\Models\Post',
+            'title'     => 'Posts',
+            'readonly'  => ['staff'],            // Staff can view, but cannot edit/delete
+            'fields'    => [
+                'title'   => ['type' => 'text', 'label' => 'Post Title', 'rules' => 'required'],
+                'content' => ['type' => 'textarea', 'label' => 'Content'],
             ],
         ],
 
@@ -298,6 +328,19 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Log Viewer
+    |--------------------------------------------------------------------------
+    |
+    | Configure the admin log viewer for application log files in storage/logs.
+    |
+    */
+    'log_viewer' => [
+        'max_read_bytes' => env('TYRO_DASHBOARD_LOG_MAX_READ_BYTES', 16777216), // tail cap: 16MB
+        'per_page' => 25,
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
     | Media
     |--------------------------------------------------------------------------
     |
@@ -306,6 +349,7 @@ return [
     */
     'media' => [
         'max_size' => env('TYRO_DASHBOARD_MEDIA_MAX_SIZE', 10240),
+        'gallery_columns' => (int) env('TYRO_DASHBOARD_MEDIA_GALLERY_COLUMNS', 6),
         'api_keys' => [
             'freepik' => env('TYRO_DASHBOARD_FREEPIK_KEY'),
             'pexels' => env('TYRO_DASHBOARD_PEXELS_KEY'),

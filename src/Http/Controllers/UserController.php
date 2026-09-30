@@ -6,10 +6,14 @@ use HasinHayder\Tyro\Models\Role;
 use HasinHayder\Tyro\Support\PasswordRules;
 use HasinHayder\Tyro\Support\TyroAudit;
 use HasinHayder\TyroDashboard\Support\DashboardRoute;
+use HasinHayder\TyroDashboard\Support\OnlineUsers;
+use HasinHayder\TyroLogin\Events\ForceLogout;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 
 class UserController extends BaseController {
     /**
@@ -19,6 +23,7 @@ class UserController extends BaseController {
         $userModel = $this->getUserModel();
         $perPage = config('tyro-dashboard.pagination.users', 15);
 
+        $onlineUserIds = $this->getOnlineUserIds();
         $query = $userModel::with('roles');
 
         // Search
@@ -41,6 +46,8 @@ class UserController extends BaseController {
             $query->whereNotNull('suspended_at');
         } elseif ($request->get('status') === 'active') {
             $query->whereNull('suspended_at');
+        } elseif ($request->get('status') === 'logged_in') {
+            $query->whereIn('id', $onlineUserIds->all());
         }
 
         $users = $query->latest()->paginate($perPage)->withQueryString();
@@ -49,6 +56,7 @@ class UserController extends BaseController {
         return view('tyro-dashboard::users.index', $this->getViewData([
             'users' => $users,
             'roles' => $roles,
+            'onlineUserIds' => $onlineUserIds,
             'filters' => $request->only(['search', 'role', 'status']),
         ]));
     }
@@ -107,6 +115,7 @@ class UserController extends BaseController {
 
         return view('tyro-dashboard::users.edit', $this->getViewData([
             'editUser' => $user,
+            'isOnline' => $this->getOnlineUserIds()->containsStrict((string) $user->getKey()),
             'roles' => $roles,
         ]));
     }
@@ -262,6 +271,84 @@ class UserController extends BaseController {
     }
 
     /**
+     * Log the specified user out of all supported sessions.
+     */
+    public function logout($id) {
+        $userModel = $this->getUserModel();
+        $user = $userModel::findOrFail($id);
+
+        if ($user->id === auth()->id()) {
+            return redirect()
+                ->route(DashboardRoute::name('users.index'))
+                ->with('error', 'You cannot log yourself out.');
+        }
+
+        $tokenCount = $user->tokens()->count();
+        $user->tokens()->delete();
+
+        $sessionCount = 0;
+        $sessionDriver = config('session.driver');
+        $sessionsRevoked = false;
+        $sessionRevocationFailed = false;
+        $forceLogoutDispatched = false;
+
+        if ($sessionDriver === 'database') {
+            try {
+                $sessionCount = DB::connection(config('session.connection'))
+                    ->table(config('session.table', 'sessions'))
+                    ->where('user_id', $user->getAuthIdentifier())
+                    ->delete();
+                $sessionsRevoked = true;
+            } catch (\Throwable $e) {
+                $sessionRevocationFailed = true;
+            }
+        } elseif ($sessionDriver === 'redis') {
+            // Redis sessions cannot be enumerated like database rows, so mark the
+            // user for logout instead; Tyro Login logs them out on their next web request.
+            try {
+                event(new ForceLogout((int) $user->getAuthIdentifier()));
+                $forceLogoutDispatched = true;
+                $sessionsRevoked = true;
+            } catch (\Throwable $e) {
+                $sessionRevocationFailed = true;
+            }
+        }
+
+        if ($sessionsRevoked) {
+            OnlineUsers::forget($user->getAuthIdentifier());
+        }
+
+        $user->setRememberToken(Str::random(60));
+        $user->save();
+
+        $result = $sessionsRevoked ? 'complete' : 'partial';
+        $this->auditSafely('user.logout', $user, null, [
+            'target_user_id' => $user->getAuthIdentifier(),
+            'target_user_email' => $user->email,
+            'api_tokens_revoked' => $tokenCount,
+            'browser_sessions_revoked' => $sessionCount,
+            'browser_session_revocation_failed' => $sessionRevocationFailed,
+            'force_logout_dispatched' => $forceLogoutDispatched,
+            'session_driver' => $sessionDriver,
+            'result' => $result,
+        ]);
+
+        if ($forceLogoutDispatched) {
+            $message = "{$user->name} has been marked for logout and will be logged out on their next request. {$tokenCount} API token(s) were revoked.";
+        } elseif ($sessionsRevoked) {
+            $message = "{$user->name} has been logged out of all browser sessions and {$tokenCount} API token(s) were revoked.";
+        } elseif ($sessionRevocationFailed) {
+            $message = "{$user->name}'s {$tokenCount} API token(s) were revoked, but browser sessions could not be terminated because the session store could not be accessed.";
+        } else {
+            $message = "{$user->name}'s {$tokenCount} API token(s) were revoked, but browser sessions could not be terminated because the session driver is not supported.";
+        }
+
+        return redirect()
+            ->route(DashboardRoute::name('users.index'))
+            ->with($sessionsRevoked ? 'success' : 'warning', $message);
+    }
+
+    /**
      * Reset 2FA for the specified user.
      */
     public function reset2FA($id) {
@@ -333,6 +420,27 @@ class UserController extends BaseController {
         return redirect()
             ->route(DashboardRoute::name('users.index'))
             ->with('success', 'You have stopped impersonating and returned to your account.');
+    }
+
+    protected function getOnlineUserIds(): Collection {
+        $sessionIds = collect();
+
+        if (config('session.driver') === 'database') {
+            try {
+                $sessionIds = DB::connection(config('session.connection'))
+                    ->table(config('session.table', 'sessions'))
+                    ->where('last_activity', '>=', now()->subMinutes(config('session.lifetime', 120))->getTimestamp())
+                    ->whereNotNull('user_id')
+                    ->distinct()
+                    ->pluck('user_id')
+                    ->map(fn ($id) => (string) $id);
+            } catch (\Throwable $e) {
+                $sessionIds = collect();
+            }
+        }
+
+        // Heartbeat cache is the primary signal; DB sessions stay as a fallback
+        return OnlineUsers::onlineUserIds()->merge($sessionIds)->unique()->values();
     }
 
     /**

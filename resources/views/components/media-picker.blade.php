@@ -19,6 +19,9 @@
     'circle' => false,
     'full_url' => false,
     'fullUrl' => null,
+    'columns' => null,
+    'gallery_columns' => null,
+    'galleryColumns' => null,
 ])
 
 @php
@@ -55,6 +58,9 @@
     if ($fieldValue && !str_starts_with($fieldValue, 'http://') && !str_starts_with($fieldValue, 'https://')) {
         $previewSrc = \Illuminate\Support\Facades\Storage::url($fieldValue);
     }
+
+    $rawColumns = $columns ?? $galleryColumns ?? $gallery_columns ?? $attributes->get('columns') ?? $attributes->get('gallery-columns') ?? $attributes->get('gallery_columns');
+    $pickerColumns = (is_numeric($rawColumns) && (int) $rawColumns > 0) ? (int) $rawColumns : null;
 @endphp
 
 <div class="tyro-media-picker-field" data-tyro-media-picker-field style="margin-top:5px; margin-bottom:0.85rem;">
@@ -74,6 +80,7 @@
                 data-tyro-media-picker-preview
                 data-tyro-media-picker-trigger
                 data-input-id="{{ $fieldId }}"
+                @if($pickerColumns) data-tyro-media-columns="{{ $pickerColumns }}" @endif
                 role="button"
                 tabindex="0"
                 aria-label="Open media picker"
@@ -106,6 +113,7 @@
             data-tyro-media-picker-input
             data-tyro-media-output="{{ $outputMode }}"
             data-tyro-media-full-url="{{ $fullUrl ? 'true' : 'false' }}"
+            @if($pickerColumns) data-tyro-media-columns="{{ $pickerColumns }}" @endif
         >
         <div class="tyro-media-picker-actions">
             <button
@@ -113,6 +121,7 @@
                 class="btn btn-{{ $buttonStyle }} tyro-media-picker-button"
                 data-tyro-media-picker-trigger
                 data-input-id="{{ $fieldId }}"
+                @if($pickerColumns) data-tyro-media-columns="{{ $pickerColumns }}" @endif
             >
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M4 16l4.586-4.586a2 2 0 0 1 2.828 0L16 16m-2-2 1.586-1.586a2 2 0 0 1 2.828 0L20 14m-6-6h.01M6 20h12a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2Z" />

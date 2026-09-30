@@ -257,9 +257,10 @@
         width: 8rem;
         height: 2.5rem;
         min-height: 2.5rem;
-        padding: 0 0.8rem;
+        padding: 0 2.2rem 0 0.8rem;
         border-radius: 999px;
-        background: rgba(255, 255, 255, 0.04);
+        background-color: rgba(255, 255, 255, 0.04);
+        background-position: right 0.7rem center;
         font-size: 0.78rem;
         letter-spacing: 0;
         text-transform: none;
@@ -294,6 +295,58 @@
         color: var(--muted-foreground);
         font-size: 0.92rem;
         line-height: 1.6;
+    }
+
+    .tyro-media-modal-fav-toggle {
+        appearance: none;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.4rem;
+        height: 2.5rem;
+        padding: 0 1rem;
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.04);
+        color: var(--muted-foreground);
+        font-size: 0.85rem;
+        font-weight: 500;
+        cursor: pointer;
+        line-height: 1;
+        box-sizing: border-box;
+        transition: background-color 0.18s ease, color 0.18s ease, border-color 0.18s ease, transform 0.15s ease;
+    }
+
+    .tyro-media-modal-fav-toggle span {
+        display: inline-block;
+        line-height: 1;
+        transform: translateY(0.5px);
+    }
+
+    .tyro-media-modal-fav-toggle:hover {
+        background: rgba(255, 255, 255, 0.08);
+        color: #f59e0b;
+        border-color: rgba(245, 158, 11, 0.3);
+    }
+
+    .tyro-media-modal-fav-toggle svg {
+        width: 1rem;
+        height: 1rem;
+        flex-shrink: 0;
+        display: block;
+        transition: transform 0.18s ease;
+    }
+
+    .tyro-media-modal-fav-toggle.is-active {
+        background: rgba(245, 158, 11, 0.14);
+        color: #f59e0b;
+        border-color: rgba(245, 158, 11, 0.45);
+        font-weight: 600;
+    }
+
+    .tyro-media-modal-fav-toggle.is-active svg {
+        fill: #f59e0b;
+        stroke: #f59e0b;
     }
 
     .tyro-media-modal-close {
@@ -349,6 +402,36 @@
         background: rgba(255, 255, 255, 0.04);
     }
 
+    .tyro-media-modal-category {
+        display: none;
+        flex: 1 1 0;
+        min-width: 0;
+    }
+
+    .tyro-media-modal-category[hidden] {
+        display: none !important;
+    }
+
+    .tyro-media-modal-toolbar-left.has-category-filter .tyro-media-modal-category {
+        display: inline-flex;
+    }
+
+    .tyro-media-modal-toolbar-left.has-category-filter .tyro-media-modal-search {
+        flex: 3 1 0;
+    }
+
+    .tyro-media-category-select {
+        width: 100%;
+        height: 2.5rem;
+        min-height: 2.5rem;
+        padding: 0 2.4rem 0 0.9rem;
+        border-radius: 999px;
+        background-color: rgba(255, 255, 255, 0.04);
+        background-position: right 0.8rem center;
+        font-size: 0.78rem;
+        cursor: pointer;
+    }
+
     .tyro-media-modal-body {
         flex: 1;
         overflow-y: auto;
@@ -357,14 +440,21 @@
 
     .tyro-media-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+        grid-template-columns: repeat(var(--picker-grid-columns, 5), minmax(0, 1fr));
         gap: 1rem;
+        transition: opacity 0.18s ease;
+    }
+
+    .tyro-media-grid.is-loading {
+        opacity: 0.45;
+        pointer-events: none;
     }
 
     .tyro-media-item {
         display: flex;
         flex-direction: column;
         min-width: 0;
+        aspect-ratio: 1 / 1;
         border: 1px solid rgba(255, 255, 255, 0.08);
         border-radius: 1rem;
         overflow: hidden;
@@ -387,7 +477,9 @@
 
     .tyro-media-item-preview {
         position: relative;
-        height: 148px;
+        width: 100%;
+        flex: 1;
+        min-height: 0;
         overflow: hidden;
         background: linear-gradient(135deg, rgba(255, 255, 255, 0.05), transparent), var(--muted);
     }
@@ -420,7 +512,7 @@
         display: flex;
         flex-direction: column;
         justify-content: space-between;
-        padding: 0.8rem;
+        padding: 0.5rem;
         background: linear-gradient(180deg, rgba(15, 23, 42, 0.14), rgba(15, 23, 42, 0.68));
         opacity: 0;
         transition: opacity 0.2s ease;
@@ -449,6 +541,21 @@
         backdrop-filter: blur(10px);
     }
 
+    .tyro-media-item-badge.tyro-media-item-fav {
+        background: rgba(245, 158, 11, 0.9);
+        color: #fff;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.2rem;
+        box-shadow: 0 4px 12px rgba(245, 158, 11, 0.35);
+    }
+
+    .tyro-media-item-badge.tyro-media-item-fav svg {
+        width: 0.75rem;
+        height: 0.75rem;
+        fill: currentColor;
+    }
+
     .tyro-media-item-action {
         align-self: flex-start;
         background: color-mix(in srgb, var(--primary) 84%, black 8%);
@@ -459,8 +566,10 @@
     .tyro-media-item-body {
         display: flex;
         flex-direction: column;
-        gap: 0.35rem;
-        padding: 0.85rem 0.9rem 0.95rem;
+        gap: 0.2rem;
+        padding: 0.5rem 0.65rem 0.6rem;
+        flex-shrink: 0;
+        background: inherit;
     }
 
     .tyro-media-item-name {
@@ -468,15 +577,17 @@
         white-space: nowrap;
         text-overflow: ellipsis;
         color: var(--foreground);
-        font-size: 0.84rem;
+        font-size: 0.78rem;
         font-weight: 600;
+        line-height: 1.25;
     }
 
     .tyro-media-item-meta {
         color: var(--muted-foreground);
-        font-size: 0.72rem;
+        font-size: 0.68rem;
         text-transform: uppercase;
-        letter-spacing: 0.08em;
+        letter-spacing: 0.05em;
+        line-height: 1.2;
     }
 
     .tyro-media-modal-state {
@@ -597,13 +708,78 @@
             width: 100%;
         }
 
+        .tyro-media-modal-toolbar-left.has-category-filter .tyro-media-modal-search {
+            flex: 0 0 auto;
+        }
+
+        .tyro-media-modal-category {
+            flex: 0 0 auto;
+            width: 100%;
+        }
+
         .tyro-media-grid {
             grid-template-columns: repeat(auto-fill, minmax(144px, 1fr));
             gap: 0.85rem;
         }
 
         .tyro-media-item-preview {
-            height: 132px;
+            width: 100%;
+            flex: 1;
+            min-height: 0;
+            height: auto;
         }
+    }
+
+    .tyro-media-picker-multi-bar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+        padding: 0.9rem 1.5rem;
+        background: var(--card, #1e293b);
+        border-top: 1px solid rgba(255, 255, 255, 0.08);
+        border-bottom-left-radius: 1rem;
+        border-bottom-right-radius: 1rem;
+    }
+
+    .tyro-media-picker-multi-count {
+        font-size: 0.875rem;
+        font-weight: 600;
+        color: var(--foreground);
+    }
+
+    .tyro-media-picker-multi-actions {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .tyro-media-item-checkbox {
+        position: absolute;
+        top: 0.5rem;
+        left: 0.5rem;
+        width: 1.35rem;
+        height: 1.35rem;
+        border-radius: 6px;
+        background: rgba(0, 0, 0, 0.5);
+        border: 1.5px solid rgba(255, 255, 255, 0.6);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: transparent;
+        transition: all 0.15s ease;
+        z-index: 2;
+    }
+
+    .tyro-media-item.is-selected .tyro-media-item-checkbox {
+        background: var(--primary);
+        border-color: var(--primary);
+        color: #fff;
+    }
+
+    .tyro-media-item-checkbox svg {
+        width: 0.9rem;
+        height: 0.9rem;
+        stroke-width: 2.5;
     }
 </style>

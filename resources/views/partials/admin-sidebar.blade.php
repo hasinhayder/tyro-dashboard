@@ -175,6 +175,28 @@
                 </a>
             @endif
 
+            @if (config('tyro-dashboard.features.smtp_settings', true))
+                <a href="{{ route($dashboardRoute::name('settings.smtp.index')) }}"
+                    class="sidebar-link {{ request()->routeIs($dashboardRoute::pattern('settings.smtp.*')) ? 'active' : '' }}">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                    </svg>
+                    SMTP Settings
+                </a>
+            @endif
+
+            @if (config('tyro-dashboard.features.emailer', true))
+                <a href="{{ route($dashboardRoute::name('emailer.index')) }}"
+                    class="sidebar-link {{ request()->routeIs($dashboardRoute::pattern('emailer.*')) ? 'active' : '' }}">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5" />
+                    </svg>
+                    Emailer
+                </a>
+            @endif
+
             @if (config('tyro-dashboard.features.checkpoints', true) &&
                     class_exists(\HasinHayder\TyroCheckpoint\TyroCheckpointServiceProvider::class))
                 <a href="{{ route($dashboardRoute::name('checkpoints.index')) }}"
@@ -184,6 +206,27 @@
                             d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4" />
                     </svg>
                     Checkpoints
+                </a>
+            @endif
+
+            @if (config('tyro-dashboard.features.health', true))
+                <a href="{{ route($dashboardRoute::name('health.index')) }}"
+                    class="sidebar-link {{ request()->routeIs($dashboardRoute::pattern('health.*')) ? 'active' : '' }}">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M22 12h-4l-3 9L9 3l-3 9H2" />
+                    </svg>
+                    System Health
+                </a>
+            @endif
+
+            @if (config('tyro-dashboard.features.log_viewer', true))
+                <a href="{{ route($dashboardRoute::name('logs.index')) }}"
+                    class="sidebar-link {{ request()->routeIs($dashboardRoute::pattern('logs.*')) ? 'active' : '' }}">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                    </svg>
+                    Log Viewer
                 </a>
             @endif
 
@@ -202,8 +245,6 @@
                     </a>
                 @endforeach
             @endif
-
-
         </div>
 
         <!-- Media -->
@@ -219,78 +260,98 @@
             </a>
         </div>
 
-        @if (config('tyro-dashboard.features.show_resources_menu', true) &&
-                !empty($allResources ?? config('tyro-dashboard.resources')))
-            @php
-                // 🚀 1. Group resources by 'group' key (Defaults to 'Resources')
-                $resourcesByGroup = [];
-                $rawResources = $allResources ?? config('tyro-dashboard.resources', []);
-                foreach ($rawResources as $key => $resource) {
+        <!-- Resources & Custom Grouped Menus -->
+        @php
+            $rawResources = config('tyro-dashboard.resources', []);
+            $user = auth()->user();
+
+            $userRoles =
+                $user && method_exists($user, 'tyroRoleSlugs')
+                    ? $user->tyroRoleSlugs()
+                    : ($user && $user->roles
+                        ? $user->roles->pluck('slug')->toArray()
+                        : []);
+
+            $adminRoles = config('tyro-dashboard.admin_roles', ['admin', 'super-admin']);
+            $isAdmin =
+                count(array_intersect($userRoles, $adminRoles)) > 0 ||
+                ($user && method_exists($user, 'isSuperAdmin') && $user->isSuperAdmin()) ||
+                in_array('super-admin', $userRoles) ||
+                in_array('admin', $userRoles);
+
+            $resourcesByGroup = [];
+
+            foreach ($rawResources as $key => $resource) {
+                if (!is_array($resource)) {
+                    continue;
+                }
+
+                $canAccess = false;
+                $hasRoles = isset($resource['roles']) && !empty($resource['roles']);
+                $hasPrivilege = isset($resource['privilege']) && !empty($resource['privilege']);
+
+                if ($hasRoles) {
+                    // 1. If 'roles' is explicitly set, ONLY users with those roles can access (even Admins are hidden if not in the list!)
+                    $canAccess = count(array_intersect($resource['roles'], $userRoles)) > 0;
+                } elseif ($hasPrivilege) {
+                    // 2. If 'privilege' is explicitly set, check privilege
+                    $canAccess =
+                        $user && method_exists($user, 'hasPrivilege') && $user->hasPrivilege($resource['privilege']);
+                } else {
+                    // 3. Default: If NO roles and NO privileges are set, only Admins can see it!
+                    $canAccess = $isAdmin;
+                }
+
+                // 🚀 ONLY add to group if user actually has access!
+                // If all items in a group are hidden, the group title is NEVER created!
+                if ($canAccess) {
                     $groupName = $resource['group'] ?? 'Resources';
                     $resourcesByGroup[$groupName][$key] = $resource;
                 }
-            @endphp
+            }
+        @endphp
 
+        {{-- Render ONLY groups that actually have visible items for this user --}}
+        @if (!empty($resourcesByGroup))
             @foreach ($resourcesByGroup as $groupName => $groupResources)
                 <div class="sidebar-section">
                     <div class="sidebar-section-title">{{ $groupName }}</div>
                     @foreach ($groupResources as $key => $resource)
                         @php
-                            // 🚀 2. Support custom URL, custom Route, or standard CRUD resource link
                             if (isset($resource['url'])) {
-                                $linkUrl = $resource['url'];
+                                $linkUrl = url($resource['url']);
                                 $isActive = request()->is(ltrim($resource['url'], '/') . '*');
-                            } elseif (isset($resource['route'])) {
+                            } elseif (
+                                isset($resource['route']) &&
+                                \Illuminate\Support\Facades\Route::has($resource['route'])
+                            ) {
                                 $linkUrl = route($resource['route']);
                                 $isActive = request()->routeIs($resource['route'] . '*');
                             } else {
-                                $linkUrl = route($dashboardRoute::name('resources.index'), $key);
+                                $linkUrl = route($dashboardRoute::name('resources.index'), [
+                                    'resource' => (string) $key,
+                                ]);
                                 $isActive = request()->is('*resources/' . $key . '*');
                             }
 
                             $target = $resource['target'] ?? '_self';
-
-                            // 🚀 3. Check access & readonly permissions
-                            $canAccess = true;
-                            if (isset($resource['roles']) && !empty($resource['roles'])) {
-                                $canAccess = false;
-                                $user = auth()->user();
-                                if ($user && method_exists($user, 'tyroRoleSlugs')) {
-                                    $userRoles = $user->tyroRoleSlugs();
-                                    // Check allowed roles
-                                    foreach ($resource['roles'] as $role) {
-                                        if (in_array($role, $userRoles)) {
-                                            $canAccess = true;
-                                            break;
-                                        }
-                                    }
-                                    // Check readonly roles
-                                    if (!$canAccess && isset($resource['readonly']) && !empty($resource['readonly'])) {
-                                        foreach ($resource['readonly'] as $role) {
-                                            if (in_array($role, $userRoles)) {
-                                                $canAccess = true;
-                                                break;
-                                            }
-                                        }
-                                    }
-                                }
-                            }
                         @endphp
 
-                        @if ($canAccess)
-                            <a href="{{ $linkUrl }}" target="{{ $target }}"
-                                class="sidebar-link {{ $isActive ? 'active' : '' }}">
-                                @if (isset($resource['icon']))
+                        <a href="{{ $linkUrl }}" target="{{ $target }}"
+                            class="sidebar-link {{ $isActive ? 'active' : '' }}">
+                            @if (isset($resource['icon']))
+                                <span
+                                    style="width: 18px; height: 18px; display: inline-flex; align-items: center; justify-content: center; margin-right: 6px;">
                                     {!! $resource['icon'] !!}
-                                @else
-                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                            d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
-                                    </svg>
-                                @endif
-                                {{ $resource['title'] }}
-                            </a>
-                        @endif
+                                </span>
+                            @else
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                        d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                                </svg>
+                            @endif
+                            <span>{{ $resource['title'] ?? ucfirst($key) }}</span>
+                        </a>
                     @endforeach
                 </div>
             @endforeach

@@ -17,7 +17,7 @@
                         <div class="sys-settings-grid">
                             <div class="sys-settings-surface">
                                 <h4 class="sys-settings-surface-title">Branding</h4>
-                                <p class="sys-settings-surface-description">Customize the dashboard app name and sidebar colors.</p>
+                                <p class="sys-settings-surface-description">Customize the dashboard app name, logo sizing, and favicon.</p>
 
                                 <div class="form-group">
                                     <label for="TYRO_DASHBOARD_APP_NAME" class="form-label">App name (TYRO_DASHBOARD_APP_NAME)</label>
@@ -35,11 +35,28 @@
                                     <p class="form-hint">CSS height value e.g. <code>32px</code>, <code>3rem</code>.</p>
                                 </div>
 
+                                <div class="form-group" style="margin-bottom:0;">
+                                    <label class="form-label">Favicon (TYRO_DASHBOARD_FAVICON)</label>
+                                    <x-media-picker
+                                        name="TYRO_DASHBOARD_FAVICON"
+                                        :value="old('TYRO_DASHBOARD_FAVICON', $settings['TYRO_DASHBOARD_FAVICON'] ?? null)"
+                                        output="thumb"
+                                        preview="true"
+                                        preview-position="left"
+                                        preview-width="48px"
+                                        preview-height="48px"
+                                        button="primary"
+                                        button-text="Select Favicon"
+                                        width="100%"
+                                        size="medium"
+                                    />
+                                    <p class="form-hint" style="margin-top:0.35rem;">Used as the shortcut icon / favicon in dashboard browser tabs.</p>
+                                </div>
                             </div>
 
                             <div class="sys-settings-surface">
                                 <h4 class="sys-settings-surface-title">Collapsible Sidebar</h4>
-                                <p class="sys-settings-surface-description">Toggle collapsible sidebar and disable example sections.</p>
+                                <p class="sys-settings-surface-description">Toggle collapsible sidebar behavior.</p>
 
                                 <div class="sys-settings-toggles" style="margin-bottom:0;">
                                     <div class="sys-settings-toggle">
@@ -52,22 +69,6 @@
                                                 <input type="hidden" name="TYRO_DASHBOARD_COLLAPSIBLE_SIDEBAR" value="0">
                                                 <label class="toggle-label">
                                                     <input type="checkbox" name="TYRO_DASHBOARD_COLLAPSIBLE_SIDEBAR" value="1" class="toggle-input" {{ old('TYRO_DASHBOARD_COLLAPSIBLE_SIDEBAR', $settings['TYRO_DASHBOARD_COLLAPSIBLE_SIDEBAR']) ? 'checked' : '' }}>
-                                                    <span class="toggle-slider"></span>
-                                                </label>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="sys-settings-toggle">
-                                        <div class="sys-settings-toggle-top">
-                                            <div>
-                                                <p class="sys-settings-toggle-title">Disable examples <span style="font-weight:normal">(<code>TYRO_DASHBOARD_DISABLE_EXAMPLES</code>)</span></p>
-                                                <p class="sys-settings-toggle-description">Hides example pages, sample data, and demo content from the dashboard sidebar and navigation.</p>
-                                            </div>
-                                            <div>
-                                                <input type="hidden" name="TYRO_DASHBOARD_DISABLE_EXAMPLES" value="0">
-                                                <label class="toggle-label">
-                                                    <input type="checkbox" name="TYRO_DASHBOARD_DISABLE_EXAMPLES" value="1" class="toggle-input" {{ old('TYRO_DASHBOARD_DISABLE_EXAMPLES', $settings['TYRO_DASHBOARD_DISABLE_EXAMPLES']) ? 'checked' : '' }}>
                                                     <span class="toggle-slider"></span>
                                                 </label>
                                             </div>
@@ -148,6 +149,22 @@
                                     <div class="sys-settings-toggle">
                                         <div class="sys-settings-toggle-top">
                                             <div>
+                                                <p class="sys-settings-toggle-title">Emailer <span style="font-weight:normal">(<code>TYRO_DASHBOARD_ENABLE_EMAILER</code>)</span></p>
+                                                <p class="sys-settings-toggle-description">Enables the admin email composer and template system. Disabling this hides the emailer menu item and disables its routes.</p>
+                                            </div>
+                                            <div>
+                                                <input type="hidden" name="TYRO_DASHBOARD_ENABLE_EMAILER" value="0">
+                                                <label class="toggle-label">
+                                                    <input type="checkbox" name="TYRO_DASHBOARD_ENABLE_EMAILER" value="1" class="toggle-input" {{ old('TYRO_DASHBOARD_ENABLE_EMAILER', $settings['TYRO_DASHBOARD_ENABLE_EMAILER']) ? 'checked' : '' }}>
+                                                    <span class="toggle-slider"></span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="sys-settings-toggle">
+                                        <div class="sys-settings-toggle-top">
+                                            <div>
                                                 <p class="sys-settings-toggle-title">Audit logs <span style="font-weight:normal">(<code>TYRO_DASHBOARD_ENABLE_AUDIT_LOGS</code>)</span></p>
                                                 <p class="sys-settings-toggle-description">Logs user activities such as logins, profile updates, and admin actions for auditing and compliance purposes.</p>
                                             </div>
@@ -213,6 +230,29 @@
                                         <option value="top-right" {{ old('TYRO_DASHBOARD_TOAST_POSITION', $settings['TYRO_DASHBOARD_TOAST_POSITION']) === 'top-right' ? 'selected' : '' }}>Top right</option>
                                         <option value="bottom-right" {{ old('TYRO_DASHBOARD_TOAST_POSITION', $settings['TYRO_DASHBOARD_TOAST_POSITION']) === 'bottom-right' ? 'selected' : '' }}>Bottom right</option>
                                     </select>
+                                </div>
+                            </div>
+
+                            <div class="sys-settings-surface">
+                                <h4 class="sys-settings-surface-title">Examples &amp; Demo Content</h4>
+                                <p class="sys-settings-surface-description">Control the visibility of sample data and example pages.</p>
+
+                                <div class="sys-settings-toggles" style="margin-bottom:0;">
+                                    <div class="sys-settings-toggle">
+                                        <div class="sys-settings-toggle-top">
+                                            <div>
+                                                <p class="sys-settings-toggle-title">Disable examples <span style="font-weight:normal">(<code>TYRO_DASHBOARD_DISABLE_EXAMPLES</code>)</span></p>
+                                                <p class="sys-settings-toggle-description">Hides example pages, sample data, and demo content from the dashboard sidebar and navigation.</p>
+                                            </div>
+                                            <div>
+                                                <input type="hidden" name="TYRO_DASHBOARD_DISABLE_EXAMPLES" value="0">
+                                                <label class="toggle-label">
+                                                    <input type="checkbox" name="TYRO_DASHBOARD_DISABLE_EXAMPLES" value="1" class="toggle-input" {{ old('TYRO_DASHBOARD_DISABLE_EXAMPLES', $settings['TYRO_DASHBOARD_DISABLE_EXAMPLES']) ? 'checked' : '' }}>
+                                                    <span class="toggle-slider"></span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
 

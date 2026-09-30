@@ -23,6 +23,8 @@ class MediaPicker extends Component {
         public ?string $previewWidth = null,
         public ?string $preview_height = null,
         public ?string $previewHeight = null,
+        public int|string|null $columns = null,
+        public int|string|null $galleryColumns = null,
     ) {}
 
     public function render(): View {

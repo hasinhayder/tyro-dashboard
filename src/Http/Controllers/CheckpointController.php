@@ -26,6 +26,37 @@ class CheckpointController extends BaseController {
     }
 
     /**
+     * Download a checkpoint snapshot.
+     */
+    public function download(string $identifier, Checkpoint $checkpoint) {
+        $this->guardUnavailable($checkpoint);
+
+        $target = $checkpoint->find($identifier);
+        $path = $target['path'] ?? null;
+
+        if (! $target || ! is_string($path) || ! is_file($path)) {
+            abort(404);
+        }
+
+        $storagePath = realpath(dirname($checkpoint->metadataPath()));
+        $realPath = realpath($path);
+
+        if ($storagePath === false || $realPath === false || ! str_starts_with(
+            $realPath,
+            rtrim($storagePath, DIRECTORY_SEPARATOR).DIRECTORY_SEPARATOR
+        )) {
+            abort(404);
+        }
+
+        return response()->download($realPath, basename($realPath), [
+            'Content-Type' => 'application/octet-stream',
+            'Cache-Control' => 'no-store, no-cache, must-revalidate, max-age=0',
+            'Pragma' => 'no-cache',
+            'Expires' => '0',
+        ]);
+    }
+
+    /**
      * Create a new checkpoint.
      */
     public function create(Request $request, Checkpoint $checkpoint): JsonResponse {
@@ -49,6 +80,55 @@ class CheckpointController extends BaseController {
         }
 
         return $this->listResponse('Checkpoint created successfully.');
+    }
+
+    /**
+     * Import a checkpoint snapshot uploaded by the admin.
+     */
+    public function import(Request $request, Checkpoint $checkpoint): JsonResponse {
+        $this->requireAjax($request);
+        $this->guardUnavailable($checkpoint);
+
+        $data = $request->validate([
+            'file' => ['required', 'file'],
+            'name' => ['nullable', 'string', 'max:100'],
+            'note' => ['nullable', 'string', 'max:500'],
+            'driver' => ['nullable', 'string', 'in:sqlite,mysql,pgsql'],
+        ]);
+
+        $uploaded = $request->file('file');
+        $suffix = $uploaded->getClientOriginalExtension();
+        $suffix = $suffix !== '' ? '.'.$suffix : '';
+        $tmp = sys_get_temp_dir().'/tyro-import-'.uniqid('', true).$suffix;
+
+        try {
+            try {
+                $uploaded->move(dirname($tmp), basename($tmp));
+            } catch (\Throwable $e) {
+                return $this->error('Could not store the uploaded snapshot file.', 422);
+            }
+
+            if (! is_file($tmp)) {
+                return $this->error('Could not store the uploaded snapshot file.', 422);
+            }
+
+            $error = null;
+            $exit = $checkpoint->import(
+                $tmp,
+                $data['name'] ?? null,
+                $data['note'] ?? null,
+                $data['driver'] ?? null,
+                $error,
+            );
+
+            if ($exit !== 0) {
+                return $this->error($error ?: 'Could not import the snapshot file.', 422);
+            }
+
+            return $this->listResponse('Checkpoint imported successfully.');
+        } finally {
+            @unlink($tmp);
+        }
     }
 
     /**

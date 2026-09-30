@@ -43,7 +43,7 @@
                 </div>
                 <div class="filter-group">
                     <label class="filter-label">Role:</label>
-                    <select name="role" class="form-select" style="min-width: 150px;">
+                    <select name="role" class="form-select" style="min-width: 150px;" onchange="this.form.submit()">
                         <option value="">All Roles</option>
                         @foreach($roles as $role)
                             <option value="{{ $role->slug }}" {{ ($filters['role'] ?? '') === $role->slug ? 'selected' : '' }}>{{ $role->name }}</option>
@@ -52,10 +52,13 @@
                 </div>
                 <div class="filter-group">
                     <label class="filter-label">Status:</label>
-                    <select name="status" class="form-select" style="min-width: 130px;">
+                    <select name="status" class="form-select" style="min-width: 130px;" onchange="this.form.submit()">
                         <option value="">All Status</option>
                         <option value="active" {{ ($filters['status'] ?? '') === 'active' ? 'selected' : '' }}>Active</option>
                         <option value="suspended" {{ ($filters['status'] ?? '') === 'suspended' ? 'selected' : '' }}>Suspended</option>
+                        @if(config('session.driver') === 'database')
+                            <option value="logged_in" {{ ($filters['status'] ?? '') === 'logged_in' ? 'selected' : '' }}>Logged In</option>
+                        @endif
                     </select>
                 </div>
                 <button type="submit" class="btn btn-secondary">Filter</button>
@@ -102,7 +105,12 @@
                                     @endif
                                 </div>
                                 <div class="user-cell-info">
-                                    <div class="user-cell-name">{{ $listUser->name }}</div>
+                                    <div class="user-cell-name" style="display: flex; align-items: center; gap: 0.5rem;">
+                                        {{ $listUser->name }}
+                                        @if($onlineUserIds->containsStrict((string) $listUser->getKey()))
+                                            <span title="Online" aria-label="Online" style="display: inline-block; width: 0.5rem; height: 0.5rem; border-radius: 9999px; background-color: var(--success); box-shadow: 0 0 0 3px color-mix(in srgb, var(--success), transparent 85%);"></span>
+                                        @endif
+                                    </div>
                                     <div class="user-cell-email">{{ $listUser->email }}</div>
                                 </div>
                             </a>
@@ -158,6 +166,16 @@
                                 </button>
                             @endif
                             @if($listUser->id !== $user->id)
+                            @if(in_array(config('session.driver'), ['database', 'redis']))
+                                <form action="{{ route($dashboardRoute::name('users.logout'), $listUser->id) }}" method="POST" style="display: inline;" id="logout-user-form-{{ $listUser->id }}">
+                                    @csrf
+                                    <button type="button" class="action-btn action-btn-danger" title="Log Out" aria-label="Log out {{ $listUser->name }}" onclick="event.preventDefault(); showDanger('Log Out User', {{ Js::from('Are you sure you want to log out '.$listUser->name.'? This will force them out of all browser sessions and revoke all API tokens.') }}, { confirmText: 'Log Out' }).then(confirmed => { if(confirmed) document.getElementById('logout-user-form-{{ $listUser->id }}').submit(); })">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6A2.25 2.25 0 005.25 5.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15m3-3H9m0 0l3-3m-3 3l3 3" />
+                                        </svg>
+                                    </button>
+                                </form>
+                            @endif
                                 <form action="{{ route($dashboardRoute::name('users.destroy'), $listUser->id) }}" method="POST" style="display: inline;" id="delete-user-form-{{ $listUser->id }}">
                                     @csrf
                                     @method('DELETE')

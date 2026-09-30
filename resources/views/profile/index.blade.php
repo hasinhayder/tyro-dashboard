@@ -43,6 +43,7 @@
                             circle="true"
                             label="Profile Photo"
                             width="100%"
+                            columns="7"
                         />
                     @endif
 

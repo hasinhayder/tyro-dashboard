@@ -2,10 +2,12 @@
 
 namespace HasinHayder\TyroDashboard\Http\Controllers;
 
+use HasinHayder\TyroDashboard\Support\OnlineUsers;
 use HasinHayder\TyroLogin\Models\InvitationLink;
 use HasinHayder\TyroLogin\Models\InvitationReferral;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 class DashboardController extends BaseController {
@@ -21,6 +23,7 @@ class DashboardController extends BaseController {
             try {
                 // User stats
                 $stats['total_users'] = class_exists($userModel) ? $userModel::count() : 0;
+                $stats['total_logged_in_users'] = $this->getLoggedInUserCount();
 
                 // Try to get suspended users count
                 if (class_exists($userModel)) {
@@ -83,6 +86,7 @@ class DashboardController extends BaseController {
                 // If any error occurs, provide default stats
                 $stats = [
                     'total_users' => 0,
+                    'total_logged_in_users' => 0,
                     'total_roles' => 0,
                     'total_privileges' => 0,
                     'recent_users' => new Collection,
@@ -120,6 +124,27 @@ class DashboardController extends BaseController {
         return view('tyro-dashboard::dashboard.user', $this->getViewData([
             'stats' => $stats,
         ]));
+    }
+
+    protected function getLoggedInUserCount(): int {
+        $sessionIds = collect();
+
+        if (config('session.driver') === 'database') {
+            try {
+                $sessionIds = DB::connection(config('session.connection'))
+                    ->table(config('session.table', 'sessions'))
+                    ->where('last_activity', '>=', now()->subMinutes(config('session.lifetime', 120))->getTimestamp())
+                    ->whereNotNull('user_id')
+                    ->distinct()
+                    ->pluck('user_id')
+                    ->map(fn ($id) => (string) $id);
+            } catch (\Throwable $e) {
+                $sessionIds = collect();
+            }
+        }
+
+        // Heartbeat cache is the primary signal; DB sessions stay as a fallback
+        return OnlineUsers::onlineUserIds()->merge($sessionIds)->unique()->count();
     }
 
     /**

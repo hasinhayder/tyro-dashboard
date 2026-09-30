@@ -22,6 +22,7 @@ class SystemSettingsController extends BaseController {
         $validated = $request->validate([
             'TYRO_DASHBOARD_APP_NAME' => 'nullable|string|max:255',
             'TYRO_DASHBOARD_LOGO_HEIGHT' => 'nullable|string|max:20',
+            'TYRO_DASHBOARD_FAVICON' => 'nullable|string|max:500',
             'TYRO_DASHBOARD_SIDEBAR_BG' => 'nullable|string|max:50',
             'TYRO_DASHBOARD_SIDEBAR_TEXT' => 'nullable|string|max:50',
             'TYRO_DASHBOARD_SIDEBAR_PRIMARY' => 'nullable|string|max:50',
@@ -34,6 +35,7 @@ class SystemSettingsController extends BaseController {
             'TYRO_DASHBOARD_COLLAPSIBLE_SIDEBAR' => 'nullable|boolean',
             'TYRO_DASHBOARD_DISABLE_EXAMPLES' => 'nullable|boolean',
             'TYRO_DASHBOARD_ENABLE_INVITATION' => 'nullable|boolean',
+            'TYRO_DASHBOARD_ENABLE_EMAILER' => 'nullable|boolean',
             'TYRO_DASHBOARD_ENABLE_AUDIT_LOGS' => 'nullable|boolean',
             'TYRO_DASHBOARD_SHOW_ROLES_MENU' => 'nullable|boolean',
             'TYRO_DASHBOARD_SHOW_PRIVILEGES_MENU' => 'nullable|boolean',
@@ -211,6 +213,7 @@ class SystemSettingsController extends BaseController {
             'TYRO_DASHBOARD_UNSPLASH_ACCESS_KEY' => 'nullable|string|max:255',
             'TYRO_DASHBOARD_PIXABAY_KEY' => 'nullable|string|max:255',
             'TYRO_DASHBOARD_MEDIA_MAX_SIZE' => 'nullable|integer|min:1|max:1048576',
+            'TYRO_DASHBOARD_MEDIA_GALLERY_COLUMNS' => 'nullable|integer|min:1|max:12',
 
             'TYRO_LOGIN_PASSKEYS_ENABLED' => 'nullable|boolean',
             'TYRO_LOGIN_PASSKEYS_DIVIDER' => 'nullable|string|max:255',
@@ -319,6 +322,7 @@ class SystemSettingsController extends BaseController {
             'TYRO_DASHBOARD_COLLAPSIBLE_SIDEBAR',
             'TYRO_DASHBOARD_DISABLE_EXAMPLES',
             'TYRO_DASHBOARD_ENABLE_INVITATION',
+            'TYRO_DASHBOARD_ENABLE_EMAILER',
             'TYRO_DASHBOARD_ENABLE_AUDIT_LOGS',
             'TYRO_DASHBOARD_SHOW_ROLES_MENU',
             'TYRO_DASHBOARD_SHOW_PRIVILEGES_MENU',
@@ -381,6 +385,7 @@ class SystemSettingsController extends BaseController {
         return [
             'TYRO_DASHBOARD_APP_NAME' => config('tyro-dashboard.branding.app_name'),
             'TYRO_DASHBOARD_LOGO_HEIGHT' => config('tyro-dashboard.branding.logo_height'),
+            'TYRO_DASHBOARD_FAVICON' => config('tyro-dashboard.branding.favicon'),
             'TYRO_DASHBOARD_SIDEBAR_BG' => config('tyro-dashboard.branding.sidebar_bg'),
             'TYRO_DASHBOARD_SIDEBAR_TEXT' => config('tyro-dashboard.branding.sidebar_text'),
             'TYRO_DASHBOARD_SIDEBAR_PRIMARY' => config('tyro-dashboard.branding.sidebar_primary'),
@@ -393,6 +398,7 @@ class SystemSettingsController extends BaseController {
             'TYRO_DASHBOARD_COLLAPSIBLE_SIDEBAR' => config('tyro-dashboard.collapsible_sidebar'),
             'TYRO_DASHBOARD_DISABLE_EXAMPLES' => config('tyro-dashboard.disable_examples'),
             'TYRO_DASHBOARD_ENABLE_INVITATION' => config('tyro-dashboard.features.invitation_system'),
+            'TYRO_DASHBOARD_ENABLE_EMAILER' => config('tyro-dashboard.features.emailer'),
             'TYRO_DASHBOARD_ENABLE_AUDIT_LOGS' => config('tyro-dashboard.features.audit_logs'),
             'TYRO_DASHBOARD_SHOW_ROLES_MENU' => config('tyro-dashboard.features.show_roles_menu'),
             'TYRO_DASHBOARD_SHOW_PRIVILEGES_MENU' => config('tyro-dashboard.features.show_privileges_menu'),
@@ -557,6 +563,7 @@ class SystemSettingsController extends BaseController {
             'TYRO_DASHBOARD_UNSPLASH_ACCESS_KEY' => config('tyro-dashboard.media.api_keys.unsplash'),
             'TYRO_DASHBOARD_PIXABAY_KEY' => config('tyro-dashboard.media.api_keys.pixabay'),
             'TYRO_DASHBOARD_MEDIA_MAX_SIZE' => config('tyro-dashboard.media.max_size'),
+            'TYRO_DASHBOARD_MEDIA_GALLERY_COLUMNS' => config('tyro-dashboard.media.gallery_columns'),
 
             'TYRO_LOGIN_PASSKEYS_ENABLED' => config('tyro-login.passkeys.enabled', false),
             'TYRO_LOGIN_PASSKEYS_DIVIDER' => config('tyro-login.passkeys.divider_text'),
@@ -590,6 +597,7 @@ class SystemSettingsController extends BaseController {
         return [
             'TYRO_DASHBOARD_APP_NAME' => null,
             'TYRO_DASHBOARD_LOGO_HEIGHT' => '32px',
+            'TYRO_DASHBOARD_FAVICON' => null,
             'TYRO_DASHBOARD_SIDEBAR_BG' => null,
             'TYRO_DASHBOARD_SIDEBAR_TEXT' => null,
             'TYRO_DASHBOARD_SIDEBAR_PRIMARY' => null,
@@ -602,6 +610,7 @@ class SystemSettingsController extends BaseController {
             'TYRO_DASHBOARD_COLLAPSIBLE_SIDEBAR' => true,
             'TYRO_DASHBOARD_DISABLE_EXAMPLES' => false,
             'TYRO_DASHBOARD_ENABLE_INVITATION' => true,
+            'TYRO_DASHBOARD_ENABLE_EMAILER' => true,
             'TYRO_DASHBOARD_ENABLE_AUDIT_LOGS' => true,
             'TYRO_DASHBOARD_SHOW_ROLES_MENU' => true,
             'TYRO_DASHBOARD_SHOW_PRIVILEGES_MENU' => true,
@@ -772,6 +781,7 @@ class SystemSettingsController extends BaseController {
             'TYRO_DASHBOARD_UNSPLASH_ACCESS_KEY' => null,
             'TYRO_DASHBOARD_PIXABAY_KEY' => null,
             'TYRO_DASHBOARD_MEDIA_MAX_SIZE' => 10240,
+            'TYRO_DASHBOARD_MEDIA_GALLERY_COLUMNS' => 6,
 
             'TYRO_LOGIN_PASSKEYS_ENABLED' => false,
             'TYRO_LOGIN_PASSKEYS_DIVIDER' => 'or continue with email',

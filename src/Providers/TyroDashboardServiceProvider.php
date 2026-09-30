@@ -353,6 +353,7 @@ class TyroDashboardServiceProvider extends ServiceProvider {
             $viewsPath.'/roles' => resource_path('views/vendor/tyro-dashboard/roles'),
             $viewsPath.'/privileges' => resource_path('views/vendor/tyro-dashboard/privileges'),
             $viewsPath.'/checkpoints' => resource_path('views/vendor/tyro-dashboard/checkpoints'),
+            $viewsPath.'/smtp' => resource_path('views/vendor/tyro-dashboard/smtp'),
         ], 'tyro-dashboard-views-admin');
 
         // Publish user views only (user layout, user sidebar, user dashboard, profile)

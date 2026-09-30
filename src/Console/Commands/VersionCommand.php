@@ -19,7 +19,7 @@ class VersionCommand extends Command {
      * Execute the console command.
      */
     public function handle(): int {
-        $version = '1.46.4'; // Media alt-text save fix (PR #7)
+        $version = '1.56.1'; // fix(settings): Authentication Plus social toggles now use the standard settings toggle card markup
 
         $this->info('');
         $this->info('  ╔════════════════════════════════════════╗');
@@ -70,6 +70,26 @@ class VersionCommand extends Command {
 }
 
 // Changelog
+// 1.56.1 - fix(settings): Authentication Plus social toggles (TYRO_LOGIN_SOCIAL_LINK_EXISTING and TYRO_LOGIN_SOCIAL_AUTO_VERIFY_EMAIL) now use the standard sys-settings-toggle card markup inside the Social Provider Details list instead of raw label/checkbox rows, matching the provider toggles above
+// 1.56.0 - feat(media): media categories management (CRUD, unique slugs, user/admin scoping), bulk category creation from comma-separated input, category filtering in media gallery and picker, multi-select "Add to Category" modal with toggles and scrollable list, bulk unlinking, lightbox category tagging, and file edit modal for rename and alt text
+// 1.56.0 - feat(branding): favicon upload container in Branding settings using thumb-mode media picker, .env persistence via TYRO_DASHBOARD_FAVICON, and link tag rendering in admin/app/user layout heads
+// 1.55.2 - feat(media): configurable media picker columns prop (e.g. columns="6" or :columns="7") with per-trigger dynamic grid sizing and square image card presentation
+// 1.55.1 - fix(media): hide Clear filter button when query parameters are present but empty (requires filled filter values to show)
+// 1.55.0 - feat(media): favorite/bookmark images with star toggle on image cards (yellow active, gray inactive), media gallery auto-applying dropdown filters (Type, Date, Favorite), and a header favorite toggle filter on the media picker component
+// 1.54.0 - feat(checkpoints): download checkpoints, import external .sqlite, .sql, and .enc snapshots from the admin UI with optional checkpoint name/note/driver, preserved .enc detection, service error feedback, and automatic list/stat refresh
+// 1.53.0 - feat(media): configurable desktop gallery columns via TYRO_DASHBOARD_MEDIA_GALLERY_COLUMNS (default 6, configurable from 1 to 12), hidden the per-item "View in new tab" action while preserving its code, replaced the Open Source icon with the external-link icon, and documented the new setting in README.md
+// 1.52.0 - feat(emailer): email composer with preset templates, live preview, queue dispatcher, and feature toggle
+// 1.51.3 - fixed(media): improved media preview modal layout and styling
+// 1.51.2 - fix(media): media grid bulk-select checkbox now matches the action button size (1.7rem) with centered alignment so it no longer sits off-positioned next to the icons
+// 1.51.1 - fix(smtp): SMTP Settings encryption dropdown now writes the Symfony DSN schemes smtp (TLS label) and smtps (SSL label) to MAIL_SCHEME instead of tls/ssl, which Symfony's EsmtpTransportFactory rejects — fixes Hostinger "SMTP/SMTP-S" (and similar providers) reporting TLS or SSL is not supported; form and preset validation updated to smtp/smtps
+// 1.51.0 - feat(smtp): SMTP Settings admin page — live .env editing (MAIL_* + MAIL_FROM_*), presets table with encrypted passwords (CRUD + apply to .env; tyro_smtp_presets.host defaults to '' so non-smtp presets may omit host), tabular Use Preset modal (Preset/Host/Actions), Save current settings as preset, Clear Config Cache via showDanger, Esc-aware modals, and sidebar entry under Administration; routes and sidebar link are dual-gated by TYRO_DASHBOARD_ENABLE_SMTP_SETTINGS (features.smtp_settings, default true), and SmtpSettingsTest/SmtpSettingsDisabledTest cover authorization, .env writes, preset password encryption, and disabled-feature gating
+// 1.50.0 - feat(logout): force logout with Redis session driver — users.logout now dispatches Tyro Login's ForceLogout event when session.driver=redis (logs the user out on their next web request; tyro-login floor bumped to ^2.14), the logout button/icon render for database+redis drivers with driver-aware messages and audit fields, OnlineUsers::forget() clears heartbeat presence immediately on successful session revocation, and UserForceLogoutTest covers redis/database/unsupported drivers (redis test skips gracefully when no server is reachable)
+// 1.50.0 - feat(heartbeat): heartbeat API for online detection — auth-protected POST /heartbeat writes a per-user cache key (TTL via TYRO_DASHBOARD_HEARTBEAT_TTL, default 600s) every 5 minutes from the dashboard JS (survives page refreshes via localStorage timestamp, CSRF header, silent failures); isOnline badges, the logged-in user filter, and the dashboard logged-in stat now use the heartbeat cache unioned with the DB-session fallback; gated by TYRO_DASHBOARD_ENABLE_HEARTBEAT
+// 1.49.1 - Log Viewer patch re-release (re-tag of v1.49.0 pointing at the same commit; no code changes)
+// 1.49.0 - feat(logs): admin log viewer — browse application log files in storage/logs with per-level stat cards (distinct Lucide level icons, filter toggle), file/level/message filters, pagination, stack-trace details with copy, tail-capping for large files, and a clear-file action gated by the dashboard danger modal
+// 1.48.0 - feat(logout): per-user logout and logged-in user filtering — added a "Logout" button to the user list for admins to log out individual users, and a "Logged In" filter to show only currently logged-in users in the user list
+// 1.48.0 - feat(health): copy-as-image on System Health — per-card PNG copy buttons on all 13 cards plus a page-level "Copy page as image" button, vanilla-JS SVG composition with theme-aware colors, 2x canvas rasterization, clipboard write with download fallback and toast feedback; zero new dependencies
+// 1.47.0 - feat(health): System Health admin page — read-only runtime diagnostics (PHP memory + upload/execution limits, OPcache, disk, database, cache round-trip, queue reachability, storage writability, runtime context with timezone mismatch check, tyro ecosystem versions) with ordered-hybrid probe caching, gated by TYRO_DASHBOARD_ENABLE_HEALTH
 // 1.46.4 - fix(#7): Media Library alt-text field now saves correctly; alt route was POST-only so PATCH method spoofing returned a 405, and the alt/rename endpoints are now aligned on native PATCH
 // 1.46.3 - fix(#8): app layout now uses config('tyro-dashboard.admin_roles') for the @hasanyrole sidebar check, fixing the admin sidebar collapsing into the user sidebar for the super-admin role
 // 1.46.3 - fix(#6): disallow SVG uploads to prevent stored XSS

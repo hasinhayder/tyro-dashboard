@@ -85,10 +85,7 @@
         gap: 1rem;
     }
     @media (min-width: 1280px) {
-        .media-grid { grid-template-columns: repeat(5, 1fr); }
-    }
-    @media (min-width: 1600px) {
-        .media-grid { grid-template-columns: repeat(6, 1fr); }
+        .media-grid { grid-template-columns: repeat(var(--tyro-media-gallery-columns), minmax(0, 1fr)); }
     }
     .media-card {
         border: 1px solid var(--border);
@@ -121,8 +118,9 @@
         outline-offset: -2px;
     }
     .media-bulk-check {
-        width: 1.45rem;
-        height: 1.45rem;
+        width: 1.7rem;
+        height: 1.7rem;
+        margin: 0;
         display: inline-flex;
         align-items: center;
         justify-content: center;
@@ -313,11 +311,15 @@
     }
     .media-card-actions {
         display: flex;
+        align-items: center;
         gap: 0.3rem;
         margin-top: auto;
         justify-content: flex-end;
         padding-top: 0.35rem;
         border-top: 1px solid color-mix(in srgb, var(--border) 60%, transparent);
+    }
+    .media-card-actions .media-view-new-tab {
+        display: none !important;
     }
     .media-card-actions .btn {
         font-size: 0.7rem;
@@ -338,6 +340,29 @@
         width: 13px;
         height: 13px;
         flex-shrink: 0;
+    }
+    .media-card-actions .media-fav-btn {
+        color: var(--muted-foreground);
+    }
+    .media-card-actions .media-fav-btn svg {
+        width: 15px;
+        height: 15px;
+        fill: none;
+        stroke: currentColor;
+        transition: fill 0.15s ease, stroke 0.15s ease, transform 0.15s ease;
+    }
+    .media-card-actions .media-fav-btn:hover {
+        color: #f59e0b;
+    }
+    .media-card-actions .media-fav-btn:hover svg {
+        stroke: #f59e0b;
+    }
+    .media-card-actions .media-fav-btn.is-favorite {
+        color: #f59e0b;
+    }
+    .media-card-actions .media-fav-btn.is-favorite svg {
+        fill: #f59e0b;
+        stroke: #f59e0b;
     }
     .media-card-alt {
         display: grid;
@@ -545,11 +570,11 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        padding: 1.25rem;
+        padding: 1.5rem;
         opacity: 0;
         visibility: hidden;
         pointer-events: none;
-        transition: opacity 0.2s ease, visibility 0.2s ease;
+        transition: opacity 0.25s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.25s cubic-bezier(0.16, 1, 0.3, 1);
     }
     .dashboard-lightbox.open {
         opacity: 1;
@@ -559,54 +584,278 @@
     .dashboard-lightbox__backdrop {
         position: absolute;
         inset: 0;
-        background: rgba(15, 23, 42, 0.88);
-        backdrop-filter: blur(10px);
+        background: rgba(10, 15, 29, 0.85);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
     }
     .dashboard-lightbox__dialog {
         position: relative;
         z-index: 1;
-        width: min(96vw, 1200px);
-        max-height: 94vh;
+        width: min(94vw, 920px);
+        max-height: 92vh;
         display: flex;
         flex-direction: column;
-        gap: 0.85rem;
+        overflow: hidden;
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 1.125rem;
+        box-shadow: 0 25px 60px -12px rgba(0, 0, 0, 0.35), 0 0 0 1px rgba(255, 255, 255, 0.05);
+        transform: scale(0.96) translateY(12px);
+        transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .dashboard-lightbox.open .dashboard-lightbox__dialog {
+        transform: scale(1) translateY(0);
     }
     .dashboard-lightbox__toolbar {
         display: flex;
-        justify-content: space-between;
         align-items: center;
+        justify-content: space-between;
         gap: 1rem;
+        padding: 0.875rem 1.25rem;
+        background: var(--card);
+        border-bottom: 1px solid var(--border);
+    }
+    .dashboard-lightbox__meta-wrap {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        min-width: 0;
+        flex: 1;
+    }
+    .dashboard-lightbox__icon {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 2.25rem;
+        height: 2.25rem;
+        border-radius: 0.625rem;
+        background: var(--muted);
+        color: var(--primary);
+        flex-shrink: 0;
+    }
+    .dashboard-lightbox__icon svg {
+        width: 18px;
+        height: 18px;
     }
     .dashboard-lightbox__meta {
-        color: rgba(255, 255, 255, 0.78);
-        font-size: 0.82rem;
-        line-height: 1.5;
+        flex: 1;
+        min-width: 0;
+    }
+    .dashboard-lightbox__name {
+        font-size: 0.9375rem;
+        font-weight: 600;
+        color: var(--foreground);
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        letter-spacing: -0.01em;
+        line-height: 1.35;
+    }
+    .dashboard-lightbox__sub {
+        font-size: 0.75rem;
+        color: var(--muted-foreground);
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        line-height: 1.4;
+        margin-top: 1px;
+    }
+    .dashboard-lightbox__toolbar-actions {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        flex-shrink: 0;
+    }
+    .dashboard-lightbox__btn-ghost {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 2.25rem;
+        height: 2.25rem;
+        border-radius: 0.5rem;
+        border: 1px solid var(--border);
+        background: transparent;
+        color: var(--muted-foreground);
+        cursor: pointer;
+        transition: all 0.15s ease;
+        text-decoration: none;
+    }
+    .dashboard-lightbox__btn-ghost:hover {
+        background: var(--muted);
+        color: var(--foreground);
+        border-color: var(--border);
     }
     .dashboard-lightbox__close {
-        width: 2.5rem;
-        height: 2.5rem;
-        border: 0;
-        border-radius: 999px;
-        background: rgba(255, 255, 255, 0.12);
-        color: #fff;
+        flex-shrink: 0;
+        width: 2.25rem;
+        height: 2.25rem;
+        border: 1px solid var(--border);
+        border-radius: 0.5rem;
+        background: transparent;
+        color: var(--muted-foreground);
         cursor: pointer;
         display: inline-flex;
         align-items: center;
         justify-content: center;
+        transition: all 0.15s ease;
+    }
+    .dashboard-lightbox__close:hover {
+        background: var(--muted);
+        color: var(--foreground);
+    }
+    .dashboard-lightbox__close:focus-visible,
+    .dashboard-lightbox__btn-ghost:focus-visible {
+        outline: 2px solid var(--primary);
+        outline-offset: 2px;
     }
     .dashboard-lightbox__media {
+        position: relative;
         display: flex;
         align-items: center;
         justify-content: center;
-        min-height: 0;
+        min-height: 260px;
+        max-height: 68vh;
+        overflow: hidden;
+        padding: 1.5rem;
+        background-color: var(--background);
+        background-image: radial-gradient(var(--border) 1px, transparent 1px);
+        background-size: 16px 16px;
     }
     .dashboard-lightbox__image {
         max-width: 100%;
-        max-height: 82vh;
+        max-height: 62vh;
         object-fit: contain;
-        border-radius: 1.25rem;
-        box-shadow: 0 24px 80px rgba(0, 0, 0, 0.38);
-        background: rgba(255, 255, 255, 0.03);
+        border-radius: 0.625rem;
+        box-shadow: 0 12px 36px -8px rgba(0, 0, 0, 0.3);
+        transition: transform 0.2s ease;
+        display: block;
+    }
+    .dashboard-lightbox__footer {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.75rem;
+        flex-wrap: wrap;
+        padding: 0.75rem 1.25rem;
+        background: var(--card);
+        border-top: 1px solid var(--border);
+        font-size: 0.8125rem;
+        color: var(--muted-foreground);
+    }
+    .dashboard-lightbox__hint {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+        font-size: 0.75rem;
+    }
+    .dashboard-lightbox__actions {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.625rem;
+    }
+    .dashboard-lightbox__copy {
+        flex-shrink: 0;
+        font-size: 0.8125rem;
+        font-weight: 500;
+        padding: 0.45rem 0.85rem;
+        border-radius: 0.5rem;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+        transition: all 0.15s ease;
+    }
+    .dashboard-lightbox__copy svg {
+        width: 15px;
+        height: 15px;
+    }
+    .dashboard-lightbox__footer kbd {
+        font-family: inherit;
+        font-size: 0.6875rem;
+        font-weight: 600;
+        padding: 0.15rem 0.45rem;
+        border: 1px solid var(--border);
+        border-bottom-width: 2px;
+        border-radius: 0.35rem;
+        background: var(--muted);
+        color: var(--foreground);
+        letter-spacing: 0.02em;
+    }
+    /* Copy URL Modern Modal Enhancement */
+    .copy-url-modal .modal-container {
+        max-width: 440px;
+        border-radius: 1rem;
+        box-shadow: 0 24px 48px -12px rgba(0, 0, 0, 0.25);
+    }
+    .copy-url-modal .modal-body {
+        padding: 1.5rem;
+    }
+    .copy-url-modal .modal-footer {
+        display: none !important;
+    }
+    .copy-url-modal .copy-url-options {
+        display: flex;
+        flex-direction: column;
+        gap: 0.625rem;
+        margin-top: 1.25rem;
+    }
+    .copy-url-option-btn {
+        display: flex !important;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.75rem;
+        padding: 0.85rem 1rem;
+        border-radius: 0.625rem;
+        border: 1px solid var(--border);
+        background: var(--card);
+        color: var(--foreground);
+        font-size: 0.875rem;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.15s cubic-bezier(0.16, 1, 0.3, 1);
+        text-align: left;
+        width: 100%;
+        box-sizing: border-box;
+    }
+    .copy-url-option-btn:hover {
+        background: var(--muted);
+        border-color: var(--primary);
+        transform: translateY(-1px);
+    }
+    .copy-url-option-btn:focus-visible {
+        outline: 2px solid var(--primary);
+        outline-offset: 2px;
+    }
+    .copy-url-option-btn .copy-url-label {
+        display: flex;
+        flex-direction: column;
+        gap: 0.15rem;
+        min-width: 0;
+        flex: 1;
+    }
+    .copy-url-option-btn .copy-url-name {
+        font-weight: 600;
+        color: var(--foreground);
+    }
+    .copy-url-option-btn .copy-url-desc {
+        font-size: 0.75rem;
+        color: var(--muted-foreground);
+        font-weight: 400;
+        line-height: 1.35;
+    }
+    .copy-url-option-btn .copy-url-icon {
+        color: var(--muted-foreground);
+        flex-shrink: 0;
+        transition: color 0.15s ease, transform 0.15s ease;
+    }
+    .copy-url-option-btn:hover .copy-url-icon {
+        color: var(--primary);
+        transform: translateX(2px);
+    }
+    @media (prefers-reduced-motion: reduce) {
+        .dashboard-lightbox,
+        .dashboard-lightbox__dialog {
+            transition: none;
+        }
     }
     @media (max-width: 640px) {
         .media-toolbar {
@@ -633,9 +882,26 @@
             width: 1.6rem;
             height: 1.6rem;
         }
+        .media-card-actions > .media-bulk-check {
+            width: 1.6rem;
+            height: 1.6rem;
+        }
+        .dashboard-lightbox {
+            padding: 0.75rem;
+        }
+        .dashboard-lightbox__dialog {
+            width: 100%;
+            max-height: 92vh;
+            border-radius: 0.85rem;
+        }
         .dashboard-lightbox__toolbar {
-            flex-direction: column-reverse;
-            align-items: stretch;
+            flex-direction: row;
+        }
+        .dashboard-lightbox__media {
+            padding: 0.6rem;
+        }
+        .dashboard-lightbox__image {
+            max-height: 60vh;
         }
     }
     .upload-progress {
@@ -921,6 +1187,9 @@
 
 @section('content')
 <div class="media-library-shell">
+@php
+    $mediaGalleryColumns = max(1, min(12, (int) config('tyro-dashboard.media.gallery_columns', 6)));
+@endphp
 <script type="application/json" id="dashboardMediaConfig">
     @php
         $dashboardMediaConfig = [
@@ -948,10 +1217,29 @@
         @endif
     @endforeach
 </form>
+<form id="bulk-category-attach-form" action="{{ route($dashboardRoute::name('media.bulk-category-attach')) }}" method="POST" style="display:none;">
+    @csrf
+    @foreach(request()->except(['_token', '_method', 'selected_ids', 'category_id', 'category_ids']) as $key => $value)
+        @if(is_scalar($value))
+            <input type="hidden" name="{{ $key }}" value="{{ $value }}">
+        @endif
+    @endforeach
+</form>
+@if(request()->filled('category') && request('category') !== 'none')
+<form id="bulk-category-unlink-form" action="{{ route($dashboardRoute::name('media.bulk-category-unlink')) }}" method="POST" style="display:none;">
+    @csrf
+    <input type="hidden" name="category_id" value="{{ request('category') }}">
+    @foreach(request()->except(['_token', '_method', 'selected_ids']) as $key => $value)
+        @if(is_scalar($value))
+            <input type="hidden" name="{{ $key }}" value="{{ $value }}">
+        @endif
+    @endforeach
+</form>
+@endif
 <div class="page-header">
     <div class="page-header-row">
         </div>
-        <div style="display:flex;gap:0.5rem;flex-shrink:0;">
+        <div style="display:flex;gap:0.5rem;flex-shrink:0;flex-wrap:wrap;align-items:center;">
             <button type="button" class="btn btn-primary" id="toggleUploadForm" style="white-space:nowrap;">
                 Add Media
             </button>
@@ -961,12 +1249,39 @@
                 </svg>
                 Import Images
             </button>
+            <a href="{{ route($dashboardRoute::name('media.categories.index')) }}" class="btn btn-secondary" style="white-space:nowrap;">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:15px;height:15px;display:inline;vertical-align:-2px;margin-right:4px;">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12.75V12A2.25 2.25 0 0 1 4.5 9.75h15A2.25 2.25 0 0 1 21.75 12v.75m-8.69-6.44-2.12-2.12a1.5 1.5 0 0 0-1.061-.44H4.5A2.25 2.25 0 0 0 2.25 6v12a2.25 2.25 0 0 0 2.25 2.25h15A2.25 2.25 0 0 0 21.75 18V9a2.25 2.25 0 0 0-2.25-2.25h-5.379a1.5 1.5 0 0 1-1.06-.44Z" />
+                </svg>
+                Category
+            </a>
+            <button type="button" class="btn btn-secondary" id="bulk-media-category-btn" onclick="openBulkCategoryModal()" style="white-space:nowrap;display:none;">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:15px;height:15px;display:inline;vertical-align:-2px;margin-right:4px;">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                </svg>
+                Add to Category
+            </button>
+            @if(request()->filled('category') && request('category') !== 'none')
+                <button type="button" class="btn btn-secondary" id="bulk-media-unlink-btn" onclick="submitBulkCategoryUnlink()" style="white-space:nowrap;display:none;color:var(--warning,#f59e0b);">
+                    Unlink Selected
+                </button>
+            @endif
             <button type="button" class="btn btn-destructive" id="bulk-media-delete-btn" onclick="submitBulkMediaDelete()" style="white-space:nowrap;display:none;">
                 Delete Selected
             </button>
         </div>
     </div>
 </div>
+
+@php
+if (!function_exists('formatBytes')) {
+    function formatBytes(int $bytes): string {
+        if ($bytes < 1024) return $bytes . ' B';
+        if ($bytes < 1048576) return round($bytes / 1024, 1) . ' KB';
+        return round($bytes / 1048576, 1) . ' MB';
+    }
+}
+@endphp
 
 <!-- Stats -->
 <div class="card" style="margin-bottom: 1rem;">
@@ -979,11 +1294,6 @@
 </div>
 
 @php
-function formatBytes(int $bytes): string {
-    if ($bytes < 1024) return $bytes . ' B';
-    if ($bytes < 1048576) return round($bytes / 1024, 1) . ' KB';
-    return round($bytes / 1048576, 1) . ' MB';
-}
 $adminRoles = config('tyro-dashboard.admin_roles', ['admin', 'super-admin']);
 $canDeleteMedia = !session()->has('impersonator_id') && !empty(array_intersect(array_merge($adminRoles, ['editor']), auth()->user()?->tyroRoleSlugs() ?? []));
 $authUserId = auth()->id();
@@ -1020,7 +1330,7 @@ $authUserId = auth()->id();
                     </div>
                     <div class="filter-group">
                         <label class="filter-label">Type:</label>
-                        <select name="type" class="form-select" style="min-width:130px;">
+                        <select name="type" class="form-select" style="min-width:130px;" onchange="this.form.submit()">
                             <option value="">All Types</option>
                             <option value="image" {{ request('type') === 'image' ? 'selected' : '' }}>Images</option>
                             <option value="application" {{ request('type') === 'application' ? 'selected' : '' }}>Documents</option>
@@ -1030,7 +1340,7 @@ $authUserId = auth()->id();
                     </div>
                     <div class="filter-group">
                         <label class="filter-label">Date:</label>
-                        <select name="date" class="form-select" style="min-width:175px;">
+                        <select name="date" class="form-select" style="min-width:175px;" onchange="this.form.submit()">
                             <option value="">All Dates</option>
                             @foreach($uploadDates as $date)
                                 <option value="{{ $date->format('Y-m-d') }}" {{ request('date') === $date->format('Y-m-d') ? 'selected' : '' }}>
@@ -1039,8 +1349,27 @@ $authUserId = auth()->id();
                             @endforeach
                         </select>
                     </div>
+                    <div class="filter-group">
+                        <label class="filter-label">Favorite:</label>
+                        <select name="favorite" class="form-select" style="min-width:140px;" onchange="this.form.submit()">
+                            <option value="">All Media</option>
+                            <option value="1" {{ request('favorite') === '1' ? 'selected' : '' }}>Favorites Only</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label class="filter-label">Category:</label>
+                        <select name="category" class="form-select" style="min-width:150px;" onchange="this.form.submit()">
+                            <option value="">All Categories</option>
+                            <option value="none" {{ request('category') === 'none' ? 'selected' : '' }}>Uncategorized</option>
+                            @foreach($categories as $cat)
+                                <option value="{{ $cat->id }}" {{ request('category') == $cat->id ? 'selected' : '' }}>
+                                    {{ $cat->name }} ({{ $cat->media_count }})
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
                     <button type="submit" class="btn btn-secondary">Filter</button>
-                    @if(request()->hasAny(['search', 'type', 'date']))
+                    @if(request()->filled('search') || request()->filled('type') || request()->filled('date') || request()->filled('favorite') || request()->filled('category'))
                         <a href="{{ route($dashboardRoute::name('media'), ['view' => $mediaView]) }}" class="btn btn-primary">Clear</a>
                     @endif
                 </div>
@@ -1050,6 +1379,8 @@ $authUserId = auth()->id();
                     @if(request('search')) <input type="hidden" name="search" value="{{ request('search') }}"> @endif
                     @if(request('type')) <input type="hidden" name="type" value="{{ request('type') }}"> @endif
                     @if(request('date')) <input type="hidden" name="date" value="{{ request('date') }}"> @endif
+                    @if(request('favorite')) <input type="hidden" name="favorite" value="{{ request('favorite') }}"> @endif
+                    @if(request('category')) <input type="hidden" name="category" value="{{ request('category') }}"> @endif
                     <input type="hidden" name="view" value="{{ $mediaView }}">
                     <select name="per_page" class="form-select" style="min-width:70px; padding-top:0.6rem; padding-bottom:0.6rem; font-size:0.8rem;" onchange="this.form.submit()">
                         <option value="12" {{ $mediaPerPage == 12 ? 'selected' : '' }}>12</option>
@@ -1087,13 +1418,34 @@ $authUserId = auth()->id();
     </div>
 </div>
 
+@if(request()->filled('category'))
+    @php
+        $activeCatName = request('category') === 'none'
+            ? 'Uncategorized'
+            : ($categories->firstWhere('id', request('category'))?->name ?? 'Category');
+    @endphp
+    <div class="card" style="margin-bottom:1rem;border-left:3px solid var(--primary);">
+        <div class="card-body" style="padding:0.75rem 1.25rem;display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;">
+            <div style="display:flex;align-items:center;gap:0.5rem;">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;color:var(--primary);">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12.75V12A2.25 2.25 0 0 1 4.5 9.75h15A2.25 2.25 0 0 1 21.75 12v.75m-8.69-6.44-2.12-2.12a1.5 1.5 0 0 0-1.061-.44H4.5A2.25 2.25 0 0 0 2.25 6v12a2.25 2.25 0 0 0 2.25 2.25h15A2.25 2.25 0 0 0 21.75 18V9a2.25 2.25 0 0 0-2.25-2.25h-5.379a1.5 1.5 0 0 1-1.06-.44Z" />
+                </svg>
+                <span style="font-size:0.875rem;">Filtered by category: <strong>{{ $activeCatName }}</strong> ({{ $media->total() }} {{ \Illuminate\Support\Str::plural('file', $media->total()) }})</span>
+            </div>
+            <a href="{{ route($dashboardRoute::name('media'), request()->except('category')) }}" class="btn btn-secondary btn-sm">
+                Clear Category Filter
+            </a>
+        </div>
+    </div>
+@endif
+
 <!-- Media Results -->
 @if($media->count())
 @if($mediaView === 'grid')
-<div class="media-grid" id="mediaGrid">
+<div class="media-grid" id="mediaGrid" style="--tyro-media-gallery-columns: {{ $mediaGalleryColumns }};">
     @foreach($media as $file)
     <div class="media-card" id="media-{{ $file->id }}" data-media-entry>
-        <div class="media-card-figure" @if($file->is_image) data-lightbox-trigger data-image-src="{{ Storage::url($file->url) }}" data-image-alt="{{ $file->alt_text ?: $file->filename }}" data-image-name="{{ $file->filename }}" data-image-meta="{{ $file->formatted_size }} · {{ strtoupper(pathinfo($file->filename, PATHINFO_EXTENSION)) }}" role="button" tabindex="0" aria-label="Preview {{ $file->alt_text ?: $file->filename }}" title="Preview image" @endif>
+        <div class="media-card-figure" @if($file->is_image) data-lightbox-trigger data-media-id="{{ $file->id }}" data-categories="{{ e(json_encode($file->categories->map(fn($c) => ['id' => $c->id, 'name' => $c->name]))) }}" data-image-src="{{ Storage::url($file->url) }}" data-image-alt="{{ $file->alt_text ?: $file->filename }}" data-image-name="{{ $file->filename }}" data-image-meta="{{ $file->formatted_size }} · {{ strtoupper(pathinfo($file->filename, PATHINFO_EXTENSION)) }}" data-copy-original="{{ url(Storage::url($file->url)) }}" data-copy-webp="{{ $file->webp_url ? url(Storage::url($file->webp_url)) : '' }}" data-copy-thumb="{{ url(Storage::url($file->thumbnail_url)) }}" data-source-url="{{ $file->source_url ?? '' }}" role="button" tabindex="0" aria-label="Preview {{ $file->alt_text ?: $file->filename }}" title="Preview image" @endif>
             @if($file->is_image)
                 <img src="{{ Storage::url($file->thumbnail_url) }}" alt="{{ $file->alt_text ?: $file->filename }}" class="media-card-thumb" loading="lazy">
                 <div class="media-card-overlay">
@@ -1107,10 +1459,16 @@ $authUserId = auth()->id();
                         type="button"
                         class="media-card-preview"
                         data-lightbox-trigger
+                        data-media-id="{{ $file->id }}"
+                        data-categories="{{ e(json_encode($file->categories->map(fn($c) => ['id' => $c->id, 'name' => $c->name]))) }}"
                         data-image-src="{{ Storage::url($file->url) }}"
                         data-image-alt="{{ $file->alt_text ?: $file->filename }}"
                         data-image-name="{{ $file->filename }}"
                         data-image-meta="{{ $file->formatted_size }} · {{ strtoupper(pathinfo($file->filename, PATHINFO_EXTENSION)) }}"
+                        data-copy-original="{{ url(Storage::url($file->url)) }}"
+                        data-copy-webp="{{ $file->webp_url ? url(Storage::url($file->webp_url)) : '' }}"
+                        data-copy-thumb="{{ url(Storage::url($file->thumbnail_url)) }}"
+                        data-source-url="{{ $file->source_url ?? '' }}"
                     >
                         Preview
                     </button>
@@ -1142,15 +1500,11 @@ $authUserId = auth()->id();
                         ID: {{ $file->id }}
                     </span>
             </div>
-            @if($file->is_image)
-            <div class="media-card-alt">
-                <input type="text" id="alt-{{ $file->id }}" class="form-input"
-                    placeholder="Alt text…" value="{{ $file->alt_text }}"
-                    onchange="saveAlt({{ $file->id }}, this.value)"
-                    onblur="saveAlt({{ $file->id }}, this.value)"
-                    title="Alt text for accessibility and SEO">
+            <div class="media-card-categories" id="card-cats-{{ $file->id }}" style="display:flex;gap:0.25rem;flex-wrap:wrap;margin-top:0.35rem;">
+                @foreach($file->categories as $c)
+                    <span class="badge badge-secondary" style="font-size:0.68rem;padding:0.15rem 0.4rem;">{{ $c->name }}</span>
+                @endforeach
             </div>
-            @endif
             <div class="media-card-actions">
                 @if($canDeleteMedia || $file->user_id === $authUserId)
                     <label class="media-bulk-check" title="Select {{ $file->filename }}">
@@ -1158,7 +1512,7 @@ $authUserId = auth()->id();
                     </label>
                 @endif
                 <a href="{{ Storage::url($file->url) }}" target="_blank" rel="noopener noreferrer"
-                        class="btn btn-secondary"
+                        class="btn btn-secondary media-view-new-tab"
                         title="View in new tab">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 6H5.25A2.25 2.25 0 0 0 3 8.25v10.5A2.25 2.25 0 0 0 5.25 21h10.5A2.25 2.25 0 0 0 18 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25"/>
@@ -1169,7 +1523,7 @@ $authUserId = auth()->id();
                         class="btn btn-secondary"
                         title="Open source page">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 10.5H18a4.5 4.5 0 1 1 0 9h-4.5m-3-15H6a4.5 4.5 0 1 0 0 9h4.5m-3 0h9"/>
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 6H5.25A2.25 2.25 0 0 0 3 8.25v10.5A2.25 2.25 0 0 0 5.25 21h10.5A2.25 2.25 0 0 0 18 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25"/>
                     </svg>
                 </a>
                 @endif
@@ -1185,13 +1539,25 @@ $authUserId = auth()->id();
                         data-media-rename
                         data-filename="{{ e($file->filename) }}"
                         data-extension="{{ e(pathinfo($file->filename, PATHINFO_EXTENSION)) }}"
-                        onclick="renameMedia({{ $file->id }}, this)"
-                        title="Rename file">
+                        data-alt-text="{{ e($file->alt_text ?? '') }}"
+                        data-is-image="{{ $file->is_image ? '1' : '0' }}"
+                        onclick="openFileEditModal({{ $file->id }}, this)"
+                        title="Edit file">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125"/>
                     </svg>
                 </button>
                 @if($file->is_image)
+                <button type="button"
+                        class="btn btn-secondary media-fav-btn {{ $file->is_favorite ? 'is-favorite' : '' }}"
+                        data-media-fav-btn="{{ $file->id }}"
+                        onclick="toggleFavorite({{ $file->id }}, this)"
+                        title="{{ $file->is_favorite ? 'Remove from favorites' : 'Mark as favorite' }}"
+                        aria-label="{{ $file->is_favorite ? 'Remove from favorites' : 'Mark as favorite' }}">
+                    <svg viewBox="0 0 24 24" fill="{{ $file->is_favorite ? 'currentColor' : 'none' }}" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+                    </svg>
+                </button>
                 <button type="button" class="btn btn-secondary cr-edit-btn"
                         data-media-id="{{ $file->id }}"
                         data-url="{{ e(Storage::url($file->url)) }}"
@@ -1229,6 +1595,7 @@ $authUserId = auth()->id();
                 <th scope="col">Type</th>
                 <th scope="col">Size</th>
                 <th scope="col">Dimensions</th>
+                <th scope="col">Categories</th>
                 <th scope="col">Uploaded</th>
                 <th scope="col">Alt Text</th>
                 <th scope="col">Actions</th>
@@ -1244,7 +1611,7 @@ $authUserId = auth()->id();
                 </td>
                 <td>
                     <div class="media-table-file">
-                        <div class="media-table-thumb" @if($file->is_image) data-lightbox-trigger data-image-src="{{ Storage::url($file->url) }}" data-image-alt="{{ $file->alt_text ?: $file->filename }}" data-image-name="{{ $file->filename }}" data-image-meta="{{ $file->formatted_size }} · {{ strtoupper(pathinfo($file->filename, PATHINFO_EXTENSION)) }}" role="button" tabindex="0" aria-label="Preview {{ $file->alt_text ?: $file->filename }}" title="Preview image" @endif>
+                        <div class="media-table-thumb" @if($file->is_image) data-lightbox-trigger data-media-id="{{ $file->id }}" data-categories="{{ e(json_encode($file->categories->map(fn($c) => ['id' => $c->id, 'name' => $c->name]))) }}" data-image-src="{{ Storage::url($file->url) }}" data-image-alt="{{ $file->alt_text ?: $file->filename }}" data-image-name="{{ $file->filename }}" data-image-meta="{{ $file->formatted_size }} · {{ strtoupper(pathinfo($file->filename, PATHINFO_EXTENSION)) }}" data-copy-original="{{ url(Storage::url($file->url)) }}" data-copy-webp="{{ $file->webp_url ? url(Storage::url($file->webp_url)) : '' }}" data-copy-thumb="{{ url(Storage::url($file->thumbnail_url)) }}" data-source-url="{{ $file->source_url ?? '' }}" role="button" tabindex="0" aria-label="Preview {{ $file->alt_text ?: $file->filename }}" title="Preview image" @endif>
                             @if($file->is_image)
                                 <img src="{{ Storage::url($file->thumbnail_url) }}" alt="{{ $file->alt_text ?: $file->filename }}" loading="lazy">
                             @else
@@ -1273,6 +1640,15 @@ $authUserId = auth()->id();
                     @endif
                 </td>
                 <td>
+                    <div id="table-cats-{{ $file->id }}" style="display:flex;gap:0.25rem;flex-wrap:wrap;max-width:180px;">
+                        @forelse($file->categories as $c)
+                            <span class="badge badge-secondary" style="font-size:0.7rem;padding:0.15rem 0.45rem;">{{ $c->name }}</span>
+                        @empty
+                            <span style="font-size:0.75rem;color:var(--muted-foreground);">—</span>
+                        @endforelse
+                    </div>
+                </td>
+                <td>
                     <span class="media-table-date">{{ optional($file->created_at)->format('M j, Y') }}</span>
                 </td>
                 <td>
@@ -1299,6 +1675,10 @@ $authUserId = auth()->id();
                             data-image-alt="{{ $file->alt_text ?: $file->filename }}"
                             data-image-name="{{ $file->filename }}"
                             data-image-meta="{{ $file->formatted_size }} · {{ strtoupper(pathinfo($file->filename, PATHINFO_EXTENSION)) }}"
+                            data-copy-original="{{ url(Storage::url($file->url)) }}"
+                            data-copy-webp="{{ $file->webp_url ? url(Storage::url($file->webp_url)) : '' }}"
+                            data-copy-thumb="{{ url(Storage::url($file->thumbnail_url)) }}"
+                            data-source-url="{{ $file->source_url ?? '' }}"
                             title="Preview image"
                         >
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -1308,7 +1688,7 @@ $authUserId = auth()->id();
                         </button>
                         @endif
                         <a href="{{ Storage::url($file->url) }}" target="_blank" rel="noopener noreferrer"
-                            class="btn btn-secondary"
+                            class="btn btn-secondary media-view-new-tab"
                             title="View in new tab">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 6H5.25A2.25 2.25 0 0 0 3 8.25v10.5A2.25 2.25 0 0 0 5.25 21h10.5A2.25 2.25 0 0 0 18 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25"/>
@@ -1319,7 +1699,7 @@ $authUserId = auth()->id();
                             class="btn btn-secondary"
                             title="Open source page">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 10.5H18a4.5 4.5 0 1 1 0 9h-4.5m-3-15H6a4.5 4.5 0 1 0 0 9h4.5m-3 0h9"/>
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 6H5.25A2.25 2.25 0 0 0 3 8.25v10.5A2.25 2.25 0 0 0 5.25 21h10.5A2.25 2.25 0 0 0 18 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25"/>
                             </svg>
                         </a>
                         @endif
@@ -1335,13 +1715,25 @@ $authUserId = auth()->id();
                             data-media-rename
                             data-filename="{{ e($file->filename) }}"
                             data-extension="{{ e(pathinfo($file->filename, PATHINFO_EXTENSION)) }}"
-                            onclick="renameMedia({{ $file->id }}, this)"
-                            title="Rename file">
+                            data-alt-text="{{ e($file->alt_text ?? '') }}"
+                            data-is-image="{{ $file->is_image ? '1' : '0' }}"
+                            onclick="openFileEditModal({{ $file->id }}, this)"
+                            title="Edit file">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125"/>
                             </svg>
                         </button>
                         @if($file->is_image)
+                        <button type="button"
+                            class="btn btn-secondary media-fav-btn {{ $file->is_favorite ? 'is-favorite' : '' }}"
+                            data-media-fav-btn="{{ $file->id }}"
+                            onclick="toggleFavorite({{ $file->id }}, this)"
+                            title="{{ $file->is_favorite ? 'Remove from favorites' : 'Mark as favorite' }}"
+                            aria-label="{{ $file->is_favorite ? 'Remove from favorites' : 'Mark as favorite' }}">
+                            <svg viewBox="0 0 24 24" fill="{{ $file->is_favorite ? 'currentColor' : 'none' }}" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+                            </svg>
+                        </button>
                         <button type="button" class="btn btn-secondary cr-edit-btn"
                             data-media-id="{{ $file->id }}"
                             data-url="{{ e(Storage::url($file->url)) }}"
@@ -1575,18 +1967,66 @@ $authUserId = auth()->id();
     <div class="dashboard-lightbox__backdrop" data-lightbox-close></div>
     <div class="dashboard-lightbox__dialog" role="dialog" aria-modal="true" aria-label="Media preview">
         <div class="dashboard-lightbox__toolbar">
-            <div class="dashboard-lightbox__meta">
-                <div id="dashboardLightboxName"></div>
-                <div id="dashboardLightboxMeta"></div>
+            <div class="dashboard-lightbox__meta-wrap">
+                <div class="dashboard-lightbox__icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="m2.25 15.75 5.159-5.159a2.25 2.25 0 0 1 3.182 0l5.159 5.159m-1.5-1.5 1.409-1.409a2.25 2.25 0 0 1 3.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 0 0 1.5-1.5V6a1.5 1.5 0 0 0-1.5-1.5H3.75A1.5 1.5 0 0 0 2.25 6v12a1.5 1.5 0 0 0 1.5 1.5Zm10.5-11.25h.008v.008h-.008V8.25Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z"/>
+                    </svg>
+                </div>
+                <div class="dashboard-lightbox__meta">
+                    <div id="dashboardLightboxName" class="dashboard-lightbox__name"></div>
+                    <div id="dashboardLightboxMeta" class="dashboard-lightbox__sub"></div>
+                </div>
             </div>
-            <button type="button" class="dashboard-lightbox__close" data-lightbox-close aria-label="Close media preview">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:20px;height:20px;">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-                </svg>
-            </button>
+            <div class="dashboard-lightbox__toolbar-actions">
+                <a id="dashboardLightboxSource" href="#" target="_blank" rel="noopener noreferrer" class="dashboard-lightbox__btn-ghost" title="Open source page" aria-label="Open source page" style="display: none;">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 6H5.25A2.25 2.25 0 0 0 3 8.25v10.5A2.25 2.25 0 0 0 5.25 21h10.5A2.25 2.25 0 0 0 18 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25"/>
+                    </svg>
+                </a>
+                <a id="dashboardLightboxDownload" href="#" download target="_blank" rel="noopener noreferrer" class="dashboard-lightbox__btn-ghost" title="Download image" aria-label="Download image">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3"/>
+                    </svg>
+                </a>
+                <button type="button" class="dashboard-lightbox__close" data-lightbox-close aria-label="Close media preview">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:17px;height:17px;">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
         </div>
         <div class="dashboard-lightbox__media">
             <img id="dashboardLightboxImage" class="dashboard-lightbox__image" alt="">
+        </div>
+        <div class="dashboard-lightbox__categories-bar" style="display:none;padding:0.65rem 1.25rem;border-top:1px solid var(--border);background:var(--muted);align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;">
+            <div style="display:flex;align-items:center;gap:0.45rem;flex-wrap:wrap;min-width:0;">
+                <span style="font-size:0.75rem;font-weight:600;text-transform:uppercase;letter-spacing:0.05em;color:var(--muted-foreground);">Category:</span>
+                <div id="dashboardLightboxCategories" style="display:flex;align-items:center;gap:0.35rem;flex-wrap:wrap;"></div>
+            </div>
+            <div style="display:flex;align-items:center;gap:0.4rem;flex-shrink:0;">
+                <select id="dashboardLightboxCategorySelect" class="form-select" style="font-size:0.8rem;padding:0.3rem 0.6rem;height:auto;min-width:160px;">
+                    <option value="">+ Add to Category...</option>
+                    @foreach($categories as $cat)
+                        <option value="{{ $cat->id }}">{{ $cat->name }}</option>
+                    @endforeach
+                </select>
+            </div>
+        </div>
+        <div class="dashboard-lightbox__footer">
+            <span class="dashboard-lightbox__hint">
+                <span>Press</span>
+                <kbd>Esc</kbd>
+                <span>or click outside to close</span>
+            </span>
+            <div class="dashboard-lightbox__actions">
+                <button type="button" id="dashboardLightboxCopy" class="btn btn-secondary dashboard-lightbox__copy">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M13.19 8.688a4.5 4.5 0 0 1 1.242 7.244l-4.5 4.5a4.5 4.5 0 0 1-6.364-6.364l1.757-1.757m13.35-.622 1.757-1.757a4.5 4.5 0 0 0-6.364-6.364l-4.5 4.5a4.5 4.5 0 0 0 1.242 7.244"/>
+                    </svg>
+                    Copy URL
+                </button>
+            </div>
         </div>
     </div>
 </div>
@@ -1602,27 +2042,45 @@ $authUserId = auth()->id();
 </div>
 
 <!-- Copy URL Modal -->
-<div id="copyUrlModal" class="modal-overlay">
+<div id="copyUrlModal" class="modal-overlay copy-url-modal">
     <div class="modal-container">
         <div class="modal-content-wrapper">
             <div class="modal-body">
                 <div class="modal-body-inner">
-                    <div class="modal-icon info">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M13.19 8.688a4.5 4.5 0 0 1 1.242 7.244l-4.5 4.5a4.5 4.5 0 0 1-6.364-6.364l1.757-1.757m13.35-.622 1.757-1.757a4.5 4.5 0 0 0-6.364-6.364l-4.5 4.5a4.5 4.5 0 0 0 1.242 7.244"/>
-                        </svg>
-                    </div>
                     <div class="modal-text-content">
-                        <h2 class="modal-title">Copy URL</h2>
-                        <p class="modal-message">Which URL would you like to copy?</p>
+                        <h2 class="modal-title">Copy Media Link</h2>
+                        <p class="modal-message">Select which format or version you would like to copy to your clipboard.</p>
                     </div>
                 </div>
-            </div>
-            <div class="modal-footer" style="flex-direction: column; gap: 0.5rem;">
-                <button type="button" class="btn btn-modal-confirm" style="width: 100%;" onclick="copySelectedUrl('original')">Original</button>
-                <button type="button" class="btn btn-modal-confirm" id="copyUrlWebpBtn" style="width: 100%;" onclick="copySelectedUrl('webp')">WebP</button>
-                <button type="button" class="btn btn-modal-confirm" style="width: 100%;" onclick="copySelectedUrl('thumbnail')">Thumbnail</button>
-                <button type="button" class="btn btn-modal-cancel" style="width: 100%;" onclick="closeCopyUrlModal()">Cancel</button>
+                <div class="copy-url-options">
+                    <button type="button" class="copy-url-option-btn" onclick="copySelectedUrl('original')">
+                        <div class="copy-url-label">
+                            <span class="copy-url-name">Original URL</span>
+                            <span class="copy-url-desc">Full resolution original uploaded file</span>
+                        </div>
+                        <svg class="copy-url-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5"/>
+                        </svg>
+                    </button>
+                    <button type="button" class="copy-url-option-btn" id="copyUrlWebpBtn" onclick="copySelectedUrl('webp')">
+                        <div class="copy-url-label">
+                            <span class="copy-url-name">WebP URL</span>
+                            <span class="copy-url-desc">Optimized next-gen format for web speed</span>
+                        </div>
+                        <svg class="copy-url-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5"/>
+                        </svg>
+                    </button>
+                    <button type="button" class="copy-url-option-btn" onclick="copySelectedUrl('thumbnail')">
+                        <div class="copy-url-label">
+                            <span class="copy-url-name">Thumbnail URL</span>
+                            <span class="copy-url-desc">Small compressed preview thumbnail</span>
+                        </div>
+                        <svg class="copy-url-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5"/>
+                        </svg>
+                    </button>
+                </div>
             </div>
         </div>
         <button type="button" class="modal-close" onclick="closeCopyUrlModal()">
@@ -1630,6 +2088,104 @@ $authUserId = auth()->id();
                 <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
             </svg>
         </button>
+    </div>
+</div>
+
+<!-- File Edit Modal -->
+<div class="modal-overlay" id="fileEditModal">
+    <div class="modal" style="max-width: 480px; border: 1px solid var(--border);">
+        <div class="modal-header">
+            <h3 class="modal-title">File Edit</h3>
+            <button type="button" class="modal-close" onclick="closeModal('fileEditModal')">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
+        </div>
+        <form id="fileEditForm" onsubmit="submitFileEdit(event)">
+            <input type="hidden" id="editMediaId" value="">
+            <input type="hidden" id="editMediaExt" value="">
+            <div class="modal-body">
+                <div class="form-group" style="margin-bottom: 1rem;">
+                    <label class="form-label" for="editMediaFilename">
+                        File Name <span style="color:var(--destructive)">*</span>
+                    </label>
+                    <input type="text" id="editMediaFilename" class="form-input" required maxlength="200" autocomplete="off">
+                    <span style="font-size:0.75rem;color:var(--muted-foreground);margin-top:0.25rem;display:block;">
+                        Enter a new name for this file (without extension).
+                    </span>
+                </div>
+                <div class="form-group" id="editMediaAltGroup">
+                    <label class="form-label" for="editMediaAlt">
+                        Alt Text <span style="font-size:0.75rem;color:var(--muted-foreground);">(optional)</span>
+                    </label>
+                    <input type="text" id="editMediaAlt" class="form-input" maxlength="255" placeholder="Alt text for accessibility and SEO..." autocomplete="off">
+                    <span style="font-size:0.75rem;color:var(--muted-foreground);margin-top:0.25rem;display:block;">
+                        Alt text for accessibility and SEO.
+                    </span>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" onclick="closeModal('fileEditModal')">Cancel</button>
+                <button type="submit" class="btn btn-primary" id="saveFileEditBtn">Save Changes</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Bulk Add to Category Modal -->
+<div class="modal-overlay" id="bulkCategoryModal">
+    <div class="modal" style="max-width: 480px; max-height: 90vh; display: flex; flex-direction: column; border: 1px solid var(--border);">
+        <div class="modal-header">
+            <h3 class="modal-title">Add to Category</h3>
+            <button type="button" class="modal-close" onclick="closeModal('bulkCategoryModal')">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
+        </div>
+        <form id="bulkCategoryForm" onsubmit="submitBulkCategoryForm(event)" style="display:flex;flex-direction:column;overflow:hidden;">
+            <div class="modal-body" style="padding: 1.25rem; overflow-y: auto;">
+                <p style="font-size:0.875rem;color:var(--muted-foreground);margin-bottom:0.75rem;" id="bulkCategoryModalSubtitle">
+                    Select categories to assign to the selected media.
+                </p>
+                @if($categories->count() > 10)
+                    <div style="margin-bottom:0.75rem;">
+                        <input type="text" id="bulkCategorySearchInput" class="form-input" placeholder="Search categories..." style="font-size:0.85rem;padding:0.4rem 0.75rem;" oninput="filterBulkCategoryList(this.value)">
+                    </div>
+                @endif
+                <div class="bulk-category-list" id="bulkCategoryList" style="display:flex;flex-direction:column;gap:0.375rem;max-height:480px;overflow-y:auto;padding-right:0.25rem;">
+                    @forelse($categories->sortBy('name', SORT_NATURAL | SORT_FLAG_CASE) as $cat)
+                        <div class="bulk-category-item" data-category-name="{{ strtolower($cat->name) }}" style="display:flex;align-items:center;justify-content:space-between;padding:0.6rem 0.85rem;border:1px solid var(--border);border-radius:var(--radius, 0.5rem);background:var(--card);min-height:42px;box-sizing:border-box;">
+                            <div style="min-width:0;padding-right:0.75rem;">
+                                <div style="font-size:0.875rem;font-weight:500;color:var(--foreground);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">{{ $cat->name }}</div>
+                                @if($cat->description)
+                                    <div style="font-size:0.75rem;color:var(--muted-foreground);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">{{ $cat->description }}</div>
+                                @endif
+                            </div>
+                            <label class="toggle-label" style="margin:0;cursor:pointer;flex-shrink:0;">
+                                <input type="checkbox" class="toggle-input bulk-category-toggle" value="{{ $cat->id }}" data-category-name="{{ $cat->name }}">
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                    @empty
+                        <div style="text-align:center;padding:1.5rem 0.5rem;color:var(--muted-foreground);font-size:0.875rem;">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="width:36px;height:36px;margin:0 auto 0.5rem;display:block;opacity:0.5;">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12.75V12A2.25 2.25 0 0 1 4.5 9.75h15A2.25 2.25 0 0 1 21.75 12v.75m-8.69-6.44-2.12-2.12a1.5 1.5 0 0 0-1.061-.44H4.5A2.25 2.25 0 0 0 2.25 6v12a2.25 2.25 0 0 0 2.25 2.25h15A2.25 2.25 0 0 0 21.75 18V9a2.25 2.25 0 0 0-2.25-2.25h-5.379a1.5 1.5 0 0 1-1.06-.44Z" />
+                            </svg>
+                            No categories available.
+                            <div style="margin-top:0.5rem;">
+                                <a href="{{ route($dashboardRoute::name('media.categories.index')) }}" class="btn btn-secondary btn-sm">Create Category</a>
+                            </div>
+                        </div>
+                    @endforelse
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" onclick="closeModal('bulkCategoryModal')">Cancel</button>
+                <button type="submit" class="btn btn-primary" id="saveBulkCategoryBtn" @if($categories->isEmpty()) disabled @endif>Save</button>
+            </div>
+        </form>
     </div>
 </div>
 
@@ -1657,6 +2213,7 @@ $authUserId = auth()->id();
     const DELETE_BASE = MEDIA_CONFIG.mediaUrl ? MEDIA_CONFIG.mediaUrl.replace(/\/+$/, '') + '/' : '/dashboard/media/';
     const RENAME_BASE  = '/dashboard/media/';
     const ALT_BASE    = '/dashboard/media/';
+    const TOGGLE_FAV_BASE = '/dashboard/media/';
 
     const toggleUploadForm = document.getElementById('toggleUploadForm');
     const uploadPanel = document.getElementById('uploadPanel');
@@ -1664,6 +2221,10 @@ $authUserId = auth()->id();
     const lightboxImage = document.getElementById('dashboardLightboxImage');
     const lightboxName = document.getElementById('dashboardLightboxName');
     const lightboxMeta = document.getElementById('dashboardLightboxMeta');
+    const lightboxCopy = document.getElementById('dashboardLightboxCopy');
+    const lightboxDownload = document.getElementById('dashboardLightboxDownload');
+    const lightboxSource = document.getElementById('dashboardLightboxSource');
+    let lightboxCopyUrls = { original: '', webp: '', thumbnail: '' };
     let previousFocus = null;
     let previousOverflow = '';
 
@@ -1754,7 +2315,7 @@ $authUserId = auth()->id();
         copyUrlData = { original: originalUrl, webp: webpUrl, thumbnail: thumbnailUrl };
         const modal = document.getElementById('copyUrlModal');
         const webpBtn = document.getElementById('copyUrlWebpBtn');
-        webpBtn.style.display = webpUrl ? 'block' : 'none';
+        webpBtn.style.display = webpUrl ? 'flex' : 'none';
         modal.classList.add('active');
         document.body.style.overflow = 'hidden';
     }
@@ -1802,13 +2363,25 @@ $authUserId = auth()->id();
         }
     });
 
-    // ── Delete ────────────────────────────────────────────────────────
+    // ── Delete & Bulk Actions ─────────────────────────────────────────
     function updateBulkMediaDeleteButtonState() {
         const checkedCount = document.querySelectorAll('.media-bulk-checkbox:checked').length;
         const button = document.getElementById('bulk-media-delete-btn');
+        const categoryBtn = document.getElementById('bulk-media-category-btn');
+        const unlinkBtn = document.getElementById('bulk-media-unlink-btn');
+
         if (button) {
             button.style.display = checkedCount > 0 ? '' : 'none';
             button.textContent = checkedCount > 0 ? `Delete Selected (${checkedCount})` : 'Delete Selected';
+        }
+
+        if (categoryBtn) {
+            categoryBtn.style.display = checkedCount > 0 ? 'inline-flex' : 'none';
+        }
+
+        if (unlinkBtn) {
+            unlinkBtn.style.display = checkedCount > 0 ? '' : 'none';
+            unlinkBtn.textContent = checkedCount > 0 ? `Unlink Selected (${checkedCount})` : 'Unlink Selected';
         }
 
         const selectAll = document.getElementById('select-all-media');
@@ -1817,6 +2390,104 @@ $authUserId = auth()->id();
             selectAll.checked = checkboxes.length > 0 && checkboxes.every((checkbox) => checkbox.checked);
             selectAll.indeterminate = checkboxes.some((checkbox) => checkbox.checked) && !selectAll.checked;
         }
+    }
+
+    function openBulkCategoryModal() {
+        const checkedMedia = Array.from(document.querySelectorAll('.media-bulk-checkbox:checked'));
+        if (!checkedMedia.length) {
+            showAlert('Please select at least one media item first.', 'No Media Selected', { variant: 'info', confirmText: 'OK' });
+            return;
+        }
+
+        const count = checkedMedia.length;
+        const subtitle = document.getElementById('bulkCategoryModalSubtitle');
+        if (subtitle) {
+            subtitle.textContent = `Assign ${count} selected ${count === 1 ? 'file' : 'files'} to categories:`;
+        }
+
+        const searchInput = document.getElementById('bulkCategorySearchInput');
+        if (searchInput) {
+            searchInput.value = '';
+            filterBulkCategoryList('');
+        }
+
+        document.querySelectorAll('.bulk-category-toggle').forEach(t => t.checked = false);
+        openModal('bulkCategoryModal');
+    }
+
+    function filterBulkCategoryList(query) {
+        const q = (query || '').toLowerCase().trim();
+        document.querySelectorAll('.bulk-category-item').forEach(item => {
+            const name = item.dataset.categoryName || '';
+            item.style.display = (!q || name.includes(q)) ? 'flex' : 'none';
+        });
+    }
+
+    function submitBulkCategoryForm(event) {
+        event.preventDefault();
+        const checkedMedia = Array.from(document.querySelectorAll('.media-bulk-checkbox:checked'));
+        if (!checkedMedia.length) {
+            closeModal('bulkCategoryModal');
+            return;
+        }
+
+        const checkedCats = Array.from(document.querySelectorAll('.bulk-category-toggle:checked'));
+        if (!checkedCats.length) {
+            showAlert('Please turn on at least one category toggle.', 'No Category Selected', { variant: 'warning', confirmText: 'OK' });
+            return;
+        }
+
+        const saveBtn = document.getElementById('saveBulkCategoryBtn');
+        if (saveBtn) {
+            saveBtn.disabled = true;
+            saveBtn.textContent = 'Saving...';
+        }
+
+        const form = document.getElementById('bulk-category-attach-form');
+        form.querySelectorAll('input[name="selected_ids[]"], input[name="category_ids[]"]').forEach((input) => input.remove());
+
+        checkedMedia.forEach((checkbox) => {
+            const input = document.createElement('input');
+            input.type = 'hidden';
+            input.name = 'selected_ids[]';
+            input.value = checkbox.value;
+            form.appendChild(input);
+        });
+
+        checkedCats.forEach((checkbox) => {
+            const input = document.createElement('input');
+            input.type = 'hidden';
+            input.name = 'category_ids[]';
+            input.value = checkbox.value;
+            form.appendChild(input);
+        });
+
+        form.submit();
+    }
+
+    function submitBulkCategoryAttach() {
+        openBulkCategoryModal();
+    }
+
+    function submitBulkCategoryUnlink() {
+        const checked = Array.from(document.querySelectorAll('.media-bulk-checkbox:checked'));
+        if (!checked.length) return;
+
+        showDanger('Unlink from Category', `Unlink ${checked.length} selected media ${checked.length === 1 ? 'file' : 'files'} from this category? Files will not be deleted from your media library.`)
+            .then((confirmed) => {
+                if (!confirmed) return;
+
+                const form = document.getElementById('bulk-category-unlink-form');
+                form.querySelectorAll('input[name="selected_ids[]"]').forEach((input) => input.remove());
+                checked.forEach((checkbox) => {
+                    const input = document.createElement('input');
+                    input.type = 'hidden';
+                    input.name = 'selected_ids[]';
+                    input.value = checkbox.value;
+                    form.appendChild(input);
+                });
+                form.submit();
+            });
     }
 
     function submitBulkMediaDelete() {
@@ -1902,27 +2573,65 @@ $authUserId = auth()->id();
         }, 600);
     }
 
-    // ── Rename ────────────────────────────────────────────────────────
-    async function renameMedia(id, btn) {
-        const current = btn.dataset.filename || '';
-        const ext     = btn.dataset.extension || '';
-        // Strip extension for display/prompt — user works with clean names
+    // ── File Edit (Rename + Alt Text) ─────────────────────────────────
+    let currentEditMediaButton = null;
+
+    function openFileEditModal(id, btn) {
+        if (!btn && id) {
+            btn = document.querySelector(`[data-media-rename][data-media-id="${id}"]`);
+        }
+        currentEditMediaButton = btn;
+        const current = btn ? (btn.dataset.filename || '') : '';
+        const ext     = btn ? (btn.dataset.extension || '') : '';
+        const altText = btn ? (btn.dataset.altText || '') : '';
+        const isImage = btn ? (btn.dataset.isImage === '1') : false;
+
         const currentDisplay = ext && current.endsWith('.' + ext)
             ? current.slice(0, -(ext.length + 1))
             : current;
 
-        const result = await showPrompt('Rename File', 'Enter a new name for this file (without extension):', currentDisplay, currentDisplay);
-        if (result === false || result === null) return;   // cancelled
-        const newDisplay = result.trim();
-        if (!newDisplay || newDisplay === currentDisplay) return;  // blank or unchanged
+        document.getElementById('editMediaId').value = id;
+        document.getElementById('editMediaExt').value = ext;
+        document.getElementById('editMediaFilename').value = currentDisplay;
 
-        // Re-attach the original extension transparently
+        const altGroup = document.getElementById('editMediaAltGroup');
+        const altInput = document.getElementById('editMediaAlt');
+        if (altGroup && altInput) {
+            if (isImage) {
+                altGroup.style.display = 'block';
+                altInput.value = altText;
+            } else {
+                altGroup.style.display = 'none';
+                altInput.value = '';
+            }
+        }
+
+        openModal('fileEditModal');
+        setTimeout(() => document.getElementById('editMediaFilename')?.focus(), 50);
+    }
+
+    async function submitFileEdit(event) {
+        event.preventDefault();
+        const id = document.getElementById('editMediaId').value;
+        const ext = document.getElementById('editMediaExt').value;
+        const newDisplay = document.getElementById('editMediaFilename').value.trim();
+        const newAlt = document.getElementById('editMediaAlt')?.value.trim() || '';
+
+        if (!newDisplay) {
+            document.getElementById('editMediaFilename').focus();
+            return;
+        }
+
         const newName = ext ? newDisplay + '.' + ext : newDisplay;
+        const saveBtn = document.getElementById('saveFileEditBtn');
+        const originalText = saveBtn.textContent;
+        saveBtn.disabled = true;
+        saveBtn.textContent = 'Saving...';
 
         try {
-            const res  = await fetch(RENAME_BASE + id + '/rename', {
+            const res = await fetch(RENAME_BASE + id + '/rename', {
                 method: 'PATCH',
-                body: JSON.stringify({ filename: newName }),
+                body: JSON.stringify({ filename: newName, alt_text: newAlt }),
                 headers: {
                     'Content-Type': 'application/json',
                     'X-CSRF-TOKEN': CSRF,
@@ -1932,12 +2641,14 @@ $authUserId = auth()->id();
             });
             const json = await res.json();
             if (res.ok && json.success) {
+                closeModal('fileEditModal');
+
                 const savedExt = json.filename.includes('.') ? json.filename.split('.').pop() : '';
                 const savedDisplay = savedExt && json.filename.endsWith('.' + savedExt)
                     ? json.filename.slice(0, -(savedExt.length + 1))
                     : json.filename;
 
-                const entry = btn.closest('[data-media-entry]');
+                const entry = currentEditMediaButton?.closest('[data-media-entry]');
                 entry?.querySelectorAll('[data-media-name]').forEach((nameEl) => {
                     nameEl.textContent = savedDisplay;
                     nameEl.title = savedDisplay;
@@ -1948,40 +2659,264 @@ $authUserId = auth()->id();
                     tableFilename.textContent = json.filename;
                 }
 
+                // Update alt text in list view if input is present
+                const listAltInput = document.getElementById(`alt-list-${id}`);
+                if (listAltInput) {
+                    listAltInput.value = json.alt_text || '';
+                }
+
+                // Update lightbox trigger attributes
+                document.querySelectorAll(`[data-lightbox-trigger][data-media-id="${id}"]`).forEach((el) => {
+                    el.dataset.imageAlt = json.alt_text || json.filename;
+                    el.dataset.imageName = json.filename;
+                });
+
+                // Update all edit buttons for this media ID
                 document.querySelectorAll(`[data-media-rename][data-media-id="${id}"]`).forEach((renameBtn) => {
                     renameBtn.dataset.filename = json.filename;
+                    renameBtn.dataset.altText = json.alt_text || '';
                 });
 
                 document.querySelectorAll(`.cr-edit-btn[data-media-id="${id}"]`).forEach((editBtn) => {
                     editBtn.dataset.filename = json.filename;
                 });
+
+                showCopyToast('File updated successfully.');
             } else {
-                showAlert(json.message || 'Rename failed. Please try again.', 'Rename Failed', { variant: 'danger', confirmText: 'OK' });
+                showAlert(json.message || 'Update failed. Please try again.', 'Update Failed', { variant: 'danger', confirmText: 'OK' });
             }
         } catch {
-            showAlert('Network error. Please try again.', 'Rename Failed', { variant: 'danger', confirmText: 'OK' });
+            showAlert('Network error. Please try again.', 'Update Failed', { variant: 'danger', confirmText: 'OK' });
+        } finally {
+            saveBtn.disabled = false;
+            saveBtn.textContent = originalText;
         }
     }
+
+    function renameMedia(id, btn) {
+        openFileEditModal(id, btn);
+    }
+
+    // ── Favorite toggle ───────────────────────────────────────────────
+    async function toggleFavorite(id, btn) {
+        const buttons = document.querySelectorAll(`[data-media-fav-btn="${id}"]`);
+        const isFavBefore = btn.classList.contains('is-favorite');
+
+        // Optimistic UI update
+        buttons.forEach((b) => {
+            b.classList.toggle('is-favorite', !isFavBefore);
+            const newTitle = !isFavBefore ? 'Remove from favorites' : 'Mark as favorite';
+            b.title = newTitle;
+            b.setAttribute('aria-label', newTitle);
+        });
+
+        try {
+            const res = await fetch(TOGGLE_FAV_BASE + id + '/toggle-favorite', {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': CSRF,
+                    'Accept': 'application/json',
+                    'X-Requested-With': 'XMLHttpRequest',
+                },
+            });
+            const json = await res.json();
+            if (res.ok && json.success) {
+                buttons.forEach((b) => {
+                    b.classList.toggle('is-favorite', Boolean(json.is_favorite));
+                    const newTitle = json.is_favorite ? 'Remove from favorites' : 'Mark as favorite';
+                    b.title = newTitle;
+                    b.setAttribute('aria-label', newTitle);
+                });
+            } else {
+                // Revert on error
+                buttons.forEach((b) => {
+                    b.classList.toggle('is-favorite', isFavBefore);
+                    const origTitle = isFavBefore ? 'Remove from favorites' : 'Mark as favorite';
+                    b.title = origTitle;
+                    b.setAttribute('aria-label', origTitle);
+                });
+                showAlert(json.message || 'Could not update favorite status.', 'Favorite Update Failed', { variant: 'danger', confirmText: 'OK' });
+            }
+        } catch {
+            // Revert on network error
+            buttons.forEach((b) => {
+                b.classList.toggle('is-favorite', isFavBefore);
+                const origTitle = isFavBefore ? 'Remove from favorites' : 'Mark as favorite';
+                b.title = origTitle;
+                b.setAttribute('aria-label', origTitle);
+            });
+            showAlert('Network error. Please try again.', 'Favorite Update Failed', { variant: 'danger', confirmText: 'OK' });
+        }
+    }
+
+    let currentLightboxMediaId = null;
+    let currentLightboxSource = null;
+    let currentLightboxCategories = [];
+
+    function renderLightboxCategories() {
+        const container = document.getElementById('dashboardLightboxCategories');
+        if (!container) return;
+        container.innerHTML = '';
+        if (!currentLightboxCategories.length) {
+            container.innerHTML = '<span style="font-size:0.75rem;color:var(--muted-foreground);font-style:italic;">No category assigned</span>';
+            return;
+        }
+
+        currentLightboxCategories.forEach(cat => {
+            const badge = document.createElement('span');
+            badge.className = 'badge badge-secondary';
+            badge.style.cssText = 'display:inline-flex;align-items:center;gap:0.35rem;padding:0.2rem 0.55rem;font-size:0.75rem;';
+            badge.innerHTML = `
+                <span>${escapeHtml(cat.name)}</span>
+                <button type="button" style="background:none;border:none;color:var(--muted-foreground);cursor:pointer;padding:0;line-height:1;font-size:0.95rem;margin-left:2px;" title="Remove category">&times;</button>
+            `;
+            badge.querySelector('button').addEventListener('click', (e) => {
+                e.stopPropagation();
+                detachLightboxCategory(cat.id);
+            });
+            container.appendChild(badge);
+        });
+    }
+
+    async function attachLightboxCategory(catId) {
+        if (!currentLightboxMediaId || !catId) return;
+        try {
+            const res = await fetch(`${DELETE_BASE}${currentLightboxMediaId}/categories`, {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': CSRF,
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'Accept': 'application/json',
+                },
+                body: JSON.stringify({ action: 'attach', category_id: catId }),
+            });
+            const data = await res.json();
+            if (data.success) {
+                currentLightboxCategories = data.categories;
+                renderLightboxCategories();
+                syncMediaCategoriesInDOM(currentLightboxMediaId, data.categories);
+            }
+        } catch(e) {
+            console.error(e);
+        }
+    }
+
+    async function detachLightboxCategory(catId) {
+        if (!currentLightboxMediaId || !catId) return;
+        try {
+            const res = await fetch(`${DELETE_BASE}${currentLightboxMediaId}/categories`, {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': CSRF,
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'Accept': 'application/json',
+                },
+                body: JSON.stringify({ action: 'detach', category_id: catId }),
+            });
+            const data = await res.json();
+            if (data.success) {
+                currentLightboxCategories = data.categories;
+                renderLightboxCategories();
+                syncMediaCategoriesInDOM(currentLightboxMediaId, data.categories);
+            }
+        } catch(e) {
+            console.error(e);
+        }
+    }
+
+    function syncMediaCategoriesInDOM(mediaId, categories) {
+        const json = JSON.stringify(categories);
+        document.querySelectorAll(`[data-lightbox-trigger][data-media-id="${mediaId}"]`).forEach(el => {
+            el.dataset.categories = json;
+        });
+
+        const cardCats = document.getElementById(`card-cats-${mediaId}`);
+        if (cardCats) {
+            cardCats.innerHTML = '';
+            categories.forEach(c => {
+                const s = document.createElement('span');
+                s.className = 'badge badge-secondary';
+                s.style.cssText = 'font-size:0.68rem;padding:0.15rem 0.4rem;';
+                s.textContent = c.name;
+                cardCats.appendChild(s);
+            });
+        }
+
+        const tableCats = document.getElementById(`table-cats-${mediaId}`);
+        if (tableCats) {
+            tableCats.innerHTML = '';
+            if (categories.length) {
+                categories.forEach(c => {
+                    const s = document.createElement('span');
+                    s.className = 'badge badge-secondary';
+                    s.style.cssText = 'font-size:0.7rem;padding:0.15rem 0.45rem;';
+                    s.textContent = c.name;
+                    tableCats.appendChild(s);
+                });
+            } else {
+                tableCats.innerHTML = '<span style="font-size:0.75rem;color:var(--muted-foreground);">—</span>';
+            }
+        }
+    }
+
+    document.getElementById('dashboardLightboxCategorySelect')?.addEventListener('change', function() {
+        const val = this.value;
+        if (val) {
+            attachLightboxCategory(val);
+            this.value = '';
+        }
+    });
 
     function openMediaLightbox(source) {
         if (!lightbox || !lightboxImage) return;
 
         previousFocus = document.activeElement;
+        currentLightboxSource = source;
+        currentLightboxMediaId = source?.dataset?.mediaId;
+        let cats = [];
+        try {
+            cats = JSON.parse(source?.dataset?.categories || '[]');
+        } catch(e) {}
+        currentLightboxCategories = cats;
+        renderLightboxCategories();
+
         const imageSrc = source?.dataset?.imageSrc ?? source?.imageSrc ?? '';
         const imageAlt = source?.dataset?.imageAlt ?? source?.imageAlt ?? '';
         const imageNameText = source?.dataset?.imageName ?? source?.imageName ?? '';
         const imageMetaText = source?.dataset?.imageMeta ?? source?.imageMeta ?? '';
+        const imageSourceUrl = source?.dataset?.sourceUrl ?? source?.sourceUrl ?? '';
 
         lightboxImage.src = imageSrc;
         lightboxImage.alt = imageAlt || imageNameText || 'Media preview';
         lightboxName.textContent = imageNameText;
         lightboxMeta.textContent = imageMetaText;
+        if (lightboxDownload) {
+            lightboxDownload.href = imageSrc;
+            lightboxDownload.setAttribute('download', imageNameText || 'image');
+        }
+        if (lightboxSource) {
+            if (imageSourceUrl) {
+                lightboxSource.href = imageSourceUrl;
+                lightboxSource.style.display = 'inline-flex';
+            } else {
+                lightboxSource.removeAttribute('href');
+                lightboxSource.style.display = 'none';
+            }
+        }
+        lightboxCopyUrls = {
+            original: source?.dataset?.copyOriginal ?? source?.copyOriginal ?? '',
+            webp: source?.dataset?.copyWebp ?? source?.copyWebp ?? '',
+            thumbnail: source?.dataset?.copyThumb ?? source?.copyThumb ?? '',
+        };
 
         lightbox.classList.add('open');
         lightbox.setAttribute('aria-hidden', 'false');
         previousOverflow = document.body.style.overflow;
         document.body.style.overflow = 'hidden';
-        lightbox.querySelector('[data-lightbox-close]')?.focus();
+        lightbox.querySelector('.dashboard-lightbox__close')?.focus();
     }
 
     function closeMediaLightbox() {
@@ -1990,6 +2925,13 @@ $authUserId = auth()->id();
         lightbox.classList.remove('open');
         lightbox.setAttribute('aria-hidden', 'true');
         lightboxImage.src = '';
+        if (lightboxDownload) {
+            lightboxDownload.removeAttribute('href');
+        }
+        if (lightboxSource) {
+            lightboxSource.removeAttribute('href');
+            lightboxSource.style.display = 'none';
+        }
         document.body.style.overflow = previousOverflow;
 
         if (previousFocus instanceof HTMLElement) {
@@ -2035,6 +2977,11 @@ $authUserId = auth()->id();
         }
 
         updateBulkMediaDeleteButtonState();
+    });
+
+    lightboxCopy?.addEventListener('click', () => {
+        closeMediaLightbox();
+        showCopyUrlModal(lightboxCopyUrls.original, lightboxCopyUrls.webp, lightboxCopyUrls.thumbnail);
     });
 
     lightbox?.addEventListener('click', (event) => {

@@ -110,6 +110,9 @@
                     <div>
                         <div style="font-weight: 600; color: var(--foreground); display: flex; align-items: center; gap: 0.5rem;">
                             {{ $editUser->name }}
+                            @if($isOnline)
+                                <span title="Online" aria-label="Online" style="display: inline-block; width: 0.625rem; height: 0.625rem; border-radius: 9999px; background-color: var(--success); box-shadow: 0 0 0 3px color-mix(in srgb, var(--success), transparent 85%);"></span>
+                            @endif
                             @if(method_exists($editUser, 'isSuspended') && $editUser->isSuspended())
                                 <span class="badge badge-danger">Suspended</span>
                             @else
@@ -197,7 +200,18 @@
                 <p style="font-size: 0.875rem; color: var(--muted-foreground); margin-bottom: 1rem;">
                     Once you delete a user, there is no going back. Please be certain.
                 </p>
-                <div style="display: flex; justify-content: flex-end; padding-top: 1rem; border-top: 1px solid var(--border);">
+                <div style="display: flex; justify-content: flex-end; gap: 0.75rem; padding-top: 1rem; border-top: 1px solid var(--border);">
+                    @if(in_array(config('session.driver'), ['database', 'redis']))
+                    <form action="{{ route($dashboardRoute::name('users.logout'), $editUser->id) }}" method="POST" id="logout-user-form">
+                        @csrf
+                        <button type="button" class="btn btn-warning" onclick="event.preventDefault(); showDanger('Log Out User', {{ Js::from('Are you sure you want to log out '.$editUser->name.'? This will force them out of all browser sessions and revoke all API tokens.') }}, { confirmText: 'Log Out' }).then(confirmed => { if(confirmed) document.getElementById('logout-user-form').submit(); })">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6A2.25 2.25 0 005.25 5.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15m3-3H9m0 0l3-3m-3 3l3 3" />
+                            </svg>
+                            Log Out User
+                        </button>
+                    </form>
+                    @endif
                     <form action="{{ route($dashboardRoute::name('users.destroy'), $editUser->id) }}" method="POST" id="delete-user-form">
                         @csrf
                         @method('DELETE')

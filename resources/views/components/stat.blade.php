@@ -4,6 +4,7 @@
     'variant' => 'primary',
     'change' => null,
     'trend' => 'none',
+    'icon' => null,
 ])
 
 @php

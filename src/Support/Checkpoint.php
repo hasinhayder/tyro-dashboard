@@ -98,6 +98,32 @@ class Checkpoint {
     }
 
     /**
+     * Import a checkpoint snapshot via the package service.
+     * Returns 0 on success, non-zero on failure.
+     */
+    public function import(string $sourcePath, ?string $name = null, ?string $note = null, ?string $driver = null, ?string &$error = null): int {
+        $service = $this->service();
+        if (! $service) {
+            return 1;
+        }
+
+        try {
+            $service->import(
+                $sourcePath,
+                $name ? $this->sanitizeName($name) : null,
+                $note,
+                $driver,
+            );
+
+            return 0;
+        } catch (\Throwable $e) {
+            $error = $e->getMessage();
+
+            return 1;
+        }
+    }
+
+    /**
      * Restore a checkpoint via the package service.
      */
     public function restore(string $idOrName): int {

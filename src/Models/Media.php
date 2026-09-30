@@ -4,6 +4,7 @@ namespace HasinHayder\TyroDashboard\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Support\Facades\Storage;
 
 class Media extends Model {
@@ -19,11 +20,27 @@ class Media extends Model {
         'mime_type',
         'size',
         'alt_text',
+        'is_favorite',
         'source_url',
     ];
 
+    protected function casts(): array {
+        return [
+            'is_favorite' => 'boolean',
+        ];
+    }
+
     public function uploader(): BelongsTo {
         return $this->belongsTo(config('tyro-dashboard.user_model', 'App\Models\User'), 'user_id');
+    }
+
+    public function categories(): BelongsToMany {
+        return $this->belongsToMany(
+            MediaCategory::class,
+            'tyro_media_category_media',
+            'media_id',
+            'media_category_id'
+        )->withTimestamps();
     }
 
     public function getUrlAttribute(): string {

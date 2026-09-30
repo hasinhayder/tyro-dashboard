@@ -4,11 +4,17 @@ use HasinHayder\TyroDashboard\Http\Controllers\AuditController;
 use HasinHayder\TyroDashboard\Http\Controllers\CheckpointController;
 use HasinHayder\TyroDashboard\Http\Controllers\ComponentsController;
 use HasinHayder\TyroDashboard\Http\Controllers\DashboardController;
+use HasinHayder\TyroDashboard\Http\Controllers\EmailerController;
+use HasinHayder\TyroDashboard\Http\Controllers\HealthController;
+use HasinHayder\TyroDashboard\Http\Controllers\HeartbeatController;
 use HasinHayder\TyroDashboard\Http\Controllers\InvitationController;
+use HasinHayder\TyroDashboard\Http\Controllers\LogViewController;
+use HasinHayder\TyroDashboard\Http\Controllers\MediaCategoryController;
 use HasinHayder\TyroDashboard\Http\Controllers\MediaController;
 use HasinHayder\TyroDashboard\Http\Controllers\PrivilegeController;
 use HasinHayder\TyroDashboard\Http\Controllers\ProfileController;
 use HasinHayder\TyroDashboard\Http\Controllers\RoleController;
+use HasinHayder\TyroDashboard\Http\Controllers\SmtpController;
 use HasinHayder\TyroDashboard\Http\Controllers\SystemSettingsController;
 use HasinHayder\TyroDashboard\Http\Controllers\UserController;
 use HasinHayder\TyroDashboard\Http\Controllers\WidgetsController;
@@ -79,6 +85,11 @@ if (config('tyro-dashboard.features.invitation_system', true)) {
 // Leave impersonation (accessible to anyone currently impersonating)
 Route::post('/leave-impersonation', [UserController::class, 'leaveImpersonation'])->name('leave-impersonation');
 
+// Heartbeat — cache-based online detection (all authenticated users)
+if (config('tyro-dashboard.features.heartbeat', true)) {
+    Route::post('/heartbeat', [HeartbeatController::class, 'store'])->name('heartbeat');
+}
+
 // Media Library (all authenticated users)
 Route::get('media', [MediaController::class, 'index'])->name('media');
 Route::prefix('media')->name('media.')->group(function () {
@@ -89,8 +100,22 @@ Route::prefix('media')->name('media.')->group(function () {
     Route::post('/starred-images', [MediaController::class, 'storeStarredImage'])->name('starred-images.store');
     Route::delete('/starred-images', [MediaController::class, 'destroyStarredImage'])->name('starred-images.destroy');
     Route::delete('/bulk-delete', [MediaController::class, 'bulkDestroy'])->name('bulk-destroy');
+    Route::post('/bulk-category-attach', [MediaController::class, 'bulkCategoryAttach'])->name('bulk-category-attach');
+    Route::post('/bulk-category-unlink', [MediaController::class, 'bulkCategoryUnlink'])->name('bulk-category-unlink');
+
+    // Media Categories
+    Route::get('/categories', [MediaCategoryController::class, 'index'])->name('categories.index');
+    Route::get('/categories/list', [MediaCategoryController::class, 'list'])->name('categories.list');
+    Route::post('/categories', [MediaCategoryController::class, 'store'])->name('categories.store');
+    Route::post('/categories/bulk', [MediaCategoryController::class, 'storeBulk'])->name('categories.bulk-store');
+    Route::put('/categories/{category}', [MediaCategoryController::class, 'update'])->name('categories.update');
+    Route::delete('/categories/{category}', [MediaCategoryController::class, 'destroy'])->name('categories.destroy');
+    Route::post('/categories/{category}/add-media', [MediaCategoryController::class, 'addMedia'])->name('categories.add-media');
+
+    Route::patch('/{media}/categories', [MediaController::class, 'updateCategories'])->name('update-categories');
     Route::patch('/{media}/alt', [MediaController::class, 'updateAlt'])->name('alt');
     Route::patch('/{media}/rename', [MediaController::class, 'rename'])->name('rename');
+    Route::patch('/{media}/toggle-favorite', [MediaController::class, 'toggleFavorite'])->name('toggle-favorite');
     Route::post('/{media}/crop-resize', [MediaController::class, 'cropResize'])->name('crop-resize');
     Route::delete('/{media}', [MediaController::class, 'destroy'])->name('destroy')->where('media', '[0-9]+');
 });
@@ -112,6 +137,7 @@ Route::middleware('tyro-dashboard.admin')->group(function () {
         Route::post('/{id}/suspend', [UserController::class, 'suspend'])->name('suspend');
         Route::post('/{id}/unsuspend', [UserController::class, 'unsuspend'])->name('unsuspend');
         Route::post('/{id}/login-as', [UserController::class, 'loginAs'])->name('login-as');
+        Route::post('/{id}/logout', [UserController::class, 'logout'])->name('logout');
         Route::delete('/{id}/photo', [ProfileController::class, 'deleteUserPhoto'])->name('photo.delete');
         Route::delete('/{id}', [UserController::class, 'destroy'])->name('destroy');
     });
@@ -168,11 +194,35 @@ Route::middleware('tyro-dashboard.admin')->group(function () {
         });
     }
 
+    // SMTP Settings (Admin) - manage MAIL_* env values and SMTP presets
+    if (config('tyro-dashboard.features.smtp_settings', true)) {
+        Route::prefix('settings/smtp')->name('settings.smtp.')->group(function () {
+            Route::get('/', [SmtpController::class, 'index'])->name('index');
+            Route::post('/update', [SmtpController::class, 'update'])->name('update');
+            Route::post('/clear-config-cache', [SmtpController::class, 'clearConfigCache'])->name('clear-config-cache');
+            Route::post('/test', [SmtpController::class, 'sendTest'])->name('test');
+            Route::post('/presets', [SmtpController::class, 'storePreset'])->name('presets.store');
+            Route::put('/presets/{id}', [SmtpController::class, 'updatePreset'])->name('presets.update');
+            Route::delete('/presets/{id}', [SmtpController::class, 'destroyPreset'])->name('presets.destroy');
+            Route::post('/presets/{id}/apply', [SmtpController::class, 'applyPreset'])->name('presets.apply');
+        });
+    }
+
+    // Emailer (Admin) - send queued emails with design presets
+    if (config('tyro-dashboard.features.emailer', true)) {
+        Route::prefix('emailer')->name('emailer.')->group(function () {
+            Route::get('/', [EmailerController::class, 'index'])->name('index');
+            Route::post('/send', [EmailerController::class, 'send'])->name('send');
+            Route::post('/preview', [EmailerController::class, 'preview'])->name('preview');
+        });
+    }
+
     // Checkpoints (Admin) - visual manager for hasinhayder/tyro-checkpoint
     if (config('tyro-dashboard.features.checkpoints', true) && class_exists(\HasinHayder\TyroCheckpoint\TyroCheckpointServiceProvider::class)) {
         Route::prefix('checkpoints')->name('checkpoints.')->group(function () {
             Route::get('/', [CheckpointController::class, 'index'])->name('index');
             Route::post('/', [CheckpointController::class, 'create'])->name('create');
+            Route::get('/download/{identifier}', [CheckpointController::class, 'download'])->name('download');
             Route::post('/restore', [CheckpointController::class, 'restore'])->name('restore');
             Route::post('/delete', [CheckpointController::class, 'delete'])->name('delete');
             Route::post('/flush', [CheckpointController::class, 'flush'])->name('flush');
@@ -182,6 +232,22 @@ Route::middleware('tyro-dashboard.admin')->group(function () {
             Route::post('/toggle-flag', [CheckpointController::class, 'toggleFlag'])->name('toggle-flag');
             Route::post('/encrypt', [CheckpointController::class, 'encrypt'])->name('encrypt');
             Route::post('/generate-key', [CheckpointController::class, 'generateKey'])->name('generate-key');
+            Route::post('/import', [CheckpointController::class, 'import'])->name('import');
+        });
+    }
+
+    // System Health (Admin) - read-only diagnostics
+    if (config('tyro-dashboard.features.health', true)) {
+        Route::prefix('health')->name('health.')->group(function () {
+            Route::get('/', [HealthController::class, 'index'])->name('index');
+        });
+    }
+
+    // Log Viewer (Admin) - browse application log files
+    if (config('tyro-dashboard.features.log_viewer', true)) {
+        Route::prefix('logs')->name('logs.')->group(function () {
+            Route::get('/', [LogViewController::class, 'index'])->name('index');
+            Route::delete('/clear', [LogViewController::class, 'clear'])->name('clear');
         });
     }
 });

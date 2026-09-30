@@ -1,6 +1,7 @@
 @php
 $mediaPickerUrl = route(\HasinHayder\TyroDashboard\Support\DashboardRoute::name('media.picker'));
 $mediaUploadUrl = route(\HasinHayder\TyroDashboard\Support\DashboardRoute::name('media.upload'));
+$mediaCategoriesUrl = route(\HasinHayder\TyroDashboard\Support\DashboardRoute::name('media.categories.list'));
 $storageBaseUrl = rtrim(\Illuminate\Support\Facades\Storage::disk('public')->url(''), '/');
 @endphp
 
@@ -14,6 +15,12 @@ $storageBaseUrl = rtrim(\Illuminate\Support\Facades\Storage::disk('public')->url
             </div>
 
             <div class="tyro-media-modal-header-actions">
+                <button type="button" class="tyro-media-modal-fav-toggle" id="tyroDashboardMediaPickerFavToggle" aria-pressed="false" title="Filter favorites only" aria-label="Filter favorites only">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+                    </svg>
+                    <span>Favorites</span>
+                </button>
                 <button type="button" class="tyro-media-modal-close" data-tyro-media-picker-close aria-label="Close media picker">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
@@ -23,7 +30,7 @@ $storageBaseUrl = rtrim(\Illuminate\Support\Facades\Storage::disk('public')->url
         </div>
 
         <div class="tyro-media-modal-toolbar">
-            <div class="tyro-media-modal-toolbar-left">
+            <div class="tyro-media-modal-toolbar-left" id="tyroDashboardMediaPickerToolbarLeft">
                 <label class="tyro-media-modal-search" for="tyroDashboardMediaPickerSearch">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
                         <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-4.35-4.35m1.85-5.15a7 7 0 1 1-14 0 7 7 0 0 1 14 0Z" />
@@ -31,6 +38,11 @@ $storageBaseUrl = rtrim(\Illuminate\Support\Facades\Storage::disk('public')->url
                     <input type="text" id="tyroDashboardMediaPickerSearch" class="form-input" placeholder="Search images or filenames" autocomplete="off">
                 </label>
 
+                <label class="tyro-media-modal-category" for="tyroDashboardMediaPickerCategory" id="tyroDashboardMediaCategoryWrap" hidden>
+                    <select id="tyroDashboardMediaPickerCategory" class="form-select tyro-media-category-select" aria-label="Filter by category">
+                        <option value="">All Categories</option>
+                    </select>
+                </label>
             </div>
 
             <div class="tyro-media-modal-toolbar-right">
@@ -53,6 +65,18 @@ $storageBaseUrl = rtrim(\Illuminate\Support\Facades\Storage::disk('public')->url
 
             <div id="tyroDashboardMediaPickerLoadMore" class="tyro-media-modal-load-more" style="display:none;">
                 <button type="button" class="btn btn-secondary" data-tyro-media-picker-load-more>Load more</button>
+            </div>
+        </div>
+
+        <div class="tyro-media-picker-multi-bar" id="tyroDashboardMediaPickerMultiBar" style="display:none;">
+            <div class="tyro-media-picker-multi-info">
+                <span class="tyro-media-picker-multi-count" id="tyroDashboardMediaPickerMultiCount">0 items selected</span>
+            </div>
+            <div class="tyro-media-picker-multi-actions">
+                <button type="button" class="btn btn-secondary btn-sm" id="tyroDashboardMediaPickerClearSelection">Clear</button>
+                <button type="button" class="btn btn-primary btn-sm" id="tyroDashboardMediaPickerConfirmBtn" disabled>
+                    Add Selected Media
+                </button>
             </div>
         </div>
 
@@ -85,6 +109,7 @@ $storageBaseUrl = rtrim(\Illuminate\Support\Facades\Storage::disk('public')->url
 
         const mediaPickerUrl = @json($mediaPickerUrl);
         const mediaUploadUrl = @json($mediaUploadUrl);
+        const mediaCategoriesUrl = @json($mediaCategoriesUrl);
         const storageBaseUrl = @json($storageBaseUrl);
         const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '';
         const modal = document.getElementById('tyroDashboardMediaPickerModal');
@@ -99,9 +124,58 @@ $storageBaseUrl = rtrim(\Illuminate\Support\Facades\Storage::disk('public')->url
         const outputWrap = document.getElementById('tyroDashboardMediaOutputWrap');
         const outputSelect = document.getElementById('tyroDashboardMediaOutputSelect');
 
+        const toolbarLeft = document.getElementById('tyroDashboardMediaPickerToolbarLeft');
+        const categoryWrap = document.getElementById('tyroDashboardMediaCategoryWrap');
+        const categorySelect = document.getElementById('tyroDashboardMediaPickerCategory');
+
+        const favToggle = document.getElementById('tyroDashboardMediaPickerFavToggle');
+        const modalTitle = document.getElementById('tyroDashboardMediaPickerTitle');
+        const modalSubtitle = modal?.querySelector('.tyro-media-modal-subtitle');
+        const multiBar = document.getElementById('tyroDashboardMediaPickerMultiBar');
+        const multiCount = document.getElementById('tyroDashboardMediaPickerMultiCount');
+        const clearSelectionBtn = document.getElementById('tyroDashboardMediaPickerClearSelection');
+        const confirmBtn = document.getElementById('tyroDashboardMediaPickerConfirmBtn');
+
         let activeInput = null;
         let nextPageUrl = null;
         let searchTimer = null;
+        let onlyFavorites = false;
+        let activeCategoryId = '';
+        let loadSequence = 0;
+        let isMultiSelect = false;
+        let selectedMediaIds = new Set();
+        let onMultiSelectConfirm = null;
+        let multiConfirmLabel = 'Add Selected Media';
+        const defaultTitle = modalTitle ? modalTitle.textContent : 'Choose media';
+        const defaultSubtitle = modalSubtitle ? modalSubtitle.textContent : '';
+
+        function updateMultiSelectBar() {
+            if (!multiBar) return;
+            const count = selectedMediaIds.size;
+            if (multiCount) {
+                multiCount.textContent = count === 1 ? '1 item selected' : `${count} items selected`;
+            }
+            if (confirmBtn) {
+                confirmBtn.disabled = count === 0;
+                confirmBtn.textContent = count > 0 ? `${multiConfirmLabel} (${count})` : multiConfirmLabel;
+            }
+        }
+
+        function toggleMultiSelectItem(item, card) {
+            const id = Number(item.id);
+            if (selectedMediaIds.has(id)) {
+                selectedMediaIds.delete(id);
+                card.classList.remove('is-selected');
+                const actionEl = card.querySelector('.tyro-media-item-action');
+                if (actionEl) actionEl.textContent = 'Click to select';
+            } else {
+                selectedMediaIds.add(id);
+                card.classList.add('is-selected');
+                const actionEl = card.querySelector('.tyro-media-item-action');
+                if (actionEl) actionEl.textContent = 'Selected';
+            }
+            updateMultiSelectBar();
+        }
 
         function stateMarkup(title, text) {
             return `<div class="tyro-media-modal-state"><div><strong>${escapeHtml(title)}</strong><span>${escapeHtml(text)}</span></div></div>`;
@@ -214,10 +288,116 @@ $storageBaseUrl = rtrim(\Illuminate\Support\Facades\Storage::disk('public')->url
             }
         }
 
+        function syncFavToggleUI() {
+            if (!favToggle) return;
+            favToggle.classList.toggle('is-active', onlyFavorites);
+            favToggle.setAttribute('aria-pressed', onlyFavorites ? 'true' : 'false');
+            favToggle.title = onlyFavorites ? 'Showing favorites only (click to show all)' : 'Filter favorites only';
+        }
+
+        function syncCategoryFilterUI(hasCategories) {
+            if (!categoryWrap || !toolbarLeft) return;
+            categoryWrap.hidden = !hasCategories;
+            toolbarLeft.classList.toggle('has-category-filter', hasCategories);
+        }
+
+        async function loadCategories() {
+            if (!categoryWrap || !categorySelect) {
+                return;
+            }
+
+            try {
+                const response = await fetch(mediaCategoriesUrl, {
+                    headers: { 'X-Requested-With': 'XMLHttpRequest' },
+                });
+                const json = await response.json();
+                const categories = Array.isArray(json.data) ? json.data : [];
+
+                if (!categories.length) {
+                    activeCategoryId = '';
+                    categorySelect.value = '';
+                    syncCategoryFilterUI(false);
+                    return;
+                }
+
+                categorySelect.innerHTML = '';
+
+                const allOption = document.createElement('option');
+                allOption.value = '';
+                allOption.textContent = 'All Categories';
+                categorySelect.appendChild(allOption);
+
+                const noneOption = document.createElement('option');
+                noneOption.value = 'none';
+                noneOption.textContent = 'Uncategorized';
+                categorySelect.appendChild(noneOption);
+
+                categories.forEach((category) => {
+                    const option = document.createElement('option');
+                    option.value = String(category.id);
+                    option.textContent = `${category.name} (${category.media_count ?? 0})`;
+                    categorySelect.appendChild(option);
+                });
+
+                categorySelect.value = activeCategoryId;
+                syncCategoryFilterUI(true);
+            } catch (error) {
+                syncCategoryFilterUI(false);
+            }
+        }
+
         function openForInput(input) {
+            isMultiSelect = false;
+            selectedMediaIds.clear();
+            onMultiSelectConfirm = null;
+            if (multiBar) multiBar.style.display = 'none';
+            if (modalTitle) modalTitle.textContent = defaultTitle;
+            if (modalSubtitle) modalSubtitle.textContent = defaultSubtitle;
+
             activeInput = input;
             searchInput.value = '';
+            onlyFavorites = false;
+            activeCategoryId = '';
+            if (categorySelect) categorySelect.value = '';
+            syncFavToggleUI();
             syncOutputSelector();
+            loadCategories();
+
+            const customCols = input?.dataset.tyroMediaColumns;
+            if (grid) {
+                if (customCols && parseInt(customCols, 10) > 0) {
+                    grid.style.setProperty('--picker-grid-columns', parseInt(customCols, 10));
+                } else {
+                    grid.style.removeProperty('--picker-grid-columns');
+                }
+            }
+
+            modal.classList.add('open');
+            modal.setAttribute('aria-hidden', 'false');
+            loadMedia(false);
+            window.setTimeout(() => searchInput.focus(), 80);
+        }
+
+        function openMultiSelect(options = {}) {
+            isMultiSelect = true;
+            activeInput = null;
+            selectedMediaIds = new Set((options.initialIds || []).map(Number));
+            onMultiSelectConfirm = options.onConfirm || null;
+            multiConfirmLabel = options.confirmLabel || 'Add Selected Media';
+
+            if (modalTitle) modalTitle.textContent = options.title || 'Choose media';
+            if (modalSubtitle) modalSubtitle.textContent = options.subtitle || 'Select images from your library and click confirm.';
+            if (outputWrap) outputWrap.hidden = true;
+            if (multiBar) multiBar.style.display = 'flex';
+
+            searchInput.value = '';
+            onlyFavorites = false;
+            activeCategoryId = '';
+            if (categorySelect) categorySelect.value = '';
+            syncFavToggleUI();
+            loadCategories();
+            updateMultiSelectBar();
+
             modal.classList.add('open');
             modal.setAttribute('aria-hidden', 'false');
             loadMedia(false);
@@ -228,7 +408,20 @@ $storageBaseUrl = rtrim(\Illuminate\Support\Facades\Storage::disk('public')->url
             modal.classList.remove('open');
             modal.setAttribute('aria-hidden', 'true');
             activeInput = null;
+            onlyFavorites = false;
+            activeCategoryId = '';
+            if (categorySelect) categorySelect.value = '';
+            isMultiSelect = false;
+            selectedMediaIds.clear();
+            onMultiSelectConfirm = null;
+            if (multiBar) multiBar.style.display = 'none';
+            if (modalTitle) modalTitle.textContent = defaultTitle;
+            if (modalSubtitle) modalSubtitle.textContent = defaultSubtitle;
+            syncFavToggleUI();
             syncOutputSelector();
+            if (grid) {
+                grid.style.removeProperty('--picker-grid-columns');
+            }
         }
 
         async function loadMedia(append) {
@@ -238,9 +431,25 @@ $storageBaseUrl = rtrim(\Illuminate\Support\Facades\Storage::disk('public')->url
                 page: '1',
             });
 
+            if (onlyFavorites) {
+                params.set('favorite', '1');
+            }
+
+            if (activeCategoryId) {
+                params.set('category', activeCategoryId);
+            }
+
+            const requestId = ++loadSequence;
+
             if (!append) {
-                grid.innerHTML = stateMarkup('Loading media', 'Fetching your latest uploads.');
                 nextPageUrl = null;
+                // Keep existing cards in place (dimmed) to avoid layout jumps;
+                // fall back to the loading state only when there is nothing to keep.
+                if (grid.querySelector('.tyro-media-item')) {
+                    grid.classList.add('is-loading');
+                } else {
+                    grid.innerHTML = stateMarkup('Loading media', 'Fetching your latest uploads.');
+                }
             }
 
             try {
@@ -248,18 +457,35 @@ $storageBaseUrl = rtrim(\Illuminate\Support\Facades\Storage::disk('public')->url
                 const fetchUrl = new URL(url, window.location.origin);
                 fetchUrl.searchParams.set('type', 'image');
                 fetchUrl.searchParams.set('search', searchInput.value || '');
+                if (onlyFavorites) {
+                    fetchUrl.searchParams.set('favorite', '1');
+                }
+                if (activeCategoryId) {
+                    fetchUrl.searchParams.set('category', activeCategoryId);
+                }
 
                 const response = await fetch(fetchUrl.toString(), {
                     headers: { 'X-Requested-With': 'XMLHttpRequest' },
                 });
                 const json = await response.json();
 
+                if (requestId !== loadSequence) {
+                    return;
+                }
+
                 renderItems(Array.isArray(json.data) ? json.data : [], append);
                 nextPageUrl = json.next_page_url || null;
                 loadMoreWrap.style.display = nextPageUrl ? '' : 'none';
             } catch (error) {
+                if (requestId !== loadSequence) {
+                    return;
+                }
                 grid.innerHTML = stateMarkup('Could not load media', 'Please try again in a moment.');
                 loadMoreWrap.style.display = 'none';
+            } finally {
+                if (requestId === loadSequence) {
+                    grid.classList.remove('is-loading');
+                }
             }
         }
 
@@ -269,7 +495,10 @@ $storageBaseUrl = rtrim(\Illuminate\Support\Facades\Storage::disk('public')->url
             }
 
             if (!items.length && !append) {
-                grid.innerHTML = stateMarkup('Nothing matched your search', 'Try a different keyword or upload a new image.');
+                grid.innerHTML = stateMarkup(
+                    onlyFavorites ? 'No favorite images found' : 'Nothing matched your search',
+                    onlyFavorites ? 'Star favorite images in the Media Library to quickly find them here.' : 'Try a different keyword or upload a new image.'
+                );
                 return;
             }
 
@@ -280,19 +509,37 @@ $storageBaseUrl = rtrim(\Illuminate\Support\Facades\Storage::disk('public')->url
                 card.dataset.mediaId = String(item.id || '');
                 card.title = item.filename || 'Media';
 
-                if (itemMatchesCurrentValue(item)) {
+                const isItemMultiSelected = isMultiSelect && selectedMediaIds.has(Number(item.id));
+                const isSingleSelected = !isMultiSelect && itemMatchesCurrentValue(item);
+
+                if (isItemMultiSelected || isSingleSelected) {
                     card.classList.add('is-selected');
                 }
 
                 const previewUrl = storageUrl(item.thumbnail_url || item.webp_url || item.url || '');
-                const actionLabel = itemMatchesCurrentValue(item) ? 'Selected' : 'Use this image';
+                const actionLabel = isMultiSelect
+                    ? (isItemMultiSelected ? 'Selected' : 'Click to select')
+                    : (isSingleSelected ? 'Selected' : 'Use this image');
                 const metaText = item.webp_size || item.size || item.original_size || getExtension(item.filename);
+                const favBadgeHtml = item.is_favorite ? `
+                    <span class="tyro-media-item-badge tyro-media-item-fav" title="Favorite">
+                        <svg viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                        Fav
+                    </span>
+                ` : '<span class="tyro-media-item-badge">Thumb</span>';
+
+                const checkboxHtml = isMultiSelect ? `
+                    <div class="tyro-media-item-checkbox">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5"/></svg>
+                    </div>
+                ` : '';
 
                 card.innerHTML = `
                     <div class="tyro-media-item-preview">
+                        ${checkboxHtml}
                         <img src="${escapeHtml(previewUrl)}" alt="${escapeHtml(item.alt_text || item.filename || 'Media image')}" loading="lazy">
                         <div class="tyro-media-item-overlay">
-                            <span class="tyro-media-item-badge">Thumb</span>
+                            ${favBadgeHtml}
                             <span class="tyro-media-item-action">${escapeHtml(actionLabel)}</span>
                         </div>
                     </div>
@@ -301,8 +548,13 @@ $storageBaseUrl = rtrim(\Illuminate\Support\Facades\Storage::disk('public')->url
                         <div class="tyro-media-item-meta">${escapeHtml(metaText)}</div>
                     </div>
                 `;
-
-                card.addEventListener('click', () => selectItem(item));
+                card.addEventListener('click', () => {
+                    if (isMultiSelect) {
+                        toggleMultiSelectItem(item, card);
+                    } else {
+                        selectItem(item);
+                    }
+                });
                 grid.appendChild(card);
             });
         }
@@ -378,7 +630,13 @@ $storageBaseUrl = rtrim(\Illuminate\Support\Facades\Storage::disk('public')->url
                 uploadProgressFill.style.width = '100%';
                 uploadProgressText.textContent = '100%';
                 uploadStatus.textContent = 'Uploaded.';
-                selectItem(result);
+                if (isMultiSelect) {
+                    selectedMediaIds.add(Number(result.id));
+                    updateMultiSelectBar();
+                    loadMedia(false);
+                } else {
+                    selectItem(result);
+                }
             } else {
                 uploadStatus.textContent = 'Upload failed.';
             }
@@ -420,6 +678,13 @@ $storageBaseUrl = rtrim(\Illuminate\Support\Facades\Storage::disk('public')->url
                 return;
             }
 
+            if (event.target.closest('#tyroDashboardMediaPickerFavToggle')) {
+                onlyFavorites = !onlyFavorites;
+                syncFavToggleUI();
+                loadMedia(false);
+                return;
+            }
+
             if (event.target.closest('[data-tyro-media-picker-close]')) {
                 close();
             }
@@ -456,10 +721,42 @@ $storageBaseUrl = rtrim(\Illuminate\Support\Facades\Storage::disk('public')->url
             searchTimer = window.setTimeout(() => loadMedia(false), 350);
         });
 
+        categorySelect?.addEventListener('change', () => {
+            activeCategoryId = categorySelect.value;
+            loadMedia(false);
+        });
+
         uploadInput.addEventListener('change', uploadFile);
+
+        clearSelectionBtn?.addEventListener('click', () => {
+            selectedMediaIds.clear();
+            grid.querySelectorAll('.tyro-media-item.is-selected').forEach(c => {
+                c.classList.remove('is-selected');
+                const a = c.querySelector('.tyro-media-item-action');
+                if (a) a.textContent = 'Click to select';
+            });
+            updateMultiSelectBar();
+        });
+
+        confirmBtn?.addEventListener('click', async () => {
+            if (onMultiSelectConfirm && selectedMediaIds.size > 0) {
+                confirmBtn.disabled = true;
+                const originalText = confirmBtn.textContent;
+                confirmBtn.textContent = 'Adding...';
+                try {
+                    await onMultiSelectConfirm(Array.from(selectedMediaIds), window.TyroDashboardMediaPicker);
+                } catch (e) {
+                    console.error(e);
+                } finally {
+                    confirmBtn.disabled = false;
+                    confirmBtn.textContent = originalText;
+                }
+            }
+        });
 
         window.TyroDashboardMediaPicker = {
             openForInput,
+            openMultiSelect,
             close,
             reload: () => loadMedia(false),
         };

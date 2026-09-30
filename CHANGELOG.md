@@ -2,6 +2,74 @@
 
 All notable changes to Tyro Dashboard are documented in this file.
 
+## [v1.56.0](https://github.com/hasinhayder/tyro-dashboard/releases/tag/v1.56.0) - 2026-09-26
+- Media picker category dropdown: the "Choose media" modal now shows a category dropdown on the same line as the search box (search 75% / category 25%) that instantly filters the images; when no categories exist the dropdown is hidden and the search box takes the full width, backed by a new `media.categories.list` JSON endpoint
+- Media Categories management: added dedicated Categories page (`/dashboard/media/categories`) with full CRUD, user and admin permission scoping, and automatic unique slug generation
+- Bulk Category creation: added "Add Bulk Category" modal to quickly create multiple categories from comma-separated (or newline-separated) input
+- Media category assignment & filtering: added category filter dropdown on media library and picker, bulk "Add to Category" modal with toggle switches and scrollable list, and bulk unlinking from categories
+- Lightbox category management: attach and detach categories directly from the image preview modal with real-time UI updates
+- File Edit modal: replaced card alt inputs with a dedicated File Edit modal supporting filename renaming and alt text editing
+- Favicon upload support in System Settings: added a Favicon media picker in the Branding settings container using thumb-mode selection (`output="thumb"`) and live preview
+- Layout head integration: rendered `<link rel="icon">` in `layouts/admin.blade.php`, `layouts/app.blade.php`, and `layouts/user.blade.php` based on `TYRO_DASHBOARD_FAVICON` / `tyro-dashboard.branding.favicon` configuration
+- Environment configuration: added `TYRO_DASHBOARD_FAVICON` validation and `.env` persistence in `SystemSettingsController`
+
+## [v1.55.2](https://github.com/hasinhayder/tyro-dashboard/releases/tag/v1.55.2) - 2026-09-19
+- Configurable media picker grid columns: added `columns` and `galleryColumns` props to `<x-media-picker>` (e.g. `columns="6"`, `:columns="7"`, or `galleryColumns="6"`) allowing per-trigger custom column counts in the media picker modal grid, defaulting to 5 columns on desktop and automatically adapting responsibly on mobile
+- Square image card presentation: the entire media picker modal card now maintains a square 1:1 aspect ratio with proportional image filling and compact file metadata footer
+
+## [v1.55.1](https://github.com/hasinhayder/tyro-dashboard/releases/tag/v1.55.1) - 2026-09-19
+- Media gallery filter auto-apply: dropdown filters (Type, Date, Favorite) now automatically submit and filter the media gallery on selection change without requiring manual submission
+- Media gallery filter clear button: the "Clear" button is now hidden when query parameters are present but empty (e.g. `search=&type=&date=&favorite=`), displaying only when at least one active filter value is filled
+
+## [v1.55.0](https://github.com/hasinhayder/tyro-dashboard/releases/tag/v1.55.0) - 2026-09-19
+- Media bookmark / favorite feature: mark images as favorite with a star toggle button on media gallery cards (yellow active star, gray inactive), accompanied by database migration and model attribute
+- Media gallery favorite filter: added a dedicated Favorite filter dropdown to filter between all images and favorite images
+- Media picker favorite filter toggle: added a star toggle button in the top-right header of the media picker modal to quickly filter only favorite uploads directly from the picker
+
+## [v1.54.0](https://github.com/hasinhayder/tyro-dashboard/releases/tag/v1.54.0) - 2026-09-08
+- Checkpoint downloads & external snapshot import: download checkpoints directly from the UI, and import external `.sqlite`, `.sql`, and `.enc` database snapshots from the admin interface with optional checkpoint name, notes, and driver detection
+- Preserved `.enc` encryption detection, service error feedback, and automatic list and stat refresh
+
+## [v1.53.0](https://github.com/hasinhayder/tyro-dashboard/releases/tag/v1.53.0) - 2026-09-06
+- Configurable desktop gallery columns: desktop media gallery grid columns can now be configured via `TYRO_DASHBOARD_MEDIA_GALLERY_COLUMNS` (default 6, supports 1 to 12)
+- Hidden per-item "View in new tab" action in media gallery grid while preserving underlying functionality
+- Replaced Open Source icon with the external-link icon
+
+## [v1.52.0](https://github.com/hasinhayder/tyro-dashboard/releases/tag/v1.52.0) - 2026-09-06
+- Emailer feature: email composer with preset templates, live rendered preview, queue dispatcher, and feature toggle gated by `TYRO_DASHBOARD_ENABLE_EMAILER`
+
+## [v1.51.4](https://github.com/hasinhayder/tyro-dashboard/releases/tag/v1.51.4) - 2026-09-04
+- Media Library modal design upgrade: polished preview lightbox with subtle dot-matrix background canvas, floating image drop shadow, thumbnail icon, new "Open original" button, cleaner typography, keyboard hints, and an enhanced multi-format URL picker with cards for Original, WebP, and Thumbnail formats
+
+## [v1.51.3](https://github.com/hasinhayder/tyro-dashboard/releases/tag/v1.51.3) - 2026-09-04
+- Media Library preview polish: clicking an image now opens it inside a themed card container with a filename header, muted image stage, and an Esc/outside-click footer hint instead of a bare floating image on the dark overlay
+
+## [v1.51.2](https://github.com/hasinhayder/tyro-dashboard/releases/tag/v1.51.2) - 2026-09-04
+- Media Library bulk-select checkbox alignment fix: the grid checkbox wrapper now matches the action button size with centered alignment so it no longer sits smaller/off-positioned next to the action icons
+
+## [v1.51.1](https://github.com/hasinhayder/tyro-dashboard/releases/tag/v1.51.1) - 2026-08-30
+- SMTP Settings encryption dropdown fix: the `MAIL_SCHEME` value for the TLS option is now `smtp` and for the SSL option `smtps` (labels unchanged), which are the DSN schemes Symfony's mailer actually supports — previously the written `tls`/`ssl` values made providers like Hostinger (SMTP/SMTP-S) fail with "TLS or SSL is not supported". Validation for the SMTP form and presets accepts `smtp`/`smtps` accordingly
+
+## [v1.51.0](https://github.com/hasinhayder/tyro-dashboard/releases/tag/v1.51.0) - 2026-08-29
+- SMTP Settings admin page: live `.env` editing for `MAIL_*` + `MAIL_FROM_*` with server-side validation, reusable SMTP presets (CRUD with encrypted passwords, apply-to-`.env`), tabular "Use Preset" picker, "Save current settings as preset", test-email sender, and a danger-confirmed config-cache clear — admin-only, gated by `TYRO_DASHBOARD_ENABLE_SMTP_SETTINGS` (`features.smtp_settings`, default true) with identical route and sidebar gating; passwords are never prefilled into the form (blank = keep existing value), preset passwords are encrypted at rest, and the new `tyro_smtp_presets` table ships via a package migration. Consumers with a published sidebar need to re-publish `partials/admin-sidebar.blade.php` (or add the link manually) to see the new menu entry
+
+## [v1.50.0](https://github.com/hasinhayder/tyro-dashboard/releases/tag/v1.50.0) - 2026-08-23
+- Heartbeat API for online user detection: auth-protected `POST /heartbeat` writes a per-user cache key (TTL via `TYRO_DASHBOARD_HEARTBEAT_TTL`, default 600s) every 5 minutes from the dashboard JS (survives page refreshes via localStorage timestamp, CSRF header, silent failures); isOnline badges, the logged-in user filter, and the dashboard logged-in stat now use the heartbeat cache unioned with the DB-session fallback — gated by `TYRO_DASHBOARD_ENABLE_HEARTBEAT`
+- Force logout with Redis sessions: per-user logout now dispatches Tyro Login's `ForceLogout` event when `session.driver=redis` (logs the user out on their next web request; tyro-login floor bumped to `^2.14`), the logout button/icon render for database + redis drivers with driver-aware messages and audit fields, and `OnlineUsers::forget()` clears heartbeat presence immediately on successful session revocation
+
+## [v1.49.1](https://github.com/hasinhayder/tyro-dashboard/releases/tag/v1.49.1) - 2026-08-22
+- Log Viewer patch re-release (re-tag of v1.49.0 pointing at the same commit; no code changes)
+
+## [v1.49.0](https://github.com/hasinhayder/tyro-dashboard/releases/tag/v1.49.0) - 2026-08-22
+- Log Viewer admin page: browse `storage/logs/*.log` files (single + daily rotation) with file picker, per-level count cards as toggleable level filters, case-insensitive message/stack-trace search, per-page sizing, expandable stack traces with copy-to-clipboard, tail-capped parsing (default 16 MB, `TYRO_DASHBOARD_LOG_MAX_READ_BYTES`), and a confirm-guarded "Clear this file" truncate action (never deletes files) — admin-only, gated by `TYRO_DASHBOARD_ENABLE_LOG_VIEWER` with identical route and sidebar gating; consumers with a published sidebar need to re-publish `partials/admin-sidebar.blade.php` (or add the link manually) to see the new menu entry
+
+## [v1.48.0](https://github.com/hasinhayder/tyro-dashboard/releases/tag/v1.48.0) - 2026-08-22
+- Per-user logout and logged-in user filtering: "Logout" button in the admin user list to log out individual users (rendered only when the session driver is database), logged-in status indicator in the user list, "Logged In" filter to show only currently logged-in users, dashboard total logged-in users card, invitation links card link fix, and user list dropdown filters now apply automatically on change
+- System Health copy-as-image: per-card PNG copy buttons plus a page-level "Copy page as image" button, theme-aware vanilla-JS SVG composition with 2x canvas rasterization, clipboard write with download fallback and toast feedback; zero new dependencies
+
+## [v1.47.0](https://github.com/hasinhayder/tyro-dashboard/releases/tag/v1.47.0) - 2026-08-21
+- System Health admin page: read-only runtime diagnostics (PHP memory + upload/execution limits, OPcache, disk usage, database driver/version/tables/size, cache round-trip latency, queue reachability ping, storage writability, runtime context with app/PHP timezone mismatch check, tyro ecosystem package versions from composer.lock) with ordered-hybrid probe caching (live cache probe + 60s expensive-bucket cache, graceful degradation when the cache store is down), gated by `TYRO_DASHBOARD_ENABLE_HEALTH`
+
 ## [v1.46.1](https://github.com/hasinhayder/tyro-dashboard/releases/tag/v1.46.1) - 2026-06-26
 - Minor UI Tweaks
 

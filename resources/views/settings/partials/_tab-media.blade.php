@@ -17,7 +17,7 @@
                     <div class="sys-settings-grid">
                         <div class="sys-settings-surface">
                             <h4 class="sys-settings-surface-title">Upload Settings</h4>
-                            <p class="sys-settings-surface-description">Maximum file size for media uploads in kilobytes.</p>
+                            <p class="sys-settings-surface-description">Configure the upload limit and desktop gallery layout.</p>
 
                             <div class="form-group" style="margin-bottom:0;">
                                 <label for="TYRO_DASHBOARD_MEDIA_MAX_SIZE" class="form-label">Max upload size (KB) (TYRO_DASHBOARD_MEDIA_MAX_SIZE)</label>
@@ -25,6 +25,14 @@
                                        class="form-input" min="1" max="1048576"
                                        value="{{ old('TYRO_DASHBOARD_MEDIA_MAX_SIZE', $settings['TYRO_DASHBOARD_MEDIA_MAX_SIZE']) }}">
                                 <p class="form-hint">Default is 10240 (10MB). Writes <code>TYRO_DASHBOARD_MEDIA_MAX_SIZE</code> in <code>.env</code>.</p>
+                            </div>
+
+                            <div class="form-group" style="margin-bottom:0.85rem;">
+                                <label for="TYRO_DASHBOARD_MEDIA_GALLERY_COLUMNS" class="form-label">Images per row (TYRO_DASHBOARD_MEDIA_GALLERY_COLUMNS)</label>
+                                <input type="number" name="TYRO_DASHBOARD_MEDIA_GALLERY_COLUMNS" id="TYRO_DASHBOARD_MEDIA_GALLERY_COLUMNS"
+                                       class="form-input" min="1" max="12"
+                                       value="{{ old('TYRO_DASHBOARD_MEDIA_GALLERY_COLUMNS', $settings['TYRO_DASHBOARD_MEDIA_GALLERY_COLUMNS']) }}">
+                                <p class="form-hint">Default is 6. Choose how many images appear per row on desktop. Writes <code>TYRO_DASHBOARD_MEDIA_GALLERY_COLUMNS</code> in <code>.env</code>.</p>
                             </div>
                         </div>
 
