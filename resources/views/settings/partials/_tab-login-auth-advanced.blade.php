@@ -156,7 +156,7 @@
 
                             <div class="sys-settings-surface" id="twofa-details-surface">
                                 <h4 class="sys-settings-surface-title">2FA Details</h4>
-                                <p class="sys-settings-surface-description">2FA page text, cookie settings, and forced roles. Visible when 2FA is enabled.</p>
+                                <p class="sys-settings-surface-description">2FA page text, cookie settings, and forced/skip roles. Visible when 2FA is enabled.</p>
 
                                 <div class="form-group" style="margin-bottom:0.85rem;">
                                     <label for="TYRO_LOGIN_2FA_SETUP_TITLE" class="form-label">Setup page title (TYRO_LOGIN_2FA_SETUP_TITLE)</label>
@@ -193,10 +193,40 @@
                                     <label for="TYRO_LOGIN_2FA_IGNORE_COOKIE_DAYS" class="form-label">Skip cookie days (TYRO_LOGIN_2FA_IGNORE_COOKIE_DAYS)</label>
                                     <input type="number" name="TYRO_LOGIN_2FA_IGNORE_COOKIE_DAYS" id="TYRO_LOGIN_2FA_IGNORE_COOKIE_DAYS" class="form-input" min="1" max="365" value="{{ old('TYRO_LOGIN_2FA_IGNORE_COOKIE_DAYS', $settings['TYRO_LOGIN_2FA_IGNORE_COOKIE_DAYS']) }}">
                                 </div>
+                                @php
+                                    $roleOptions = $roleOptions ?? [];
+                                    $forcedRoleList = array_map('strval', (array) old('TYRO_LOGIN_2FA_FORCED_ROLES', array_filter(array_map('trim', explode(',', (string) $settings['TYRO_LOGIN_2FA_FORCED_ROLES'])))));
+                                    $skipRoleList = array_map('strval', (array) old('TYRO_LOGIN_2FA_SKIP_ROLES', array_filter(array_map('trim', explode(',', (string) $settings['TYRO_LOGIN_2FA_SKIP_ROLES'])))));
+                                @endphp
+                                <div class="form-group" style="margin-bottom:0.85rem;">
+                                    <label class="form-label">Forced roles (TYRO_LOGIN_2FA_FORCED_ROLES)</label>
+                                    <input type="hidden" name="TYRO_LOGIN_2FA_FORCED_ROLES[]" value="">
+                                    <div class="sys-settings-checkbox-grid" style="display:flex;flex-wrap:wrap;gap:0.5rem 1.25rem;margin:0.35rem 0 0.25rem;">
+                                        @forelse($roleOptions as $roleSlug => $roleLabel)
+                                        <label class="form-check" style="display:inline-flex;align-items:center;gap:0.4rem;margin:0;font-weight:normal;">
+                                            <input type="checkbox" name="TYRO_LOGIN_2FA_FORCED_ROLES[]" value="{{ $roleSlug }}" {{ in_array((string) $roleSlug, $forcedRoleList, true) ? 'checked' : '' }}>
+                                            <span>{{ $roleLabel === $roleSlug ? $roleSlug : $roleLabel.' ('.$roleSlug.')' }}</span>
+                                        </label>
+                                        @empty
+                                        <p class="form-hint" style="margin:0;">No roles found. Create roles before configuring forced roles.</p>
+                                        @endforelse
+                                    </div>
+                                    <p class="form-hint">Roles required to use 2FA. Forced roles take precedence over skip roles.</p>
+                                </div>
                                 <div class="form-group" style="margin-bottom:0;">
-                                    <label for="TYRO_LOGIN_2FA_FORCED_ROLES" class="form-label">Forced roles (TYRO_LOGIN_2FA_FORCED_ROLES)</label>
-                                    <input type="text" name="TYRO_LOGIN_2FA_FORCED_ROLES" id="TYRO_LOGIN_2FA_FORCED_ROLES" class="form-input" maxlength="255" value="{{ old('TYRO_LOGIN_2FA_FORCED_ROLES', $settings['TYRO_LOGIN_2FA_FORCED_ROLES']) }}">
-                                    <p class="form-hint">Comma-separated role slugs that must use 2FA.</p>
+                                    <label class="form-label">Skip roles (TYRO_LOGIN_2FA_SKIP_ROLES)</label>
+                                    <input type="hidden" name="TYRO_LOGIN_2FA_SKIP_ROLES[]" value="">
+                                    <div class="sys-settings-checkbox-grid" style="display:flex;flex-wrap:wrap;gap:0.5rem 1.25rem;margin:0.35rem 0 0.25rem;">
+                                        @forelse($roleOptions as $roleSlug => $roleLabel)
+                                        <label class="form-check" style="display:inline-flex;align-items:center;gap:0.4rem;margin:0;font-weight:normal;">
+                                            <input type="checkbox" name="TYRO_LOGIN_2FA_SKIP_ROLES[]" value="{{ $roleSlug }}" {{ in_array((string) $roleSlug, $skipRoleList, true) ? 'checked' : '' }}>
+                                            <span>{{ $roleLabel === $roleSlug ? $roleSlug : $roleLabel.' ('.$roleSlug.')' }}</span>
+                                        </label>
+                                        @empty
+                                        <p class="form-hint" style="margin:0;">No roles found. Create roles before configuring skip roles.</p>
+                                        @endforelse
+                                    </div>
+                                    <p class="form-hint">Roles never prompted to set up 2FA (comma-separated in <code>.env</code>). Forced roles always take precedence.</p>
                                 </div>
                             </div>
 

@@ -19,7 +19,7 @@ class VersionCommand extends Command {
      * Execute the console command.
      */
     public function handle(): int {
-        $version = '1.56.1'; // fix(settings): Authentication Plus social toggles now use the standard settings toggle card markup
+        $version = '1.57.0'; // feat(settings): 2FA forced/skip role checkbox pickers; feat(forms): auto-resolving model-form Blade component
 
         $this->info('');
         $this->info('  ╔════════════════════════════════════════╗');
@@ -70,6 +70,8 @@ class VersionCommand extends Command {
 }
 
 // Changelog
+// 1.57.0 - feat(settings): Authentic+ 2FA forced and skip roles now use checkbox pickers (same card layout as the other 2FA options). Role options come from the Tyro roles table plus any slugs already saved in .env, both lists are normalized through shared roleOptions()/normalizeRoleList() helpers, and the comma-separated TYRO_LOGIN_2FA_FORCED_ROLES and new TYRO_LOGIN_2FA_SKIP_ROLES values are persisted via the existing .env writer (unchecking everything removes the line). Visible only when TYRO_LOGIN_2FA_ENABLED is on.
+// 1.57.0 - feat(forms): new <x-tyro-dashboard-model-form> Blade component that auto-resolves fields from a model (resource config, fillable, or schema), supports types/labels/field overrides/exclusions, model prefill, HTTP method spoofing (@method for PUT/PATCH/DELETE), media/select/multiselect/radio/checkbox/textarea/markdown/richtext/boolean/password/file inputs, escaped attribute passthrough, and balanced 1..N column layouts via the columns/columnOne/columnTwo props (field guessing cached per table, optional option_limit for relationship selects)
 // 1.56.1 - fix(settings): Authentication Plus social toggles (TYRO_LOGIN_SOCIAL_LINK_EXISTING and TYRO_LOGIN_SOCIAL_AUTO_VERIFY_EMAIL) now use the standard sys-settings-toggle card markup inside the Social Provider Details list instead of raw label/checkbox rows, matching the provider toggles above
 // 1.56.0 - feat(media): media categories management (CRUD, unique slugs, user/admin scoping), bulk category creation from comma-separated input, category filtering in media gallery and picker, multi-select "Add to Category" modal with toggles and scrollable list, bulk unlinking, lightbox category tagging, and file edit modal for rename and alt text
 // 1.56.0 - feat(branding): favicon upload container in Branding settings using thumb-mode media picker, .env persistence via TYRO_DASHBOARD_FAVICON, and link tag rendering in admin/app/user layout heads

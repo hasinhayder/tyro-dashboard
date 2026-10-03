@@ -2,10 +2,12 @@
 
 namespace HasinHayder\TyroDashboard\Http\Controllers;
 
+use HasinHayder\Tyro\Models\Role;
 use HasinHayder\TyroDashboard\Support\DashboardColors;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Schema;
 
 class SystemSettingsController extends BaseController {
     public function index() {
@@ -13,6 +15,10 @@ class SystemSettingsController extends BaseController {
 
         return view('tyro-dashboard::settings.system', $this->getViewData([
             'settings' => $settings,
+            'roleOptions' => $this->roleOptions([
+                $settings['TYRO_LOGIN_2FA_FORCED_ROLES'] ?? '',
+                $settings['TYRO_LOGIN_2FA_SKIP_ROLES'] ?? '',
+            ]),
         ]));
     }
 
@@ -115,7 +121,10 @@ class SystemSettingsController extends BaseController {
             'TYRO_LOGIN_2FA_ENABLED' => 'nullable|boolean',
             'TYRO_LOGIN_2FA_ALLOW_SKIP' => 'nullable|boolean',
             'TYRO_LOGIN_2FA_IGNORE_COOKIE_DAYS' => 'nullable|integer|min:1|max:365',
-            'TYRO_LOGIN_2FA_FORCED_ROLES' => 'nullable|string|max:255',
+            'TYRO_LOGIN_2FA_FORCED_ROLES' => 'nullable|array',
+            'TYRO_LOGIN_2FA_FORCED_ROLES.*' => 'nullable|string|max:100',
+            'TYRO_LOGIN_2FA_SKIP_ROLES' => 'nullable|array',
+            'TYRO_LOGIN_2FA_SKIP_ROLES.*' => 'nullable|string|max:100',
             'TYRO_LOGIN_ENABLE_MAGIC_LINKS' => 'nullable|boolean',
             'TYRO_LOGIN_EMAIL_MAGIC_LINK_SUBJECT' => 'nullable|string|max:255',
             'TYRO_LOGIN_MAGIC_LINK_EXPIRE' => 'nullable|integer|min:1|max:60',
@@ -231,6 +240,12 @@ class SystemSettingsController extends BaseController {
         ]);
 
         $booleans = $this->booleanKeys();
+
+        foreach (['TYRO_LOGIN_2FA_FORCED_ROLES', 'TYRO_LOGIN_2FA_SKIP_ROLES'] as $roleKey) {
+            if (array_key_exists($roleKey, $validated)) {
+                $validated[$roleKey] = self::normalizeRoleList($validated[$roleKey]);
+            }
+        }
 
         if (array_key_exists('dashboard_colors', $validated)) {
             $submitted = $validated['dashboard_colors'] ?? [];
@@ -490,6 +505,7 @@ class SystemSettingsController extends BaseController {
             'TYRO_LOGIN_2FA_ALLOW_SKIP' => config('tyro-login.two_factor.allow_skip'),
             'TYRO_LOGIN_2FA_IGNORE_COOKIE_DAYS' => config('tyro-login.two_factor.ignore_cookie_days'),
             'TYRO_LOGIN_2FA_FORCED_ROLES' => config('tyro-login.two_factor.forced_roles'),
+            'TYRO_LOGIN_2FA_SKIP_ROLES' => config('tyro-login.two_factor.skip_roles'),
             'TYRO_LOGIN_2FA_SETUP_TITLE' => config('tyro-login.two_factor.setup_title'),
             'TYRO_LOGIN_2FA_SETUP_SUBTITLE' => config('tyro-login.two_factor.setup_subtitle'),
             'TYRO_LOGIN_2FA_CHALLENGE_TITLE' => config('tyro-login.two_factor.challenge_title'),
@@ -579,6 +595,49 @@ class SystemSettingsController extends BaseController {
             'TYRO_LOGIN_PASSKEYS_EMPTY_TEXT' => config('tyro-login.passkeys.empty_text'),
             'TYRO_LOGIN_PASSKEYS_CDN' => config('tyro-login.passkeys.cdn_url'),
         ];
+    }
+
+    /**
+     * Build the role options (slug => label) for the 2FA forced/skip pickers.
+     *
+     * Slugs already configured are kept even when they are missing from the
+     * roles table, so a saved .env value is never silently dropped from the UI.
+     */
+    protected function roleOptions(array $configuredLists): array {
+        $options = [];
+
+        try {
+            if (class_exists(Role::class) && Schema::hasTable((new Role)->getTable())) {
+                $options = Role::query()
+                    ->orderBy('name')
+                    ->pluck('name', 'slug')
+                    ->all();
+            }
+        } catch (\Throwable $e) {
+            $options = [];
+        }
+
+        foreach ($configuredLists as $configured) {
+            foreach (array_filter(array_map('trim', explode(',', (string) $configured))) as $slug) {
+                if (! array_key_exists($slug, $options)) {
+                    $options[$slug] = $slug;
+                }
+            }
+        }
+
+        return $options;
+    }
+
+    /**
+     * Normalize a submitted role list (checkbox array or comma string) to a
+     * trimmed, de-duplicated, comma-separated string.
+     */
+    protected static function normalizeRoleList(mixed $value): string {
+        $values = is_string($value) ? explode(',', $value) : (array) $value;
+        $roles = array_map(static fn ($role) => trim((string) $role), $values);
+        $roles = array_values(array_unique(array_filter($roles, static fn ($role) => $role !== '')));
+
+        return implode(',', $roles);
     }
 
     protected function removeEnvLine(string $content, string $key): string
@@ -692,6 +751,7 @@ class SystemSettingsController extends BaseController {
             'TYRO_LOGIN_2FA_ALLOW_SKIP' => false,
             'TYRO_LOGIN_2FA_IGNORE_COOKIE_DAYS' => 30,
             'TYRO_LOGIN_2FA_FORCED_ROLES' => '',
+            'TYRO_LOGIN_2FA_SKIP_ROLES' => '',
             'TYRO_LOGIN_ENABLE_MAGIC_LINKS' => false,
             'TYRO_LOGIN_EMAIL_MAGIC_LINK_SUBJECT' => 'Your Magic Login Link',
             'TYRO_LOGIN_MAGIC_LINK_EXPIRE' => 5,
