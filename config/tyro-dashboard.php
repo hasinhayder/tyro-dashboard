@@ -224,41 +224,53 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Dynamic Resources (CRUD)
+    | Dynamic Resources (CRUD), Groups & Navigation Links
     |--------------------------------------------------------------------------
     |
-    | Define your resources here to automatically generate CRUD interfaces.
+    | Define your resources here to automatically generate CRUD interfaces,
+    | custom links, and grouped sidebar accordions.
     |
     */
-    // 'resources' => [
-    //     // Example:
-    //     // 'posts' => [
-    //     //     'model' => 'App\Models\Post',
-    //     //     'title' => 'Posts',
-    //     //     'icon' => '<svg>...</svg>', // Optional SVG icon
-    //     //     'fields' => [
-    //     //         'title' => ['type' => 'text', 'label' => 'Title', 'rules' => 'required'],
-    //     //         'content' => ['type' => 'textarea', 'label' => 'Content'],
-    //     //     ],
-    //     // ],
-    // ],
     'resources' => [
+        // 🚀 Example 1: Standard Dynamic CRUD Resource (Ungrouped - Default Tyro)
         // 'posts' => [
         //     'model' => 'App\Models\Post',
         //     'title' => 'Posts',
         //     'fields' => [
         //         'title' => ['type' => 'text', 'label' => 'Title', 'rules' => 'required'],
         //         'content' => ['type' => 'textarea', 'label' => 'Content'],
-        //         'category_id' => [
-        //             'type' => 'select',
-        //             'label' => 'Category',
-        //             'relationship' => 'category', // Name of the relationship method in Post model
-        //             'option_label' => 'name',
-        //         ],
         //         'is_published' => ['type' => 'boolean', 'label' => 'Published'],
         //     ],
         // ],
+
+        // 🚀 Example 2: Grouped Dynamic CRUD Resource
+        // 'categories' => [
+        //     'group' => 'Product & Inventory', // Group Name for Accordion
+        //     'model' => 'App\Models\Category',
+        //     'title' => 'Categories',
+        //     'icon'  => '<svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"/></svg>',
+        //     'fields' => [
+        //         'name' => ['type' => 'text', 'label' => 'Category Name', 'rules' => 'required'],
+        //     ],
+        // ],
+
+        // 🚀 Example 3: Custom URL Link inside a Group
+        // 'pos_terminal' => [
+        //     'group'  => 'POS & Counters',
+        //     'title'  => 'Web POS Terminal',
+        //     'url'    => '/pos',
+        //     'target' => '_blank',
+        //     'icon'   => '<svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>',
+        // ],
+
+        // 🚀 Example 4: Custom Named Route Link
+        // 'sales_invoices' => [
+        //     'group' => 'POS & Counters',
+        //     'title' => 'Sales Invoices',
+        //     'route' => 'sales.index',
+        // ],
     ],
+
 
     /*
     |--------------------------------------------------------------------------
