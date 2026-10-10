@@ -19,7 +19,7 @@ class VersionCommand extends Command {
      * Execute the console command.
      */
     public function handle(): int {
-        $version = '1.57.0'; // feat(settings): 2FA forced/skip role checkbox pickers; feat(forms): auto-resolving model-form Blade component
+        $version = '1.58.0'; // feat(editor): x-tyro-dashboard-editor markdown component with media picker; fix(emailer): minimal preset picker and stacked modal escape handling; fix(smtp): test email in its own card
 
         $this->info('');
         $this->info('  ╔════════════════════════════════════════╗');
@@ -70,6 +70,9 @@ class VersionCommand extends Command {
 }
 
 // Changelog
+// 1.58.0 - feat(editor): new <x-tyro-dashboard-editor> Blade component — an EasyMDE-powered Markdown editor for any form field with a toolbar image button that opens the Tyro media picker and inserts ![alt](url) at the caret (falls back to stock EasyMDE when the media picker is unavailable); configurable assets via tyro-dashboard.editor.css_url/js_url (TYRO_DASHBOARD_EDITOR_CSS/TYRO_DASHBOARD_EDITOR_JS, pinned easymde@2.20.0 CDN by default), a window.TyroDashboardEditor.init(el) JS API for dynamically added editors, resource create/edit views refactored onto it for markdown fields, and the Emailer composer switched from Quill to it (Markdown converted to HTML server-side for send and preview so emails render unchanged)
+// 1.58.0 - fix(emailer): preset picker redesigned as minimal selectable cards (dropped pill badges, corner circles, and dual buttons), neutral ring token replaces the black selected border, and stacked modals now dismiss the topmost one first on Escape
+// 1.58.0 - fix(smtp): test email moved into its own card with the primary send button at the bottom
 // 1.57.0 - feat(settings): Authentic+ 2FA forced and skip roles now use checkbox pickers (same card layout as the other 2FA options). Role options come from the Tyro roles table plus any slugs already saved in .env, both lists are normalized through shared roleOptions()/normalizeRoleList() helpers, and the comma-separated TYRO_LOGIN_2FA_FORCED_ROLES and new TYRO_LOGIN_2FA_SKIP_ROLES values are persisted via the existing .env writer (unchecking everything removes the line). Visible only when TYRO_LOGIN_2FA_ENABLED is on.
 // 1.57.0 - feat(forms): new <x-tyro-dashboard-model-form> Blade component that auto-resolves fields from a model (resource config, fillable, or schema), supports types/labels/field overrides/exclusions, model prefill, HTTP method spoofing (@method for PUT/PATCH/DELETE), media/select/multiselect/radio/checkbox/textarea/markdown/richtext/boolean/password/file inputs, escaped attribute passthrough, and balanced 1..N column layouts via the columns/columnOne/columnTwo props (field guessing cached per table, optional option_limit for relationship selects)
 // 1.56.1 - fix(settings): Authentication Plus social toggles (TYRO_LOGIN_SOCIAL_LINK_EXISTING and TYRO_LOGIN_SOCIAL_AUTO_VERIFY_EMAIL) now use the standard sys-settings-toggle card markup inside the Social Provider Details list instead of raw label/checkbox rows, matching the provider toggles above
