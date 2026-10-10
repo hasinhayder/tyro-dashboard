@@ -453,10 +453,15 @@
     // Close modal on escape key
     document.addEventListener('keydown', function(event) {
         if (event.key === 'Escape') {
-            const activeModal = document.querySelector('.modal-overlay.active');
-            if (activeModal) {
-                activeModal.classList.remove('active');
-                document.body.style.overflow = '';
+            const activeModals = document.querySelectorAll('.modal-overlay.active');
+            if (activeModals.length) {
+                // Close the topmost modal first (last opened = last in DOM order),
+                // so stacked modals dismiss one at a time.
+                const topModal = activeModals[activeModals.length - 1];
+                topModal.classList.remove('active');
+                if (!document.querySelector('.modal-overlay.active')) {
+                    document.body.style.overflow = '';
+                }
             }
         }
     });

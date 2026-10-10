@@ -72,6 +72,7 @@
             document.querySelectorAll('.emailer-preset-item-card').forEach(function(card) {
                 const isCurrent = card.dataset.designKey === designKey;
                 card.classList.toggle('is-selected', isCurrent);
+                card.setAttribute('aria-pressed', isCurrent ? 'true' : 'false');
             });
 
             if (persist) {

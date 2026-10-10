@@ -91,70 +91,100 @@
             grid-template-columns: 1fr;
         }
     }
-    /* Preset Sidebar Card */
-    .emailer-preset-active-card {
-        padding: 1.25rem;
-        border-radius: 10px;
-        border: 1px solid var(--border);
-        background: var(--card);
-        margin-bottom: 1.25rem;
-    }
-    .emailer-preset-tag {
-        display: inline-flex;
-        align-items: center;
-        gap: 0.35rem;
-        padding: 0.25rem 0.625rem;
-        border-radius: 9999px;
-        font-size: 0.75rem;
-        font-weight: 600;
-        background: var(--muted);
-        color: var(--foreground);
-        border: 1px solid var(--border);
-    }
+    /* Preset Modal Cards */
     .emailer-preset-item-card {
-        border: 1px solid var(--border);
-        border-radius: 10px;
-        padding: 1.1rem;
-        background: var(--card);
-        cursor: pointer;
-        transition: all 0.2s ease;
-        position: relative;
         display: flex;
         flex-direction: column;
+        gap: 0.4rem;
+        height: 100%;
+        padding: 1rem 1.125rem;
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        background: var(--card);
+        cursor: pointer;
+        text-align: left;
+        transition: border-color 0.15s ease, background-color 0.15s ease;
     }
     .emailer-preset-item-card:hover {
-        border-color: color-mix(in srgb, var(--foreground) 35%, var(--border));
-        transform: translateY(-1px);
+        background: color-mix(in srgb, var(--muted) 45%, var(--card));
+    }
+    .emailer-preset-item-card:focus-visible {
+        outline: none;
+        border-color: var(--ring);
+        box-shadow: 0 0 0 3px color-mix(in srgb, var(--ring) 25%, transparent);
     }
     .emailer-preset-item-card.is-selected {
-        border-color: color-mix(in srgb, var(--foreground) 40%, var(--border));
-        background: color-mix(in srgb, var(--muted) 40%, var(--card));
-        box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.04);
+        border-color: var(--ring);
+        background: color-mix(in srgb, var(--muted) 55%, var(--card));
     }
-    .emailer-preset-badge-icon {
-        position: absolute;
-        top: 0.75rem;
-        right: 0.75rem;
-        width: 22px;
-        height: 22px;
-        border-radius: 50%;
+    .emailer-preset-head {
         display: flex;
         align-items: center;
-        justify-content: center;
-        background: var(--muted);
-        color: var(--muted-foreground);
-        border: 1px solid var(--border);
+        justify-content: space-between;
+        gap: 0.75rem;
     }
-    .emailer-preset-item-card.is-selected .emailer-preset-badge-icon {
-        background: color-mix(in srgb, var(--foreground) 65%, transparent);
-        color: #ffffff;
-        border-color: transparent;
+    .emailer-preset-name {
+        font-size: 0.875rem;
+        font-weight: 600;
+        line-height: 1.3;
+        color: var(--foreground);
+    }
+    .emailer-preset-check {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 16px;
+        height: 16px;
+        flex-shrink: 0;
+        color: var(--foreground);
+        opacity: 0;
+        transform: scale(0.8);
+        transition: opacity 0.15s ease, transform 0.15s ease;
+    }
+    .emailer-preset-check svg {
+        width: 100%;
+        height: 100%;
+    }
+    .emailer-preset-item-card.is-selected .emailer-preset-check {
+        opacity: 1;
+        transform: scale(1);
+    }
+    .emailer-preset-desc {
+        margin: 0;
+        font-size: 0.8125rem;
+        line-height: 1.5;
+        color: var(--muted-foreground);
+    }
+    .emailer-preset-foot {
+        margin-top: auto;
+        padding-top: 0.4rem;
+    }
+    .emailer-preset-preview {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.3rem;
+        padding: 0;
+        border: 0;
+        background: none;
+        color: var(--muted-foreground);
+        font: inherit;
+        font-size: 0.75rem;
+        font-weight: 500;
+        cursor: pointer;
+        transition: color 0.15s ease;
+    }
+    .emailer-preset-preview:hover {
+        color: var(--foreground);
+    }
+    .emailer-preset-preview svg {
+        width: 13px;
+        height: 13px;
     }
     /* Preset Modal Grid */
     .emailer-modal-presets-grid {
         display: grid;
         grid-template-columns: repeat(2, 1fr);
-        gap: 1rem;
+        gap: 0.875rem;
     }
     @media (max-width: 640px) {
         .emailer-modal-presets-grid {

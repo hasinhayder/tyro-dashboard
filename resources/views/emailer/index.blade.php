@@ -136,26 +136,27 @@
         <div class="modal-body">
             <div class="emailer-modal-presets-grid">
                 @foreach($presets as $key => $preset)
-                    <div class="emailer-preset-item-card {{ $key === 'modern' ? 'is-selected' : '' }}" data-design-key="{{ $key }}" onclick="selectPresetFromModal('{{ $key }}')">
-                        <div class="emailer-preset-badge-icon">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width:12px;height:12px;"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                    <div class="emailer-preset-item-card {{ $key === 'modern' ? 'is-selected' : '' }}"
+                         data-design-key="{{ $key }}"
+                         role="button"
+                         tabindex="0"
+                         aria-pressed="{{ $key === 'modern' ? 'true' : 'false' }}"
+                         onclick="selectPresetFromModal('{{ $key }}')"
+                         onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();selectPresetFromModal('{{ $key }}');}">
+                        <div class="emailer-preset-head">
+                            <span class="emailer-preset-name">{{ $preset['name'] }}</span>
+                            <span class="emailer-preset-check" aria-hidden="true">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                            </span>
                         </div>
-                        <div style="display:flex;align-items:center;gap:0.5rem;margin-bottom:0.5rem;">
-                            <span style="width:10px;height:10px;border-radius:50%;background:{{ $preset['preview_accent'] }};display:inline-block;"></span>
-                            <span class="emailer-preset-tag">{{ $preset['badge'] }}</span>
-                        </div>
-                        <h4 style="font-size:0.9375rem;font-weight:700;color:var(--foreground);margin:0 0 0.35rem 0;">{{ $preset['name'] }}</h4>
-                        <p style="font-size:0.8125rem;color:var(--muted-foreground);line-height:1.45;margin:0 0 0.75rem 0;">{{ $preset['description'] }}</p>
-                        <div style="display:flex;gap:0.5rem;margin-top:auto;">
-                            <button type="button" class="btn btn-sm btn-secondary" style="flex:1;justify-content:center;font-size:0.75rem;" onclick="event.stopPropagation(); previewPresetFromModal('{{ $key }}')">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:13px;height:13px;">
+                        <p class="emailer-preset-desc">{{ $preset['description'] }}</p>
+                        <div class="emailer-preset-foot">
+                            <button type="button" class="emailer-preset-preview" onclick="event.stopPropagation(); previewPresetFromModal('{{ $key }}')">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
                                 </svg>
                                 Preview
-                            </button>
-                            <button type="button" class="btn btn-sm btn-primary" style="flex:1;justify-content:center;font-size:0.75rem;" onclick="event.stopPropagation(); selectPresetFromModal('{{ $key }}')">
-                                Select This Design
                             </button>
                         </div>
                     </div>
