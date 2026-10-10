@@ -128,21 +128,6 @@
                 <input type="text" id="MAIL_FROM_NAME" class="form-input" placeholder="Example" value="{{ $current['MAIL_FROM_NAME'] }}">
             </div>
         </div>
-
-        <div style="margin-top:1.25rem;padding-top:1rem;border-top:1px solid var(--border);">
-            <h4 style="font-size:0.875rem;font-weight:600;margin-bottom:0.75rem;">Test Email</h4>
-            <div class="smtp-test-row">
-                <div class="form-group">
-                    <label class="form-label" for="smtpTestTo">Send test to</label>
-                    <input type="email" id="smtpTestTo" class="form-input" placeholder="you@example.com" value="{{ auth()->user()->email ?? '' }}" data-default="{{ auth()->user()->email ?? '' }}">
-                </div>
-                <button type="button" class="btn btn-secondary" id="smtpTestBtn" onclick="sendTestEmail()">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>
-                    Send Test
-                </button>
-            </div>
-            <p class="form-hint">Saves are written to <code>.env</code> and config is cleared automatically. Run a test after saving to verify delivery.</p>
-        </div>
     </div>
     <div class="card-footer" style="display:flex;justify-content:space-between;gap:0.75rem;flex-wrap:wrap;">
         <button type="button" class="btn btn-destructive btn-sm" onclick="clearSmtpCache()">Clear Config Cache</button>
@@ -153,6 +138,25 @@
             </button>
             <button type="button" class="btn btn-primary btn-sm" onclick="saveSmtp()">Save SMTP</button>
         </div>
+    </div>
+</div>
+
+<div class="card" style="margin-bottom:1rem;">
+    <div class="card-header">
+        <h3 class="card-title">Test Email</h3>
+    </div>
+    <div class="card-body">
+        <div class="form-group">
+            <label class="form-label" for="smtpTestTo">Send test to</label>
+            <input type="email" id="smtpTestTo" class="form-input" placeholder="you@example.com" value="{{ auth()->user()->email ?? '' }}" data-default="{{ auth()->user()->email ?? '' }}">
+            <p class="form-hint">Saves are written to <code>.env</code> and config is cleared automatically. Run a test after saving to verify delivery.</p>
+        </div>
+    </div>
+    <div class="card-footer" style="display:flex;justify-content:flex-end;">
+        <button type="button" class="btn btn-primary" id="smtpTestBtn" onclick="sendTestEmail()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>
+            Send Test
+        </button>
     </div>
 </div>
 

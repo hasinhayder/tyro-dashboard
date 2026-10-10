@@ -85,13 +85,6 @@
         gap: 1rem;
     }
     @media (max-width: 640px) { .smtp-modal-grid { grid-template-columns: 1fr; } }
-    .smtp-test-row {
-        display: flex;
-        align-items: end;
-        gap: 0.75rem;
-        flex-wrap: wrap;
-    }
-    .smtp-test-row .form-group { flex: 1; min-width: 200px; margin-bottom: 0; }
     #smtpUsePresetModal .modal { max-width: 760px; width: 96%; }
     #smtpUsePresetModal .modal-body { max-height: 60vh; overflow-y: auto; }
     .smtp-btn-save-preset {
