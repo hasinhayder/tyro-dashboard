@@ -49,7 +49,6 @@
         <div class="emailer-card-body">
             <!-- Hidden design input -->
             <input type="hidden" id="emailDesignInput" value="modern">
-            <input type="hidden" id="emailBody" value="">
 
             <!-- Recipient To -->
             <div class="emailer-field-group">
@@ -84,14 +83,20 @@
                 <input type="text" id="emailSubject" class="emailer-field-input" placeholder="Enter your email subject line...">
             </div>
 
-            <!-- Rich Text Body -->
+            <!-- Message Body (Markdown) -->
             <div class="emailer-field-group">
-                <label class="emailer-field-label">
+                <label class="emailer-field-label" for="emailerEditor">
                     Message Body <span class="req">*</span>
                 </label>
-                <div class="emailer-quill-wrapper">
-                    <div id="emailerEditor"></div>
-                </div>
+                <x-tyro-dashboard-editor
+                    id="emailerEditor"
+                    name="body"
+                    :value="old('body', '')"
+                    :label="null"
+                    height="280px"
+                    placeholder="Type your email message here... Supports Markdown formatting, bullet points, links, images, and bold text."
+                    :toolbar="['bold', 'italic', 'strikethrough', 'heading', '|', 'quote', 'unordered-list', 'ordered-list', '|', 'link', 'image', '|', 'preview']"
+                />
             </div>
 
             <!-- Bottom Actions -->

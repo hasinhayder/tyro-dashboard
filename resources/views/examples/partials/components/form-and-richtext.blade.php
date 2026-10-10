@@ -131,4 +131,22 @@
             </div>
         </div>
     </div>
+
+    {{-- Markdown editor (EasyMDE) with media-picker image button --}}
+    @php($exampleMarkdown = "## Hello Markdown\n\nClick the **image** button to insert media from the library.")
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title" style="font-size: 1.0625rem;">Markdown Editor</h3>
+            <span class="badge badge-secondary">EasyMDE</span>
+        </div>
+        <div class="card-body">
+            <x-tyro-dashboard-editor
+                name="example_markdown"
+                label="Article body"
+                help="Markdown supported. Use the image button to insert a library image."
+                :value="$exampleMarkdown"
+                height="220px"
+            />
+        </div>
+    </div>
 </div>

@@ -146,7 +146,7 @@
     </div>
 </div>
 
-@once
+@once('tyro-media-assets')
     @push('styles')
         @include('tyro-dashboard::partials.media-styles')
     @endpush

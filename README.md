@@ -151,6 +151,7 @@ Tyro Dashboard ships a library of shadcn-styled Blade components you can drop in
 | `<x-tyro-dashboard::toggle>` | Toggle switch with label and color variants |
 | `<x-tyro-dashboard::media>` | Renders media with WebP/thumbnail fallback, sizing, rounded/circle, lazy loading |
 | `<x-tyro-dashboard-media-picker>` | Media library picker for any form field (see Media Library) |
+| `<x-tyro-dashboard-editor>` | Markdown editor (EasyMDE) with a toolbar image button that inserts library images via the media picker |
 
 Example:
 
@@ -233,6 +234,8 @@ Key options in `config/tyro-dashboard.php`:
 | `TYRO_DASHBOARD_PEXELS_KEY` | `null` | Pexels API key for media library |
 | `TYRO_DASHBOARD_UNSPLASH_ACCESS_KEY` | `null` | Unsplash API key for media library |
 | `TYRO_DASHBOARD_PIXABAY_KEY` | `null` | Pixabay API key for media library |
+| `TYRO_DASHBOARD_EDITOR_CSS` | CDN `easymde@2.20.0` | Stylesheet URL for the `<x-tyro-dashboard-editor>` component |
+| `TYRO_DASHBOARD_EDITOR_JS` | CDN `easymde@2.20.0` | Script URL for the `<x-tyro-dashboard-editor>` component |
 | `TYRO_SHOW_GLOBAL_ERRORS` | `true` | Show global form errors |
 | `TYRO_SHOW_FIELD_ERRORS` | `true` | Show per-field form errors |
 

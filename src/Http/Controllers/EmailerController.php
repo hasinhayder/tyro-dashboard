@@ -5,6 +5,7 @@ namespace HasinHayder\TyroDashboard\Http\Controllers;
 use HasinHayder\TyroDashboard\Jobs\SendQueuedEmailJob;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class EmailerController extends BaseController {
     /**
@@ -92,11 +93,14 @@ class EmailerController extends BaseController {
         $bccEmails = $parseEmails($validated['bcc'] ?? null);
         $design = $validated['design'] ?? 'modern';
 
+        // The composer sends Markdown; email templates render raw HTML.
+        $body = Str::markdown($validated['body']);
+
         // Dispatch background job to the queue
         SendQueuedEmailJob::dispatch(
             $toEmails,
             $validated['subject'],
-            $validated['body'],
+            $body,
             $design,
             $ccEmails,
             $bccEmails
@@ -121,7 +125,12 @@ class EmailerController extends BaseController {
         }
 
         $subject = $request->input('subject', 'Preview: Your Subject Line Here');
-        $content = $request->input('body', '<p>Hello!</p><p>This is a live preview of your email template. You can write rich text with <strong>bold</strong>, <em>italic</em>, bullet lists, links, and more.</p><p>Best regards,<br>The Team</p>');
+        $rawContent = $request->input('body');
+
+        // The composer sends Markdown; email templates render raw HTML.
+        $content = filled($rawContent)
+            ? Str::markdown($rawContent)
+            : '<p>Hello!</p><p>This is a live preview of your email template. You can write Markdown with <strong>bold</strong>, <em>italic</em>, bullet lists, links, and more.</p><p>Best regards,<br>The Team</p>';
 
         return view("tyro-dashboard::emailer.templates.{$design}", [
             'subject' => $subject,

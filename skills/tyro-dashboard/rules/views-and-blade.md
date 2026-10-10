@@ -44,6 +44,8 @@ All partials live in `partials/` and have a single responsibility:
 - `impersonation-banner` — "You are logged in as..." banner
 - `media-styles` — Media library specific styles
 - `media-script` — Media library and MediaPicker JavaScript
+- `editor-styles` — EasyMDE editor theming scoped to `[data-tyro-editor-field]`
+- `editor-script` — EasyMDE bootstrap, auto-init, and media-picker image insertion
 
 ## View Namespacing
 
@@ -57,7 +59,7 @@ All partials live in `partials/` and have a single responsibility:
 resources/views/
 ├── layouts/          — app, admin, user layouts
 ├── partials/         — reusable partials (12 files)
-├── components/       — anonymous Blade components (media-picker)
+├── components/       — anonymous Blade components (media-picker) and editor component view
 ├── dashboard/        — admin and user dashboard home pages
 ├── users/            — user CRUD views (index, create, edit, show)
 ├── roles/            — role CRUD views
@@ -103,6 +105,7 @@ Changing any of these names breaks every consumer-published layout.
 - Registered via `Blade::component()` in the service provider
 - `<x-tyro-dashboard-media-picker>` is the primary class-based component
 - A legacy alias `<x-tyro-dashbaord-media-picker>` is also registered for backward compatibility — see `rules/public-api-surface.md`
+- `<x-tyro-dashboard-editor>` is the EasyMDE Markdown editor component (`src/View/Components/Editor.php`); its image toolbar button inserts media-picker selections as Markdown
 - Component class lives in `src/View/Components/`
 
 ## Publishable Tags

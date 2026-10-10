@@ -315,4 +315,18 @@ return [
             'pixabay' => env('TYRO_DASHBOARD_PIXABAY_KEY'),
         ],
     ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Markdown Editor
+    |--------------------------------------------------------------------------
+    |
+    | Configure the assets used by the `<x-tyro-dashboard-editor>` component
+    | (EasyMDE). Override these URLs to point at pinned or self-hosted copies.
+    |
+    */
+    'editor' => [
+        'css_url' => env('TYRO_DASHBOARD_EDITOR_CSS', 'https://cdn.jsdelivr.net/npm/easymde@2.20.0/dist/easymde.min.css'),
+        'js_url' => env('TYRO_DASHBOARD_EDITOR_JS', 'https://cdn.jsdelivr.net/npm/easymde@2.20.0/dist/easymde.min.js'),
+    ],
 ];

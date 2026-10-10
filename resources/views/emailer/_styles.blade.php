@@ -1,4 +1,3 @@
-<link href="https://cdn.jsdelivr.net/npm/quill@1.3.7/dist/quill.snow.css" rel="stylesheet">
 <style>
     .emailer-container {
         width: 100%;
@@ -91,35 +90,6 @@
         .emailer-carbon-fields {
             grid-template-columns: 1fr;
         }
-    }
-    /* Quill Container Styling */
-    .emailer-quill-wrapper {
-        border: 1px solid var(--border);
-        border-radius: 8px;
-        overflow: hidden;
-        background: var(--background);
-    }
-    .emailer-quill-wrapper .ql-toolbar.ql-snow {
-        border: none;
-        border-bottom: 1px solid var(--border);
-        background: var(--muted);
-        padding: 0.5rem 0.75rem;
-    }
-    .emailer-quill-wrapper .ql-container.ql-snow {
-        border: none;
-        min-height: 240px;
-        font-size: 0.9375rem;
-        font-family: inherit;
-        color: var(--foreground);
-    }
-    .emailer-quill-wrapper .ql-editor {
-        min-height: 240px;
-        padding: 1rem;
-        line-height: 1.65;
-    }
-    .emailer-quill-wrapper .ql-editor.ql-blank::before {
-        color: var(--muted-foreground);
-        font-style: normal;
     }
     /* Preset Sidebar Card */
     .emailer-preset-active-card {

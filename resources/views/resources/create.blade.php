@@ -12,12 +12,10 @@
 
 @push('styles')
 <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/easymde/dist/easymde.min.css">
 @endpush
 
 @push('scripts')
 <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/easymde/dist/easymde.min.js"></script>
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         @foreach($config['fields'] as $key => $field)
@@ -37,38 +35,6 @@
 
                     quill.on('text-change', function () {
                         textarea.value = quill.root.innerHTML;
-                    });
-                }
-            })();
-        @endif
-        @endforeach
-
-        // Markdown editors
-        @foreach($config['fields'] as $key => $field)
-        @if (($field['type'] ?? '') === 'markdown')
-            (function () {
-                var key = '{{ $key }}';
-                var textarea = document.getElementById(key);
-
-                if (textarea) {
-                    new EasyMDE({
-                        element: textarea,
-                        spellChecker: false,
-                        status: false,
-                        toolbar: [
-                            "bold",
-                            "italic",
-                            "heading",
-                            "|",
-                            "quote",
-                            "unordered-list",
-                            "ordered-list",
-                            "|",
-                            "link",
-                            "image",
-                            "|",
-                            "preview",
-                        ]
                     });
                 }
             })();
@@ -111,7 +77,7 @@
                 </div>
 
                 @elseif($field['type'] === 'markdown')
-                <textarea name="{{ $key }}" id="{{ $key }}" class="@error($key) is-invalid @enderror" placeholder="{{ $field['placeholder'] ?? '' }}">{{ old($key, $field['default'] ?? '') }}</textarea>
+                <x-tyro-dashboard-editor name="{{ $key }}" id="{{ $key }}" :value="old($key, $field['default'] ?? '')" placeholder="{{ $field['placeholder'] ?? '' }}" :label="null" :show-error="false" />
 
                 @elseif($field['type'] === 'select')
                 @if($field['multiple'] ?? false)

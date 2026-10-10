@@ -2,6 +2,13 @@
 
 All notable changes to Tyro Dashboard are documented in this file.
 
+## [Unreleased]
+- New `<x-tyro-dashboard-editor>` Blade component: an EasyMDE-powered Markdown editor for any form field, with a toolbar image button that opens the Tyro media picker and inserts `![alt](url)` at the caret (falls back to stock EasyMDE behavior when the media picker is unavailable)
+- Configurable EasyMDE assets via `tyro-dashboard.editor.css_url` / `tyro-dashboard.editor.js_url` (`TYRO_DASHBOARD_EDITOR_CSS` / `TYRO_DASHBOARD_EDITOR_JS`), defaulting to pinned `easymde@2.20.0` CDN URLs
+- Consumer JS API `window.TyroDashboardEditor.init(el)` to initialize dynamically added editors
+- Refactored resource `create`/`edit` views to use the new component for `markdown` fields (removes their inline EasyMDE includes/init)
+- Emailer composer now uses the `<x-tyro-dashboard-editor>` markdown editor instead of Quill; the message body is converted Markdown → HTML server-side (send and preview) so emails render unchanged
+
 ## [v1.56.0](https://github.com/hasinhayder/tyro-dashboard/releases/tag/v1.56.0) - 2026-09-26
 - Media picker category dropdown: the "Choose media" modal now shows a category dropdown on the same line as the search box (search 75% / category 25%) that instantly filters the images; when no categories exist the dropdown is hidden and the search box takes the full width, backed by a new `media.categories.list` JSON endpoint
 - Media Categories management: added dedicated Categories page (`/dashboard/media/categories`) with full CRUD, user and admin permission scoping, and automatic unique slug generation

@@ -114,6 +114,11 @@ The media system handles user files — the most irreplaceable data in most appl
 - Selection sets the associated input value and shows preview
 - Delete button clears selection
 
+### Markdown Editor Integration
+- `<x-tyro-dashboard-editor>` (EasyMDE) reuses the picker: its toolbar image button opens `window.TyroDashboardMediaPicker.openForInput()` with a detached probe input and inserts `![alt](url)` at the caret
+- Requests full (absolute) URLs by default (`fullUrl` defaults to `true`) and the `select` output mode (WebP/Original/Thumb dropdown)
+- Falls back to stock EasyMDE image behavior when the media picker is not present on the page
+
 ## Media Model
 
 ### Properties

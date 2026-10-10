@@ -1,37 +1,44 @@
-<script src="https://cdn.jsdelivr.net/npm/quill@1.3.7/dist/quill.min.js"></script>
 <script>
     (function() {
         const STORAGE_KEY = 'tyro_email_preset_design';
         const presets = @json($presets);
+        const EDITOR_ID = 'emailerEditor';
 
-        let quillInstance = null;
+        // The markdown editor component keeps its value synced back to the
+        // underlying textarea, so we read the markdown from there.
+        function getEditorTextarea() {
+            return document.getElementById(EDITOR_ID);
+        }
 
-        // Initialize Quill Editor
-        function initEditor() {
-            const editorEl = document.getElementById('emailerEditor');
-            if (!editorEl || typeof window.Quill === 'undefined') return;
+        function getEditorMarkdown() {
+            const textarea = getEditorTextarea();
+            return textarea ? textarea.value : '';
+        }
 
-            quillInstance = new window.Quill(editorEl, {
-                theme: 'snow',
-                placeholder: 'Type your email message here... Supports rich text formatting, bullet points, links, and bold text.',
-                modules: {
-                    toolbar: [
-                        [{ 'header': [1, 2, 3, false] }],
-                        ['bold', 'italic', 'underline', 'strike'],
-                        [{ 'list': 'ordered' }, { 'list': 'bullet' }],
-                        ['link', 'blockquote'],
-                        ['clean']
-                    ]
+        function getEditorInstance() {
+            const textarea = getEditorTextarea();
+            const instances = window.TyroDashboardEditor?.instances || [];
+            if (!textarea || !instances.length) return null;
+
+            return instances.find(function(editor) {
+                try {
+                    return editor.codemirror
+                        && typeof editor.codemirror.getTextArea === 'function'
+                        && editor.codemirror.getTextArea() === textarea;
+                } catch (e) {
+                    return false;
                 }
-            });
+            }) || null;
+        }
 
-            // Sync editor HTML to hidden form input on text change
-            quillInstance.on('text-change', function() {
-                const hiddenInput = document.getElementById('emailBody');
-                if (hiddenInput) {
-                    hiddenInput.value = quillInstance.root.innerHTML;
-                }
-            });
+        function resetEditor() {
+            const textarea = getEditorTextarea();
+            if (textarea) textarea.value = '';
+
+            const editor = getEditorInstance();
+            if (editor && typeof editor.value === 'function') {
+                editor.value('');
+            }
         }
 
         // Initialize and restore saved preset design
@@ -111,7 +118,7 @@
             const modal = document.getElementById('emailerPreviewModal');
             const iframe = document.getElementById('emailerPreviewIframe');
             const subject = document.getElementById('emailSubject')?.value || 'Subject Preview';
-            const body = quillInstance ? quillInstance.root.innerHTML : '';
+            const body = getEditorMarkdown();
             const design = document.getElementById('emailDesignInput')?.value || 'modern';
 
             if (!modal || !iframe) return;
@@ -211,8 +218,8 @@
             const bcc = document.getElementById('emailBcc')?.value?.trim();
             const design = document.getElementById('emailDesignInput')?.value || 'modern';
 
-            const rawBody = quillInstance ? quillInstance.root.innerHTML : '';
-            const textContent = quillInstance ? quillInstance.getText().trim() : '';
+            const rawBody = getEditorMarkdown();
+            const textContent = rawBody.trim();
 
             if (!to) {
                 if (typeof showToast === 'function') showToast('Please enter at least one recipient email address.', 'warning');
@@ -228,7 +235,7 @@
 
             if (!textContent) {
                 if (typeof showToast === 'function') showToast('Please compose an email message body.', 'warning');
-                quillInstance?.focus();
+                getEditorInstance()?.codemirror?.focus();
                 return;
             }
 
@@ -279,7 +286,7 @@
 
                 // Reset composer inputs
                 document.getElementById('emailSubject').value = '';
-                if (quillInstance) quillInstance.setContents([]);
+                resetEditor();
                 const ccContainer = document.getElementById('emailerCarbonFields');
                 if (ccContainer && ccContainer.style.display !== 'none') {
                     document.getElementById('emailCc').value = '';
@@ -303,7 +310,6 @@
 
         // Bootstrap on DOM ready
         document.addEventListener('DOMContentLoaded', function() {
-            initEditor();
             initPresetState();
         });
     })();

@@ -107,6 +107,37 @@ class EmailerFeatureTest extends TestCase {
         $response->assertSee('Newsletter Body Content');
     }
 
+    public function test_emailer_preview_converts_markdown_body_to_html(): void {
+        $user = $this->createAdminUser();
+
+        $response = $this->actingAs($user)->post(route(DashboardRoute::name('emailer.preview')), [
+            'design' => 'modern',
+            'subject' => 'Markdown Preview',
+            'body' => "# Heading\n\nThis is **bold** and a [link](https://example.com).",
+        ]);
+
+        $response->assertOk();
+        $response->assertSee('<h1>Heading</h1>', false);
+        $response->assertSee('<strong>bold</strong>', false);
+        $response->assertSee('href="https://example.com"', false);
+    }
+
+    public function test_emailer_send_converts_markdown_body_to_html(): void {
+        Queue::fake();
+
+        $user = $this->createAdminUser();
+
+        $this->actingAs($user)->postJson(route(DashboardRoute::name('emailer.send')), [
+            'to' => 'test@example.com',
+            'subject' => 'Markdown Subject',
+            'body' => 'Hello **world**',
+        ])->assertOk();
+
+        Queue::assertPushed(SendQueuedEmailJob::class, function ($job) {
+            return str_contains($job->content, '<strong>world</strong>');
+        });
+    }
+
     public function test_send_queued_email_job_executes_mail_send(): void {
         Mail::shouldReceive('send')
             ->once()
