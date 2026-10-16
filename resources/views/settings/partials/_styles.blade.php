@@ -211,6 +211,11 @@
     background: color-mix(in srgb, var(--destructive), transparent 90%);
 }
 
+/* Rectangle sidebar logo preview: show the full image instead of cropping it */
+.sb-logo-rectangle .tyro-media-picker-preview img {
+    object-fit: contain;
+}
+
 /* ── Settings Search ─────────────────────────────────────────── */
 .settings-search-bar {
     position: relative;

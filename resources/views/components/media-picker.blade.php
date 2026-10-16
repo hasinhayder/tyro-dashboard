@@ -17,6 +17,7 @@
     'preview_height' => null,
     'previewHeight' => null,
     'circle' => false,
+    'radius' => null,
     'full_url' => false,
     'fullUrl' => null,
     'columns' => null,
@@ -37,6 +38,7 @@
     $previewPosition = in_array((string) $rawPreviewPosition, ['top', 'bottom', 'left', 'right'], true) ? (string) $rawPreviewPosition : 'top';
     $previewStyles = [];
     $previewHasFixedHeight = filled($rawPreviewHeight);
+    $previewRadius = filled($radius) ? trim((string) $radius) : null;
 
     if ($rawPreviewWidth) {
         $previewStyles[] = 'width: '.$rawPreviewWidth;
@@ -76,7 +78,7 @@
         @if($showPreview)
             <div
                 class="tyro-media-picker-preview {{ filled($fieldValue) ? 'has-image' : '' }} {{ $previewHasFixedHeight ? 'has-fixed-height' : '' }} {{ $circle ? 'circle' : '' }}"
-                style="{{ implode('; ', $previewStyles) }};{{ $circle ? ' border-radius: 50%; overflow: hidden;' : '' }}"
+                style="{{ implode('; ', $previewStyles) }};{{ $circle ? ' border-radius: 50%; overflow: hidden;' : ($previewRadius ? ' border-radius: '.$previewRadius.'; overflow: hidden;' : '') }}"
                 data-tyro-media-picker-preview
                 data-tyro-media-picker-trigger
                 data-input-id="{{ $fieldId }}"

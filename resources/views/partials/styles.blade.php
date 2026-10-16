@@ -25,6 +25,16 @@
         @if($accent = config('tyro-dashboard.branding.sidebar_accent_foreground'))
             --sidebar-accent-foreground: {{ $accent }} !important;
         @endif
+        @php
+            $sbLogoShape = config('tyro-dashboard.branding.sidebar_logo_shape', 'circle') === 'rectangle' ? 'rectangle' : 'circle';
+            $sbLogoRadius = trim((string) config('tyro-dashboard.branding.sidebar_logo_border_radius', '0'));
+            if ($sbLogoRadius === '') {
+                $sbLogoRadius = '0';
+            }
+        @endphp
+        --sidebar-logo-radius: {{ $sbLogoShape === 'rectangle' ? $sbLogoRadius : '50%' }};
+        --sidebar-logo-width: {{ $sbLogoShape === 'rectangle' ? 'auto' : '36px' }};
+        --sidebar-logo-fit: {{ $sbLogoShape === 'rectangle' ? 'contain' : 'cover' }};
     }
 
     *,
@@ -240,12 +250,26 @@
     }
 
     .sidebar-logo-img {
-        width: 36px;
+        width: var(--sidebar-logo-width, 36px);
         height: 36px;
-        object-fit: cover;
-        border-radius: 50%;
+        max-width: 100%;
+        object-fit: var(--sidebar-logo-fit, cover);
+        border-radius: var(--sidebar-logo-radius, 50%);
         flex-shrink: 0;
     }
+
+    @if($sbLogoShape === 'rectangle')
+    /* Rectangle logos keep their aspect ratio; let the image yield space
+       first so a wide wordmark never pushes the app name out of the sidebar. */
+    .sidebar-logo-img {
+        flex-shrink: 1;
+        min-width: 0;
+    }
+
+    .sidebar-logo-text {
+        flex-shrink: 0;
+    }
+    @endif
 
     .sidebar-logo-text {
         font-size: 1rem;

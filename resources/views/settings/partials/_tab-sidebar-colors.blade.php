@@ -9,6 +9,16 @@
             $sbAccordionCompact = filter_var(old('TYRO_DASHBOARD_SIDEBAR_ACCORDION_COMPACT', $settings['TYRO_DASHBOARD_SIDEBAR_ACCORDION_COMPACT'] ?? false), FILTER_VALIDATE_BOOLEAN);
             $sbOpenSections = old('TYRO_DASHBOARD_SIDEBAR_ACCORDION_OPEN_SECTIONS', $settings['TYRO_DASHBOARD_SIDEBAR_ACCORDION_OPEN_SECTIONS'] ?? 1);
             $sbLogo = old('TYRO_DASHBOARD_SIDEBAR_LOGO', $settings['TYRO_DASHBOARD_SIDEBAR_LOGO'] ?? null);
+            $sbLogoShape = old('TYRO_DASHBOARD_SIDEBAR_LOGO_SHAPE', $settings['TYRO_DASHBOARD_SIDEBAR_LOGO_SHAPE'] ?? 'circle');
+            $sbLogoShape = $sbLogoShape === 'rectangle' ? 'rectangle' : 'circle';
+            $sbLogoRadius = old('TYRO_DASHBOARD_SIDEBAR_LOGO_BORDER_RADIUS', $settings['TYRO_DASHBOARD_SIDEBAR_LOGO_BORDER_RADIUS'] ?? '0');
+            $sbLogoRadius = is_string($sbLogoRadius) && trim($sbLogoRadius) !== '' ? trim($sbLogoRadius) : '0';
+            $sbLogoUrl = null;
+            if ($sbLogo) {
+                $sbLogoUrl = str_starts_with($sbLogo, 'http://') || str_starts_with($sbLogo, 'https://')
+                    ? $sbLogo
+                    : \Illuminate\Support\Facades\Storage::url($sbLogo);
+            }
         @endphp
         <div class="vtabs-panel" id="vtab-sidebar-colors">
             <div class="card">
@@ -62,19 +72,40 @@
                         <p class="sys-settings-surface-description">Custom logo image shown in the sidebar header. When not set, the default icon and app name are shown.</p>
 
                         <div class="form-group" style="margin-bottom:0;">
-                            <x-media-picker
-                                name="TYRO_DASHBOARD_SIDEBAR_LOGO"
-                                :value="$sbLogo"
-                                preview="true"
-                                preview-position="left"
-                                preview-width="70px"
-                                preview-height="70px"
-                                circle="true"
-                                button="primary"
-                                button-text="Select Logo"
-                                width="100%"
-                                size="medium"
-                            />
+                            <div id="sb-logo-picker-wrap" class="{{ $sbLogoShape === 'rectangle' ? 'sb-logo-rectangle' : '' }}">
+                                <x-media-picker
+                                    name="TYRO_DASHBOARD_SIDEBAR_LOGO"
+                                    :value="$sbLogo"
+                                    preview="true"
+                                    preview-position="left"
+                                    preview-width="70px"
+                                    preview-height="70px"
+                                    :circle="$sbLogoShape === 'circle'"
+                                    :radius="$sbLogoShape === 'rectangle' ? $sbLogoRadius : null"
+                                    button="primary"
+                                    button-text="Select Logo"
+                                    width="100%"
+                                    size="medium"
+                                />
+                            </div>
+                        </div>
+
+                        <div class="sys-settings-metrics" style="margin-top:1rem;">
+                            <div class="form-group sys-settings-metric" style="margin-bottom:0;">
+                                <label for="TYRO_DASHBOARD_SIDEBAR_LOGO_SHAPE" class="form-label">Logo shape (TYRO_DASHBOARD_SIDEBAR_LOGO_SHAPE)</label>
+                                <select name="TYRO_DASHBOARD_SIDEBAR_LOGO_SHAPE" id="TYRO_DASHBOARD_SIDEBAR_LOGO_SHAPE" class="form-select" onchange="updateSbLogoShape()">
+                                    <option value="circle" {{ $sbLogoShape === 'circle' ? 'selected' : '' }}>Circle</option>
+                                    <option value="rectangle" {{ $sbLogoShape === 'rectangle' ? 'selected' : '' }}>Rectangle</option>
+                                </select>
+                                <p class="form-hint">Circle crops the logo to a 36&times;36 round icon. Rectangle keeps the logo's natural aspect ratio.</p>
+                            </div>
+                            <div class="form-group sys-settings-metric" id="sb-logo-radius-group" style="margin-bottom:0;{{ $sbLogoShape === 'rectangle' ? '' : 'display:none;' }}">
+                                <label for="TYRO_DASHBOARD_SIDEBAR_LOGO_BORDER_RADIUS" class="form-label">Corner radius (TYRO_DASHBOARD_SIDEBAR_LOGO_BORDER_RADIUS)</label>
+                                <input type="text" name="TYRO_DASHBOARD_SIDEBAR_LOGO_BORDER_RADIUS" id="TYRO_DASHBOARD_SIDEBAR_LOGO_BORDER_RADIUS"
+                                       class="form-input" maxlength="20"
+                                       value="{{ $sbLogoRadius }}" oninput="updateSbLogoShape()">
+                                <p class="form-hint">CSS value e.g. <code>8px</code>, <code>50%</code>. Use <code>0</code> for sharp corners.</p>
+                            </div>
                         </div>
                     </div>
 
@@ -223,16 +254,18 @@
                             <div style="flex-shrink:0; position:sticky; top:1rem; align-self:flex-start;">
                                 <h4 class="branding-surface-title" style="margin:0 0 0.75rem;">Sidebar Preview</h4>
                                 <div id="sidebarPreview" style="border-radius:0.75rem;overflow:hidden;border:1px solid var(--border);width:25rem;">
-                                    <div style="padding:1rem 1.25rem;display:flex;align-items:center;gap:0.75rem;background:{{ $sbBg }};border-bottom:1px solid {{ $sbHeaderBorder }};">
-                                        <div style="width:24px;height:24px;border-radius:6px;background:{{ $sbText }};opacity:0.85;display:flex;align-items:center;justify-content:center;">
+                                    <div data-sb-preview-header style="padding:1rem 1.25rem;display:flex;align-items:center;gap:0.75rem;background:{{ $sbBg }};border-bottom:1px solid {{ $sbHeaderBorder }};">
+                                        <img data-sb-preview-logo alt="" @if($sbLogoUrl) src="{{ $sbLogoUrl }}" @endif
+                                             style="width:24px;height:24px;object-fit:{{ $sbLogoShape === 'rectangle' ? 'contain' : 'cover' }};border-radius:{{ $sbLogoShape === 'rectangle' ? $sbLogoRadius : '50%' }};{{ $sbLogoUrl ? '' : 'display:none;' }}">
+                                        <div data-sb-preview-icon style="width:24px;height:24px;border-radius:6px;background:{{ $sbText }};opacity:0.85;display:{{ $sbLogoUrl ? 'none' : 'flex' }};align-items:center;justify-content:center;">
                                             <svg viewBox="0 0 24 24" fill="none" stroke="{{ $sbBg }}" stroke-width="2" style="width:14px;height:14px;"><rect x="3" y="3" width="18" height="18" rx="2"/></svg>
                                         </div>
-                                        <span style="font-size:0.94rem;font-weight:600;color:{{ $sbText }};">Dashboard</span>
+                                        <span data-sb-preview-title style="font-size:0.94rem;font-weight:600;color:{{ $sbText }};">Dashboard</span>
                                     </div>
-                                    <div style="padding:0.5rem 0.75rem 0.75rem;display:flex;flex-direction:column;gap:4px;background:{{ $sbBg }};">
-                                        <div style="padding:0.4rem 0.6rem;border-radius:6px;font-size:0.82rem;font-weight:500;color:{{ $sbText }};opacity:0.7;">Users</div>
-                                        <div style="padding:0.4rem 0.6rem;border-radius:6px;font-size:0.82rem;font-weight:500;background:{{ $sbPrimary }};color:{{ $sbText }};">Settings</div>
-                                        <div style="padding:0.4rem 0.6rem;border-radius:6px;font-size:0.82rem;font-weight:500;background:{{ $sbAccent }};color:{{ $sbAccentFg }};">System</div>
+                                    <div data-sb-preview-body style="padding:0.5rem 0.75rem 0.75rem;display:flex;flex-direction:column;gap:4px;background:{{ $sbBg }};">
+                                        <div data-sb-preview-item style="padding:0.4rem 0.6rem;border-radius:6px;font-size:0.82rem;font-weight:500;color:{{ $sbText }};opacity:0.7;">Users</div>
+                                        <div data-sb-preview-item style="padding:0.4rem 0.6rem;border-radius:6px;font-size:0.82rem;font-weight:500;background:{{ $sbPrimary }};color:{{ $sbText }};">Settings</div>
+                                        <div data-sb-preview-item style="padding:0.4rem 0.6rem;border-radius:6px;font-size:0.82rem;font-weight:500;background:{{ $sbAccent }};color:{{ $sbAccentFg }};">System</div>
                                     </div>
                                 </div>
                             </div>

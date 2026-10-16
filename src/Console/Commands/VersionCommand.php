@@ -19,7 +19,7 @@ class VersionCommand extends Command {
      * Execute the console command.
      */
     public function handle(): int {
-        $version = '1.58.0'; // feat(editor): x-tyro-dashboard-editor markdown component with media picker; fix(emailer): minimal preset picker and stacked modal escape handling; fix(smtp): test email in its own card
+        $version = '1.59.0'; // feat(settings): sidebar logo shape (TYRO_DASHBOARD_SIDEBAR_LOGO_SHAPE, circle|rectangle) and rectangle corner radius (TYRO_DASHBOARD_SIDEBAR_LOGO_BORDER_RADIUS, CSS value) in the Sidebar tab — rectangle mode renders the logo at its natural aspect ratio instead of cropping to a circle, the radius field is conditionally visible, and the media picker plus sidebar preview reflect the shape live
 
         $this->info('');
         $this->info('  ╔════════════════════════════════════════╗');
@@ -70,6 +70,7 @@ class VersionCommand extends Command {
 }
 
 // Changelog
+// 1.59.0 - feat(settings): sidebar logo shape (TYRO_DASHBOARD_SIDEBAR_LOGO_SHAPE, circle|rectangle) and rectangle corner radius (TYRO_DASHBOARD_SIDEBAR_LOGO_BORDER_RADIUS, CSS value) in the Sidebar tab — rectangle mode renders the logo at its natural aspect ratio instead of cropping to a circle, the radius field is conditionally visible, and the media picker plus sidebar preview reflect the shape live
 // 1.58.0 - feat(editor): new <x-tyro-dashboard-editor> Blade component — an EasyMDE-powered Markdown editor for any form field with a toolbar image button that opens the Tyro media picker and inserts ![alt](url) at the caret (falls back to stock EasyMDE when the media picker is unavailable); configurable assets via tyro-dashboard.editor.css_url/js_url (TYRO_DASHBOARD_EDITOR_CSS/TYRO_DASHBOARD_EDITOR_JS, pinned easymde@2.20.0 CDN by default), a window.TyroDashboardEditor.init(el) JS API for dynamically added editors, resource create/edit views refactored onto it for markdown fields, and the Emailer composer switched from Quill to it (Markdown converted to HTML server-side for send and preview so emails render unchanged)
 // 1.58.0 - fix(emailer): preset picker redesigned as minimal selectable cards (dropped pill badges, corner circles, and dual buttons), neutral ring token replaces the black selected border, and stacked modals now dismiss the topmost one first on Escape
 // 1.58.0 - fix(smtp): test email moved into its own card with the primary send button at the bottom

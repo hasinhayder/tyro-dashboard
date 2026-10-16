@@ -74,6 +74,8 @@ return [
         'sidebar_accordion_compact' => filter_var(env('TYRO_DASHBOARD_SIDEBAR_ACCORDION_COMPACT', false), FILTER_VALIDATE_BOOLEAN),
         'sidebar_accordion_open_sections' => (int) env('TYRO_DASHBOARD_SIDEBAR_ACCORDION_OPEN_SECTIONS', 1),
         'sidebar_logo' => env('TYRO_DASHBOARD_SIDEBAR_LOGO', null),
+        'sidebar_logo_shape' => env('TYRO_DASHBOARD_SIDEBAR_LOGO_SHAPE', 'circle'), // circle | rectangle
+        'sidebar_logo_border_radius' => env('TYRO_DASHBOARD_SIDEBAR_LOGO_BORDER_RADIUS', '0'), // CSS corner radius for rectangle logos
     ],
 
     /*

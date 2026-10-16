@@ -15,24 +15,25 @@ function updateSbPreview() {
     var preview = document.getElementById('sidebarPreview');
     if (!preview) return;
 
-    var header = preview.querySelector('div:first-child');
+    var header = preview.querySelector('[data-sb-preview-header]') || preview.querySelector('div:first-child');
     if (header) {
         header.style.background = bg;
         header.style.borderBottomColor = headerBorder;
-        var iconBox = header.querySelector('div:first-child');
+        var iconBox = header.querySelector('[data-sb-preview-icon]') || header.querySelector('div:first-child');
         if (iconBox) {
             iconBox.style.background = text;
             var svg = iconBox.querySelector('svg');
             if (svg) svg.setAttribute('stroke', bg);
         }
-        var title = header.querySelector('span');
+        var title = header.querySelector('[data-sb-preview-title]') || header.querySelector('span');
         if (title) title.style.color = text;
     }
 
-    var body = preview.querySelector('div:last-child');
+    var body = preview.querySelector('[data-sb-preview-body]') || preview.querySelector('div:last-child');
     if (body) {
         body.style.background = bg;
-        var items = body.querySelectorAll('div');
+        var items = body.querySelectorAll('[data-sb-preview-item]');
+        if (!items.length) items = body.querySelectorAll('div');
         if (items.length >= 3) {
             items[0].style.color = text;
             items[1].style.background = primary;
@@ -42,6 +43,75 @@ function updateSbPreview() {
         }
     }
 }
+
+// ── Sidebar Logo Shape / Radius ───────────────────────────────
+function updateSbLogoShape() {
+    var shapeSelect = document.getElementById('TYRO_DASHBOARD_SIDEBAR_LOGO_SHAPE');
+    if (!shapeSelect) return;
+
+    var isRectangle = shapeSelect.value === 'rectangle';
+
+    var radiusGroup = document.getElementById('sb-logo-radius-group');
+    if (radiusGroup) radiusGroup.style.display = isRectangle ? '' : 'none';
+
+    var radiusInput = document.getElementById('TYRO_DASHBOARD_SIDEBAR_LOGO_BORDER_RADIUS');
+    var radius = radiusInput && radiusInput.value.trim() !== '' ? radiusInput.value.trim() : '0';
+
+    var logoInput = document.querySelector('[name="TYRO_DASHBOARD_SIDEBAR_LOGO"]');
+    var field = logoInput ? logoInput.closest('[data-tyro-media-picker-field]') : null;
+    var wrapper = document.getElementById('sb-logo-picker-wrap');
+    if (wrapper) wrapper.classList.toggle('sb-logo-rectangle', isRectangle);
+
+    var pickerImg = field ? field.querySelector('[data-tyro-media-picker-preview-img]') : null;
+    var preview = field ? field.querySelector('[data-tyro-media-picker-preview]') : null;
+    if (preview) {
+        preview.style.borderRadius = isRectangle ? radius : '50%';
+        preview.style.overflow = 'hidden';
+    }
+
+    var header = document.querySelector('#sidebarPreview [data-sb-preview-header]');
+    if (!header) return;
+
+    var logoImg = header.querySelector('[data-sb-preview-logo]');
+    var iconBox = header.querySelector('[data-sb-preview-icon]');
+
+    var src = '';
+    if (pickerImg && pickerImg.style.display !== 'none' && pickerImg.getAttribute('src')) {
+        src = pickerImg.getAttribute('src');
+    } else if (logoInput) {
+        src = logoInput.value || '';
+    }
+
+    if (logoImg) {
+        if (src) {
+            logoImg.setAttribute('src', src);
+            logoImg.style.display = '';
+            logoImg.style.objectFit = isRectangle ? 'contain' : 'cover';
+            logoImg.style.borderRadius = isRectangle ? radius : '50%';
+            if (iconBox) iconBox.style.display = 'none';
+        } else {
+            logoImg.style.display = 'none';
+            logoImg.removeAttribute('src');
+            if (iconBox) iconBox.style.display = 'flex';
+        }
+    }
+}
+
+(function () {
+    var shapeSelect = document.getElementById('TYRO_DASHBOARD_SIDEBAR_LOGO_SHAPE');
+    if (shapeSelect) shapeSelect.addEventListener('change', updateSbLogoShape);
+
+    var radiusInput = document.getElementById('TYRO_DASHBOARD_SIDEBAR_LOGO_BORDER_RADIUS');
+    if (radiusInput) radiusInput.addEventListener('input', updateSbLogoShape);
+
+    var logoInput = document.querySelector('[name="TYRO_DASHBOARD_SIDEBAR_LOGO"]');
+    if (logoInput) {
+        logoInput.addEventListener('input', updateSbLogoShape);
+        logoInput.addEventListener('change', updateSbLogoShape);
+    }
+
+    updateSbLogoShape();
+})();
 
 function updateAbPreview() {
     var bg = document.getElementById('ab_bg_picker').value;

@@ -213,6 +213,8 @@ Key options in `config/tyro-dashboard.php`:
 | `TYRO_DASHBOARD_SIDEBAR_ACCORDION_COMPACT` | `false` | Compact sidebar accordion sections |
 | `TYRO_DASHBOARD_SIDEBAR_ACCORDION_OPEN_SECTIONS` | `1` | Number of accordion sections open by default |
 | `TYRO_DASHBOARD_SIDEBAR_LOGO` | `null` | Sidebar logo URL (falls back to `TYRO_DASHBOARD_LOGO` behavior) |
+| `TYRO_DASHBOARD_SIDEBAR_LOGO_SHAPE` | `circle` | Sidebar logo shape: `circle` or `rectangle` |
+| `TYRO_DASHBOARD_SIDEBAR_LOGO_BORDER_RADIUS` | `0` | Corner radius for rectangle sidebar logos (CSS value) |
 | `TYRO_DASHBOARD_UPLOAD_DISK` | `public` | Storage disk for resource uploads |
 | `TYRO_DASHBOARD_UPLOAD_DIRECTORY` | `uploads` | Storage directory for resource uploads |
 | `TYRO_DASHBOARD_AUTO_DELETE_UPLOADS` | `true` | Delete files when a resource is deleted |
