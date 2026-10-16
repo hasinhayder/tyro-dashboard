@@ -65,12 +65,12 @@ return [
         'favicon' => env('TYRO_DASHBOARD_FAVICON', null),
 
         // Sidebar colors (supports any CSS color value: hex, rgb, hsl, etc.)
-        'sidebar_bg' => env('TYRO_DASHBOARD_SIDEBAR_BG', null), // Custom background color for sidebar
-        'sidebar_text' => env('TYRO_DASHBOARD_SIDEBAR_TEXT', null), // Custom text color for sidebar
-        'sidebar_primary' => env('TYRO_DASHBOARD_SIDEBAR_PRIMARY', null), // Custom text color for sidebar
-        'sidebar_accent' => env('TYRO_DASHBOARD_SIDEBAR_ACCENT', null), // Custom text color for sidebar
-        'sidebar_accent_foreground' => env('TYRO_DASHBOARD_SIDEBAR_ACCENT_FOREGROUND', null), // Custom text color for sidebar
-        'sidebar_header_border' => env('TYRO_DASHBOARD_SIDEBAR_HEADER_BORDER', null), // Custom text color for sidebar
+        'sidebar_bg' => env('TYRO_DASHBOARD_SIDEBAR_BG', '#0e0e0e'), // Background color for sidebar
+        'sidebar_text' => env('TYRO_DASHBOARD_SIDEBAR_TEXT', '#f8fafc'), // Text color for sidebar
+        'sidebar_primary' => env('TYRO_DASHBOARD_SIDEBAR_PRIMARY', '#333333'), // Highlight color for sidebar
+        'sidebar_accent' => env('TYRO_DASHBOARD_SIDEBAR_ACCENT', '#f5f5f5'), // Hover color for sidebar
+        'sidebar_accent_foreground' => env('TYRO_DASHBOARD_SIDEBAR_ACCENT_FOREGROUND', '#171717'), // Hover text color for sidebar
+        'sidebar_header_border' => env('TYRO_DASHBOARD_SIDEBAR_HEADER_BORDER', '#333c56'), // Separator color for sidebar
         'sidebar_accordion_compact' => filter_var(env('TYRO_DASHBOARD_SIDEBAR_ACCORDION_COMPACT', false), FILTER_VALIDATE_BOOLEAN),
         'sidebar_accordion_open_sections' => (int) env('TYRO_DASHBOARD_SIDEBAR_ACCORDION_OPEN_SECTIONS', 1),
         'sidebar_logo' => env('TYRO_DASHBOARD_SIDEBAR_LOGO', null),

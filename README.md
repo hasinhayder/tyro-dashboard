@@ -204,12 +204,12 @@ Key options in `config/tyro-dashboard.php`:
 | `TYRO_DASHBOARD_LOGO` | `null` | Logo URL |
 | `TYRO_DASHBOARD_LOGO_HEIGHT` | `32px` | Logo display height |
 | `TYRO_DASHBOARD_FAVICON` | `null` | Favicon URL |
-| `TYRO_DASHBOARD_SIDEBAR_BG` | `null` | Sidebar background color |
-| `TYRO_DASHBOARD_SIDEBAR_TEXT` | `null` | Sidebar text color |
-| `TYRO_DASHBOARD_SIDEBAR_PRIMARY` | `null` | Sidebar primary color |
-| `TYRO_DASHBOARD_SIDEBAR_ACCENT` | `null` | Sidebar accent color |
-| `TYRO_DASHBOARD_SIDEBAR_ACCENT_FOREGROUND` | `null` | Sidebar accent text color |
-| `TYRO_DASHBOARD_SIDEBAR_HEADER_BORDER` | `null` | Sidebar header border color |
+| `TYRO_DASHBOARD_SIDEBAR_BG` | `#0e0e0e` | Sidebar background color |
+| `TYRO_DASHBOARD_SIDEBAR_TEXT` | `#f8fafc` | Sidebar text color |
+| `TYRO_DASHBOARD_SIDEBAR_PRIMARY` | `#333333` | Sidebar primary color |
+| `TYRO_DASHBOARD_SIDEBAR_ACCENT` | `#f5f5f5` | Sidebar accent color |
+| `TYRO_DASHBOARD_SIDEBAR_ACCENT_FOREGROUND` | `#171717` | Sidebar accent text color |
+| `TYRO_DASHBOARD_SIDEBAR_HEADER_BORDER` | `#333c56` | Sidebar header border color |
 | `TYRO_DASHBOARD_SIDEBAR_ACCORDION_COMPACT` | `false` | Compact sidebar accordion sections |
 | `TYRO_DASHBOARD_SIDEBAR_ACCORDION_OPEN_SECTIONS` | `1` | Number of accordion sections open by default |
 | `TYRO_DASHBOARD_SIDEBAR_LOGO` | `null` | Sidebar logo URL (falls back to `TYRO_DASHBOARD_LOGO` behavior) |

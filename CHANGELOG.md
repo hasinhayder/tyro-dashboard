@@ -11,6 +11,7 @@ All notable changes to Tyro Dashboard are documented in this file.
 - Sidebar logo shape setting: choose `circle` (default, unchanged 36×36 crop) or `rectangle` via `TYRO_DASHBOARD_SIDEBAR_LOGO_SHAPE` in the Sidebar settings tab
 - Rectangle sidebar logos render at their natural aspect ratio with a configurable CSS corner radius (`TYRO_DASHBOARD_SIDEBAR_LOGO_BORDER_RADIUS`, shown only when Rectangle is selected)
 - The sidebar logo media picker and the Sidebar Preview panel reflect the selected shape and radius live
+- Fixed sidebar colors: the sidebar now renders with the default dark palette shown in the Sidebar settings tab (`#0e0e0e` background and matching text/accent/border colors) immediately after install, instead of staying on the light theme default until settings are saved
 
 ## [v1.56.0](https://github.com/hasinhayder/tyro-dashboard/releases/tag/v1.56.0) - 2026-09-26
 - Media picker category dropdown: the "Choose media" modal now shows a category dropdown on the same line as the search box (search 75% / category 25%) that instantly filters the images; when no categories exist the dropdown is hidden and the search box takes the full width, backed by a new `media.categories.list` JSON endpoint

@@ -3,28 +3,24 @@
 
 <style>
     :root {
-        @if($sidebar_bg = config('tyro-dashboard.branding.sidebar_bg'))
-            --sidebar: {{ $sidebar_bg }} !important;
-        @endif
-        @if($sidebar_text = config('tyro-dashboard.branding.sidebar_text'))
-            --sidebar-foreground: {{ $sidebar_text }} !important;
-        @endif
+        @php
+            $sbColorBg = config('tyro-dashboard.branding.sidebar_bg') ?: '#0e0e0e';
+            $sbColorText = config('tyro-dashboard.branding.sidebar_text') ?: '#f8fafc';
+            $sbColorPrimary = config('tyro-dashboard.branding.sidebar_primary') ?: '#333333';
+            $sbColorAccent = config('tyro-dashboard.branding.sidebar_accent') ?: '#f5f5f5';
+            $sbColorAccentFg = config('tyro-dashboard.branding.sidebar_accent_foreground') ?: '#171717';
+            $sbColorHeaderBorder = config('tyro-dashboard.branding.sidebar_header_border') ?: '#333c56';
+        @endphp
+        --sidebar: {{ $sbColorBg }} !important;
+        --sidebar-foreground: {{ $sbColorText }} !important;
         /* --sidebar-primary */
-        @if($primary = config('tyro-dashboard.branding.sidebar_primary'))
-            --sidebar-primary: {{ $primary }} !important;
-        @endif
+        --sidebar-primary: {{ $sbColorPrimary }} !important;
         /* --sidebar-header-border */
-        @if($headerBorder = config('tyro-dashboard.branding.sidebar_header_border'))
-            --sidebar-header-border: {{ $headerBorder }} !important;
-        @endif
+        --sidebar-header-border: {{ $sbColorHeaderBorder }} !important;
         /* --sidebar-accent */
-        @if($accent = config('tyro-dashboard.branding.sidebar_accent'))
-            --sidebar-accent: {{ $accent }} !important;
-        @endif
+        --sidebar-accent: {{ $sbColorAccent }} !important;
         /* --sidebar-accent-foreground */
-        @if($accent = config('tyro-dashboard.branding.sidebar_accent_foreground'))
-            --sidebar-accent-foreground: {{ $accent }} !important;
-        @endif
+        --sidebar-accent-foreground: {{ $sbColorAccentFg }} !important;
         @php
             $sbLogoShape = config('tyro-dashboard.branding.sidebar_logo_shape', 'circle') === 'rectangle' ? 'rectangle' : 'circle';
             $sbLogoRadius = trim((string) config('tyro-dashboard.branding.sidebar_logo_border_radius', '0'));
