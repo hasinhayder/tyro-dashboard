@@ -4,7 +4,13 @@
             <div class="card">
                 <div class="card-header" style="display:flex;align-items:center;justify-content:space-between;gap:1rem;">
                     <h3 class="card-title">Passkeys</h3>
-                    <button type="submit" form="systemSettingsForm" class="btn btn-primary btn-sm section-save-button">Save</button>
+                    <div style="display:flex;align-items:center;gap:0.5rem;">
+                        <button type="button" class="btn btn-secondary btn-sm" onclick="openModal('passkeySetupInfoModal')">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px;"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+                            Info
+                        </button>
+                        <button type="submit" form="systemSettingsForm" class="btn btn-primary btn-sm section-save-button">Save</button>
+                    </div>
                 </div>
                 <div class="card-body">
                     <div class="sys-settings-section-intro">
@@ -151,3 +157,43 @@
                 </div>
             </div>
         </div><!-- /vtab-passkeys -->
+
+        {{-- Passkeys manual setup help modal --}}
+        <div class="modal-overlay" id="passkeySetupInfoModal">
+            <div class="modal passkey-info-modal">
+                <div class="modal-header">
+                    <h3 class="modal-title">Passkey Login Setup</h3>
+                    <button type="button" class="modal-close" onclick="closeModal('passkeySetupInfoModal')" aria-label="Close">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M18 6L6 18"/><path d="M6 6l12 12"/>
+                        </svg>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="passkey-info-step">
+                        <p class="passkey-info-step-title">1. Publish &amp; run the passkey migration</p>
+                        <p class="passkey-info-step-text">Run the setup command. It publishes the passkeys migration and runs it.</p>
+                        <pre class="passkey-info-code"><code>php artisan tyro-login:setup-passkeys</code></pre>
+                    </div>
+
+                    <div class="passkey-info-step">
+                        <p class="passkey-info-step-title">2. Update your User model</p>
+                        <p class="passkey-info-step-text">
+                            <strong>One manual step remaining: update your User model.</strong>
+                            See the &ldquo;Passkeys (Passwordless WebAuthn) &gt; Manual Setup&rdquo; section of the
+                            README for the exact trait + contract to add, then update your model:
+                        </p>
+                        <pre class="passkey-info-code"><code>use Laravel\Passkeys\Contracts\PasskeyUser;
+use Laravel\Passkeys\PasskeyAuthenticatable;
+
+class User extends Authenticatable implements PasskeyUser
+{
+    use PasskeyAuthenticatable;
+}</code></pre>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal('passkeySetupInfoModal')">Close</button>
+                </div>
+            </div>
+        </div>

@@ -351,4 +351,34 @@
 @media (max-width: 900px) {
     .settings-search-shortcut { display: none; }
 }
+
+/* ── Passkeys setup help modal ──────────────────────────────── */
+.passkey-info-modal { max-width: 640px; }
+.passkey-info-step + .passkey-info-step { margin-top: 1.1rem; }
+.passkey-info-step-title {
+    margin: 0 0 0.3rem;
+    color: var(--foreground);
+    font-size: 0.875rem;
+    font-weight: 700;
+}
+.passkey-info-step-text {
+    margin: 0 0 0.6rem;
+    color: var(--muted-foreground);
+    font-size: 0.85rem;
+    line-height: 1.6;
+}
+.passkey-info-step-text strong { color: var(--foreground); }
+.passkey-info-code {
+    margin: 0;
+    padding: 0.85rem 1rem;
+    border: 1px solid var(--border);
+    border-radius: 0.75rem;
+    background: var(--muted);
+    color: var(--foreground);
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-size: 0.8rem;
+    line-height: 1.6;
+    overflow-x: auto;
+    white-space: pre;
+}
 </style>
