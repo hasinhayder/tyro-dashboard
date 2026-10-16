@@ -120,7 +120,7 @@ return [
         'settings_management' => true,
         'profile_management' => true,
         'invitation_system' => env('TYRO_DASHBOARD_ENABLE_INVITATION', true),
-        'audit_logs' => env('TYRO_DASHBOARD_ENABLE_AUDIT_LOGS', true),
+        'audit_logs' => env('TYRO_DASHBOARD_ENABLE_AUDIT_LOGS', false),
         'system_settings' => env('TYRO_DASHBOARD_ENABLE_SYSTEM_SETTINGS', true),
         'smtp_settings' => env('TYRO_DASHBOARD_ENABLE_SMTP_SETTINGS', true),
         'emailer' => env('TYRO_DASHBOARD_ENABLE_EMAILER', false),

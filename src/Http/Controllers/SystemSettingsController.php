@@ -676,7 +676,7 @@ class SystemSettingsController extends BaseController {
             'TYRO_DASHBOARD_DISABLE_EXAMPLES' => false,
             'TYRO_DASHBOARD_ENABLE_INVITATION' => true,
             'TYRO_DASHBOARD_ENABLE_EMAILER' => true,
-            'TYRO_DASHBOARD_ENABLE_AUDIT_LOGS' => true,
+            'TYRO_DASHBOARD_ENABLE_AUDIT_LOGS' => false,
             'TYRO_DASHBOARD_SHOW_ROLES_MENU' => true,
             'TYRO_DASHBOARD_SHOW_PRIVILEGES_MENU' => true,
             'TYRO_DASHBOARD_SHOW_RESOURCES_MENU' => true,
@@ -699,7 +699,7 @@ class SystemSettingsController extends BaseController {
             'TYRO_DISABLE_API' => false,
             'TYRO_DISABLE_COMMANDS' => false,
             'TYRO_ROUTE_PREFIX' => 'api',
-            'TYRO_AUDIT_ENABLED' => true,
+            'TYRO_AUDIT_ENABLED' => false,
             'TYRO_AUDIT_RETENTION_DAYS' => 30,
 
             'TYRO_LOGIN_PASSWORD_MIN_LENGTH' => 8,
