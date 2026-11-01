@@ -417,4 +417,12 @@
 @media (max-height: 780px) {
     .vtabs-sidebar { position: static; }
 }
+/* Links inside settings copy use the foreground colour, not browser blue */
+.vtabs-content a:not(.btn):not(.vtabs-item),
+.vtabs-content a:not(.btn):not(.vtabs-item):visited {
+    color: var(--foreground);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+}
+.vtabs-content a:not(.btn):not(.vtabs-item):hover { color: var(--foreground); text-decoration-thickness: 2px; }
 </style>
