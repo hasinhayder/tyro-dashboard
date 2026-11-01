@@ -47,7 +47,7 @@ When adding a new configurable setting:
 ### Tab Layout
 Vertical tabs (vtabs) with left sidebar navigation and right content panel:
 
-Sidebar nav is grouped (General, Appearance, Sign-in & security, Access control, Integrations). Each item is a `.vtabs-panel` with id `vtab-{id}`; the active tab is mirrored in `location.hash` (`#auth-social`).
+Sidebar nav is grouped (General, Appearance, Sign-in & security, Access control). Each item is a `.vtabs-panel` with id `vtab-{id}`; the active tab is mirrored in `location.hash` (`#auth-social`).
 
 | Group | Tab id | Partial | Config Namespace |
 |-------|--------|---------|-----------------|
@@ -59,7 +59,7 @@ Sidebar nav is grouped (General, Appearance, Sign-in & security, Access control,
 | Sign-in & security | `auth-signin`, `auth-verification`, `auth-social`, `auth-lockout`, `auth-pages`, `auth-emails` | `_tab-auth-*` | `tyro-login` |
 | Sign-in & security | `passkeys` | `_tab-passkeys` | `tyro-login` |
 | Access control | `access`, `access-caching` | `_tab-access`, `_tab-access-caching` | `tyro` |
-| Integrations | `media` | `_tab-media` | `tyro-dashboard.media` |
+| General | `media` | `_tab-media` | `tyro-dashboard.media` |
 
 Place a new setting in the panel for its topic, next to its parent toggle; do not add "advanced"/"plus" tabs. The old partials `_tab-dashboard`, `_tab-login-auth(-advanced)` and `_tab-rbac(-advanced)` are deprecated shims that include the new panels; `system.blade.php` no longer includes them.
 
