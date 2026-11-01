@@ -411,4 +411,12 @@
     color: var(--muted-foreground);
     word-break: break-all;
 }
+/* Settings sidebar: no scrollbar. Compact so it fits; on short screens it scrolls with the page instead. */
+.vtabs-sidebar { max-height: none; overflow: visible; }
+.vtabs-sidebar .vtabs-item { padding: 0.45rem 0.75rem; }
+.vtabs-sidebar .vtabs-group-label { padding: 0.25rem 0.75rem 0.15rem; }
+.vtabs-sidebar .vtabs-group + .vtabs-group { margin-top: 0.25rem; padding-top: 0.25rem; }
+@media (max-height: 780px) {
+    .vtabs-sidebar { position: static; }
+}
 </style>
