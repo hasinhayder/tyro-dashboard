@@ -71,13 +71,6 @@
                             {{ $tabLabel }}
                         </button>
                     @endforeach
-                    @if($groupLabel === 'Integrations' && config('tyro-dashboard.features.smtp_settings', true))
-                        <a class="vtabs-item vtabs-item-link" href="{{ route($dashboardRoute::name('settings.smtp.index')) }}">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
-                            Email (SMTP)
-                            <svg class="vtabs-item-external" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12"><path stroke-linecap="round" stroke-linejoin="round" d="M7 17L17 7M7 7h10v10"/></svg>
-                        </a>
-                    @endif
                 </div>
             @endforeach
             <div class="vtabs-save-bar">

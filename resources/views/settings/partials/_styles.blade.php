@@ -393,8 +393,6 @@
     text-transform: uppercase;
     color: var(--muted-foreground);
 }
-.vtabs-item-link { text-decoration: none; }
-.vtabs-item-external { margin-left: auto; }
 @media (max-width: 900px) {
     .vtabs-group { flex-direction: row; flex-wrap: wrap; align-items: center; }
     .vtabs-group + .vtabs-group { margin-top: 0; padding-top: 0; border-top: 0; }
