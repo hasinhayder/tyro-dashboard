@@ -19,7 +19,7 @@ class VersionCommand extends Command {
      * Execute the console command.
      */
     public function handle(): int {
-        $version = '1.59.0'; // feat(settings): sidebar logo shape (TYRO_DASHBOARD_SIDEBAR_LOGO_SHAPE, circle|rectangle) and rectangle corner radius (TYRO_DASHBOARD_SIDEBAR_LOGO_BORDER_RADIUS, CSS value) in the Sidebar tab — rectangle mode renders the logo at its natural aspect ratio instead of cropping to a circle, the radius field is conditionally visible, and the media picker plus sidebar preview reflect the shape live
+        $version = '1.60.0'; // refactor(settings): System Settings reorganized into grouped navigation (General, Appearance, Sign-in & security, Access control) replacing the flat tabs and the Authentication/Authorization "Plus" splits — tabs deep-link via URL hash, search hides empty groups, sidebar has no scrollbar, settings links use the foreground colour; Media moved under General; legacy _tab-dashboard/_tab-login-auth(-advanced)/_tab-rbac(-advanced) partials kept as deprecated shims
 
         $this->info('');
         $this->info('  ╔════════════════════════════════════════╗');
@@ -70,6 +70,7 @@ class VersionCommand extends Command {
 }
 
 // Changelog
+// 1.60.0 - refactor(settings): System Settings reorganized into grouped navigation (General, Appearance, Sign-in & security, Access control) replacing the flat tabs and the Authentication/Authorization "Plus" splits — tabs deep-link via URL hash, search hides empty groups, sidebar has no scrollbar, settings links use the foreground colour; Media moved under General; legacy _tab-dashboard/_tab-login-auth(-advanced)/_tab-rbac(-advanced) partials kept as deprecated shims
 // 1.59.0 - feat(settings): sidebar logo shape (TYRO_DASHBOARD_SIDEBAR_LOGO_SHAPE, circle|rectangle) and rectangle corner radius (TYRO_DASHBOARD_SIDEBAR_LOGO_BORDER_RADIUS, CSS value) in the Sidebar tab — rectangle mode renders the logo at its natural aspect ratio instead of cropping to a circle, the radius field is conditionally visible, and the media picker plus sidebar preview reflect the shape live
 // 1.59.0 - fix(branding): sidebar colors now default to the dark palette shown in the Sidebar settings tab (TYRO_DASHBOARD_SIDEBAR_BG #0e0e0e, TEXT #f8fafc, PRIMARY #333333, ACCENT #f5f5f5, ACCENT_FOREGROUND #171717, HEADER_BORDER #333c56) so the sidebar renders the same colors before any settings are saved; custom values still override via .env
 // 1.59.0 - feat(settings): passkeys setup help modal opened from a new "Info" button in the Passkeys tab, showing the manual php artisan tyro-login:setup-passkeys step (publishes and runs the migration) and the PasskeyUser trait/contract change to add to the User model
