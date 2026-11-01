@@ -47,17 +47,21 @@ When adding a new configurable setting:
 ### Tab Layout
 Vertical tabs (vtabs) with left sidebar navigation and right content panel:
 
-| Tab | Partial | Config Namespace |
-|-----|---------|-----------------|
-| Dashboard | `_tab-dashboard` | `tyro-dashboard` |
-| Authentication | `_tab-login-auth` | `tyro-login` |
-| Authorization | `_tab-rbac` | `tyro` |
-| Authentication+ | `_tab-login-auth-advanced` | `tyro-login` |
-| Authorization+ | `_tab-rbac-advanced` | `tyro` |
-| Sidebar | `_tab-sidebar-colors` | `tyro-dashboard.branding` |
-| Admin Bar | `_tab-admin-bar-colors` | `tyro-dashboard.admin_bar` |
-| Dashboard Colors | `_tab-dashboard-colors` | JSON (not `.env`) |
-| Media | `_tab-media` | `tyro-dashboard.media` |
+Sidebar nav is grouped (General, Appearance, Sign-in & security, Access control, Integrations). Each item is a `.vtabs-panel` with id `vtab-{id}`; the active tab is mirrored in `location.hash` (`#auth-social`).
+
+| Group | Tab id | Partial | Config Namespace |
+|-------|--------|---------|-----------------|
+| General | `general` | `_tab-general` | `tyro-dashboard` |
+| General | `features` | `_tab-features` | `tyro-dashboard` |
+| Appearance | `sidebar-colors` | `_tab-sidebar-colors` | `tyro-dashboard.branding` |
+| Appearance | `admin-bar-colors` | `_tab-admin-bar-colors` | `tyro-dashboard.admin_bar` |
+| Appearance | `dashboard-colors` | `_tab-dashboard-colors` | JSON (not `.env`) |
+| Sign-in & security | `auth-signin`, `auth-verification`, `auth-social`, `auth-lockout`, `auth-pages`, `auth-emails` | `_tab-auth-*` | `tyro-login` |
+| Sign-in & security | `passkeys` | `_tab-passkeys` | `tyro-login` |
+| Access control | `access`, `access-caching` | `_tab-access`, `_tab-access-caching` | `tyro` |
+| Integrations | `media` | `_tab-media` | `tyro-dashboard.media` |
+
+Place a new setting in the panel for its topic, next to its parent toggle; do not add "advanced"/"plus" tabs. The old partials `_tab-dashboard`, `_tab-login-auth(-advanced)` and `_tab-rbac(-advanced)` are deprecated shims that include the new panels; `system.blade.php` no longer includes them.
 
 ### Conditional Field Visibility
 Fields that depend on a parent toggle use JavaScript to show/hide. OTP fields are hidden when OTP is disabled. Social login fields are hidden when social login is disabled. This prevents confusion about which settings apply.

@@ -531,6 +531,16 @@ function confirmResetAllDcColors() {
         return document.querySelector('.vtabs-item[data-vtab="' + key + '"]');
     }
 
+    function syncGroups() {
+        document.querySelectorAll('[data-vtab-group]').forEach(function (group) {
+            var items = group.querySelectorAll('.vtabs-item[data-vtab]');
+            var anyVisible = Array.prototype.some.call(items, function (it) {
+                return !it.classList.contains('search-hidden');
+            });
+            group.classList.toggle('search-hidden', !anyVisible);
+        });
+    }
+
     function clearHighlights() {
         content.querySelectorAll('.search-highlight').forEach(function (el) {
             el.classList.remove('search-highlight');
@@ -543,6 +553,7 @@ function confirmResetAllDcColors() {
         document.querySelectorAll('.vtabs-item').forEach(function (it) {
             it.classList.remove('search-hidden');
         });
+        syncGroups();
         clearHighlights();
         if (noResults) noResults.classList.remove('visible');
         if (clearBtn) clearBtn.classList.remove('visible');
@@ -595,6 +606,8 @@ function confirmResetAllDcColors() {
                 if (st.item) st.item.classList.add('search-hidden');
             }
         });
+
+        syncGroups();
 
         if (totalMatches === 0) {
             if (noResults) {
@@ -653,5 +666,24 @@ function confirmResetAllDcColors() {
     if (shortcut) {
         shortcut.textContent = /Mac|iPhone|iPad/.test(navigator.platform) ? '⌘K' : 'Ctrl K';
     }
+})();
+
+// ── Tab deep links (#tab-id) ──────────────────────────────────
+(function () {
+    function activateFromHash() {
+        var id = (location.hash || '').replace(/^#/, '');
+        if (!id) return;
+        var btn = document.querySelector('.vtabs-item[data-vtab="' + id.replace(/[^a-z0-9-]/gi, '') + '"]');
+        if (btn && !btn.classList.contains('active')) btn.click();
+    }
+
+    window.addEventListener('load', activateFromHash);
+    window.addEventListener('hashchange', activateFromHash);
+
+    document.addEventListener('click', function (e) {
+        var btn = e.target.closest('.vtabs-item[data-vtab]');
+        if (!btn) return;
+        try { history.replaceState(null, '', '#' + btn.dataset.vtab); } catch (err) {}
+    });
 })();
 </script>

@@ -77,7 +77,7 @@ resources/views/
 
 ### Settings Tab Partials
 Located in `resources/views/settings/partials/`, prefixed with underscore:
-`_tab-dashboard`, `_tab-login-auth`, `_tab-rbac`, `_tab-login-auth-advanced`, `_tab-rbac-advanced`, `_tab-sidebar-colors`, `_tab-admin-bar-colors`, `_tab-dashboard-colors`, `_tab-media`, `_scripts`, `_styles`
+`_tab-general`, `_tab-features`, `_tab-auth-signin`, `_tab-auth-verification`, `_tab-auth-social`, `_tab-auth-lockout`, `_tab-auth-pages`, `_tab-auth-emails`, `_tab-access`, `_tab-access-caching`, `_tab-passkeys`, `_tab-sidebar-colors`, `_tab-admin-bar-colors`, `_tab-dashboard-colors`, `_tab-media`, `_scripts`, `_styles`
 
 ### Error Views
 - `errors/invitation-maintenance.blade.php` — shown to non-admin users when invitation tables are missing ("system under maintenance")

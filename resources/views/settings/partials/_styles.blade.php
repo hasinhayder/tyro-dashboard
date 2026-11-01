@@ -381,4 +381,34 @@
     overflow-x: auto;
     white-space: pre;
 }
+/* Grouped settings navigation */
+.vtabs-group { display: flex; flex-direction: column; gap: 0.15rem; }
+.vtabs-group + .vtabs-group { margin-top: 0.5rem; padding-top: 0.5rem; border-top: 1px solid var(--border); }
+.vtabs-group.search-hidden { display: none; }
+.vtabs-group-label {
+    padding: 0.35rem 0.85rem 0.25rem;
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--muted-foreground);
+}
+.vtabs-item-link { text-decoration: none; }
+.vtabs-item-external { margin-left: auto; }
+@media (max-width: 900px) {
+    .vtabs-group { flex-direction: row; flex-wrap: wrap; align-items: center; }
+    .vtabs-group + .vtabs-group { margin-top: 0; padding-top: 0; border-top: 0; }
+    .vtabs-group-label { width: 100%; }
+    .vtabs-item { width: auto; }
+}
+
+/* Env key shown as a muted hint next to a label */
+.env-key {
+    margin-left: 0.4rem;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-size: 0.7rem;
+    font-weight: 400;
+    color: var(--muted-foreground);
+    word-break: break-all;
+}
 </style>
