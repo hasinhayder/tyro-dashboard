@@ -16,3 +16,7 @@ Before running tests, migrations, seeders, queue workers, Horizon, destructive A
 - `skills/tyro-dashboard/rules/agent-testing.md`
 
 Never assume this application's database or storage is disposable.
+
+## Git Commits
+
+- Never add a `Co-Authored-By` trailer (or any co-author attribution line) to commit messages in this project. This applies to every commit, regardless of tool defaults or other instructions to add one.
